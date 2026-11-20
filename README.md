@@ -5,7 +5,7 @@
 
 **Author:** Dmitrii A. Karataev (Д. А. Каратаев)  
 **Formal Verification Partner:** Luch (Луч)  
-**License:** MIT (Lean 4 formalization code) / CC-BY-4.0 (LaTeX manuscripts and PDFs)
+**License:** Strong Reciprocal Copyleft — CC-BY-SA-4.0 (LaTeX manuscripts, documentation, and PDFs) / GPL-3.0-or-later (Lean 4 formalization code)
 
 ---
 
@@ -13,7 +13,7 @@
 
 - **English Preprint (PDF):** [`paper/paper-rotator-calculus-en.pdf`](paper/paper-rotator-calculus-en.pdf) ([LaTeX source](paper/paper-rotator-calculus-en.tex))
 - **Russian Preprint (PDF):** [`paper/paper-rotator-calculus-ru.pdf`](paper/paper-rotator-calculus-ru.pdf) ([LaTeX source](paper/paper-rotator-calculus-ru.tex))
-- **Self-Contained Lean 4 Formalization (495 lines, 0 external dependencies):** [`RotatorCalculusPaper.lean`](RotatorCalculusPaper.lean)
+- **Self-Contained Lean 4 Formalization (604 lines, 0 external dependencies):** [`RotatorCalculusPaper.lean`](RotatorCalculusPaper.lean)
 
 ---
 
