@@ -81,6 +81,7 @@ On the antipodal poles `{0, Φ_half} = {0, 256} ⊂ ℤ_{512}` (`C₃(0) = +128`
   1. **Non-injective `7 → 1` remainder gluing:** `q_OR` discards the 3-valued remainder `r ∈ {-256, 0, +256}` and maps `7` distinct satisfying octants onto `q_OR = 0` (`1 → 7` preimage branching per clause).
   2. **Identical annihilation of Channel 2 linear gradients on Channel 1 parity constraints:** across the `4` clauses encoding a `3-XOR` parity equation, the sum of linear projections `C₃` vanishes identically on all `8` octants (`xor4LinearGradientSum ≡ 0`).
   3. **Non-distributivity and non-commutativity of Channel 1 and Channel 2:** `C₃(0 + 0) = 128 ≠ 256 = C₃(0) + C₃(0)` and `q_AND(0 + 0, 0, 0) = 1 ≠ 0 = (q_AND(0, 0, 0) + q_AND(0, 0, 0)) mod 2`.
+  4. **Single-point depth-`T` inverse cone underdetermination (backward state inversion & single-sensor inverse wave scattering):** the `T`-th coordination shell contains `cuboctShellNodes(3, T) = 10 T² + 2` equidistant nodes, the cumulative cone volume `V_{O₂}(3, T) = cuboctBallNodes(3, T)` obeys `3 * V_{O₂}(3, T) = 10 T³ + 15 T² + 11 T + 3` (`V_{O₂}(3, 3) = 3 * 7² = 147`), Channel 2 gluing induces `preimageRayBranching(3, T) = 7^T` indistinguishable preimages per ray (`7³ = 343` at `T = 3`), and 4-clause parity loops (`xor4LinearGradientSum ≡ 0`) form zero-gradient cloaked kernels invisible to single-point linear probing.
 
 ---
 

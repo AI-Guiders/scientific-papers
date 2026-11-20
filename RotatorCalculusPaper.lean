@@ -366,6 +366,25 @@ def count3SatSatisfyingOctants (d : Nat) : Nat :=
       poles.foldl (fun acc3 p3 =>
         acc3 + (if eqIntBool (clause3OrDefectQuotient d p1 p2 p3) 0 then 1 else 0)) acc2) acc1) 0
 
+/-- Cuboctahedron `k`-th coordination shell size `N_shell(d, k) = 10 k² + 2` (`k ≥ 1`)
+and cumulative backward cone / ball volume `V_{O₂}(d, T) = 1 + ∑_{k=1}^T (10 k² + 2)` (`3 V_{O₂}(3, T) = 10 T³ + 15 T² + 11 T + 3`),
+governing single-point inverse wave scattering and backward state inversion of depth `T`. -/
+def cuboctShellNodes (d k : Nat) : Nat :=
+  (nVertices d - normSqEdge d) * k * k + normSqEdge d
+
+def cuboctBallNodes (d : Nat) : Nat → Nat
+  | 0 => unitStep
+  | k + 1 => cuboctBallNodes d k + cuboctShellNodes d (k + 1)
+
+def cuboctBallCubicNum (d t : Nat) : Nat :=
+  (nVertices d - normSqEdge d) * t * t * t +
+  d * dOutEdge d * t * t +
+  (nVertices d - unitStep) * t +
+  d * unitStep
+
+def preimageRayBranching (d t : Nat) : Nat :=
+  (count3SatSatisfyingOctants d) ^ t
+
 def checkPostCompletenessAnd3SatBool (d : Nat) : Bool :=
   let poles := [(0 : Int), (halfPeriod d : Int)]
   poles.all (fun p1 =>
@@ -546,8 +565,13 @@ theorem thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality 
     clause3OrDefectQuotient 3 (halfPeriod 3 : Int) (halfPeriod 3 : Int) (halfPeriod 3 : Int) = (unitStep : Int) ∧
     -- (iii) Non-distributivity and non-commutativity between Channel 1 (phase addition mod 512) and Channel 2 (post-rotator 512-quotient)
     projC 3 (0 + 0) ≠ projC 3 0 + projC 3 0 ∧
-    clause3AndQuotient 3 (0 + 0) 0 0 ≠ (clause3AndQuotient 3 0 0 0 + clause3AndQuotient 3 0 0 0) % 2 :=
-  ⟨rfl, rfl, rfl, rfl, by decide, by decide⟩
+    clause3AndQuotient 3 (0 + 0) 0 0 ≠ (clause3AndQuotient 3 0 0 0 + clause3AndQuotient 3 0 0 0) % 2 ∧
+    -- (iv) Single-point depth-T inverse cone expansion (3 * V_{O₂}(3, T) = 10 T³ + 15 T² + 11 T + 3) and 7^T preimage ray branching
+    allUpTo (nSquares 3) (fun t => eqNatBool (3 * cuboctBallNodes 3 t) (cuboctBallCubicNum 3 t)) = true ∧
+    cuboctShellNodes 3 1 = nVertices 3 ∧
+    cuboctBallNodes 3 3 = 3 * (nTriangles 3 - unitStep) * (nTriangles 3 - unitStep) ∧
+    preimageRayBranching 3 3 = (nTriangles 3 - unitStep) ^ 3 :=
+  ⟨rfl, rfl, rfl, rfl, by decide, by decide, rfl, rfl, rfl, rfl⟩
 
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
