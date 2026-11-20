@@ -385,6 +385,27 @@ def cuboctBallCubicNum (d t : Nat) : Nat :=
 def preimageRayBranching (d t : Nat) : Nat :=
   (count3SatSatisfyingOctants d) ^ t
 
+/-- Antipodal-pair syndrome encoding `σ(ψ, a) = (ψ - a - Φ_half(d)) mod N_ring(d)`
+and exact phase reconstruction `((a + Φ_half(d)) + σ(ψ, a)) mod N_ring(d) = ψ` across all `512` ring states. -/
+def antipodalPartner (d : Nat) (a : Int) : Int :=
+  (a + (halfPeriod d : Int)).emod (nRing d : Int)
+
+def antipodalSyndrome (d : Nat) (psi a : Int) : Int :=
+  (psi - a - (halfPeriod d : Int)).emod (nRing d : Int)
+
+def antipodalReconstruct (d : Nat) (b sigma : Int) : Int :=
+  (b + sigma).emod (nRing d : Int)
+
+def checkAntipodalStateTransferBool (d : Nat) (aAnchor : Int) : Bool :=
+  allUpTo (nRing d) (fun psi =>
+    let psiInt := (psi : Int)
+    let b := antipodalPartner d aAnchor
+    let sig := antipodalSyndrome d psiInt aAnchor
+    let out := antipodalReconstruct d b sig
+    eqIntBool out psiInt &&
+    eqIntBool (projC d out) (projC d psiInt) &&
+    eqIntBool (projS d out) (projS d psiInt))
+
 def checkPostCompletenessAnd3SatBool (d : Nat) : Bool :=
   let poles := [(0 : Int), (halfPeriod d : Int)]
   poles.all (fun p1 =>
@@ -570,8 +591,10 @@ theorem thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality 
     allUpTo (nSquares 3) (fun t => eqNatBool (3 * cuboctBallNodes 3 t) (cuboctBallCubicNum 3 t)) = true ∧
     cuboctShellNodes 3 1 = nVertices 3 ∧
     cuboctBallNodes 3 3 = 3 * (nTriangles 3 - unitStep) * (nTriangles 3 - unitStep) ∧
-    preimageRayBranching 3 3 = (nTriangles 3 - unitStep) ^ 3 :=
-  ⟨rfl, rfl, rfl, rfl, by decide, by decide, rfl, rfl, rfl, rfl⟩
+    preimageRayBranching 3 3 = (nTriangles 3 - unitStep) ^ 3 ∧
+    -- (v) Exact Channel 1 state transfer and rotator projection reconstruction across all 512 ring states via antipodal syndrome
+    checkAntipodalStateTransferBool 3 (octantStep 3 : Int) = true :=
+  ⟨rfl, rfl, rfl, rfl, by decide, by decide, rfl, rfl, rfl, rfl, rfl⟩
 
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
