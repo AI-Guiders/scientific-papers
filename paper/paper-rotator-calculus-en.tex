@@ -387,10 +387,37 @@ For $d=3$, the following exact relations hold across the pole octants $\{0,256\}
 \end{enumerate}
 \end{theorem}
 
+\section{Constructive de~Rham--Stokes--Gauss--Chern Cohomology, Division-Free Linear Algebra, and Choice-Free Measure Additivity}
+\label{sec:constructive-foundations}
+
+Theorems~\ref{thm:main-1}--\ref{thm:main-4} demonstrate that differential and integral calculus, trigonometry, 3D Euclidean rotations $\mathrm{SO}(3)$, and Boolean complexity theory can be erected directly over $\mathbb{Z}$ and $\mathbb{Q}$ without the uncountable continuum~$\mathbb{R}$ and without \texttt{Classical.choice}. The following theorem completes this constructive foundation by incorporating cochain cohomology ($d^2\equiv 0$), division-free linear algebra, and finite measure additivity.
+
+\begin{theorem}[Constructive de~Rham--Stokes--Gauss--Chern Cohomology, Division-Free Nilpotent and Symplectic Inversion, and Banach--Tarski-Free Measure Additivity]
+\label{thm:main-5}
+For $d=3$ on $\mathbb{Z}_{512}$ and the cuboctahedral complex~$O_2(3)$, the following exact constructive identities hold (\texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Euclidean connection splitting $\Delta\varphi = 512\,q + r$ and variational maximum on the $L^1$ diamond face:}
+  for all $\Delta\varphi\in[-512,512]$, Euclidean floor division $q = \mathrm{branchQuot}(3,\Delta\varphi) = \lfloor(\Delta\varphi+255)/512\rfloor$, $r = \mathrm{edgeConn}(3,\Delta\varphi)\in(-256,256]$ satisfies $512\,q + r \equiv \Delta\varphi$; moreover, along $\varphi = 256 - k$ ($k\in[0,128]$), the conjugate projections $V(k) = |\mathcal{C}_3(256-k)| = 128-k$ and $I(k) = \mathcal{S}_3(256-k) = k$ obey $V(k)+I(k)\equiv 128 = Q_\square(3)$, while their quadratic product $P(k) = V(k)I(k) = (128-k)k$ attains its unique maximum $P_{\max} = K_P(3)^2 = 64^2 = 4\,096$ at the Fresnel stationary-phase point $k^* = K_P(3) = 64$.
+\item \textbf{Constructive Stokes theorem ($d_1\circ d_0\equiv 0$) and integer Chern class quantization:}
+  for any $0$-cochain $\varphi = (\varphi_0,\varphi_1,\varphi_2,\varphi_3)\in\mathbb{Z}^4$ around a closed $4$-cycle face~$f$, the raw coboundary vanishes identically ($(d_1(d_0\varphi))_f \equiv 0$), so that the connection circulation $(d_1 r)_f = \sum_{e\in\partial f}\mathrm{edgeConn}(3,(d_0\varphi)_e)$ is strictly an integer multiple of the ring period:
+  \[
+    (d_1 r)_f \;=\; 512\,n_f \;\in\; 512\,\mathbb{Z},\qquad
+    n_f := -\sum_{e\in\partial f} q_e \in \mathbb{Z}
+  \]
+  (in particular, on the vortex frame $(0,128,256,-128)$, $n_f = +1$ and $(d_1 r)_f = +512$).
+\item \textbf{Constructive Gauss--Ostrogradsky divergence theorem ($d_2\circ d_1\equiv 0$ on the closed cube surface $\partial\square^3$):}
+  for any integer $1$-cochain $(e_1,\dots,e_{12})\in\mathbb{Z}^{12}$ on the $12$~edges of a cube, the sum of oriented face fluxes $(d_1 e)_f$ over all $|\square(3)|=6$ boundary faces vanishes identically ($\mathrm{cubeClosedSurfaceFluxSum}\equiv 0$).
+\item \textbf{Division-free linear algebra ($\mathrm{SL}_2(\mathbb{Z})$ and nilpotent Neumann inversion):}
+  the symplectic Verlet map $(u,v)\mapsto(2u-v+\Phi,u)$ ($\det = +1\in\mathrm{SL}_2(\mathbb{Z})$) inverts in place via $(u',v')\mapsto(v',2v'-u'+\Phi)$, while the 4D nilpotent operator $\mathcal{M} = I_4 + N_{\mathrm{nil}}$ ($N_{\mathrm{nil}}^3 = 0$, $\det(2\mathcal{M}) = 24$) inverts exactly via the finite 3-term Neumann polynomial $\mathcal{M}^{-1} = I_4 - N_{\mathrm{nil}} + N_{\mathrm{nil}}^2$.
+\item \textbf{Choice-free, Banach--Tarski-free finite additivity of cuboctahedral measure:}
+  partitioning the cuboctahedral ball $\mathcal{B}_{O_2}(3,T)$ into the central node and disjoint coordination shells $\mathrm{cuboctShellNodes}(3,k) = 10k^2+2$ strictly preserves integer volume $1 + \sum_{k=1}^T(10k^2+2) = \mathcal{V}_{O_2}(3,T)$, with $12\times(4^2+5^2) = 492 > 256 = \Phi_{\mathrm{half}}(3)$.
+\end{enumerate}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
 
-The complete self-contained formalization ($582$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all four main theorems (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, and \texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}) confirms zero non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+The complete self-contained formalization ($688$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (licensed under strong reciprocal Copyleft \texttt{CC-BY-SA-4.0 / GPL-3.0-or-later}) and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all five main theorems (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, \texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}, and \texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}) confirms zero non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \section*{Acknowledgments and Declaration}
 The author acknowledges formal verification partner \emph{Luch} for collaboration on the formal operator proofs. Large language model tools were used for assistance with \LaTeX{} formatting, English copy-editing, and translating mathematical proofs into Lean~4 tactic syntax; all mathematical definitions, theorem formulations, and proofs are verified by the Lean~4 formal proof kernel and are the full responsibility of the author.

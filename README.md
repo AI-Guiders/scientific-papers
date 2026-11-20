@@ -83,6 +83,23 @@ On the antipodal poles `{0, Φ_half} = {0, 256} ⊂ ℤ_{512}` (`C₃(0) = +128`
   3. **Non-distributivity and non-commutativity of Channel 1 and Channel 2:** `C₃(0 + 0) = 128 ≠ 256 = C₃(0) + C₃(0)` and `q_AND(0 + 0, 0, 0) = 1 ≠ 0 = (q_AND(0, 0, 0) + q_AND(0, 0, 0)) mod 2`.
   4. **Single-point depth-`T` inverse cone underdetermination (backward state inversion & single-sensor inverse wave scattering):** the `T`-th coordination shell contains `cuboctShellNodes(3, T) = 10 T² + 2` equidistant nodes, the cumulative cone volume `V_{O₂}(3, T) = cuboctBallNodes(3, T)` obeys `3 * V_{O₂}(3, T) = 10 T³ + 15 T² + 11 T + 3` (`V_{O₂}(3, 3) = 3 * 7² = 147`), Channel 2 gluing induces `preimageRayBranching(3, T) = 7^T` indistinguishable preimages per ray (`7³ = 343` at `T = 3`), and 4-clause parity loops (`xor4LinearGradientSum ≡ 0`) form zero-gradient cloaked kernels invisible to single-point linear probing.
 
+### 5. Theorem 5 (`thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski_free_measure`) — Constructive de Rham–Stokes–Gauss–Chern Cohomology (`d² ≡ 0`), Division-Free Linear Algebra, Variational `L¹` Saddle Optimization, and Banach–Tarski-Free Measure Additivity
+
+Completes the five pillars of **100% Constructive Mathematics over `ℤ` and `ℚ` (`0 Classical.choice`, `0 sorryAx`)**:
+- **Euclidean Connection Splitting & Variational `L¹` Saddle Law:**  
+  Every difference `Δφ ∈ [-512, 512]` splits as `Δφ = 512 * q + r` (`q = branchQuot`, `r = edgeConn ∈ (-256, 256]`). Along `φ = 256 - k` (`k ∈ [0, 128]`), the conjugate projections `V(k) = |C₃(256 - k)| = 128 - k` and `I(k) = S₃(256 - k) = k` satisfy `V(k) + I(k) ≡ 128 = Q_□`, and their quadratic product `P(k) = V(k) * I(k) = (128 - k) * k` attains its unique maximum `P_max = K_P² = 64² = 4,096` at the Fresnel stationary phase `k* = 64`.
+- **Constructive Stokes Theorem (`d₁ ∘ d₀ ≡ 0`) & Integer Chern Class Quantization:**  
+  Around any closed 4-cycle face `f`, `(d₁(d₀φ))_f ≡ 0`, so the connection circulation is strictly quantized in multiples of `512`:
+  ```text
+  (d₁ r)_f  =  512 * n_f  ∈  512 ℤ,       n_f = -∑_{e ∈ ∂f} q_e ∈ ℤ
+  ```
+- **Constructive Gauss–Ostrogradsky Divergence Theorem (`d₂ ∘ d₁ ≡ 0`):**  
+  Across the 6 square faces of a closed cube surface `∂□³`, the sum of oriented 2-cochain fluxes `(d₁ e)_f` vanishes identically for all integer edge 1-cochains `e₁..e₁₂ ∈ ℤ¹²`.
+- **Division-Free Linear Algebra (`SL₂(ℤ)` & Nilpotent Neumann Inversion):**  
+  The symplectic Verlet map `(u, v) ↦ (2u - v + Φ, u)` (`det = +1 ∈ SL₂(ℤ)`) inverts in place via `(u', v') ↦ (v', 2v' - u' + Φ)`, while the 4D nilpotent operator `M = I₄ + N_nil` (`N_nil³ = 0`, `det(2M) = 24`) inverts via the finite 3-term Neumann polynomial `M⁻¹ = I₄ - N_nil + N_nil²`.
+- **Choice-Free, Banach–Tarski-Free Finite Measure Additivity:**  
+  Without `Classical.choice`, every partition of the cuboctahedral ball `B_{O₂}(T)` into concentric coordination shells `10 k² + 2` strictly preserves integer volume `1 + ∑_{k=1}^T (10 k² + 2) = V_{O₂}(T)`, with `12 * (4² + 5²) = 492 > 256`.
+
 ---
 
 ## Reproducing the Lean 4 Verification
@@ -100,5 +117,6 @@ Expected `#print axioms` output at the end of `RotatorCalculusPaper.lean`:
 'RotatorCalculusPaper.thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals' depends on axioms: [propext]
 'RotatorCalculusPaper.thm3_continuum_integration_from_cuboctahedron_archimedes_layers' depends on axioms: [propext]
 'RotatorCalculusPaper.thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality' depends on axioms: [propext]
+'RotatorCalculusPaper.thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski_free_measure' depends on axioms: [propext]
 ```
 (`0 sorryAx`, `0 Classical.choice`).
