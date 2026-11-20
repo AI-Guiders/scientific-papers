@@ -10,11 +10,10 @@
 % Extending the piecewise-linear trigonometric framework studied by Thompson
 % (arXiv:1205.3814), where derivatives lost the classical sine-cosine coupling
 % at diamond corners and integral calculus remained open, we show that on the
-% discrete phase ring Z_{N_ring(d)} (N_ring = 2^(1+2^d) = 512) and the 12-vertex
-% cuboctahedron O_2(d) selected by the Catalan Diophantine equation 1 + 2^d = d^2
-% (d = 3), the piecewise-linear projection pair E_d(phi) = (C_d(phi), S_d(phi))
-% forms an exact discrete Euler exponential generating the five constants
-% {0, 1, i, pi, e}:
+% 12-vertex cuboctahedron O_2(d) (d = 3) and the associated discrete phase ring
+% Z_{N_ring} (N_ring = 4*Q_square = 512, Q_square = 128), the piecewise-linear
+% projection pair E_d(phi) = (C_d(phi), S_d(phi)) forms an exact discrete Euler
+% exponential generating the five constants {0, 1, i, pi, e}:
 %   1. A quarter-period shift +Q_square(d) = +128 acts across all 512 points as
 %      exact multiplication by the imaginary unit i;
 %   2. A half-period shift +256 satisfies Euler's identity e^(i*pi) + 1 = 0
@@ -41,7 +40,7 @@
 % Riemann integral from pure 3D geometry.
 %
 % Every definition, lemma, and theorem is formally verified in the Lean 4 theorem
-% prover in a self-contained 572-line module (`RotatorCalculusPaper.lean`, zero
+% prover in a self-contained 495-line module (`RotatorCalculusPaper.lean`, zero
 % `sorry`, zero `Classical.choice`) available at:
 % https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus
 %
@@ -89,7 +88,7 @@
 \maketitle
 
 \begin{abstract}
-We investigate discrete trigonometric and integral calculus on the finite phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ ($N_{\mathrm{ring}}(d) = 2^{1+2^d}$) and the three-dimensional cuboctahedral shell $O_2(d)\subset\{-1,0,+1\}^d$ selected by the Catalan exponential-quadratic Diophantine equation $1+2^d=d^2$ ($d=3$, $N_{\mathrm{ring}}=512$). Extending the piecewise-linear calculus of Thompson (\texttt{arXiv:1205.3814}), where piecewise derivatives lost the classical sine--cosine coupling at diamond corners and integral calculus remained open, we prove that the branchless projection pair $\mathcal{E}_d(\varphi) = (\mathcal{C}_d(\varphi),\mathcal{S}_d(\varphi))$ forms an exact discrete Euler exponential on the $512$-gon generating the five fundamental constants $\{0,1,i,\pi,e\}$: a quarter-period shift $+Q_\square(d)=+128$ acts across all $512$ ring points as exact multiplication by the imaginary unit~$i$, a half-period shift $+\Phi_{\mathrm{half}}(d)=+256$ satisfies Euler's identity $\mathcal{E}_d(\varphi+\Phi_{\mathrm{half}}(d))+\mathcal{E}_d(\varphi)=(0,0)$ ($e^{i\pi}+1=0$), and the one-step difference Wronskian $\mathcal{W}_d(\varphi)=\mathcal{C}_d(\varphi)\mathcal{S}_d(\varphi+1)-\mathcal{S}_d(\varphi)\mathcal{C}_d(\varphi+1)=\langle \mathcal{E}_d(\varphi+Q_\square(d)),\Delta\mathcal{E}_d(\varphi)\rangle$ is identically equal to the constant $Q_\square(d)=128$ at all $512$ points of the ring, including the four corner vertices.
+We investigate discrete trigonometric and integral calculus on the three-dimensional cuboctahedral shell $O_2(d)\subset\{-1,0,+1\}^d$ ($d=3$, $|V_{O_2}|=12$ vertices, $|\square|=6$ square faces, $|\triangle|=8$ triangular faces) and the associated finite phase ring $\mathbb{Z}_{N_{\mathrm{ring}}}$ ($N_{\mathrm{ring}} = 4\,Q_\square = 512$, where $Q_\square = 2^{|\triangle|-1} = 128$ is the quarter-period). Extending the piecewise-linear calculus of Thompson (\texttt{arXiv:1205.3814}), where piecewise derivatives lost the classical sine--cosine coupling at diamond corners and integral calculus remained open, we prove that the branchless projection pair $\mathcal{E}_d(\varphi) = (\mathcal{C}_d(\varphi),\mathcal{S}_d(\varphi))$ forms an exact discrete Euler exponential on the $512$-gon generating the five fundamental constants $\{0,1,i,\pi,e\}$: a quarter-period shift $+Q_\square(d)=+128$ acts across all $512$ ring points as exact multiplication by the imaginary unit~$i$, a half-period shift $+\Phi_{\mathrm{half}}(d)=+256$ satisfies Euler's identity $\mathcal{E}_d(\varphi+\Phi_{\mathrm{half}}(d))+\mathcal{E}_d(\varphi)=(0,0)$ ($e^{i\pi}+1=0$), and the one-step difference Wronskian $\mathcal{W}_d(\varphi)=\mathcal{C}_d(\varphi)\mathcal{S}_d(\varphi+1)-\mathcal{S}_d(\varphi)\mathcal{C}_d(\varphi+1)=\langle \mathcal{E}_d(\varphi+Q_\square(d)),\Delta\mathcal{E}_d(\varphi)\rangle$ is identically equal to the constant $Q_\square(d)=128$ at all $512$ points of the ring, including the four corner vertices.
 
 We further prove that the two-tick symplectic Verlet difference recurrence $\varphi_{t+1}-2\varphi_t+\varphi_{t-1}=\Phi$ unifies Liouville's elementary circular basis ($\Phi=0$) with the non-elementary quadratic-phase Fresnel--Airy basis ($\Phi\ne 0$), while two-ring coupling at the intrinsic cuboctahedron modulus $k^2 = 1/\|e\|_2^2 = 1/(d-1) = 1/2$ generates Gauss's lemniscate Jacobi elliptic triad $(\mathrm{sn}_d,\mathrm{cn}_d,\mathrm{dn}_d)$. This structure yields exact closed-form integer evaluations of the discrete Fresnel diffraction integrals ($\mathcal{C}_{\mathrm{Fresnel}}=\mathcal{S}_{\mathrm{Fresnel}}=2048$ via half-period cancellation of $480$ oscillating quadratic residues and survival of $32$ stationary-phase points on the bisector $\varphi^2\equiv 64\pmod{512}$), complete and incomplete elliptic integrals of the second kind, the Dirichlet sine integral ($\mathrm{Si}_3(128)=128$), the Parseval energy integral ($2,796,288$), and the zero-order Bessel integral ($\mathcal{J}_{0,3}(0)=65,536$, $\mathcal{J}_{0,3}(1)=32,768$, and exact root $\mathcal{J}_{0,3}(4)=0$). Finally, we show that the continuum circle and $\pi$ emerge as the rectification limit of the $512$-gon Weierstrass rotator (with an intrinsic finite perimeter defect of $\pi^2/(6\cdot 512^2)\approx 6.3\;\text{ppm}$ on the fundamental ring), and that projecting the $12$ vertices of the cuboctahedron $O_2(3)$ onto any coordinate axis yields the Archimedes equizonal partition $(4,4,4)$, which together with the central node of weight $12$ derives the parabolic quadrature weights $(4,16,4)=4\times(1,4,1)$ and the exact 3D continuum Riemann integral $\iiint_{[-1,1]^3} F\,\mathrm{d}V$ from pure 3D geometry. All definitions and theorems are formally verified in the \textbf{Lean~4} theorem prover in a self-contained module without non-constructive axioms (\texttt{0 sorry}, \texttt{0 Classical.choice}).
 
@@ -110,38 +109,24 @@ Piecewise-linear trigonometry in the $L^1$ metric (``taxicab trigonometry'' on t
 \item integral calculus, the lift to the Euclidean ($L^2$) circle, and the evaluation of classical non-elementary integrals (Fresnel, Jacobi elliptic, Bessel, Dirichlet) were left open.
 \end{enumerate}
 
-In this paper, we resolve these obstacles by formulating the rotator over the modular integer ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ whose spatial dimension $d\in\mathbb{N}$ is determined by an elementary geometric self-duality condition in the basis of $d$ unit vectors $\mathbf{e}_1,\dots,\mathbf{e}_d$: the number $1+2^d$ of intrinsic choice states of a node ($1$ rest state outside the axes plus $2^d$ participation combinations of the $d$ unit basis vectors) equals the number $d\times d = d^2$ of elementary transition pairs $(\mathbf{e}_i\to\mathbf{e}_j)$ from one unit basis vector to another, yielding the Catalan exponential-quadratic Diophantine lock~\cite{Catalan1844,Mihailescu2004}
-\begin{equation}
-  \label{eq:catalan-lock}
-  \mathrm{CatalanLock}(d) \;\equiv\; \bigl(1 + 2^d = d^2\bigr).
-\end{equation}
-Simultaneously, the $d^2$ unit-vector pairs $(\mathbf{e}_i,\mathbf{e}_j)$ decompose into $d$ longitudinal pairs $(\mathbf{e}_i,\mathbf{e}_i)$ and $d(d-1)$ off-diagonal rotation pairs $(\mathbf{e}_i,\mathbf{e}_j)$ ($i\ne j$), whose signed combinations $\pm\mathbf{e}_i\pm\mathbf{e}_j$ form the $2d(d-1)$ vertices of the cuboctahedron $O_2(d)$ of squared Euclidean norm $\|\mathbf{e}_i\pm\mathbf{e}_j\|_2^2 = 2 = d-1$.
-The unique solution of~\eqref{eq:catalan-lock} in $\mathbb{N}$ ($d=3$, since $1+2^3=9=3^2=3+6$, while for $d\ge 5$ induction gives $2^d > 2d(d-1)\ge d^2$) fixes a parameter-free alphabet of ring and lattice invariants:
+In this paper, we resolve these obstacles by formulating the rotator over the three-dimensional Archimedean cuboctahedral shell $O_2(d) = \{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2 = d-1\}$ ($d=3$) and the associated modular integer phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$:
 \[
   |{\triangle}(d)| = 2^d = 8,\qquad
-  \mathrm{modBits}(d) = 1 + 2^d = d^2 = 9,\qquad
-  N_{\mathrm{ring}}(d) = 2^{\mathrm{modBits}(d)} = 512,
-\]
-\[
-  \Phi_{\mathrm{half}}(d) = \frac{N_{\mathrm{ring}}(d)}{2} = 256,\qquad
-  Q_\square(d) = \frac{N_{\mathrm{ring}}(d)}{4} = 128,\qquad
-  K_P(d) = \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64,
-\]
-\[
   |\square(d)| = 2d = 6,\qquad
-  |V_{O_2}(d)| = 2d(d-1) = 12,\qquad
+  |V_{O_2}(d)| = 2d(d-1) = 12,
+\]
+\[
   d_{\mathrm{in}}(\square) = 4,\qquad
   d_{\mathrm{out}}(E)(d) = 2^d - d = 5,\qquad
   \|e\|_2^2 = d - 1 = 2,
 \]
-where $O_2(d) = \{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2 = d-1\}$ is the $12$-vertex cuboctahedral shell.
-
-Every theorem below is formulated as a universal operator law parameterized by a free dimension variable $d\in\mathbb{N}$ via the predicate
-\begin{equation}
-  \label{eq:catalan-law}
-  \mathrm{CatalanLaw}(P,d) \;\equiv\; \bigl(\mathrm{CatalanLock}(d) \;\Longleftrightarrow\; \mathrm{CatalanLock}(d)\wedge P(d)\bigr),
-\end{equation}
-and chained into a single recursive implication sequence via the combinator \texttt{catalan\_chain} in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{lean/MtCarrier/RotatorCalculusPaper.lean}.
+\[
+  Q_\square(d) = 2^{|{\triangle}(d)|-1} = 128,\qquad
+  \Phi_{\mathrm{half}}(d) = 2\,Q_\square(d) = 256,\qquad
+  N_{\mathrm{ring}}(d) = 4\,Q_\square(d) = 512,\qquad
+  K_P(d) = \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64.
+\]
+All definitions and theorems below are formally verified in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorCalculusPaper.lean}.
 
 \section{Discrete Euler Exponential, Euler's Identity \texorpdfstring{$e^{i\pi}+1=0$}{e\^{}(i pi)+1=0}, Constant Wronskian, and the Weierstrass 512-gon Lift}
 \label{sec:wronskian-euler}
@@ -183,7 +168,7 @@ To each $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ we associate the rational 
 
 \begin{theorem}[Discrete Euler's Identity, Universal Constant Wronskian, Weierstrass Lift, and Fundamental Theorem of Discrete Calculus]
 \label{thm:main-1}
-For any $d\in\mathbb{N}$, the operator law $\mathrm{CatalanLaw}(P_1,d)$ holds (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}), where $P_1(d)$ comprises the following exact identities across all $N_{\mathrm{ring}}(d)=512$ points $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$:
+For $d=3$, the following exact identities hold across all $N_{\mathrm{ring}}(d)=512$ points $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Generation of $\{0,1,i,\pi,e\}$ and Euler's identity $e^{i\pi}+1=0$:}
   \begin{itemize}[noitemsep]
@@ -254,7 +239,7 @@ Define the five canonical ring integrals:
 
 \begin{theorem}[Closed-Form Fresnel, Jacobi Elliptic, Dirichlet, Parseval, and Bessel Integrals]
 \label{thm:main-2}
-Chained directly from Theorem~\ref{thm:main-1} via \texttt{catalan\_chain}, for any $d\in\mathbb{N}$ the operator law $\mathrm{CatalanLaw}(P_2,d)$ holds (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+For $d=3$, the following exact integral evaluations hold on $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Lemniscate Jacobi elliptic triad and elliptic integrals:}
   across all $N_{\mathrm{ring}}(d)$ points, $|\mathrm{sn}_d(\varphi)|+|\mathrm{cn}_d(\varphi)|=Q_\square(d)$ and $2\,\mathrm{dn}_d(\varphi)+|\mathrm{sn}_d(\varphi)|=\Phi_{\mathrm{half}}(d)$, with complete elliptic integral $\mathcal{I}_{\mathrm{ell}}(d;\|e\|_2^2,d) = \Phi_{\mathrm{half}}(d)\,Q_\square(d)\,d_{\mathrm{out}}(E)(d) = 163,840$ and first-quadrant incomplete integral $Q_\square(d)^2 = 16,384$.
@@ -310,7 +295,7 @@ In this framework, the continuum circle and the continuum Riemann integral are n
 
 \begin{theorem}[Geometric Derivation of the Continuum Riemann Integral and Simpson's Weights $(1,4,1)/6$ from the Archimedes Equizonal Partition of the Cuboctahedron]
 \label{thm:main-3}
-Chained directly from Theorem~\ref{thm:main-2} via \texttt{catalan\_chain}, for any $d\in\mathbb{N}$ the operator law $\mathrm{CatalanLaw}(P_3,d)$ holds (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+For $d=3$, the following relations hold on the cuboctahedral shell $O_2(d)$ and phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Archimedes equizonal partition of $O_2(d)$:}
   slicing the $12$ vertices of $O_2(d)=\mathrm{cubicOrbit3D}(d-1)$ along any coordinate axis $e_x\in\{-1,0,+1\}$ partitions the shell into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each:
@@ -347,7 +332,7 @@ Chained directly from Theorem~\ref{thm:main-2} via \texttt{catalan\_chain}, for 
   \[
     \sin_{\mathrm{rat}}(d;\,p,q) \;=\; \frac{d_{\mathrm{in}}(\square)\,p(\|e\|_2^2 q - p)}{d_{\mathrm{out}}(E)(d)\,q^2 - p(\|e\|_2^2 q - p)},
   \]
-  evaluates $\sin$ and $\cos$ without a calculator in two arithmetic operations and at the canonical right-angle fractions $p/q\in\{1/\mathrm{modBits}(d),\,1/d,\,1/\|e\|_2^2,\,\|e\|_2^2/d,\,1\}$ ($10^\circ,30^\circ,45^\circ,60^\circ,90^\circ$) returns the exact structural ratios of the cuboctahedron:
+  evaluates $\sin$ and $\cos$ without a calculator in two arithmetic operations and at the canonical right-angle fractions $p/q\in\{1/d^2,\,1/d,\,1/\|e\|_2^2,\,\|e\|_2^2/d,\,1\}$ ($10^\circ,30^\circ,45^\circ,60^\circ,90^\circ$) returns the exact structural ratios of the cuboctahedron:
   \[
     \sin_{\mathrm{rat}}(10^\circ) = \frac{17}{97},\quad
     \sin_{\mathrm{rat}}(30^\circ) = \frac{1}{2},\quad
@@ -369,18 +354,12 @@ Chained directly from Theorem~\ref{thm:main-2} via \texttt{catalan\_chain}, for 
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
 
-The complete self-contained formalization ($572$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all four theorems (\texttt{catalan\_lock\_iff\_d3}, \texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, and \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}) confirms dependence solely on \texttt{[propext, Quot.sound]} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+The complete self-contained formalization ($495$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all three main theorems (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, and \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}) confirms zero non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \section*{Acknowledgments and Declaration}
-The author acknowledges formal verification partner \emph{Luch} for collaboration on structuring the recursive operator proof chain. Large language model tools were used for assistance with \LaTeX{} formatting, English copy-editing, and translating mathematical proofs into Lean~4 tactic syntax; all mathematical definitions, theorem formulations, and proofs are verified by the Lean~4 formal proof kernel and are the full responsibility of the author.
+The author acknowledges formal verification partner \emph{Luch} for collaboration on the formal operator proofs. Large language model tools were used for assistance with \LaTeX{} formatting, English copy-editing, and translating mathematical proofs into Lean~4 tactic syntax; all mathematical definitions, theorem formulations, and proofs are verified by the Lean~4 formal proof kernel and are the full responsibility of the author.
 
 \begin{thebibliography}{9}
-\bibitem{Catalan1844}
-E.~Catalan, ``Note extraite d'une lettre adress\'ee \`a l'\'editeur,'' \emph{J. Reine Angew. Math.} \textbf{27} (1844), 192.
-
-\bibitem{Mihailescu2004}
-P.~Mih\u{a}ilescu, ``Primary cyclotomic units and a proof of Catalan's conjecture,'' \emph{J. Reine Angew. Math.} \textbf{572} (2004), 167--195.
-
 \bibitem{Krause1986}
 E.\,F.~Krause, \emph{Taxicab Geometry: An Adventure in Non-Euclidean Geometry}, Dover Publications, New York, 1986.
 

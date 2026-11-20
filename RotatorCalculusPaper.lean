@@ -1,12 +1,12 @@
 /-
-  MtCarrier.RotatorCalculusPaper
+  RotatorCalculusPaper.lean
   Self-contained formal verification module for the mathematical paper:
-  "On a Remarkable Property of the Cuboctahedral Rotator and Closed-Form Evaluation
-   of Fresnel, Jacobi, Bessel, and Dirichlet Integrals in Lean 4"
-  ("Об одном замечательном свойстве кусочно-линейного ротатора на кубооктаэдре
-    и замкнутом вычислении сумм типа Френеля, Якоби, Бесселя и Дирихле").
+  "On a Remarkable Property of the Cuboctahedral Rotator, Euler's Identity,
+   and Closed-Form Evaluation of Fresnel, Jacobi, Bessel, and Dirichlet Integrals in Lean 4"
+  ("Об одном замечательном свойстве кусочно-линейного ротатора на кубооктаэдре,
+    тождестве Эйлера и замкнутом вычислении интегралов типа Френеля, Якоби, Бесселя и Дирихле").
 
-  Authors: D. Karavaev & Luch (Луч)
+  Authors: D. A. Karataev & Luch (Луч)
   Zero external dependencies (pure Lean 4 core), zero `sorry`, zero `Classical.choice`.
 -/
 
@@ -16,109 +16,37 @@ set_option maxRecDepth 200000
 set_option maxHeartbeats 1000000
 
 /-!
-## 1. The Catalan Diophantine Lock `1 + 2^d = d^2` and Induced Ring & Cuboctahedron Invariants
+## 1. Geometric Invariants of the 3D Cuboctahedron `O₂` and the Discrete Phase Ring `ℤ_{512}`
 -/
 
-theorem two_mul_quad_gt (k : Nat) :
-    2 * (2 * (k + 6) * (k + 5)) > 2 * (k + 1 + 6) * (k + 1 + 5) := by
-  have h_assoc1 : 2 * (k + 6) * (k + 5) = 2 * ((k + 6) * (k + 5)) := Nat.mul_assoc 2 (k + 6) (k + 5)
-  have h_assoc2 : 2 * (k + 1 + 6) * (k + 1 + 5) = 2 * ((k + 1 + 6) * (k + 1 + 5)) :=
-    Nat.mul_assoc 2 (k + 1 + 6) (k + 1 + 5)
-  rw [h_assoc1, h_assoc2]
-  simp only [Nat.left_distrib, Nat.right_distrib]
-  omega
-
-theorem two_d_pred_ge_d_sq (k : Nat) :
-    2 * (k + 6) * (k + 5) ≥ (k + 6) * (k + 6) := by
-  have h_assoc : 2 * (k + 6) * (k + 5) = 2 * ((k + 6) * (k + 5)) := Nat.mul_assoc 2 (k + 6) (k + 5)
-  rw [h_assoc]
-  simp only [Nat.left_distrib, Nat.right_distrib]
-  omega
-
-theorem pow2_gt_two_d_pred (k : Nat) : 2 ^ (k + 6) > 2 * (k + 6) * (k + 5) := by
-  induction k with
-  | zero => decide
-  | succ k ih =>
-    have h1 : 2 ^ (k + 1 + 6) = 2 * 2 ^ (k + 6) := by
-      rw [Nat.add_right_comm k 1 6, Nat.pow_succ, Nat.mul_comm]
-    have h2 := two_mul_quad_gt k
-    omega
-
-/-- The Catalan exponential-quadratic Diophantine lock `1 + 2^d = d^2`:
-exact equality between the `1 + 2^d` unit-vector choice states of a cell (`1` rest state + `2^d` combinations of the `d` unit basis vectors `e_1, ..., e_d`)
-and the `d × d = d^2` elementary transition pairs `(e_i → e_j)` between unit basis vectors
-(`d` longitudinal transitions `e_i → e_i` plus `d(d-1)` off-diagonal rotations `e_i → e_j`, `i ≠ j`, whose signed sums `±e_i ± e_j` form the `2d(d-1) = 12` vertices of the cuboctahedron `O_2(d)`). -/
-abbrev CatalanLock (d : Nat) : Prop :=
-  1 + 2 ^ d = d * d
-
-/-- Universal operator law combinator: `P d` holds if and only if `CatalanLock d` is satisfied. -/
-abbrev CatalanLaw (P : Nat → Prop) (d : Nat) : Prop :=
-  CatalanLock d ↔ (CatalanLock d ∧ P d)
-
-/-- Unique solution of `1 + 2^d = d^2` across all `d ∈ ℕ`. -/
-theorem catalan_lock_iff_d3 (d : Nat) :
-    CatalanLock d ↔ d = 3 := by
-  unfold CatalanLock
-  constructor
-  · intro h
-    have h_split : d < 6 ∨ 6 ≤ d := by omega
-    rcases h_split with hlt | h6
-    · have hd_cases : d = 0 ∨ d = 1 ∨ d = 2 ∨ d = 3 ∨ d = 4 ∨ d = 5 := by omega
-      rcases hd_cases with rfl | rfl | rfl | rfl | rfl | rfl <;> revert h <;> decide
-    · have hk : ∃ k, d = k + 6 := ⟨d - 6, by omega⟩
-      rcases hk with ⟨k, rfl⟩
-      have h1 := pow2_gt_two_d_pred k
-      have h2 := two_d_pred_ge_d_sq k
-      omega
-  · rintro rfl
-    decide
-
-/-- Master transfer principle chaining any dimension-parameterized property `P d` to `CatalanLock d`. -/
-theorem catalan_law_of_d3 (P : Nat → Prop) (h3 : P 3) (d : Nat) :
-    CatalanLaw P d := by
-  unfold CatalanLaw
-  constructor
-  · intro h
-    have hd := (catalan_lock_iff_d3 d).mp h
-    subst hd
-    exact ⟨h, h3⟩
-  · exact And.left
-
-/-- Recursive implication chain combinator (`Catalan → Step 1 → Step 2 → Step 3`):
-derives `CatalanLaw Q d` directly from a prior link `CatalanLaw P d` and the implication `P 3 → Q 3`. -/
-theorem catalan_chain {P Q : Nat → Prop} (d : Nat)
-    (hPrev : CatalanLaw P 3) (hNext : P 3 → Q 3) :
-    CatalanLaw Q d :=
-  catalan_law_of_d3 Q (hNext ((hPrev.mp (by decide : CatalanLock 3)).2)) d
-
-/--Induced algebraic invariants of the discrete phase ring `ℤ_{N_ring(d)}`:
-- `nTriangles(d) = 2^d` (`8` triangular faces / octants),
-- `modBits(d) = 1 + nTriangles(d)` (`9` bits),
-- `nRing(d) = 2^(modBits(d))` (`512` phase ticks),
-- `halfPeriod(d) = N_ring(d) / 2` (`256` half-turn antisymmetry period),
-- `quarterPeriod(d) = N_ring(d) / 4` (`128` quarter-turn saddle),
-- `octantStep(d) = N_ring(d) / 8` (`64` half-quadrant bisector),
-- `nSquares(d) = 2 * d` (`6` square faces),
-- `nVertices(d) = 2 * (2 * d)` (`12` cuboctahedron vertices),
-- `dInSquare = 4` (square-face vertex degree),
-- `dOutEdge(d) = 2^d - d` (`5` outer edge degree),
+/-- Structural constants of the 3D cuboctahedron `O₂(d)` (`d = 3`) and the associated discrete phase ring `ℤ_{N_ring}`:
+- `nTriangles(d) = 2^d` (`8` triangular faces / octants at `d = 3`),
+- `nSquares(d) = 2 * d` (`6` square faces at `d = 3`),
+- `nVertices(d) = 2 * nSquares(d)` (`12` cuboctahedron vertices at `d = 3`),
+- `dInSquare = 4` (vertices per square face),
+- `dOutEdge(d) = 2^d - d` (`5` complementary face degree at `d = 3`),
 - `normSqEdge(d) = d - 1` (`2`, squared Euclidean norm `‖e‖₂²` of each cuboctahedron vertex),
-- `unitStep(d) = d^2 - 2^d` (`1`). -/
+- `quarterPeriod(d) = 2^(2^d - 1)` (`128` quarter-period ticks `Q_□`),
+- `halfPeriod(d) = 2 * quarterPeriod(d)` (`256` half-period ticks `Φ_half`),
+- `nRing(d) = 4 * quarterPeriod(d)` (`512` full-period ring ticks `N_ring`),
+- `octantStep(d) = nRing(d) / nTriangles(d)` (`64` half-quadrant bisector ticks `K_P`),
+- `nineFoldDivisor(d) = d * d` (`9`, ninth-quadrant divisor `90° / 9 = 10°`),
+- `unitStep = 1`. -/
 def nTriangles (d : Nat) : Nat := 2 ^ d
-def modBits (d : Nat) : Nat := 1 + nTriangles d
-def nRing (d : Nat) : Nat := 2 ^ modBits d
-def halfPeriod (d : Nat) : Nat := nRing d / 2
-def quarterPeriod (d : Nat) : Nat := nRing d / 4
-def octantStep (d : Nat) : Nat := nRing d / nTriangles d
-def dInSquare : Nat := 4
 def nSquares (d : Nat) : Nat := 2 * d
 def nVertices (d : Nat) : Nat := 2 * nSquares d
+def dInSquare : Nat := 4
 def dOutEdge (d : Nat) : Nat := nTriangles d - d
 def normSqEdge (d : Nat) : Nat := d - 1
-def unitStep (d : Nat) : Nat := modBits d - nTriangles d
+def quarterPeriod (d : Nat) : Nat := 2 ^ (nTriangles d - 1)
+def halfPeriod (d : Nat) : Nat := 2 * quarterPeriod d
+def nRing (d : Nat) : Nat := dInSquare * quarterPeriod d
+def octantStep (d : Nat) : Nat := nRing d / nTriangles d
+def nineFoldDivisor (d : Nat) : Nat := d * d
+def unitStep : Nat := 1
 
-/-- The 3D cubic shell orbit `O_k(d) = {e ∈ {-1, 0, +1}^3 | e_x² + e_y² + e_z² = k}`.
-At `k = normSqEdge(d) = d - 1 = 2`, `cubicOrbit3D(d - 1)` is the 12-vertex cuboctahedron `O₂(d)`. -/
+/-- The 3D cubic shell orbit `O_k = {e ∈ {-1, 0, +1}^3 | e_x² + e_y² + e_z² = k}`.
+At `k = normSqEdge(3) = 2`, `cubicOrbit3D 2` is the 12-vertex cuboctahedron `O₂`. -/
 def cubicGrid3D : List (Int × Int × Int) :=
   ([-1, 0, 1] : List Int).flatMap (fun x =>
     ([-1, 0, 1] : List Int).flatMap (fun y =>
@@ -160,11 +88,10 @@ def projS (d : Nat) (phi : Int) : Int :=
 - At `φ = 0`: `eulerExp(d, 0) = (Q_□(d), 0)` (`1`),
 - Quarter-turn shift `+Q_□(d)` acts as exact multiplication by the imaginary unit `i`:
   `eulerExp(d, φ + Q_□(d)) = (-S_d(φ), C_d(φ)) = i * eulerExp(d, φ)` for all `φ ∈ ℤ_{N_ring(d)}`,
-- Half-turn shift `+Φ_Pauli(d)` (`π`) satisfies **Euler's Identity `e^{iπ} + 1 = 0`** across the entire ring:
+- Half-turn shift `+Φ_half(d)` (`π`) satisfies **Euler's Identity `e^{iπ} + 1 = 0`** across the entire ring:
   `eulerExp(d, φ + halfPeriod(d)) + eulerExp(d, φ) = (0, 0)`,
 - And the inner product of `i * eulerExp(d, φ) = eulerExp(d, φ + Q_□(d))` with the finite difference
-  `Δ eulerExp(d, φ) = eulerExp(d, φ + 1) - eulerExp(d, φ)` is identically the constant Wronskian `W_d(φ) ≡ Q_□(d)`
-  (the exact discrete differential equation of Euler's exponential `⟨i e^{iφ}, d/dφ e^{iφ}⟩ ≡ 1`)! -/
+  `Δ eulerExp(d, φ) = eulerExp(d, φ + 1) - eulerExp(d, φ)` is identically the constant Wronskian `W_d(φ) ≡ Q_□(d)`! -/
 def eulerExp (d : Nat) (phi : Int) : Int × Int :=
   (projC d phi, projS d phi)
 
@@ -291,7 +218,7 @@ def sumOverShell3D : List (Int × Int × Int) → (Int × Int × Int → Int) �
   | e :: rest, f3D => f3D e + sumOverShell3D rest f3D
 
 /-- Natural center-plus-shell 3D volume integrator on the cuboctahedron ball `B₁(d) = {0} ∪ O₂(d)`:
-weights the central node `(0,0,0)` by `|N(d)| = 12` equally against the sum over the `12` vertices of `O₂(d) = cubicOrbit3D(d - 1)`. -/
+weights the central node `(0,0,0)` by `|V_{O₂}(d)| = 12` equally against the sum over the `12` vertices of `O₂(d) = cubicOrbit3D(d - 1)`. -/
 def cuboct3DContinuumIntegrator (d : Nat) (f3D : Int × Int × Int → Int) : Int :=
   (nVertices d : Int) * f3D (0, 0, 0) +
   sumOverShell3D (cubicOrbit3D (d - 1)) f3D
@@ -300,21 +227,19 @@ def cuboct3DContinuumIntegrator (d : Nat) (f3D : Int × Int × Int → Int) : In
 def exactContinuum1DUnitIntegralNum (pDeg : Nat) : Int :=
   ((1 : Int) - ((-1 : Int) ^ (pDeg + 1))) / 2
 
-/-- **Step-`s` Wronskian `stepWronskian(d, s, φ)` and Inner Product `stepInner(d, s, φ)` for `\pi(n)` as a Function of `n = N_ring(d) / s`:**
-On the Weierstrass `n`-gon with step `s = N_ring(d) / n`, the inscribed rational approximation `\pi_in(n)` and circumscribed
-rational approximation `\pi_out(n)` have per-segment terms `a_j = (I_s * W_s) / (R_1 * R_2)` and `b_j = W_s / I_s`.
+/-- Step-`s` Wronskian `stepWronskian(d, s, φ)` and Inner Product `stepInner(d, s, φ)` for `π(n)` as a Function of `n = N_ring(d) / s`:
+On the Weierstrass `n`-gon with step `s = N_ring(d) / n`, the inscribed rational approximation `π_in(n)` and circumscribed
+rational approximation `π_out(n)` have per-segment terms `a_j = (I_s * W_s) / (R_1 * R_2)` and `b_j = W_s / I_s`.
 By Brahmagupta's identity `R_1 * R_2 - I_s² = W_s²`, their difference over common denominator `I_s * R_1 * R_2`
 is identically the **cube of the step Wronskian `W_s³ = (s * Q_□(d))³`**:
-`b_j - a_j = W_s³ / (I_s * R_1 * R_2) > 0`!
-Under polygon doubling `n ↦ 2n` (`s ↦ s / 2`), `W_s³` shrinks by `2^d = |△(d)| = 8` while the segment count doubles by `‖e‖₂² = d - 1 = 2`,
-so the rational bracket width `\pi_out(n) - \pi_in(n)` contracts by the exact factor `2^d / (d - 1) = d_in(□) = 4` at every step! -/
+`b_j - a_j = W_s³ / (I_s * R_1 * R_2) > 0`! -/
 def stepWronskian (d : Nat) (s phi : Int) : Int :=
   projC d phi * projS d (phi + s) - projS d phi * projC d (phi + s)
 
 def stepInner (d : Nat) (s phi : Int) : Int :=
   projC d phi * projC d (phi + s) + projS d phi * projS d (phi + s)
 
-/-- Rational pair addition `(n₁, d₁) + (n₂, d₂) = (n₁ * d₂ + n₂ * d₁, d₁ * d₂)` and reduction for `\pi_in(n)` and `\pi_out(n)`. -/
+/-- Rational pair addition `(n₁, d₁) + (n₂, d₂) = (n₁ * d₂ + n₂ * d₁, d₁ * d₂)` and reduction for `π_in(n)` and `π_out(n)`. -/
 def addRat (p1 p2 : Nat × Nat) : Nat × Nat :=
   (p1.1 * p2.2 + p2.1 * p1.2, p1.2 * p2.2)
 
@@ -326,7 +251,7 @@ def foldRatUpTo : Nat → (Nat → Nat × Nat) → Nat × Nat
   | 0, _ => (0, 1)
   | n + 1, f => reduceRat (addRat (foldRatUpTo n f) (f n))
 
-/-- Inscribed rational `\pi_in(n)` and circumscribed rational `\pi_out(n)` as explicit functions of polygon side count `n` (`s = N_ring(d) / n`). -/
+/-- Inscribed rational `π_in(n)` and circumscribed rational `π_out(n)` as explicit functions of polygon side count `n` (`s = N_ring(d) / n`). -/
 def piInscribedRat (d nSides : Nat) : Nat × Nat :=
   foldRatUpTo (nSides / 2) (fun j =>
     reduceRat
@@ -341,7 +266,7 @@ def piCircumscribedRat (d nSides : Nat) : Nat × Nat :=
       ((stepWronskian d ((nRing d / nSides : Nat) : Int) ((j * (nRing d / nSides) : Nat) : Int)).toNat,
        (stepInner d ((nRing d / nSides : Nat) : Int) ((j * (nRing d / nSides) : Nat) : Int)).toNat))
 
-/-- Huygens–Snellius dimension-weighted rational estimator `\pi_d(n) = (\pi_in(n) + (d - 1) * \pi_out(n)) / d`. -/
+/-- Huygens–Snellius dimension-weighted rational estimator `π_d(n) = (π_in(n) + (d - 1) * π_out(n)) / d`. -/
 def piHuygensSnelliusRat (d nSides : Nat) : Nat × Nat :=
   reduceRat
     ((addRat (piInscribedRat d nSides) (normSqEdge d * (piCircumscribedRat d nSides).1, (piCircumscribedRat d nSides).2)).1,
@@ -349,10 +274,10 @@ def piHuygensSnelliusRat (d nSides : Nat) : Nat × Nat :=
 
 /-- Calculator-Free Rational Sine Operator `verletParabolaSineRat(d, p, q)` on Fractions `(p / q) * Q_□(d)` of a Right Angle:
 Evaluates the Verlet half-turn parabola `P(p, q) = p * (2 * q - p)` weighted by the cuboctahedron square-face degree `d_in(□) = 4`
-and outer edge degree `d_out(E)(d) = 5`:
+and complementary edge degree `d_out(E)(d) = 5`:
 `sin_rat(d; p, q) = reduceRat(d_in(□) * p * (2 * q - p), d_out(E)(d) * q² - p * (2 * q - p))`.
-At the canonical fractions of a right angle `p / q ∈ {1 / modBits(d) (10°), 1 / d (30°), 1 / ‖e‖₂² (45°), ‖e‖₂² / d (60°), 1 / 1 (90°)}`,
-it outputs the exact structural invariants of the cuboctahedron `(17/97, 1/2, 12/17, 32/37, 1/1)`! -/
+At the canonical fractions of a right angle `p / q ∈ {1 / 9 (10°), 1 / 3 (30°), 1 / 2 (45°), 2 / 3 (60°), 1 / 1 (90°)}`,
+it outputs the exact structural ratios `(17/97, 1/2, 12/17, 32/37, 1/1)`. -/
 def verletParabolaSineRat (d p q : Nat) : Nat × Nat :=
   reduceRat
     (dInSquare * p * (normSqEdge d * q - p),
@@ -376,8 +301,8 @@ def cuboctFourthMomentClosedForm (d : Nat) (kz ky kx : Int) : Int :=
 /-- Universal verification across the 3D wavevector grid `k ∈ [-d, d]³` (`343` wavevectors) of exact `O(k²)` isotropy
 `M^{(2)}_d(k) = |△(d)| * |k|² = 8 |k|²` and exact `O(k⁴)` lattice anisotropy `M^{(4)}_d(k) = 12 |k|⁴ - 4 ∑ k_i⁴`. -/
 def checkCuboctMomentIdentitiesBool (d : Nat) : Bool :=
-  let grid := [-(d : Int), -((normSqEdge d : Nat) : Int), -((unitStep d : Nat) : Int), 0,
-               ((unitStep d : Nat) : Int), ((normSqEdge d : Nat) : Int), (d : Int)]
+  let grid := [-(d : Int), -((normSqEdge d : Nat) : Int), -(unitStep : Int), 0,
+               (unitStep : Int), ((normSqEdge d : Nat) : Int), (d : Int)]
   grid.all (fun kz =>
     grid.all (fun ky =>
       grid.all (fun kx =>
@@ -386,16 +311,13 @@ def checkCuboctMomentIdentitiesBool (d : Nat) : Bool :=
         eqIntBool (cuboctFourthMoment d kz ky kx)
           (cuboctFourthMomentClosedForm d kz ky kx))))
 
-/-- Number of independent rotation/tilt planes (Euler angles `dim SO(d) = d(d-1)/2`), which equals `d` uniquely at `d = 3`,
+/-- Number of independent rotation/tilt planes (Euler angles `dim SO(d) = d(d-1)/2 = 3`),
 partitioning the `12` cuboctahedron vertices into `3 × 4` equatorial squares `(xy, xz, yz)`. -/
 def eulerPlaneCount (d : Nat) : Nat :=
   d * (d - 1) / normSqEdge d
 
 /-- Exact root-free 3D Euler-angle rotator `(φ₁, φ₂, φ₃) ∈ ℤ_{N_ring(d)}³` acting on `(x, y, z) ∈ ℤ³`
-by composing Weierstrass Pythagorean rotations in the three cuboctahedron coordinate planes `(xy, xz, yz)`:
-1. Yaw `φ₁` in the `xy`-plane,
-2. Pitch/nutation tilt `φ₂` in the `xz`-plane,
-3. Roll tilt `φ₃` in the `yz`-plane. -/
+by composing Weierstrass Pythagorean rotations in the three cuboctahedron coordinate planes `(xy, xz, yz)`. -/
 def euler3DRotateVec (d : Nat) (phi1 phi2 phi3 x y z : Int) : Int × Int × Int :=
   let x1 := pythCosNum d phi1 * x - pythSinNum d phi1 * y
   let y1 := pythSinNum d phi1 * x + pythCosNum d phi1 * y
@@ -420,153 +342,147 @@ def vec3NormSq (v : Int × Int × Int) : Int :=
 ## 5. Main Theorems of the Paper
 -/
 
-/-- **Theorem 1 (Discrete Euler Exponential `e^{iφ}`, Euler's Identity `e^{iπ} + 1 = 0`, Universal Constant Difference Wronskian `⟨i e^{iφ}, Δ e^{iφ}⟩ ≡ Q_□(d)`, Brahmagupta–Weierstrass Euclidean Lift, and Fundamental Theorem of Discrete Calculus)**: -/
-theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz (d : Nat) :
-    CatalanLaw (fun d =>
-      -- (i) Discrete Euler exponential e^{iφ}, multiplication by i via +Q_□(d), Euler's identity e^{iπ} + 1 = 0, and ⟨i e^{iφ}, Δ e^{iφ}⟩ = W_d(φ) ≡ Q_□(d)
-      (allUpTo (nRing d) (fun phi =>
-         eqNatBool (Int.natAbs (projC d (phi : Int)) + Int.natAbs (projS d (phi : Int))) (quarterPeriod d) &&
-         eqIntBool (eulerExp d ((phi : Int) + (quarterPeriod d : Int))).1 (-projS d (phi : Int)) &&
-         eqIntBool (eulerExp d ((phi : Int) + (quarterPeriod d : Int))).2 (projC d (phi : Int)) &&
-         eqIntBool ((eulerExp d ((phi : Int) + (halfPeriod d : Int))).1 + (eulerExp d (phi : Int)).1) 0 &&
-         eqIntBool ((eulerExp d ((phi : Int) + (halfPeriod d : Int))).2 + (eulerExp d (phi : Int)).2) 0 &&
-         eqIntBool (eulerImagDotDiff d (phi : Int)) (rotatorWronskian d (phi : Int)) &&
-         eqIntBool (rotatorWronskian d (phi : Int)) (quarterPeriod d : Int)) = true ∧
-       discreteIntegral (nRing d) (fun phi => rotatorWronskian d phi) =
-         ((nRing d * quarterPeriod d : Nat) : Int)) ∧
-      -- (ii) Root-free Euclidean Pythagorean circle identity X² + Y² = R² and Brahmagupta-Weierstrass step differentials
-      (allUpTo (nRing d) (fun phi =>
-         eqIntBool
-           (pythCosNum d (phi : Int) * pythCosNum d (phi : Int) +
-            pythSinNum d (phi : Int) * pythSinNum d (phi : Int))
-           (pythHypDenom d (phi : Int) * pythHypDenom d (phi : Int)) &&
-         eqIntBool (pythStepCross d (phi : Int))
-           (((normSqEdge d * quarterPeriod d : Nat) : Int) * rotatorInnerStep d (phi : Int)) &&
-         eqIntBool (pythStepDot d (phi : Int))
-           (rotatorInnerStep d (phi : Int) * rotatorInnerStep d (phi : Int) -
-            ((quarterPeriod d * quarterPeriod d : Nat) : Int))) = true) ∧
-      -- (iii) Fundamental Theorem of Discrete Calculus (Newton-Leibniz) across all 512 points & half-wave area = Q_□(d)²
-      (allUpTo (nRing d) (fun phi =>
-         eqIntBool (antiderivC d (phi + 1) - antiderivC d phi) (projC d (phi : Int)) &&
-         eqIntBool (antiderivS d (phi + 1) - antiderivS d phi) (projS d (phi : Int))) = true ∧
-       antiderivC d (nRing d) = 0 ∧
-       antiderivS d (nRing d) = 0 ∧
-       antiderivS d (halfPeriod d) = ((quarterPeriod d * quarterPeriod d : Nat) : Int))) d :=
-  catalan_law_of_d3 _ ⟨⟨rfl, rfl⟩, rfl, ⟨rfl, rfl, rfl, rfl⟩⟩ d
+/-- **Theorem 1 (Discrete Euler Exponential `e^{iφ}`, Euler's Identity `e^{iπ} + 1 = 0`, Universal Constant Difference Wronskian `⟨i e^{iφ}, Δ e^{iφ}⟩ ≡ Q_□(3) = 128`, Brahmagupta–Weierstrass Euclidean Lift, and Fundamental Theorem of Discrete Calculus)**: -/
+theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz :
+    -- (i) Discrete Euler exponential e^{iφ}, multiplication by i via +Q_□(3), Euler's identity e^{iπ} + 1 = 0, and ⟨i e^{iφ}, Δ e^{iφ}⟩ = W₃(φ) ≡ Q_□(3) = 128
+    (allUpTo (nRing 3) (fun phi =>
+       eqNatBool (Int.natAbs (projC 3 (phi : Int)) + Int.natAbs (projS 3 (phi : Int))) (quarterPeriod 3) &&
+       eqIntBool (eulerExp 3 ((phi : Int) + (quarterPeriod 3 : Int))).1 (-projS 3 (phi : Int)) &&
+       eqIntBool (eulerExp 3 ((phi : Int) + (quarterPeriod 3 : Int))).2 (projC 3 (phi : Int)) &&
+       eqIntBool ((eulerExp 3 ((phi : Int) + (halfPeriod 3 : Int))).1 + (eulerExp 3 (phi : Int)).1) 0 &&
+       eqIntBool ((eulerExp 3 ((phi : Int) + (halfPeriod 3 : Int))).2 + (eulerExp 3 (phi : Int)).2) 0 &&
+       eqIntBool (eulerImagDotDiff 3 (phi : Int)) (rotatorWronskian 3 (phi : Int)) &&
+       eqIntBool (rotatorWronskian 3 (phi : Int)) (quarterPeriod 3 : Int)) = true ∧
+     discreteIntegral (nRing 3) (fun phi => rotatorWronskian 3 phi) =
+       ((nRing 3 * quarterPeriod 3 : Nat) : Int)) ∧
+    -- (ii) Root-free Euclidean Pythagorean circle identity X² + Y² = R² and Brahmagupta-Weierstrass step differentials
+    (allUpTo (nRing 3) (fun phi =>
+       eqIntBool
+         (pythCosNum 3 (phi : Int) * pythCosNum 3 (phi : Int) +
+          pythSinNum 3 (phi : Int) * pythSinNum 3 (phi : Int))
+         (pythHypDenom 3 (phi : Int) * pythHypDenom 3 (phi : Int)) &&
+       eqIntBool (pythStepCross 3 (phi : Int))
+         (((normSqEdge 3 * quarterPeriod 3 : Nat) : Int) * rotatorInnerStep 3 (phi : Int)) &&
+       eqIntBool (pythStepDot 3 (phi : Int))
+         (rotatorInnerStep 3 (phi : Int) * rotatorInnerStep 3 (phi : Int) -
+          ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int))) = true) ∧
+    -- (iii) Fundamental Theorem of Discrete Calculus (Newton-Leibniz) across all 512 points & half-wave area = Q_□(3)² = 16,384
+    (allUpTo (nRing 3) (fun phi =>
+       eqIntBool (antiderivC 3 (phi + 1) - antiderivC 3 phi) (projC 3 (phi : Int)) &&
+       eqIntBool (antiderivS 3 (phi + 1) - antiderivS 3 phi) (projS 3 (phi : Int))) = true ∧
+     antiderivC 3 (nRing 3) = 0 ∧
+     antiderivS 3 (nRing 3) = 0 ∧
+     antiderivS 3 (halfPeriod 3) = ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int)) :=
+  ⟨⟨rfl, rfl⟩, rfl, ⟨rfl, rfl, rfl, rfl⟩⟩
 
 /-- **Theorem 2 (Closed-Form Evaluation of Fresnel, Jacobi Elliptic, Dirichlet `Si`, Parseval, and Bessel `J₀` Integrals)**: -/
-theorem thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals (d : Nat) :
-    CatalanLaw (fun d =>
-      -- (i) Lemniscate Jacobi elliptic triad (sn_d, cn_d, dn_d) invariants at cuboctahedron modulus k² = 1/‖e‖₂² = 1/2
-      (allUpTo (nRing d) (fun phi =>
-         eqNatBool (Int.natAbs (jacobiSn d (phi : Int)) + Int.natAbs (jacobiCn d (phi : Int))) (quarterPeriod d) &&
-         eqIntBool (jacobiDoubleDn d (phi : Int) + (Int.natAbs (jacobiSn d (phi : Int)) : Int)) (halfPeriod d : Int)) = true ∧
-       completeEllipticIntegral d (normSqEdge d : Int) (d : Int) =
-         ((halfPeriod d * quarterPeriod d * dOutEdge d : Nat) : Int) ∧
-       incompleteEllipticFirstQuad d (quarterPeriod d) (unitStep d : Int) (unitStep d : Int) =
-         ((quarterPeriod d * quarterPeriod d : Nat) : Int)) ∧
-      -- (ii) Closed-form Fresnel diffraction integrals: C_Fresnel = S_Fresnel = d_in(□) * N_ring(d) = 2048 (stationary phase at ψ = K_P(d) = 64)
-      (fresnelCosIntegral d = ((dInSquare * nRing d : Nat) : Int) ∧
-       fresnelSinIntegral d = ((dInSquare * nRing d : Nat) : Int) ∧
-       fresnelCosIntegral d = fresnelSinIntegral d ∧
-       projC d (octantStep d : Int) = (octantStep d : Int) ∧
-       projS d (octantStep d : Int) = (octantStep d : Int)) ∧
-      -- (iii) Closed-form Dirichlet Si integral (128 on Q₁ and half-period) and Parseval energy integral (2,796,288)
-      (dirichletSiIntegral d (quarterPeriod d) = (quarterPeriod d : Int) ∧
-       dirichletSiIntegral d (halfPeriod d) = (quarterPeriod d : Int) ∧
-       parsevalCosSqIntegral d = parsevalSinSqIntegral d ∧
-       (nSquares d : Int) * parsevalCosSqIntegral d =
-         ((nRing d * (normSqEdge d * quarterPeriod d * quarterPeriod d + unitStep d) : Nat) : Int)) ∧
-      -- (iv) Closed-form Bessel J₀ integral (65536 at k=0, 32768 at k=1, and exact root 0 at k = d_in(□) = 4)
-      (besselJ0Integral d 0 = ((nRing d * quarterPeriod d : Nat) : Int) ∧
-       besselJ0Integral d (unitStep d : Int) = ((halfPeriod d * quarterPeriod d : Nat) : Int) ∧
-       besselJ0Integral d (dInSquare : Int) = 0)) d :=
-  catalan_chain d (thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz 3)
-    (fun _ => ⟨⟨rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl⟩⟩)
+theorem thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals :
+    -- (i) Lemniscate Jacobi elliptic triad (sn₃, cn₃, dn₃) invariants at cuboctahedron modulus k² = 1/‖e‖₂² = 1/2
+    (allUpTo (nRing 3) (fun phi =>
+       eqNatBool (Int.natAbs (jacobiSn 3 (phi : Int)) + Int.natAbs (jacobiCn 3 (phi : Int))) (quarterPeriod 3) &&
+       eqIntBool (jacobiDoubleDn 3 (phi : Int) + (Int.natAbs (jacobiSn 3 (phi : Int)) : Int)) (halfPeriod 3 : Int)) = true ∧
+     completeEllipticIntegral 3 (normSqEdge 3 : Int) 3 =
+       ((halfPeriod 3 * quarterPeriod 3 * dOutEdge 3 : Nat) : Int) ∧
+     incompleteEllipticFirstQuad 3 (quarterPeriod 3) (unitStep : Int) (unitStep : Int) =
+       ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int)) ∧
+    -- (ii) Closed-form Fresnel diffraction integrals: C_Fresnel = S_Fresnel = d_in(□) * N_ring(3) = 2048 (stationary phase at ψ = K_P(3) = 64)
+    (fresnelCosIntegral 3 = ((dInSquare * nRing 3 : Nat) : Int) ∧
+     fresnelSinIntegral 3 = ((dInSquare * nRing 3 : Nat) : Int) ∧
+     fresnelCosIntegral 3 = fresnelSinIntegral 3 ∧
+     projC 3 (octantStep 3 : Int) = (octantStep 3 : Int) ∧
+     projS 3 (octantStep 3 : Int) = (octantStep 3 : Int)) ∧
+    -- (iii) Closed-form Dirichlet Si integral (128 on Q₁ and half-period) and Parseval energy integral (2,796,288)
+    (dirichletSiIntegral 3 (quarterPeriod 3) = (quarterPeriod 3 : Int) ∧
+     dirichletSiIntegral 3 (halfPeriod 3) = (quarterPeriod 3 : Int) ∧
+     parsevalCosSqIntegral 3 = parsevalSinSqIntegral 3 ∧
+     (nSquares 3 : Int) * parsevalCosSqIntegral 3 =
+       ((nRing 3 * (normSqEdge 3 * quarterPeriod 3 * quarterPeriod 3 + unitStep) : Nat) : Int)) ∧
+    -- (iv) Closed-form Bessel J₀ integral (65536 at k=0, 32768 at k=1, and exact root 0 at k = d_in(□) = 4)
+    (besselJ0Integral 3 0 = ((nRing 3 * quarterPeriod 3 : Nat) : Int) ∧
+     besselJ0Integral 3 (unitStep : Int) = ((halfPeriod 3 * quarterPeriod 3 : Nat) : Int) ∧
+     besselJ0Integral 3 (dInSquare : Int) = 0) :=
+  ⟨⟨rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl⟩⟩
 
-/-- **Theorem 3 (First-Principles Derivation of 3D & 1D Continuum Integration from the Cuboctahedron Archimedes Equizonal Partition)**: -/
-theorem thm3_continuum_integration_from_cuboctahedron_archimedes_layers (d : Nat) :
-    CatalanLaw (fun d =>
-      -- (i) Archimedes equizonal partition of the 12 cuboctahedron vertices into (4, 4, 4) across e_x ∈ {-1, 0, +1}
-      ((cubicOrbit3D (d - 1)).length = nVertices d ∧
-       cuboctLayerCount d (-(unitStep d : Int)) = dInSquare ∧
-       cuboctLayerCount d 0 = dInSquare ∧
-       cuboctLayerCount d (unitStep d : Int) = dInSquare ∧
-       nVertices d + cuboctLayerCount d 0 = dInSquare * dInSquare ∧
-       normSqEdge d * nVertices d = dInSquare * nSquares d) ∧
-      -- (ii) Exact agreement of the 3D cuboctahedron operator with the 1D and 3D continuum Riemann integral ∭_{[-1,1]³} F dV up to degree d = 3
-      (allUpTo dInSquare (fun p =>
-         eqIntBool (((p + 1 : Nat) : Int) * cuboct3DContinuumIntegrator d (fun (ex, _, _) => ex ^ p))
-           (((normSqEdge d * nVertices d : Nat) : Int) * exactContinuum1DUnitIntegralNum p)) = true ∧
-       cuboct3DContinuumIntegrator d (fun (ex, ey, ez) => ex * ex + ey * ey + ez * ez) =
-         ((normSqEdge d * nVertices d : Nat) : Int) ∧
-       cuboct3DContinuumIntegrator d (fun (ex, ey, ez) => ex * ey * ez) = 0) ∧
-      -- (iii) Exact Pochhammer falling-factorial discrete integration & M-layer 512-gon circle radius lower bound C² + S² ≥ Q_□² / 2
-      ((dInSquare : Int) * discreteIntegral (nVertices d + unitStep d) (fun m => (fallingFactorial (Int.toNat m) d : Int)) =
-         (fallingFactorial (nVertices d + unitStep d) dInSquare : Int) ∧
-       allUpTo (nRing d) (fun phi =>
-         Nat.ble (quarterPeriod d * quarterPeriod d) (Int.toNat (pythHypDenom d (phi : Int)) * normSqEdge d)) = true ∧
-       nSquares d * nRing d * nRing d = d * normSqEdge d * (nRing d ^ (normSqEdge d))) ∧
-      -- (iv) \pi(n) as a pure rational function of n on the Weierstrass rotator: Wronskian-cube identity R₁*R₂ - I_s² = W_s²,
-      -- strict monotone nested brackets \pi_in(8) < \pi_in(16) < \pi_in(32) < \pi_out(32) < \pi_out(16) < \pi_out(8),
-      -- and Huygens-Snellius estimator \pi_d(16) = 142 / 45 = (2*K_P(d) + 14) / (modBits(d) * d_out(E)(d))!
-      (allUpTo (nRing d) (fun phi =>
-         eqIntBool
-           (pythHypDenom d (phi : Int) * pythHypDenom d ((phi : Int) + 1) -
-            rotatorInnerStep d (phi : Int) * rotatorInnerStep d (phi : Int))
-           (rotatorWronskian d (phi : Int) * rotatorWronskian d (phi : Int))) = true ∧
-       piInscribedRat d (nTriangles d) = (normSqEdge d, unitStep d) ∧
-       piCircumscribedRat d (nTriangles d) = (dInSquare, unitStep d) ∧
-       piInscribedRat d (normSqEdge d * nTriangles d) = (nVertices d + normSqEdge d, dOutEdge d) ∧
-       piCircumscribedRat d (normSqEdge d * nTriangles d) = (nVertices d - normSqEdge d, d) ∧
-       piHuygensSnelliusRat d (normSqEdge d * nTriangles d) =
-         (normSqEdge d * octantStep d + nVertices d + normSqEdge d, modBits d * dOutEdge d) ∧
-       (piInscribedRat d (nTriangles d)).1 * (piInscribedRat d (normSqEdge d * nTriangles d)).2 <
-         (piInscribedRat d (normSqEdge d * nTriangles d)).1 * (piInscribedRat d (nTriangles d)).2 ∧
-       (piInscribedRat d (normSqEdge d * nTriangles d)).1 * (piInscribedRat d (dInSquare * nTriangles d)).2 <
-         (piInscribedRat d (dInSquare * nTriangles d)).1 * (piInscribedRat d (normSqEdge d * nTriangles d)).2 ∧
-       (piInscribedRat d (dInSquare * nTriangles d)).1 * (piCircumscribedRat d (dInSquare * nTriangles d)).2 <
-         (piCircumscribedRat d (dInSquare * nTriangles d)).1 * (piInscribedRat d (dInSquare * nTriangles d)).2 ∧
-       (piCircumscribedRat d (dInSquare * nTriangles d)).1 * (piCircumscribedRat d (normSqEdge d * nTriangles d)).2 <
-         (piCircumscribedRat d (normSqEdge d * nTriangles d)).1 * (piCircumscribedRat d (dInSquare * nTriangles d)).2 ∧
-       (piCircumscribedRat d (normSqEdge d * nTriangles d)).1 * (piCircumscribedRat d (nTriangles d)).2 <
-         (piCircumscribedRat d (nTriangles d)).1 * (piCircumscribedRat d (normSqEdge d * nTriangles d)).2) ∧
-      -- (v) Calculator-free rational sine from the Verlet parabola at 10°, 30°, 45°, 60°, 90°: (17/97, 1/2, 12/17, 32/37, 1/1)
-      (verletParabolaSineRat d (unitStep d) (modBits d) =
-         (nVertices d + unitStep d + dInSquare, dInSquare * dInSquare + modBits d * modBits d) ∧
-       verletParabolaSineRat d (unitStep d) d = (unitStep d, normSqEdge d) ∧
-       verletParabolaSineRat d (unitStep d) (normSqEdge d) =
-         (nVertices d, nVertices d + unitStep d + dInSquare) ∧
-       verletParabolaSineRat d (normSqEdge d) d =
-         (octantStep d / normSqEdge d, dInSquare ^ d - d ^ d) ∧
-       verletParabolaSineRat d (unitStep d) (unitStep d) = (unitStep d, unitStep d)) ∧
-      -- (vi) Exact O(k²) isotropy `∑ (k·e)² = 8 |k|²`, O(k⁴) fourth-moment identity `∑ (k·e)⁴ = 12 |k|⁴ - 4 ∑ k_i⁴`,
-      -- and root-free 3D Euler-angle rotator `(φ₁, φ₂, φ₃)` across the `d(d-1)/2 = 3` cuboctahedron planes `(xy, xz, yz)`
-      (checkCuboctMomentIdentitiesBool d = true ∧
-       cuboctFourthMoment d (unitStep d : Int) 0 0 =
-         (nVertices d : Int) - (dInSquare : Int) ∧
-       cuboctFourthMoment d (unitStep d : Int) (unitStep d : Int) 0 / (dInSquare : Int) =
-         (nVertices d : Int) - (normSqEdge d : Int) ∧
-       cuboctFourthMoment d (unitStep d : Int) (unitStep d : Int) (unitStep d : Int) =
-         ((nVertices d * nTriangles d : Nat) : Int) ∧
-       eulerPlaneCount d = d ∧
-       nVertices d = eulerPlaneCount d * dInSquare ∧
-       ((cubicOrbit3D (d - 1)).all (fun (ex, ey, ez) =>
-         eqIntBool
-           (vec3NormSq (euler3DRotateVec d (d : Int) (dOutEdge d : Int) (modBits d : Int) ex ey ez))
-           (euler3DHypDenom d (d : Int) (dOutEdge d : Int) (modBits d : Int) *
-            euler3DHypDenom d (d : Int) (dOutEdge d : Int) (modBits d : Int) *
-            (normSqEdge d : Int))) = true) ∧
-       euler3DRotateVec d 0 (octantStep d : Int) 0 (unitStep d : Int) (unitStep d : Int) 0 =
-         (0,
-          euler3DHypDenom d 0 (octantStep d : Int) 0,
-          euler3DHypDenom d 0 (octantStep d : Int) 0))) d :=
-  catalan_chain d (thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals 3)
-    (fun _ => ⟨⟨rfl, rfl, rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl⟩,
-               ⟨rfl, rfl, rfl, rfl, rfl, rfl, by decide, by decide, by decide, by decide, by decide⟩,
-               ⟨rfl, rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩⟩)
+/-- **Theorem 3 (First-Principles Derivation of 3D & 1D Continuum Integration, `π(n)` Rational Brackets, Calculator-Free Rational Trigonometry, Moments, and 3D Euler-Angle Rotator from the Cuboctahedron `O₂`)**: -/
+theorem thm3_continuum_integration_from_cuboctahedron_archimedes_layers :
+    -- (i) Archimedes equizonal partition of the 12 cuboctahedron vertices into (4, 4, 4) across e_x ∈ {-1, 0, +1}
+    ((cubicOrbit3D (3 - 1)).length = nVertices 3 ∧
+     cuboctLayerCount 3 (-(unitStep : Int)) = dInSquare ∧
+     cuboctLayerCount 3 0 = dInSquare ∧
+     cuboctLayerCount 3 (unitStep : Int) = dInSquare ∧
+     nVertices 3 + cuboctLayerCount 3 0 = dInSquare * dInSquare ∧
+     normSqEdge 3 * nVertices 3 = dInSquare * nSquares 3) ∧
+    -- (ii) Exact agreement of the 3D cuboctahedron operator with the 1D and 3D continuum Riemann integral ∭_{[-1,1]³} F dV up to degree 3
+    (allUpTo dInSquare (fun p =>
+       eqIntBool (((p + 1 : Nat) : Int) * cuboct3DContinuumIntegrator 3 (fun (ex, _, _) => ex ^ p))
+         (((normSqEdge 3 * nVertices 3 : Nat) : Int) * exactContinuum1DUnitIntegralNum p)) = true ∧
+     cuboct3DContinuumIntegrator 3 (fun (ex, ey, ez) => ex * ex + ey * ey + ez * ez) =
+       ((normSqEdge 3 * nVertices 3 : Nat) : Int) ∧
+     cuboct3DContinuumIntegrator 3 (fun (ex, ey, ez) => ex * ey * ez) = 0) ∧
+    -- (iii) Exact Pochhammer falling-factorial discrete integration & 512-gon circle radius lower bound 2 R₃(φ) ≥ Q_□²
+    ((dInSquare : Int) * discreteIntegral (nVertices 3 + unitStep) (fun m => (fallingFactorial (Int.toNat m) 3 : Int)) =
+       (fallingFactorial (nVertices 3 + unitStep) dInSquare : Int) ∧
+     allUpTo (nRing 3) (fun phi =>
+       Nat.ble (quarterPeriod 3 * quarterPeriod 3) (Int.toNat (pythHypDenom 3 (phi : Int)) * normSqEdge 3)) = true ∧
+     nSquares 3 * nRing 3 * nRing 3 = 3 * normSqEdge 3 * (nRing 3 ^ (normSqEdge 3))) ∧
+    -- (iv) π(n) as a pure rational function of n on the Weierstrass rotator: Wronskian-cube identity R₁*R₂ - I_s² = W_s²,
+    -- strict monotone nested brackets π_in(8) < π_in(16) < π_in(32) < π_out(32) < π_out(16) < π_out(8),
+    -- and Huygens-Snellius estimator π₃(16) = 142 / 45
+    (allUpTo (nRing 3) (fun phi =>
+       eqIntBool
+         (pythHypDenom 3 (phi : Int) * pythHypDenom 3 ((phi : Int) + 1) -
+          rotatorInnerStep 3 (phi : Int) * rotatorInnerStep 3 (phi : Int))
+         (rotatorWronskian 3 (phi : Int) * rotatorWronskian 3 (phi : Int))) = true ∧
+     piInscribedRat 3 (nTriangles 3) = (normSqEdge 3, unitStep) ∧
+     piCircumscribedRat 3 (nTriangles 3) = (dInSquare, unitStep) ∧
+     piInscribedRat 3 (normSqEdge 3 * nTriangles 3) = (nVertices 3 + normSqEdge 3, dOutEdge 3) ∧
+     piCircumscribedRat 3 (normSqEdge 3 * nTriangles 3) = (nVertices 3 - normSqEdge 3, 3) ∧
+     piHuygensSnelliusRat 3 (normSqEdge 3 * nTriangles 3) =
+       (normSqEdge 3 * octantStep 3 + nVertices 3 + normSqEdge 3, nineFoldDivisor 3 * dOutEdge 3) ∧
+     (piInscribedRat 3 (nTriangles 3)).1 * (piInscribedRat 3 (normSqEdge 3 * nTriangles 3)).2 <
+       (piInscribedRat 3 (normSqEdge 3 * nTriangles 3)).1 * (piInscribedRat 3 (nTriangles 3)).2 ∧
+     (piInscribedRat 3 (normSqEdge 3 * nTriangles 3)).1 * (piInscribedRat 3 (dInSquare * nTriangles 3)).2 <
+       (piInscribedRat 3 (dInSquare * nTriangles 3)).1 * (piInscribedRat 3 (normSqEdge 3 * nTriangles 3)).2 ∧
+     (piInscribedRat 3 (dInSquare * nTriangles 3)).1 * (piCircumscribedRat 3 (dInSquare * nTriangles 3)).2 <
+       (piCircumscribedRat 3 (dInSquare * nTriangles 3)).1 * (piInscribedRat 3 (dInSquare * nTriangles 3)).2 ∧
+     (piCircumscribedRat 3 (dInSquare * nTriangles 3)).1 * (piCircumscribedRat 3 (normSqEdge 3 * nTriangles 3)).2 <
+       (piCircumscribedRat 3 (normSqEdge 3 * nTriangles 3)).1 * (piCircumscribedRat 3 (dInSquare * nTriangles 3)).2 ∧
+     (piCircumscribedRat 3 (normSqEdge 3 * nTriangles 3)).1 * (piCircumscribedRat 3 (nTriangles 3)).2 <
+       (piCircumscribedRat 3 (nTriangles 3)).1 * (piCircumscribedRat 3 (normSqEdge 3 * nTriangles 3)).2) ∧
+    -- (v) Calculator-free rational sine from the Verlet parabola at 10°, 30°, 45°, 60°, 90°: (17/97, 1/2, 12/17, 32/37, 1/1)
+    (verletParabolaSineRat 3 unitStep (nineFoldDivisor 3) =
+       (nVertices 3 + unitStep + dInSquare, dInSquare * dInSquare + nineFoldDivisor 3 * nineFoldDivisor 3) ∧
+     verletParabolaSineRat 3 unitStep 3 = (unitStep, normSqEdge 3) ∧
+     verletParabolaSineRat 3 unitStep (normSqEdge 3) =
+       (nVertices 3, nVertices 3 + unitStep + dInSquare) ∧
+     verletParabolaSineRat 3 (normSqEdge 3) 3 =
+       (octantStep 3 / normSqEdge 3, dInSquare ^ 3 - 3 ^ 3) ∧
+     verletParabolaSineRat 3 unitStep unitStep = (unitStep, unitStep)) ∧
+    -- (vi) Exact O(k²) isotropy `∑ (k·e)² = 8 |k|²`, O(k⁴) fourth-moment identity `∑ (k·e)⁴ = 12 |k|⁴ - 4 ∑ k_i⁴`,
+    -- and root-free 3D Euler-angle rotator `(φ₁, φ₂, φ₃)` across the `3` cuboctahedron coordinate planes `(xy, xz, yz)`
+    (checkCuboctMomentIdentitiesBool 3 = true ∧
+     cuboctFourthMoment 3 (unitStep : Int) 0 0 =
+       (nVertices 3 : Int) - (dInSquare : Int) ∧
+     cuboctFourthMoment 3 (unitStep : Int) (unitStep : Int) 0 / (dInSquare : Int) =
+       (nVertices 3 : Int) - (normSqEdge 3 : Int) ∧
+     cuboctFourthMoment 3 (unitStep : Int) (unitStep : Int) (unitStep : Int) =
+       ((nVertices 3 * nTriangles 3 : Nat) : Int) ∧
+     eulerPlaneCount 3 = 3 ∧
+     nVertices 3 = eulerPlaneCount 3 * dInSquare ∧
+     ((cubicOrbit3D (3 - 1)).all (fun (ex, ey, ez) =>
+       eqIntBool
+         (vec3NormSq (euler3DRotateVec 3 3 (dOutEdge 3 : Int) (nineFoldDivisor 3 : Int) ex ey ez))
+         (euler3DHypDenom 3 3 (dOutEdge 3 : Int) (nineFoldDivisor 3 : Int) *
+          euler3DHypDenom 3 3 (dOutEdge 3 : Int) (nineFoldDivisor 3 : Int) *
+          (normSqEdge 3 : Int))) = true) ∧
+     euler3DRotateVec 3 0 (octantStep 3 : Int) 0 (unitStep : Int) (unitStep : Int) 0 =
+       (0,
+        euler3DHypDenom 3 0 (octantStep 3 : Int) 0,
+        euler3DHypDenom 3 0 (octantStep 3 : Int) 0)) :=
+  ⟨⟨rfl, rfl, rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl⟩,
+   ⟨rfl, rfl, rfl, rfl, rfl, rfl, by decide, by decide, by decide, by decide, by decide⟩,
+   ⟨rfl, rfl, rfl, rfl, rfl⟩, ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩⟩
 
-#print axioms catalan_lock_iff_d3
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
