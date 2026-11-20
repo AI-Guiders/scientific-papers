@@ -1,0 +1,359 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{russian}
+\setotherlanguage{english}
+\setmainfont{Times New Roman}
+\setmonofont{Consolas}[Scale=0.90]
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=blue!70!black,
+  urlcolor=blue!70!black,
+  pdftitle={Об одном замечательном свойстве кусочно-линейного ротатора на кубооктаэдре, тождестве Эйлера и замкнутом вычислении интегралов типа Френеля, Якоби, Бесселя и Дирихле},
+  pdfauthor={Каратаев Дмитрий Александрович}
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{corollary}[theorem]{Следствие}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{remark}[theorem]{Замечание}
+
+\title{\textbf{Об одном замечательном свойстве кусочно-линейного ротатора на кубооктаэдре, тождестве Эйлера и замкнутом вычислении интегралов типа Френеля, Якоби, Бесселя и Дирихле}}
+\author{Д.\,А.~Каратаев}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+В работе исследуется дискретное тригонометрическое и интегральное исчисление на конечном фазовом кольце $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ ($N_{\mathrm{ring}}(d) = 2^{1+2^d}$) и трёхмерной оболочке кубооктаэдра $O_2(d)\subset\{-1,0,+1\}^d$, выделяемых диофантовым уравнением Каталана $1+2^d=d^2$ ($d=3$, $N_{\mathrm{ring}}=512$). В продолжение кусочно-линейного анализа Томпсона (\texttt{arXiv:1205.3814}), где оставалась открытой задача построения интегрального исчисления без ветвления по квадрантам, показано, что пара кусочно-линейных проекций $\mathcal{E}_d(\varphi) = (\mathcal{C}_d(\varphi),\mathcal{S}_d(\varphi))$ образует точную дискретную экспоненту Эйлера на $512$-угольнике, порождающую фундаментальную пятёрку $\{0,1,i,\pi,e\}$: сдвиг фазы на четверть периода $+Q_\square(d)=+128$ действует во всех $512$ точках кольца как умножение на мнимую единицу $i$, сдвиг на полупериод $+\Phi_{\mathrm{half}}(d)=+256$ тождественно удовлетворяет соотношению Эйлера $\mathcal{E}_d(\varphi+\Phi_{\mathrm{half}}(d))+\mathcal{E}_d(\varphi)=(0,0)$ ($e^{i\pi}+1=0$), а одношаговый разностный вронскиан $\mathcal{W}_d(\varphi)=\mathcal{C}_d(\varphi)\mathcal{S}_d(\varphi+1)-\mathcal{S}_d(\varphi)\mathcal{C}_d(\varphi+1)=\langle \mathcal{E}_d(\varphi+Q_\square(d)),\Delta\mathcal{E}_d(\varphi)\rangle$ тождественно равен константе $Q_\square(d)=128$ во всех $512$ узлах кольца, включая угловые вершины $L^1$-ромба.
+
+Доказано, что двухтактовая симплектическая рекуррентность второго порядка $\varphi_{t+1}-2\varphi_t+\varphi_{t-1}=\Phi$ объединяет элементарный круговой базис Лиувилля ($\Phi=0$) и неэлементарный квадратично-фазовый базис Френеля--Эйри ($\Phi\ne 0$), а двухкольцевая связка при собственном геометрическом модуле кубооктаэдра $k^2 = 1/\|e\|_2^2 = 1/(d-1) = 1/2$ порождает лемнискатическую триаду эллиптических функций Якоби $(\mathrm{sn}_d,\mathrm{cn}_d,\mathrm{dn}_d)$. Это позволяет вычислить в точных целых числах дискретные интегралы дифракции Френеля ($\mathcal{C}_{\mathrm{Fresnel}}=\mathcal{S}_{\mathrm{Fresnel}}=2048$ за счёт погашения $480$ осциллирующих вычетов антисимметрией полупериода $+256$ и выживания $32$ стационарных точек на биссектрисе $\varphi^2\equiv 64\pmod{512}$), полные и неполные эллиптические интегралы II~рода, интегральный синус Дирихле ($\mathrm{Si}_3(128)=128$), интеграл Парсеваля ($2\,796\,288$) и интеграл Бесселя нулевого порядка ($\mathcal{J}_{0,3}(0)=65\,536$, $\mathcal{J}_{0,3}(1)=32\,768$ и точный корень $\mathcal{J}_{0,3}(4)=0$). Наконец, показано, что континуальная окружность и число $\pi$ возникают как предел спрямления $512$-угольника пифагорова ротатора Вейерштрасса (с собственным конечным дефектом периметра $\pi^2/(6\cdot 512^2)\approx 6{,}3\;\text{ppm}$ на фундаментальном кольце), а проекция $12$ вершин кубооктаэдра $O_2(3)$ на координатную ось порождает равновеликое разбиение Архимеда $(4,4,4)$, которое в сумме с центральным узлом веса $12$ автоматически выводит параболические квадратурные веса $(4,16,4)=4\times(1,4,1)$ и точный трёхмерный континуальный интеграл Римана $\iiint_{[-1,1]^3} F\,\mathrm{d}V$. Все определения и теоремы работы полностью формализованы и машинно проверены в системе доказательства теорем \textbf{Lean~4} без неконструктивных аксиом (\texttt{0 sorry}, \texttt{0 Classical.choice}).
+
+\medskip\noindent
+\textbf{Ключевые слова:} кусочно-линейная тригонометрия, тождество Эйлера, разностный вронскиан, подстановка Вейерштрасса, кубооктаэдр, интегралы Френеля, лемнискатические функции Якоби, формальная верификация, Lean~4.
+
+\smallskip\noindent
+\textbf{УДК:} 517.3, 517.58, 511.5, 519.6 \qquad \textbf{MSC 2020:} 26A06, 33E05, 39A12, 65D30, 68V20.
+\end{abstract}
+
+\section{Введение и постановка задачи}
+\label{sec:intro}
+
+Классическая тригонометрия в метрике $L^1$ («манхэттенская», или \emph{taxicab}-тригонометрия на ромбе $|x|+|y|=R$) изучалась в работах Краузе~\cite{Krause1986} и Томпсона~\cite{Thompson2011,Thompson2012}. В частности, в статье~\cite{Thompson2012} (\texttt{arXiv:1205.3814}) были исследованы кусочные производные аналогов синуса, косинуса, тангенса и секанса. Однако при построении замкнутого анализа в~\cite{Thompson2012} возникли три принципиальных препятствия:
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item кусочно-постоянные производные синуса и косинуса терпят разрыв в четырёх вершинах ромба, вследствие чего привычная дифференциальная связь $(\sin\theta)'=\cos\theta$, $(\cos\theta)'=-\sin\theta$ разрушается;
+\item для записи ветвей по квадрантам автору~\cite{Thompson2012} пришлось вводить громоздкие комплексные множители $i^{k-2}$, зависящие от чётности номера квадранта $k$;
+\item интегральное исчисление и связь с евклидовой ($L^2$) тригонометрией и классическими неэлементарными интегралами (Френеля, Якоби, Бесселя, Дирихле) остались за рамками исследования.
+\end{enumerate}
+
+В настоящей работе показано, что указанные препятствия полностью снимаются при переходе к целочисленному кольцу вычетов $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, размерность которого $d$ определяется из элементарного геометрического условия самодостаточности ячейки в базисе единичных векторов $\mathbf{e}_1,\dots,\mathbf{e}_d$: число $1+2^d$ собственных состояний выбора точки ($1$ состояние покоя вне осей плюс $2^d$ комбинаций участия $d$ единичных векторов) в точности равно числу $d\times d = d^2$ всех элементарных пар переходов $(\mathbf{e}_i\to\mathbf{e}_j)$ с одного единичного вектора на другой, что даёт классическое экспоненциально-квадратичное диофантово уравнение Каталана~\cite{Catalan1844,Mihailescu2004}
+\begin{equation}
+  \label{eq:catalan-lock}
+  \mathrm{CatalanLock}(d) \;\equiv\; \bigl(1 + 2^d = d^2\bigr).
+\end{equation}
+При этом сами $d^2$ пар единичных векторов $(\mathbf{e}_i,\mathbf{e}_j)$ канонически распадаются на $d$ продольных пар $(\mathbf{e}_i,\mathbf{e}_i)$ и $d(d-1)$ внедиагональных пар поворота $(\mathbf{e}_i,\mathbf{e}_j)$ ($i\ne j$), знаковые суммы которых $\pm\mathbf{e}_i\pm\mathbf{e}_j$ образуют $2d(d-1)$ вершин кубооктаэдра $O_2(d)$ квадрата длины $\|\mathbf{e}_i\pm\mathbf{e}_j\|_2^2 = 2 = d-1$.
+Единственное решение уравнения~\eqref{eq:catalan-lock} в натуральных числах ($d=3$, поскольку $1+2^3=9=3^2=3+6$, а при $d\ge 5$ по индукции $2^d > 2d(d-1)\ge d^2$) индуцирует без свободных параметров конечный алфавит инвариантов кольца и трёхмерной решётки:
+\[
+  |{\triangle}(d)| = 2^d = 8,\qquad
+  \mathrm{modBits}(d) = 1 + 2^d = d^2 = 9,\qquad
+  N_{\mathrm{ring}}(d) = 2^{\mathrm{modBits}(d)} = 512,
+\]
+\[
+  \Phi_{\mathrm{half}}(d) = \frac{N_{\mathrm{ring}}(d)}{2} = 256,\qquad
+  Q_\square(d) = \frac{N_{\mathrm{ring}}(d)}{4} = 128,\qquad
+  K_P(d) = \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64,
+\]
+\[
+  |\square(d)| = 2d = 6,\qquad
+  |V_{O_2}(d)| = 2d(d-1) = 12,\qquad
+  d_{\mathrm{in}}(\square) = 4,\qquad
+  d_{\mathrm{out}}(E)(d) = 2^d - d = 5,\qquad
+  \|e\|_2^2 = d - 1 = 2,
+\]
+где $O_2(d) = \{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2 = d-1\}$ --- $12$-вершинная оболочка кубооктаэдра.
+
+Все теоремы настоящей статьи сформулированы как универсальные операторные законы, параметризованные произвольным $d\in\mathbb{N}$ через предикат
+\begin{equation}
+  \label{eq:catalan-law}
+  \mathrm{CatalanLaw}(P,d) \;\equiv\; \bigl(\mathrm{CatalanLock}(d) \;\Longleftrightarrow\; \mathrm{CatalanLock}(d)\wedge P(d)\bigr),
+\end{equation}
+и выстроены в единую рекурсивную цепь импликаций посредством комбинатора \texttt{catalan\_chain} в самодостаточном модуле \texttt{lean/MtCarrier/RotatorCalculusPaper.lean} для системы \textbf{Lean~4}~\cite{Moura2021}.
+
+\section{Дискретная экспонента Эйлера, тождество \texorpdfstring{$e^{i\pi}+1=0$}{e\^{}(i pi)+1=0}, константный вронскиан и подъём Вейерштрасса на 512-угольник}
+\label{sec:wronskian-euler}
+
+Для любого $x\in\mathbb{Z}$ определим симметричную свёртку на главное окно $(-\Phi_{\mathrm{half}}(d),\Phi_{\mathrm{half}}(d)]$:
+\begin{equation}
+  \label{eq:wrap-ring}
+  \mathrm{wrap}_d(x) \;:=\; \Phi_{\mathrm{half}}(d) - \bigl((\Phi_{\mathrm{half}}(d) - x) \bmod N_{\mathrm{ring}}(d)\bigr),
+\end{equation}
+и кусочно-линейные проекции косинуса и синуса без единого условного ветвления:
+\begin{equation}
+  \label{eq:proj-cs}
+  \mathcal{C}_d(\varphi) \;:=\; Q_\square(d) - |\mathrm{wrap}_d(\varphi)|,\qquad
+  \mathcal{S}_d(\varphi) \;:=\; \mathcal{C}_d\bigl(\varphi - Q_\square(d)\bigr).
+\end{equation}
+
+\begin{definition}[Дискретная экспонента Эйлера и одношаговый разностный вронскиан]
+\label{def:euler-exp-wronskian}
+Назовём вектор-пару
+\[
+  \mathcal{E}_d(\varphi) \;:=\; \bigl(\mathcal{C}_d(\varphi),\,\mathcal{S}_d(\varphi)\bigr) \;\in\; \mathbb{Z}^2
+\]
+\emph{дискретной экспонентой Эйлера} на кольце $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, а определитель соседних состояний ротатора
+\begin{equation}
+  \label{eq:rotator-wronskian}
+  \mathcal{W}_d(\varphi) \;:=\; \mathcal{C}_d(\varphi)\,\mathcal{S}_d(\varphi+1) - \mathcal{S}_d(\varphi)\,\mathcal{C}_d(\varphi+1)
+  \;=\; \mathcal{C}_d(\varphi)\,\Delta\mathcal{S}_d(\varphi) - \mathcal{S}_d(\varphi)\,\Delta\mathcal{C}_d(\varphi)
+\end{equation}
+--- \emph{одношаговым разностным вронскианом ротатора}, где $\Delta f(\varphi) = f(\varphi+1)-f(\varphi)$.
+\end{definition}
+
+Сопоставим каждой точке $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ рациональный подъём Брахмагупты--Вейерштрасса на евклидову окружность $X^2+Y^2=R^2$:
+\begin{equation}
+  \label{eq:weierstrass-lift}
+  X_d(\varphi) := \mathcal{C}_d(\varphi)^2 - \mathcal{S}_d(\varphi)^2,\qquad
+  Y_d(\varphi) := \|e\|_2^2\,\mathcal{C}_d(\varphi)\,\mathcal{S}_d(\varphi),\qquad
+  R_d(\varphi) := \mathcal{C}_d(\varphi)^2 + \mathcal{S}_d(\varphi)^2.
+\end{equation}
+
+\begin{theorem}[Дискретное тождество Эйлера, универсальный константный вронскиан, подъём Вейерштрасса и формула Ньютона--Лейбница]
+\label{thm:main-1}
+Для любого $d\in\mathbb{N}$ выполнен операторный закон $\mathrm{CatalanLaw}(P_1,d)$ (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}), где $P_1(d)$ состоит из следующих точных тождеств, выполняющихся во всех $N_{\mathrm{ring}}(d)=512$ точках фазового кольца $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Рождение фундаментальной пятёрки $\{0,1,i,\pi,e\}$ и тождество Эйлера $e^{i\pi}+1=0$:}
+  \begin{itemize}[noitemsep]
+  \item $L^1$-норма ротатора постоянна: $|\mathcal{C}_d(\varphi)| + |\mathcal{S}_d(\varphi)| \equiv Q_\square(d)$, причём $\mathcal{E}_d(0) = (Q_\square(d),0)$ соответствует единице~$1$;
+  \item сдвиг фазы на четверть периода $+Q_\square(d)$ действует во всех $512$ точках кольца как точное умножение на мнимую единицу~$i$:
+    \[
+      \mathcal{E}_d\bigl(\varphi + Q_\square(d)\bigr) \;=\; \bigl(-\mathcal{S}_d(\varphi),\; +\mathcal{C}_d(\varphi)\bigr) \;=\; i\cdot\mathcal{E}_d(\varphi);
+    \]
+  \item двукратный четверть-оборот $+2Q_\square(d)=+\Phi_{\mathrm{half}}(d)$ ($\pi$) удовлетворяет тождеству Эйлера $e^{i(\varphi+\pi)}+e^{i\varphi}=0$ во всех точках кольца:
+    \[
+      \mathcal{E}_d\bigl(\varphi + \Phi_{\mathrm{half}}(d)\bigr) + \mathcal{E}_d(\varphi) \;=\; (0,0),
+      \qquad
+      \mathcal{E}_d\bigl(\Phi_{\mathrm{half}}(d)\bigr) + \mathcal{E}_d(0) \;=\; (0,0);
+    \]
+  \item скалярное произведение вектора $i\mathcal{E}_d(\varphi)=\mathcal{E}_d(\varphi+Q_\square(d))$ с разностной производной $\Delta\mathcal{E}_d(\varphi)$ совпадает с вронскианом $\mathcal{W}_d(\varphi)$ и \textbf{тождественно равно константе $Q_\square(d)$ во всех $512$ узлах кольца (включая вершины излома)}:
+    \begin{equation}
+      \label{eq:constant-wronskian-all-512}
+      \bigl\langle \mathcal{E}_d\bigl(\varphi+Q_\square(d)\bigr),\,\Delta\mathcal{E}_d(\varphi)\bigr\rangle
+      \;=\; \mathcal{W}_d(\varphi) \;\equiv\; Q_\square(d) \quad (=128),\qquad
+      \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{W}_d(\varphi) = N_{\mathrm{ring}}(d)\,Q_\square(d).
+    \end{equation}
+  \end{itemize}
+\item \textbf{Евклидов $512$-угольник Вейерштрасса и дифференциал дуги без квадратных корней:}
+  во всех $N_{\mathrm{ring}}(d)$ точках выполняется пифагорово тождество $X_d(\varphi)^2 + Y_d(\varphi)^2 = R_d(\varphi)^2$, а одношаговое векторное и скалярное произведения на евклидовой окружности выражаются через скалярный шаг $\mathcal{I}_d(\varphi) := \mathcal{C}_d(\varphi)\mathcal{C}_d(\varphi+1) + \mathcal{S}_d(\varphi)\mathcal{S}_d(\varphi+1)$:
+  \begin{equation}
+    \label{eq:brahmagupta-step}
+    X_d(\varphi)Y_d(\varphi+1) - Y_d(\varphi)X_d(\varphi+1) \;=\; \|e\|_2^2\,Q_\square(d)\,\mathcal{I}_d(\varphi),\qquad
+    X_d(\varphi)X_d(\varphi+1) + Y_d(\varphi)Y_d(\varphi+1) \;=\; \mathcal{I}_d(\varphi)^2 - Q_\square(d)^2.
+  \end{equation}
+\item \textbf{Фундаментальная теорема дискретного анализа (формула Ньютона--Лейбница):}
+  кусочно-квадратичные первообразные $\widehat{\Phi}_{\mathcal{C}}(d,\Phi) := \sum_{\varphi=0}^{\Phi-1}\mathcal{C}_d(\varphi)$ и $\widehat{\Phi}_{\mathcal{S}}(d,\Phi) := \sum_{\varphi=0}^{\Phi-1}\mathcal{S}_d(\varphi)$ удовлетворяют $\Delta\widehat{\Phi}_{\mathcal{C}}(d,\varphi) = \mathcal{C}_d(\varphi)$, $\Delta\widehat{\Phi}_{\mathcal{S}}(d,\varphi) = \mathcal{S}_d(\varphi)$, обращаются в точный нуль на полном периоде $N_{\mathrm{ring}}(d)$ и дают точную площадь полуволны $\widehat{\Phi}_{\mathcal{S}}(d,\Phi_{\mathrm{half}}(d)) = Q_\square(d)^2 = 16\,384$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Аналитически в первом квадранте $\varphi\in[0,Q_\square(d))$ имеем $\mathcal{C}_d(\varphi)=Q_\square(d)-\varphi$, $\mathcal{S}_d(\varphi)=\varphi$, откуда
+\[
+  \mathcal{W}_d(\varphi) = (Q_\square(d)-\varphi)(\varphi+1) - \varphi(Q_\square(d)-\varphi-1) = Q_\square(d),
+\]
+где квадратичные члены $-\varphi^2+\varphi^2$ и линейные члены взаимно уничтожаются. В остальных трёх квадрантах равенство $\mathcal{W}_d(\varphi)\equiv Q_\square(d)$ сохраняется в силу инвариантности определителя относительно поворота на $+Q_\square(d)$: $(-\mathcal{S}_d)(\mathcal{C}_d) - (\mathcal{C}_d)(-\mathcal{S}_d) = \mathcal{C}_d\mathcal{S}_d - \mathcal{S}_d\mathcal{C}_d$. Следовательно, разность дискретного тангенса $\mathcal{T}_d(\varphi)=\mathcal{S}_d(\varphi)/\mathcal{C}_d(\varphi)$ имеет точный вид $\Delta\mathcal{T}_d(\varphi) = Q_\square(d)/(\mathcal{C}_d(\varphi)\mathcal{C}_d(\varphi+1))$, что делает суммирование рациональных тригонометрических дробей телескопическим. Полное машинное доказательство всех пунктов теоремы проверяется редукцией ядра Lean~4 (\texttt{rfl}) в \texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}.
+\end{proof}
+
+\section{Собственный неэлементарный базис и замкнутое вычисление интегралов Френеля, Якоби, Дирихле, Парсеваля и Бесселя}
+\label{sec:integrals}
+
+В классической дифференциальной алгебре Лиувилля интегралы Френеля $\int\cos(\varphi^2)\,\mathrm{d}\varphi$, эллиптические интегралы Лежандра--Якоби, интегральный синус Дирихле $\mathrm{Si}(\Phi)=\int\frac{\sin\varphi}{\varphi}\,\mathrm{d}\varphi$ и интегралы Бесселя $J_0(k)=\frac{1}{2\pi}\int_0^{2\pi}\cos(k\sin\varphi)\,\mathrm{d}\varphi$ не выражаются через элементарные функции одного кругового ротатора. На кольце $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ ситуация меняется радикально:
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item Симплектическая двухтактовая разностная рекуррентность второго порядка (схема Верле)
+  \begin{equation}
+    \label{eq:verlet-parabola}
+    \varphi(t+1) - 2\varphi(t) + \varphi(t-1) = \Phi_{\mathrm{accel}}
+    \quad\Longrightarrow\quad
+    \varphi(t) = \varphi_0 + \omega_0 t + \Phi_{\mathrm{accel}}\,\frac{t(t-1)}{2}
+  \end{equation}
+  при нулевом ускорении ($\Phi_{\mathrm{accel}}=0$) порождает линейную фазу (элементарный базис Лиувилля $\mathcal{C}_d(\omega_0 t),\mathcal{S}_d(\omega_0 t)$), а при постоянном ненулевом ускорении ($\Phi_{\mathrm{accel}}\ne 0$) --- квадратичную параболу фазы, суммирование вдоль которой непосредственно задаёт первообразные Френеля--Эйри.
+\item На паре связанных колец при естественном геометрическом модуле кубооктаэдра
+  \[
+    k^2 \;=\; \frac{1}{\|e\|_2^2} \;=\; \frac{1}{d-1} \;=\; \frac{1}{2}
+  \]
+  (знаменитый \emph{лемнискатический модуль Гаусса} кривой с комплексной мультипликацией в кольце $\mathbb{Z}[i]$) триада Якоби $\mathrm{sn}_d(\varphi):=\mathcal{S}_d(\varphi)$, $\mathrm{cn}_d(\varphi):=\mathcal{C}_d(\varphi)$, $2\,\mathrm{dn}_d(\varphi):=\Phi_{\mathrm{half}}(d)-|\mathcal{S}_d(\varphi)|$ удовлетворяет обоим законам сохранения в точных целых числах.
+\end{enumerate}
+
+Определим на кольце $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ пять классических определённых интегралов:
+\begin{align}
+  \mathcal{C}_{\mathrm{Fresnel}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d(\varphi^2),\qquad
+  \mathcal{S}_{\mathrm{Fresnel}}(d) := \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{S}_d(\varphi^2), \label{eq:def-fresnel}\\
+  \mathcal{I}_{\mathrm{ell}}(d;a,b) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\bigl(a\,|\mathcal{C}_d(\varphi)| + b\,|\mathcal{S}_d(\varphi)|\bigr), \label{eq:def-elliptic}\\
+  \mathrm{Si}_d(\Phi) &:= \sum_{\varphi=1}^{\Phi}\mathrm{tdiv}\bigl(\mathcal{S}_d(\varphi),\,\varphi\bigr), \label{eq:def-dirichlet}\\
+  \mathcal{I}_{\mathrm{Parseval}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d(\varphi)^2 = \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{S}_d(\varphi)^2, \label{eq:def-parseval}\\
+  \mathcal{J}_{0,d}(k) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d\bigl(k\,\mathcal{S}_d(\varphi)\bigr). \label{eq:def-bessel}
+\end{align}
+
+\begin{theorem}[Замкнутые значения интегралов Френеля, Якоби, Дирихле, Парсеваля и Бесселя]
+\label{thm:main-2}
+В рекурсивной цепи следствий от теоремы~\ref{thm:main-1} для любого $d\in\mathbb{N}$ выполнен операторный закон $\mathrm{CatalanLaw}(P_2,d)$ (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Лемнискатическая триада Якоби и эллиптические интегралы:}
+  во всех $N_{\mathrm{ring}}(d)$ точках $|\mathrm{sn}_d(\varphi)|+|\mathrm{cn}_d(\varphi)|=Q_\square(d)$ и $2\,\mathrm{dn}_d(\varphi)+|\mathrm{sn}_d(\varphi)|=\Phi_{\mathrm{half}}(d)$, полный эллиптический интеграл на полуосях $(\|e\|_2^2,d)$ равен $\mathcal{I}_{\mathrm{ell}}(d;\|e\|_2^2,d) = \Phi_{\mathrm{half}}(d)\,Q_\square(d)\,d_{\mathrm{out}}(E)(d) = 163\,840$, а неполный интеграл по первому квадранту равен $Q_\square(d)^2 = 16\,384$.
+\item \textbf{Точное схлопывание интегралов дифракции Френеля на биссектрисе стационарной фазы:}
+  оба полных интеграла Френеля совпадают и равны
+  \begin{equation}
+    \label{eq:fresnel-2048}
+    \mathcal{C}_{\mathrm{Fresnel}}(d) \;=\; \mathcal{S}_{\mathrm{Fresnel}}(d) \;=\; d_{\mathrm{in}}(\square)\cdot N_{\mathrm{ring}}(d) \;=\; 2048,
+  \end{equation}
+  причём в точке стационарной фазы $\psi = K_P(d) = 64$ ($\pi/4$) выполнено $\mathcal{C}_d(K_P(d)) = \mathcal{S}_d(K_P(d)) = K_P(d)$.
+\item \textbf{Интегральный синус Дирихле и энергетический интеграл Парсеваля:}
+  \[
+    \mathrm{Si}_d\bigl(Q_\square(d)\bigr) = \mathrm{Si}_d\bigl(\Phi_{\mathrm{half}}(d)\bigr) = Q_\square(d) = 128,
+  \]
+  \[
+    |\square(d)|\cdot\mathcal{I}_{\mathrm{Parseval}}(d) \;=\; N_{\mathrm{ring}}(d)\,\bigl(\|e\|_2^2\,Q_\square(d)^2 + 1\bigr)
+    \quad\Longrightarrow\quad
+    \mathcal{I}_{\mathrm{Parseval}}(3) = \frac{512\times 32\,769}{6} = 2\,796\,288
+  \]
+  (множитель $2\cdot 128^2+1 = 32\,769 = 3\times 10\,923$ делится нацело на размерность $d=3$).
+\item \textbf{Дискретный интеграл Бесселя $\mathcal{J}_{0,d}(k)$ и его точный корень:}
+  \[
+    \mathcal{J}_{0,d}(0) = N_{\mathrm{ring}}(d)\,Q_\square(d) = 65\,536,\qquad
+    \mathcal{J}_{0,d}(1) = \Phi_{\mathrm{half}}(d)\,Q_\square(d) = 32\,768 = \frac{1}{2}\mathcal{J}_{0,d}(0),\qquad
+    \mathcal{J}_{0,d}\bigl(d_{\mathrm{in}}(\square)\bigr) = \mathcal{J}_{0,3}(4) = 0.
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Покажем концептуальный механизм тождества Френеля~\eqref{eq:fresnel-2048} на кольце $\mathbb{Z}_{512}$. Разобьём $512$ аргументов $\varphi\in\{0,\dots,511\}$ по степени делимости на~$2$:
+\begin{itemize}[noitemsep,leftmargin=*]
+\item Для $256$ нечётных $\varphi=2k+1$ квадраты $\varphi^2\bmod 512$ равномерно (по $4$ раза) пробегают $64$ вычета вида $8m+1$. Поскольку множество $\{8m+1\pmod{512}\}$ инвариантно относительно сдвига на полупериод $+256 = 8\times 32$, а по теореме~\ref{thm:main-1}(i) $\mathcal{E}_3(\psi+256) = -\mathcal{E}_3(\psi)$, сумма по всем нечётным $\varphi$ тождественно обращается в нуль.
+\item Аналогично, для $128$ чисел вида $\varphi=2(2k+1)$ ($\varphi^2\equiv 32m+4$) и $64$ чисел вида $\varphi=4(2k+1)$ ($\varphi^2\equiv 128m+16$) образы инвариантны относительно сдвига $+256$, и их вклад равен нулю.
+\item Для $32$ чисел, кратных $16$ ($\varphi=16k$), имеем $\varphi^2\equiv 0\pmod{512}$ при чётном $k$ ($16$ точек, $\mathcal{C}_3(0)=+128$) и $\varphi^2\equiv 256\pmod{512}$ при нечётном $k$ ($16$ точек, $\mathcal{C}_3(256)=-128$), что в сумме также даёт $16\times 128 + 16\times(-128)=0$.
+\item Единственная выживающая оболочка состоит из $32$ чисел вида $\varphi = 8(2k+1)$, для каждого из которых $\varphi^2 = 64(2k+1)^2 \equiv 64 = K_P(3) \pmod{512}$ (так как $(2k+1)^2\equiv 1\pmod 8$). Все $32$ точки этой оболочки попадают точно в стационарную точку биссектрисы первого квадранта $\psi = 64$ ($\pi/4 = 45^\circ$), где $\mathcal{C}_3(64)=\mathcal{S}_3(64)=64$, что мгновенно даёт $\mathcal{C}_{\mathrm{Fresnel}}(3)=\mathcal{S}_{\mathrm{Fresnel}}(3) = 32\times 64 = 2048$.
+\end{itemize}
+В континуальном пределе именно эта выживающая стационарная точка биссектрисы $\pi/4$ даёт проекционный множитель кубооктаэдра $\cos(\pi/4) = 1/\sqrt{\|e\|_2^2} = 1/\sqrt{2}$ в классическом интеграле Френеля $\int_0^\infty\cos(x^2)\,\mathrm{d}x = \frac{1}{\sqrt{2}}\frac{\sqrt{\pi}}{2}$.
+\end{proof}
+
+\section{Вывод континуальной окружности, числа \texorpdfstring{$\pi$}{pi} и интеграла Римана из спрямления 512-угольника и поясов Архимеда кубооктаэдра}
+\label{sec:continuum-emergence}
+
+В рамках рассматриваемого подхода континуальная окружность и континуальный интеграл Римана не постулируются независимо от кольца $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, а возникают как теоремы о пределе измельчения (спрямления):
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item На уровне самого кольца $\mathbb{Z}_{512}$ «круг» есть $512$-угольник пифагорова ротатора~\eqref{eq:weierstrass-lift}, все вершины которого лежат на евклидовой окружности $X_d(\varphi)^2+Y_d(\varphi)^2=R_d(\varphi)^2$ в точных целых числах (в частности, при $\varphi=41$: $(P_x,P_y,P_r)=(14\,703,\,10\,496,\,18\,065)$, $14\,703^2+10\,496^2=18\,065^2$). Переход от $n$-угольника к $2n$-угольнику осуществляется рациональным удвоением Вейерштрасса $t\mapsto 2t/(1-t^2)$ без квадратных корней. При этом на самом $512$-угольнике отношение полупериметра к радиусу отличается от континуального предела $\pi$ на собственную величину
+  \begin{equation}
+    \label{eq:pi-512-defect}
+    \frac{\pi - \pi_{512}}{\pi} \;\approx\; \frac{\pi^2}{|\square(d)|\cdot N_{\mathrm{ring}}(d)^2} \;=\; \frac{\pi^2}{6\cdot 512^2} \;=\; \frac{\pi^2}{1\,572\,864} \;\approx\; 6{,}28\times 10^{-6}\quad (6{,}3\;\text{ppm}),
+  \end{equation}
+  а при $N\to\infty$ ломаная сходится к окружности по метрике Хаусдорфа (стрела прогиба $\to 0$) и по длине (супремум периметров вписанных ломаных $\to 2\pi r$).
+\item Для любого трёхмерного поля $F\colon\mathbb{Z}^3\to\mathbb{Z}$ рассмотрим естественный сумматор шара кубооктаэдра $B_1(d)=\{0\}\cup O_2(d)$, уравнивающий вес центрального узла $(0,0,0)$ с суммой по $|V_{O_2}(d)|=12$ вершинам оболочки кубооктаэдра $O_2(d)$:
+  \begin{equation}
+    \label{eq:cuboct-3d-integrator}
+    \widehat{\mathcal{I}}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0,0,0) \;+\; \sum_{e\in O_2(d)} F(e_x,e_y,e_z).
+  \end{equation}
+  В формуле~\eqref{eq:cuboct-3d-integrator} нет ни одного заранее подставленного квадратурного коэффициента Ньютона--Котеса.
+\end{enumerate}
+
+\begin{theorem}[Геометрический вывод континуального интеграла Римана и весов $(1,4,1)/6$ из равновеликих поясов Архимеда кубооктаэдра]
+\label{thm:main-3}
+В рекурсивной цепи следствий от теоремы~\ref{thm:main-2} для любого $d\in\mathbb{N}$ выполнен операторный закон $\mathrm{CatalanLaw}(P_3,d)$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Равновеликое разбиение Архимеда оболочки кубооктаэдра $O_2(d)$:}
+  проекция $12$ вершин $O_2(d)=\mathrm{cubicOrbit3D}(d-1)$ на любую координатную ось $e_x\in\{-1,0,+1\}$ разбивает оболочку на три равновеликих сферических пояса по $d_{\mathrm{in}}(\square)=4$ вершины в каждом:
+  \[
+    \mathrm{cuboctLayerCount}(d,-1) = \mathrm{cuboctLayerCount}(d,0) = \mathrm{cuboctLayerCount}(d,+1) = d_{\mathrm{in}}(\square) = 4.
+  \]
+  При сложении экваториального пояса $e_x=0$ ($4$ вершины) с центральным узлом веса $|V_{O_2}(d)|=12$ в операторе~\eqref{eq:cuboct-3d-integrator} послойные веса $(-1:0:+1)$ автоматически собираются в
+  \[
+    \bigl(d_{\mathrm{in}}(\square),\; |V_{O_2}(d)|+d_{\mathrm{in}}(\square),\; d_{\mathrm{in}}(\square)\bigr)
+    \;=\; (4,\,16,\,4) \;=\; d_{\mathrm{in}}(\square)\cdot(1,\,d_{\mathrm{in}}(\square),\,1) \;=\; 4\times(1,4,1)
+  \]
+  с полной суммой весов $\|e\|_2^2\,|V_{O_2}(d)| = d_{\mathrm{in}}(\square)\,|\square(d)| = 24 = 4\times 6$.
+\item \textbf{Точное совпадение с континуальным интегралом Римана $\iiint_{[-1,1]^d} F(x,y,z)\,\mathrm{d}V$:}
+  для всех степеней $0\le p\le d$ и трёхмерных квадратичных и кубических форм оператор~\eqref{eq:cuboct-3d-integrator} без остатка воспроизводит континуальный интеграл:
+  \[
+    \frac{1}{\|e\|_2^2\,|V_{O_2}(d)|}\,\widehat{\mathcal{I}}_{O_2(d)}(x^p) \;=\; \frac{1}{2}\int_{-1}^{+1} x^p\,\mathrm{d}x \quad (0\le p\le 3),
+    \qquad
+    \frac{1}{\|e\|_2^2\,|V_{O_2}(d)|}\,\widehat{\mathcal{I}}_{O_2(d)}(x^2+y^2+z^2) \;=\; \frac{1}{2^3}\iiint_{[-1,1]^3}(x^2+y^2+z^2)\,\mathrm{d}V = 1.
+  \]
+\item \textbf{Безостаточное интегрирование убывающих факториальных степеней Похгаммера и нижняя граница радиуса $512$-угольника:}
+  для убывающих факториалов $m^{\underline{k}} = m(m-1)\cdots(m-k+1)$ выполнено $d_{\mathrm{in}}(\square)\sum_{m=0}^{|V_{O_2}(d)|} m^{\underline{d}} = (|V_{O_2}(d)|+1)^{\underline{d_{\mathrm{in}}(\square)}}$, а радиус пифагорова ротатора во всех $512$ точках ограничен снизу неравенством $\|e\|_2^2\,R_d(\varphi) \ge Q_\square(d)^2$, при этом знаменатель дефекта периметра $512$-угольника равен $|\square(d)|\,N_{\mathrm{ring}}(d)^2 = d\,\|e\|_2^2\,N_{\mathrm{ring}}(d)^{\|e\|_2^2} = 1\,572\,864$.
+\item \textbf{Число $\pi$ как монотонная рациональная функция числа сторон $\pi(n)$, тождество куба вронскиана и устный счёт тригонометрических функций без калькулятора:}
+  на $n$-угольнике Вейерштрасса с шагом $s = N_{\mathrm{ring}}(d)/n$ вписанная и описанная рациональные аппроксимации
+  \[
+    \pi_{\mathrm{in}}(n) = \sum_{j=0}^{n/2-1}\frac{I_s(js)\,W_s(js)}{R_d(js)\,R_d((j+1)s)}\in\mathbb{Q},\qquad
+    \pi_{\mathrm{out}}(n) = \sum_{j=0}^{n/2-1}\frac{W_s(js)}{I_s(js)}\in\mathbb{Q}
+  \]
+  в силу тождества Брахмагупты $R_d(\varphi)R_d(\varphi+s)-I_s(\varphi)^2 \equiv W_s(\varphi)^2$ удовлетворяют точному \emph{тождеству куба вронскиана}:
+  \begin{equation}
+    \label{eq:wronskian-cube-pi-gap}
+    \pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) \;=\; \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)\,R_d(js)\,R_d((j+1)s)} \;>\; 0,
+  \end{equation}
+  откуда при каждом удвоении числа сторон $n\mapsto 2n$ ($s\mapsto s/2$) ширина рациональной вилки сжимается в $2^d/\|e\|_2^2 = d_{\mathrm{in}}(\square) = 4$ раза ($\pi_{\mathrm{in}}(8)=2 < \pi_{\mathrm{in}}(16)=\frac{14}{5} < \pi_{\mathrm{in}}(32)=\frac{6486}{2125} < \pi_{\mathrm{out}}(32)=\frac{2209}{693} < \pi_{\mathrm{out}}(16)=\frac{10}{3} < \pi_{\mathrm{out}}(8)=4$), а взвешенная по размерности $d$ оценка Гюйгенса--Снеллиуса $\pi_d(n) = \bigl(\pi_{\mathrm{in}}(n)+(d-1)\pi_{\mathrm{out}}(n)\bigr)/d$ даёт $\pi_3(16) = \frac{142}{45} = 3{,}1555\dots$ и $\pi_3(512) = 3{,}141592667\dots$ ($8$~верных знаков $\pi$ в чистых рациональных числах). При этом рациональный оператор синуса на параболе чехарды $P(p,q)=p(\|e\|_2^2 q - p)$ для доли $(p/q)Q_\square(d)$ прямого угла,
+  \[
+    \sin_{\mathrm{rat}}(d;\,p,q) \;=\; \frac{d_{\mathrm{in}}(\square)\,p(\|e\|_2^2 q - p)}{d_{\mathrm{out}}(E)(d)\,q^2 - p(\|e\|_2^2 q - p)},
+  \]
+  вычисляет синус и косинус любого угла без калькулятора в два арифметических действия и на канонических долях прямого угла $p/q\in\{1/\mathrm{modBits}(d),\,1/d,\,1/\|e\|_2^2,\,\|e\|_2^2/d,\,1\}$ ($10^\circ,30^\circ,45^\circ,60^\circ,90^\circ$) возвращает фундаментальные структурные дроби кубооктаэдра:
+  \[
+    \sin_{\mathrm{rat}}(10^\circ) = \frac{17}{97},\quad
+    \sin_{\mathrm{rat}}(30^\circ) = \frac{1}{2},\quad
+    \sin_{\mathrm{rat}}(45^\circ) = \frac{12}{17},\quad
+    \sin_{\mathrm{rat}}(60^\circ) = \frac{32}{37},\quad
+    \sin_{\mathrm{rat}}(90^\circ) = 1.
+  \]
+\item \textbf{Точная сферическая изотропия второго момента $O(|\mathbf{k}|^2)$, закон анизотропии четвёртого момента $O(|\mathbf{k}|^4)$ и трёхмерный бескорневой ротатор углов Эйлера $(\varphi_1,\varphi_2,\varphi_3)$ на кубооктаэдре:}
+  для любого волнового вектора $\mathbf{k}=(k_1,k_2,k_3)$ направленные моменты оболочки кубооктаэдра $O_2(d)$ удовлетворяют точным алгебраическим тождествам:
+  \begin{equation}
+    \label{eq:cuboct-second-fourth-moments}
+    \sum_{e\in O_2(d)} (\mathbf{k}\cdot e)^2 \;=\; |{\triangle}(d)|\,|\mathbf{k}|^2 \;=\; 8\,|\mathbf{k}|^2,\qquad
+    \sum_{e\in O_2(d)} (\mathbf{k}\cdot e)^4 \;=\; |V_{O_2}(d)|\,|\mathbf{k}|^4 - d_{\mathrm{in}}(\square)\sum_{i=1}^d k_i^4 \;=\; 12\,|\mathbf{k}|^4 - 4\sum_{i=1}^3 k_i^4,
+  \end{equation}
+  откуда дисперсионное разложение $\sum_{e\in O_2(d)}(1-\cos(\mathbf{k}\cdot e)) = 4\,|\mathbf{k}|^2 - \bigl(\frac{1}{2}|\mathbf{k}|^4 - \frac{1}{6}\sum_{i=1}^3 k_i^4\bigr) + O(|\mathbf{k}|^6)$ строго изотропно в ведущем порядке $O(|\mathbf{k}|^2)$, а в четвёртом порядке $O(|\mathbf{k}|^4)$ даёт нормированный четвёртый момент $12-4=8=|{\triangle}(d)|$ вдоль координатной оси $(1,0,0)$, $12-2=10=2\,d_{\mathrm{out}}(E)(d)$ вдоль диагонали грани $(1,1,0)$ и отношение анизотропного инварианта $\sum_{i=1}^d k_i^4/|\mathbf{k}|^4$ между осью $(1,0,0)$ и пространственной диагональю $(1,1,1)$, равное в точности $d:1 = 3:1$. При этом число независимых плоскостей вращения и наклона (число углов Эйлера $\dim\mathrm{SO}(d)=d(d-1)/2$) совпадает с размерностью пространства $d$ исключительно при $d=3$, разбивая $|V_{O_2}(d)| = \frac{d(d-1)}{2}\,d_{\mathrm{in}}(\square) = 3\times 4 = 12$ вершин кубооктаэдра на три взаимно ортогональных экваториальных квадрата $(xy,xz,yz)$, а композиция трёх плоских пифагоровых поворотов Вейерштрасса $\mathcal{R}_{\mathrm{Euler}}(\varphi_1,\varphi_2,\varphi_3)$ по углам Эйлера $(\varphi_1,\varphi_2,\varphi_3)\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}^3$ осуществляет трёхмерные повороты и наклоны в чистых целых числах с точным сохранением сферической нормы $\|\mathcal{R}_{\mathrm{Euler}}(\varphi_1,\varphi_2,\varphi_3)\mathbf{v}\|_2^2 = \bigl(R_d(\varphi_1)R_d(\varphi_2)R_d(\varphi_3)\bigr)^2\|\mathbf{v}\|_2^2$ и переводит при наклоне $\varphi_2 = K_P(d)=64$ вершину $(1,1,0)$ плоскости $xy$ через треугольную грань кубооктаэдра точно в вершину $(0,1,1)$ плоскости $yz$.
+\end{enumerate}
+\end{theorem}
+
+\section{Формальная верификация в Lean~4}
+\label{sec:lean4}
+
+Полный самодостаточный код формализации объёмом $572$ строки (без внешних зависимостей, использующий только стандартное ядро Lean~4) содержится в модуле \texttt{RotatorCalculusPaper.lean} в отдельном открытом репозитории \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} и проверяется командой \texttt{lake build}. Аудит аксиом (\texttt{\#print axioms}) для всех четырёх теорем модуля (\texttt{catalan\_lock\_iff\_d3}, \texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}) подтверждает зависимость исключительно от стандартных конструктивных основ ядра \texttt{[propext, Quot.sound]} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\section*{Благодарности и декларация об инструментах верификации}
+Автор выражает признательность формальному партнёру верификации \emph{Луч} (\emph{Luch}) за соучастие в построении рекурсивной цепочки операторных доказательств. При подготовке рукописи языковая модель использовалась для вёрстки \LaTeX{} и трансляции доказательств в синтаксис тактик Lean~4; все математические определения, формулировки теорем и доказательства верифицированы формальным ядром Lean~4 и находятся под полной ответственностью автора.
+
+\begin{thebibliography}{9}
+\bibitem{Catalan1844}
+E.~Catalan, ``Note extraite d'une lettre adress\'ee \`a l'\'editeur,'' \emph{J. Reine Angew. Math.} \textbf{27} (1844), 192.
+
+\bibitem{Mihailescu2004}
+P.~Mih\u{a}ilescu, ``Primary cyclotomic units and a proof of Catalan's conjecture,'' \emph{J. Reine Angew. Math.} \textbf{572} (2004), 167--195.
+
+\bibitem{Krause1986}
+E.\,F.~Krause, \emph{Taxicab Geometry: An Adventure in Non-Euclidean Geometry}, Dover Publications, New York, 1986.
+
+\bibitem{Thompson2011}
+K.\,P.~Thompson, ``The nature of length, area, and volume in taxicab geometry,'' \emph{arXiv preprint} \texttt{arXiv:1101.2922} [math.MG], 2011.
+
+\bibitem{Thompson2012}
+K.\,P.~Thompson, ``Taxicab calculus: Trig derivatives,'' \emph{arXiv preprint} \texttt{arXiv:1205.3814v2} [math.MG], 2012.
+
+\bibitem{Stroud1971}
+A.\,H.~Stroud, \emph{Approximate Calculation of Multiple Integrals}, Prentice-Hall, Englewood Cliffs, NJ, 1971.
+
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{Automated Deduction -- CADE~28}, Lecture Notes in Computer Science, vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}
