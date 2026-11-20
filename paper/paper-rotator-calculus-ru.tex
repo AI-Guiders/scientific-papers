@@ -311,10 +311,44 @@
 \end{enumerate}
 \end{theorem}
 
+\section{Функционально полный булев базис Поста, представление 3-SAT на треугольных гранях \texorpdfstring{$\mathbb{Z}_{512}$}{Z512} и алгебраическая асимметрия прямой проверки и обращения}
+\label{sec:boolean-3sat}
+
+На антиподальных полюсах кольца $\{0,\Phi_{\mathrm{half}}(d)\}=\{0,256\}\subset\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ ($\mathcal{C}_3(0)=+128$ кодирует истину~$1$, $\mathcal{C}_3(256)=-128$ кодирует ложь~$0$) кусочно-линейный ротатор индуцирует два алгебраических канала на треугольных гранях $(\psi_1,\psi_2,\psi_3)\in\{0,256\}^3$:
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item \textbf{Канал~1 (линейный класс Поста~$L$ --- сложение аргументов до оператора $\mathcal{C}_3$):}
+  сдвиг $\mathrm{NOT}(\psi)=(\psi+256)\bmod 512$ меняет знак проекции ($\mathcal{C}_3(\psi+256)=-\mathcal{C}_3(\psi)$), а сложение фаз задаёт трехаргументную чётность $\mathrm{XOR}_3$:
+  \begin{equation}
+    \label{eq:pre-rotator-xor}
+    Q_\square(d)^2\,\mathcal{C}_d(\psi_1+\psi_2+\psi_3) \;\equiv\; \mathcal{C}_d(\psi_1)\,\mathcal{C}_d(\psi_2)\,\mathcal{C}_d(\psi_3),
+  \end{equation}
+  где подгруппа полюсов $(\{0,256\},+\bmod 512)\cong(\mathbb{F}_2,\oplus)$ ($256+256\equiv 0\pmod{512}$).
+\item \textbf{Канал~2 (нелинейный пороговый класс --- сложение значений после оператора $\mathcal{C}_3$ с целочисленным делением на $N_{\mathrm{ring}}(d)=512$):}
+  положим $\Delta_{\mathrm{3SAT}}(\psi_1,\psi_2,\psi_3) := Q_\square(d)-\bigl(\mathcal{C}_d(\psi_1)+\mathcal{C}_d(\psi_2)+\mathcal{C}_d(\psi_3)\bigr)$. Поскольку при $d=3$ выполнено $(1+d)Q_\square(d)=4\times 128=512=N_{\mathrm{ring}}(d)$, неполные частные деления на $N_{\mathrm{ring}}(d)$ со знаком к нулю задают дизъюнкцию и конъюнкцию без условных ветвлений:
+  \begin{equation}
+    \label{eq:post-rotator-or-and}
+    q_{\mathrm{OR}}(\psi_1,\psi_2,\psi_3) := \mathrm{tdiv}\bigl(\Delta_{\mathrm{3SAT}}(\psi_1,\psi_2,\psi_3),\,N_{\mathrm{ring}}(d)\bigr)\in\{0,1\},\qquad
+    q_{\mathrm{AND}}(\psi_1,\psi_2,\psi_3) := \mathrm{tdiv}\Bigl(Q_\square(d)+\sum_{k=1}^3\mathcal{C}_d(\psi_k),\,N_{\mathrm{ring}}(d)\Bigr)\in\{0,1\}.
+  \end{equation}
+\end{enumerate}
+
+\begin{theorem}[Функциональная полнота Поста \{\texttt{NOT}, \texttt{XOR}, \texttt{OR}, \texttt{AND}\}, представление 3-SAT, склейка остатка $7\to 1$ и некоммутативность двух каналов на $\mathbb{Z}_{512}$]
+\label{thm:main-4}
+При $d=3$ на полюсах $\{0,256\}^3\subset\mathbb{Z}_{512}^3$ выполнены следующие точные соотношения (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Функциональная полнота Поста и эквивалентность выполнимости 3-SAT нулю частных Канала~2:}
+  во всех $2^3=8$ состояниях $\{0,256\}^3$ выполнено мультипликативное тождество чётности~\eqref{eq:pre-rotator-xor}, частное $q_{\mathrm{AND}}$ равно~$1$ исключительно на $(0,0,0)$ и~$0$ на остальных $7$~октантах, а частное дефекта $q_{\mathrm{OR}}$ равно~$0$ на всех $7$~выполняющих октантах дизъюнкта $(l_1\lor l_2\lor l_3)$ и равно~$1$ ($\Delta_{\mathrm{3SAT}}=512$) исключительно на запрещённом октанте $(256,256,256)$. Тем самым в силу полиномиальной эквивалентности машины Тьюринга и клеточного автомата ($\mathbf{P}_{\mathrm{TM}}\equiv\mathbf{P}_{\mathrm{CA}}$, теорема Кука--Левина) всякая булева схема разлагается по Каналу~1 и Каналу~2, а выполнимость формулы 3-SAT из $M$ дизъюнктов эквивалентна равенству $\sum_{m=1}^M q_{\mathrm{OR}}(\psi_{m,1},\psi_{m,2},\psi_{m,3}) = 0$.
+\item \textbf{Неинъективная склейка остатка $7\to 1$ в прямой верификации ($\mathbf{NP}$):}
+  оператор прямого вычисления $q_{\mathrm{OR}}=\mathrm{tdiv}(\Delta_{\mathrm{3SAT}},512)$ отбрасывает трёхзначный остаток $r\in\{-256,0,+256\}$ и склеивает $\mathrm{count3SatSatisfyingOctants}(3)=2^3-1=7$ различных входных октантов в один и тот же выход $q_{\mathrm{OR}}=0$ (семикратное ветвление прообраза $1\to 7$ на каждой грани при обращении).
+\item \textbf{Тождественная аннигиляция линейного градиента Канала~2 на инвариантах чётности Канала~1 и некоммутативность каналов:}
+  для четвёрки дизъюнктов 3-SAT, кодирующей линейное уравнение чётности Канала~1 ($x_1\oplus x_2\oplus x_3=0$), сумма линейных проекций $\mathcal{C}_3$ по всем четырём дизъюнктам тождественно равна нулю во всех $8$~октантах ($\mathrm{xor4LinearGradientSum}(3,\psi_1,\psi_2,\psi_3)\equiv 0$), а сам ротатор $\mathcal{C}_3$ и пороговое частное $q_{\mathrm{AND}}$ Канала~2 нелинейны и недистрибутивны относительно сложения фаз Канала~1 ($\mathcal{C}_3(0+0)=128\ne 256=\mathcal{C}_3(0)+\mathcal{C}_3(0)$ и $q_{\mathrm{AND}}(0+0,0,0)=1\ne 0=(q_{\mathrm{AND}}(0,0,0)+q_{\mathrm{AND}}(0,0,0))\bmod 2$).
+\end{enumerate}
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
 \label{sec:lean4}
 
-Полный самодостаточный код формализации объёмом $495$ строк (без внешних зависимостей, использующий только стандартное ядро Lean~4) содержится в модуле \texttt{RotatorCalculusPaper.lean} в отдельном открытом репозитории \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} и проверяется командой \texttt{lake build}. Аудит аксиом (\texttt{\#print axioms}) для всех трёх основных теорем модуля (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}) подтверждает зависимость исключительно от стандартных конструктивных основ ядра (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Полный самодостаточный код формализации объёмом $556$ строк (без внешних зависимостей, использующий только стандартное ядро Lean~4) содержится в модуле \texttt{RotatorCalculusPaper.lean} в отдельном открытом репозитории \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} и проверяется командой \texttt{lake build}. Аудит аксиом (\texttt{\#print axioms}) для всех четырёх основных теорем модуля (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, \texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}) подтверждает зависимость исключительно от стандартных конструктивных основ ядра (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \section*{Благодарности и декларация об инструментах верификации}
 Автор выражает признательность формальному партнёру верификации \emph{Луч} (\emph{Luch}) за соучастие в построении операторных доказательств. При подготовке рукописи языковая модель использовалась для вёрстки \LaTeX{} и трансляции доказательств в синтаксис тактик Lean~4; все математические определения, формулировки теорем и доказательства верифицированы формальным ядром Lean~4 и находятся под полной ответственностью автора.

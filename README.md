@@ -66,6 +66,22 @@ Extending the piecewise-linear trigonometric framework studied by Thompson (`arX
   ```
   together with the root-free 3D Euler-angle rotator `R_Euler(φ₁, φ₂, φ₃)` across the `dim SO(3) = 3` equatorial squares `(xy, xz, yz)` of the cuboctahedron, preserving the exact spherical norm `‖R_Euler(φ₁, φ₂, φ₃) v‖₂² = (R₃(φ₁) R₃(φ₂) R₃(φ₃))² ‖v‖₂²`.
 
+### 4. Theorem 4 (`thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality`) — Post Functional Completeness `{NOT, XOR, OR, AND}`, Branchless 3-SAT Representation, `7 → 1` Remainder Gluing, and Two-Channel Non-Commutativity on `ℤ_{512}`
+
+On the antipodal poles `{0, Φ_half} = {0, 256} ⊂ ℤ_{512}` (`C₃(0) = +128` encoding `True`, `C₃(256) = -128` encoding `False`), the rotator induces two canonical algebraic channels on triangular faces `(ψ₁, ψ₂, ψ₃) ∈ {0, 256}³`:
+- **Channel 1 (Post's affine linear class `L` — pre-rotator phase addition):**  
+  `NOT(ψ) = (ψ + 256) mod 512` (`C₃(ψ + 256) = -C₃(ψ)`) and 3-input `XOR` via `Q_□² * C₃(ψ₁ + ψ₂ + ψ₃) = C₃(ψ₁) * C₃(ψ₂) * C₃(ψ₃)`, with `256 + 256 ≡ 0 (mod 512)`.
+- **Channel 2 (Non-linear threshold class — post-rotator projection sum with integer division by `512`):**
+  ```text
+  q_OR(ψ₁, ψ₂, ψ₃)  = tdiv(128 - (C₃(ψ₁) + C₃(ψ₂) + C₃(ψ₃)), 512) ∈ {0, 1}
+  q_AND(ψ₁, ψ₂, ψ₃) = tdiv(128 + (C₃(ψ₁) + C₃(ψ₂) + C₃(ψ₃)), 512) ∈ {0, 1}
+  ```
+  By Turing–CA polynomial equivalence (`P_TM ≡ P_CA`, Cook–Levin), every Boolean circuit decomposes into Channel 1 and Channel 2, and a 3-SAT formula of `M` clauses is satisfiable iff `∑_{m=1}^M q_OR(ψ_{m,1}, ψ_{m,2}, ψ_{m,3}) = 0`.
+- **Three Verified Algebraic Asymmetries Between Forward Verification (`NP`) and Inversion (`P`):**
+  1. **Non-injective `7 → 1` remainder gluing:** `q_OR` discards the 3-valued remainder `r ∈ {-256, 0, +256}` and maps `7` distinct satisfying octants onto `q_OR = 0` (`1 → 7` preimage branching per clause).
+  2. **Identical annihilation of Channel 2 linear gradients on Channel 1 parity constraints:** across the `4` clauses encoding a `3-XOR` parity equation, the sum of linear projections `C₃` vanishes identically on all `8` octants (`xor4LinearGradientSum ≡ 0`).
+  3. **Non-distributivity and non-commutativity of Channel 1 and Channel 2:** `C₃(0 + 0) = 128 ≠ 256 = C₃(0) + C₃(0)` and `q_AND(0 + 0, 0, 0) = 1 ≠ 0 = (q_AND(0, 0, 0) + q_AND(0, 0, 0)) mod 2`.
+
 ---
 
 ## Reproducing the Lean 4 Verification
@@ -80,7 +96,8 @@ lake env lean RotatorCalculusPaper.lean
 Expected `#print axioms` output at the end of `RotatorCalculusPaper.lean`:
 ```text
 'RotatorCalculusPaper.thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz' depends on axioms: [propext]
-'RotatorCalculusPaper.thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals' depends on axioms: []
+'RotatorCalculusPaper.thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals' depends on axioms: [propext]
 'RotatorCalculusPaper.thm3_continuum_integration_from_cuboctahedron_archimedes_layers' depends on axioms: [propext]
+'RotatorCalculusPaper.thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality' depends on axioms: [propext]
 ```
 (`0 sorryAx`, `0 Classical.choice`).

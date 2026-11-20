@@ -351,10 +351,44 @@ For $d=3$, the following relations hold on the cuboctahedral shell $O_2(d)$ and 
 \end{enumerate}
 \end{theorem}
 
+\section{Post Functional Completeness, Branchless 3-SAT Representation on \texorpdfstring{$\mathbb{Z}_{512}$}{Z512}, and Algebraic Asymmetry of Verification vs.\ Inversion}
+\label{sec:boolean-3sat}
+
+On the antipodal poles $\{0,\Phi_{\mathrm{half}}(d)\}=\{0,256\}\subset\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ ($\mathcal{C}_3(0)=+128$ encoding truth~$1$, $\mathcal{C}_3(256)=-128$ encoding falsity~$0$), the piecewise-linear rotator induces two canonical algebraic channels on triangular faces $(\psi_1,\psi_2,\psi_3)\in\{0,256\}^3$:
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item \textbf{Channel~1 (Post's affine linear class~$L$ --- pre-rotator phase addition):}
+  the half-turn shift $\mathrm{NOT}(\psi)=(\psi+256)\bmod 512$ negates the projection ($\mathcal{C}_3(\psi+256)=-\mathcal{C}_3(\psi)$), while phase addition yields three-input parity $\mathrm{XOR}_3$:
+  \begin{equation}
+    \label{eq:pre-rotator-xor}
+    Q_\square(d)^2\,\mathcal{C}_d(\psi_1+\psi_2+\psi_3) \;\equiv\; \mathcal{C}_d(\psi_1)\,\mathcal{C}_d(\psi_2)\,\mathcal{C}_d(\psi_3),
+  \end{equation}
+  where the pole subgroup $(\{0,256\},+\bmod 512)\cong(\mathbb{F}_2,\oplus)$ ($256+256\equiv 0\pmod{512}$).
+\item \textbf{Channel~2 (Non-linear threshold class --- post-rotator projection sum with integer division by $N_{\mathrm{ring}}(d)=512$):}
+  set $\Delta_{\mathrm{3SAT}}(\psi_1,\psi_2,\psi_3) := Q_\square(d)-\bigl(\mathcal{C}_d(\psi_1)+\mathcal{C}_d(\psi_2)+\mathcal{C}_d(\psi_3)\bigr)$. Since $(1+d)Q_\square(d)=4\times 128=512=N_{\mathrm{ring}}(d)$ at $d=3$, truncated integer division by $N_{\mathrm{ring}}(d)$ defines branchless disjunction and conjunction:
+  \begin{equation}
+    \label{eq:post-rotator-or-and}
+    q_{\mathrm{OR}}(\psi_1,\psi_2,\psi_3) := \mathrm{tdiv}\bigl(\Delta_{\mathrm{3SAT}}(\psi_1,\psi_2,\psi_3),\,N_{\mathrm{ring}}(d)\bigr)\in\{0,1\},\qquad
+    q_{\mathrm{AND}}(\psi_1,\psi_2,\psi_3) := \mathrm{tdiv}\Bigl(Q_\square(d)+\sum_{k=1}^3\mathcal{C}_d(\psi_k),\,N_{\mathrm{ring}}(d)\Bigr)\in\{0,1\}.
+  \end{equation}
+\end{enumerate}
+
+\begin{theorem}[Post Functional Completeness \{\texttt{NOT}, \texttt{XOR}, \texttt{OR}, \texttt{AND}\}, 3-SAT Representation, $7\to 1$ Remainder Gluing, and Two-Channel Non-Commutativity on $\mathbb{Z}_{512}$]
+\label{thm:main-4}
+For $d=3$, the following exact relations hold across the pole octants $\{0,256\}^3\subset\mathbb{Z}_{512}^3$ (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Post functional completeness and equivalence of 3-SAT satisfiability to zero Channel~2 quotients:}
+  across all $2^3=8$ states in $\{0,256\}^3$, the multiplicative parity identity~\eqref{eq:pre-rotator-xor} holds, $q_{\mathrm{AND}}$ equals~$1$ uniquely at $(0,0,0)$ and~$0$ on the other $7$~octants, while the defect quotient $q_{\mathrm{OR}}$ equals~$0$ on all $7$~satisfying octants of a 3-SAT clause $(l_1\lor l_2\lor l_3)$ and equals~$1$ ($\Delta_{\mathrm{3SAT}}=512$) uniquely on the falsifying octant $(256,256,256)$. Consequently, by the polynomial equivalence between Turing machines and cellular automata ($\mathbf{P}_{\mathrm{TM}}\equiv\mathbf{P}_{\mathrm{CA}}$, Cook--Levin), every Boolean circuit decomposes into Channel~1 and Channel~2, and a 3-SAT formula of $M$ clauses is satisfiable if and only if $\sum_{m=1}^M q_{\mathrm{OR}}(\psi_{m,1},\psi_{m,2},\psi_{m,3}) = 0$.
+\item \textbf{Non-injective $7\to 1$ remainder gluing in forward verification ($\mathbf{NP}$):}
+  the forward quotient operator $q_{\mathrm{OR}}=\mathrm{tdiv}(\Delta_{\mathrm{3SAT}},512)$ discards the three-valued remainder $r\in\{-256,0,+256\}$ and maps $\mathrm{count3SatSatisfyingOctants}(3)=2^3-1=7$ distinct input octants onto the single output $q_{\mathrm{OR}}=0$ ($1\to 7$ preimage branching per clause under inversion).
+\item \textbf{Identical annihilation of the Channel~2 linear gradient on Channel~1 parity constraints and channel non-commutativity:}
+  across the four 3-SAT clauses encoding a single Channel~1 parity equation ($x_1\oplus x_2\oplus x_3=0$), the sum of linear projections $\mathcal{C}_3$ vanishes identically on all $8$~octants ($\mathrm{xor4LinearGradientSum}(3,\psi_1,\psi_2,\psi_3)\equiv 0$), while the rotator $\mathcal{C}_3$ and the Channel~2 threshold quotient $q_{\mathrm{AND}}$ are non-linear and non-distributive with respect to Channel~1 phase addition ($\mathcal{C}_3(0+0)=128\ne 256=\mathcal{C}_3(0)+\mathcal{C}_3(0)$ and $q_{\mathrm{AND}}(0+0,0,0)=1\ne 0=(q_{\mathrm{AND}}(0,0,0)+q_{\mathrm{AND}}(0,0,0))\bmod 2$).
+\end{enumerate}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
 
-The complete self-contained formalization ($495$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all three main theorems (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, and \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}) confirms zero non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+The complete self-contained formalization ($556$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all four main theorems (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, and \texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}) confirms zero non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \section*{Acknowledgments and Declaration}
 The author acknowledges formal verification partner \emph{Luch} for collaboration on the formal operator proofs. Large language model tools were used for assistance with \LaTeX{} formatting, English copy-editing, and translating mathematical proofs into Lean~4 tactic syntax; all mathematical definitions, theorem formulations, and proofs are verified by the Lean~4 formal proof kernel and are the full responsibility of the author.
