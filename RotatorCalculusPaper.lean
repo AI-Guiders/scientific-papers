@@ -449,10 +449,10 @@ def plaquetteChernWinding (d : Nat) (p0 p1 p2 p3 : Int) : Int :=
 def cubeClosedSurfaceFluxSum (e1 e2 e3 e4 e5 e6 e7 e8 e9 e10 e11 e12 : Int) : Int :=
   let fBottom := e1 + e2 - e3 - e4
   let fTop    := e5 + e6 - e7 - e8
-  let fFront  := e4 + e9 - e8 - e10
-  let fBack   := e2 + e11 - e6 - e12
-  let fLeft   := e10 + e7 - e11 - e3
-  let fRight  := e12 + e5 - e9 - e1
+  let fFront  := e4 + e9 + e8 - e10
+  let fBack   := e11 - e2 - e6 - e12
+  let fLeft   := e10 + e7 - e11 + e3
+  let fRight  := e12 - e5 - e9 - e1
   fBottom + fTop + fFront + fBack + fLeft + fRight
 
 def nilpotentForward2x (s0 s1 s2 s3 : Int) : Int × Int × Int × Int :=
