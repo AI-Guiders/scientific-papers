@@ -84,6 +84,29 @@ def projC (d : Nat) (phi : Int) : Int :=
 def projS (d : Nat) (phi : Int) : Int :=
   projC d (phi - (quarterPeriod d : Int))
 
+/-- **Native Gray-Quadrant Butterfly Radix Decomposition (`ℤ_{N_ring(d)} ≅ ℤ_4^Gray ⋉ ℤ_{Q_□(d)}`):**
+For any integer angle `φ ∈ ℤ` with canonical ring representative `u = φ mod N_ring(d) ∈ [0, N_ring(d))`:
+- `q1 = u / Φ_half(d) ∈ {0, 1}` (half-turn bit `256`),
+- `q0 = (u / Q_□(d)) % 2 ∈ {0, 1}` (quadrant parity bit `128`),
+- `m7 = u % Q_□(d) ∈ [0, Q_□(d))` (7-bit intra-quadrant mantissa `0..127`),
+- `comp7 = Q_□(d) - m7` (unique complement satisfying `comp7 + m7 ≡ Q_□(d)` identically!).
+Then **both** `C_d(φ)` and `S_d(φ)` are generated from the **single** pair `(comp7, m7)` via:
+1. an X-butterfly crossbar switch controlled by `q0`:
+   `|C_d(φ)| = (1 - q0) * comp7 + q0 * m7`,   `|S_d(φ)| = (1 - q0) * m7 + q0 * comp7`,
+2. and the 2-bit reflective Gray code `(c_neg, s_neg) = ((q1 + q0) % 2, q1)` for quadrant signs:
+   `C_d(φ) = (1 - 2 * c_neg) * |C_d(φ)|`,   `S_d(φ) = (1 - 2 * s_neg) * |S_d(φ)|`! -/
+def grayButterflyRotatorPair (d : Nat) (phi : Int) : Int × Int :=
+  let u     : Nat := (phi.emod (nRing d : Int)).toNat
+  let q1    : Int := ((u / halfPeriod d : Nat) : Int)
+  let q0    : Int := (((u / quarterPeriod d) % 2 : Nat) : Int)
+  let m7    : Int := ((u % quarterPeriod d : Nat) : Int)
+  let comp7 : Int := (quarterPeriod d : Int) - m7
+  let cMag  : Int := (1 - q0) * comp7 + q0 * m7
+  let sMag  : Int := (1 - q0) * m7 + q0 * comp7
+  let cNeg  : Int := (q1 + q0) % 2
+  let sNeg  : Int := q1
+  ((1 - 2 * cNeg) * cMag, (1 - 2 * sNeg) * sMag)
+
 /-- **Discrete Euler Exponential `eulerExp(d, φ) = (C_d(φ), S_d(φ))` (`e^{iφ}` on `ℤ_{N_ring(d)}`):**
 - At `φ = 0`: `eulerExp(d, 0) = (Q_□(d), 0)` (`1`),
 - Quarter-turn shift `+Q_□(d)` acts as exact multiplication by the imaginary unit `i`:
@@ -544,9 +567,12 @@ def checkConstructiveCohomologyAndVariationalCalculusBool (d : Nat) : Bool :=
 
 /-- **Theorem 1 (Discrete Euler Exponential `e^{iφ}`, Euler's Identity `e^{iπ} + 1 = 0`, Universal Constant Difference Wronskian `⟨i e^{iφ}, Δ e^{iφ}⟩ ≡ Q_□(3) = 128`, Brahmagupta–Weierstrass Euclidean Lift, and Fundamental Theorem of Discrete Calculus)**: -/
 theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz :
-    -- (i) Discrete Euler exponential e^{iφ}, multiplication by i via +Q_□(3), Euler's identity e^{iπ} + 1 = 0, and ⟨i e^{iφ}, Δ e^{iφ}⟩ = W₃(φ) ≡ Q_□(3) = 128
+    -- (i) Discrete Euler exponential e^{iφ}, Native Gray-Quadrant Butterfly Radix identity (Z_4^Gray x Z_128),
+    -- multiplication by i via +Q_□(3), Euler's identity e^{iπ} + 1 = 0, and ⟨i e^{iφ}, Δ e^{iφ}⟩ = W₃(φ) ≡ Q_□(3) = 128
     (allUpTo (nRing 3) (fun phi =>
        eqNatBool (Int.natAbs (projC 3 (phi : Int)) + Int.natAbs (projS 3 (phi : Int))) (quarterPeriod 3) &&
+       eqIntBool (grayButterflyRotatorPair 3 (phi : Int)).1 (projC 3 (phi : Int)) &&
+       eqIntBool (grayButterflyRotatorPair 3 (phi : Int)).2 (projS 3 (phi : Int)) &&
        eqIntBool (eulerExp 3 ((phi : Int) + (quarterPeriod 3 : Int))).1 (-projS 3 (phi : Int)) &&
        eqIntBool (eulerExp 3 ((phi : Int) + (quarterPeriod 3 : Int))).2 (projC 3 (phi : Int)) &&
        eqIntBool ((eulerExp 3 ((phi : Int) + (halfPeriod 3 : Int))).1 + (eulerExp 3 (phi : Int)).1) 0 &&
