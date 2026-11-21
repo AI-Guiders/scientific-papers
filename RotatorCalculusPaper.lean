@@ -568,7 +568,8 @@ def checkConstructiveCohomologyAndVariationalCalculusBool (d : Nat) : Bool :=
 /-- **Theorem 1 (Discrete Euler Exponential `e^{iφ}`, Euler's Identity `e^{iπ} + 1 = 0`, Universal Constant Difference Wronskian `⟨i e^{iφ}, Δ e^{iφ}⟩ ≡ Q_□(3) = 128`, Brahmagupta–Weierstrass Euclidean Lift, and Fundamental Theorem of Discrete Calculus)**: -/
 theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz :
     -- (i) Discrete Euler exponential e^{iφ}, Native Gray-Quadrant Butterfly Radix identity (Z_4^Gray x Z_128),
-    -- multiplication by i via +Q_□(3), Euler's identity e^{iπ} + 1 = 0, and ⟨i e^{iφ}, Δ e^{iφ}⟩ = W₃(φ) ≡ Q_□(3) = 128
+    -- multiplication by i via +Q_□(3), Euler's identity e^{iπ} + 1 = 0, ⟨i e^{iφ}, Δ e^{iφ}⟩ = W₃(φ) ≡ Q_□(3) = 128,
+    -- and Carrier Bezout-Catalan representations of Unity 1 = 3² - 2³ = 25*41 - 2*512 = 197*13 - 5*512
     (allUpTo (nRing 3) (fun phi =>
        eqNatBool (Int.natAbs (projC 3 (phi : Int)) + Int.natAbs (projS 3 (phi : Int))) (quarterPeriod 3) &&
        eqIntBool (grayButterflyRotatorPair 3 (phi : Int)).1 (projC 3 (phi : Int)) &&
@@ -580,7 +581,12 @@ theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz :
        eqIntBool (eulerImagDotDiff 3 (phi : Int)) (rotatorWronskian 3 (phi : Int)) &&
        eqIntBool (rotatorWronskian 3 (phi : Int)) (quarterPeriod 3 : Int)) = true ∧
      discreteIntegral (nRing 3) (fun phi => rotatorWronskian 3 phi) =
-       ((nRing 3 * quarterPeriod 3 : Nat) : Int)) ∧
+       ((nRing 3 * quarterPeriod 3 : Nat) : Int) ∧
+     nineFoldDivisor 3 - nTriangles 3 = unitStep ∧
+     (dOutEdge 3 * dOutEdge 3) * (dInSquare * dInSquare + dOutEdge 3 * dOutEdge 3) -
+       normSqEdge 3 * nRing 3 = unitStep ∧
+     (normSqEdge 3 * (dInSquare * dInSquare + nineFoldDivisor 3 * nineFoldDivisor 3) + 3) *
+       (unitStep + nVertices 3) - dOutEdge 3 * nRing 3 = unitStep) ∧
     -- (ii) Root-free Euclidean Pythagorean circle identity X² + Y² = R² and Brahmagupta-Weierstrass step differentials
     (allUpTo (nRing 3) (fun phi =>
        eqIntBool
@@ -592,14 +598,14 @@ theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz :
        eqIntBool (pythStepDot 3 (phi : Int))
          (rotatorInnerStep 3 (phi : Int) * rotatorInnerStep 3 (phi : Int) -
           ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int))) = true) ∧
-    -- (iii) Fundamental Theorem of Discrete Calculus (Newton-Leibniz) across all 512 points & half-wave area = Q_□(3)² = 16,384
+      -- (iii) Fundamental Theorem of Discrete Calculus (Newton-Leibniz) across all 512 points & half-wave area = Q_□(3)² = 16,384
     (allUpTo (nRing 3) (fun phi =>
        eqIntBool (antiderivC 3 (phi + 1) - antiderivC 3 phi) (projC 3 (phi : Int)) &&
        eqIntBool (antiderivS 3 (phi + 1) - antiderivS 3 phi) (projS 3 (phi : Int))) = true ∧
      antiderivC 3 (nRing 3) = 0 ∧
      antiderivS 3 (nRing 3) = 0 ∧
      antiderivS 3 (halfPeriod 3) = ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int)) :=
-  ⟨⟨rfl, rfl⟩, rfl, ⟨rfl, rfl, rfl, rfl⟩⟩
+  ⟨⟨rfl, rfl, rfl, rfl, rfl⟩, rfl, ⟨rfl, rfl, rfl, rfl⟩⟩
 
 /-- **Theorem 2 (Closed-Form Evaluation of Fresnel, Jacobi Elliptic, Dirichlet `Si`, Parseval, and Bessel `J₀` Integrals)**: -/
 theorem thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals :
