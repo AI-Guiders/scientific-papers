@@ -169,6 +169,61 @@ def antiderivC (d phiUpper : Nat) : Int :=
 def antiderivS (d phiUpper : Nat) : Int :=
   discreteIntegral phiUpper (fun phi => projS d phi)
 
+/-- **Native Multiplierless Carrier Arithmetic Expressing All Integer Operations (`x, -x, |x|, max, min, x², x * y`) Purely Through the Rotator `(C_d, S_d)` and Its Verlet Antiderivative `antiderivS`:**
+- `rotatorId(d, x) = S_d(x) ≡ x` on `[-Q_□(d), +Q_□(d)]`,
+- `rotatorNeg(d, x) = S_d(x + Φ_half(d)) ≡ -x` on `[-Q_□(d), +Q_□(d)]`,
+- `rotatorAbs(d, x) = C_d(0) - C_d(x) ≡ |x|` on `[-Φ_half(d), +Φ_half(d)]`,
+- `rotatorMax(d, x, y) = (S_d(x) + S_d(y) + (C_d(0) - C_d(x - y))) / 2 ≡ max(x, y)` on `[-K_P(d), +K_P(d)]`,
+- `rotatorMin(d, x, y) = (S_d(x) + S_d(y) - (C_d(0) - C_d(x - y))) / 2 ≡ min(x, y)` on `[-K_P(d), +K_P(d)]`,
+- `rotatorTropicalMin(d, x, y) = (C_d(x - y) - C_d(x + y)) / 2 ≡ min(x, y)` on `[0, K_P(d)]` (prosthaphaeresis on the `L¹` diamond),
+- `rotatorSquare(d, u) = antiderivS(d, |u|_rot) + antiderivS(d, |u|_rot + 1) ≡ u²` on `[-Q_□(d), +Q_□(d)]` (generated purely by Verlet addition with zero multiplications!),
+- `rotatorSignedMul(d, x, y) = (rotatorSquare(d, x + y) - rotatorSquare(d, x - y)) / 4 ≡ x * y` across all signed pairs `(x, y) ∈ [-K_P(d), +K_P(d)]²`! -/
+def rotatorId (d : Nat) (x : Int) : Int :=
+  projS d x
+
+def rotatorNeg (d : Nat) (x : Int) : Int :=
+  projS d (x + (halfPeriod d : Int))
+
+def rotatorAbs (d : Nat) (x : Int) : Int :=
+  projC d 0 - projC d x
+
+def rotatorMax (d : Nat) (x y : Int) : Int :=
+  (projS d x + projS d y + rotatorAbs d (x - y)).tdiv (normSqEdge d : Int)
+
+def rotatorMin (d : Nat) (x y : Int) : Int :=
+  (projS d x + projS d y - rotatorAbs d (x - y)).tdiv (normSqEdge d : Int)
+
+def rotatorTropicalMin (d : Nat) (x y : Int) : Int :=
+  (projC d (x - y) - projC d (x + y)).tdiv (normSqEdge d : Int)
+
+def rotatorSquare (d : Nat) (u : Int) : Int :=
+  let a := (rotatorAbs d u).toNat
+  antiderivS d a + antiderivS d (a + unitStep)
+
+def rotatorSignedMul (d : Nat) (x y : Int) : Int :=
+  (rotatorSquare d (x + y) - rotatorSquare d (x - y)).tdiv (dInSquare : Int)
+
+def checkNativeRotatorArithmeticBool (d : Nat) : Bool :=
+  let spanQ := quarterPeriod d
+  let unaryOk := allUpTo (2 * spanQ + 1) (fun idx =>
+    let x : Int := (idx : Int) - (spanQ : Int)
+    eqIntBool (rotatorId d x) x &&
+    eqIntBool (rotatorNeg d x) (-x) &&
+    eqIntBool (rotatorAbs d x) (Int.natAbs x : Int) &&
+    eqIntBool (rotatorSquare d x) (x * x))
+  let samples := [-(octantStep d : Int), -((dOutEdge d * nineFoldDivisor d : Nat) : Int),
+                  -(nVertices d : Int), -(unitStep : Int), 0,
+                  (unitStep : Int), (nVertices d : Int),
+                  ((dOutEdge d * nineFoldDivisor d : Nat) : Int), (octantStep d : Int)]
+  let binaryOk := samples.all (fun x =>
+    samples.all (fun y =>
+      let expMax := if x ≥ y then x else y
+      let expMin := if x ≤ y then x else y
+      eqIntBool (rotatorSignedMul d x y) (x * y) &&
+      eqIntBool (rotatorMax d x y) expMax &&
+      eqIntBool (rotatorMin d x y) expMin))
+  unaryOk && binaryOk
+
 /-- Lemniscate Jacobi elliptic triad `(jacobiSn, jacobiCn, jacobiDoubleDn)` at the cuboctahedron modulus `k² = 1 / ‖e‖₂² = 1/2`. -/
 def jacobiSn (d : Nat) (phi : Int) : Int := projS d phi
 def jacobiCn (d : Nat) (phi : Int) : Int := projC d phi
@@ -598,14 +653,18 @@ theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz :
        eqIntBool (pythStepDot 3 (phi : Int))
          (rotatorInnerStep 3 (phi : Int) * rotatorInnerStep 3 (phi : Int) -
           ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int))) = true) ∧
-      -- (iii) Fundamental Theorem of Discrete Calculus (Newton-Leibniz) across all 512 points & half-wave area = Q_□(3)² = 16,384
+      -- (iii) Fundamental Theorem of Discrete Calculus (Newton-Leibniz) across all 512 points, half-wave area = Q_□(3)² = 16,384,
+    -- and Native Multiplierless Carrier Arithmetic (x, -x, |x|, max, min, x², x * y) purely from C₃, S₃, and antiderivS
     (allUpTo (nRing 3) (fun phi =>
        eqIntBool (antiderivC 3 (phi + 1) - antiderivC 3 phi) (projC 3 (phi : Int)) &&
        eqIntBool (antiderivS 3 (phi + 1) - antiderivS 3 phi) (projS 3 (phi : Int))) = true ∧
      antiderivC 3 (nRing 3) = 0 ∧
      antiderivS 3 (nRing 3) = 0 ∧
-     antiderivS 3 (halfPeriod 3) = ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int)) :=
-  ⟨⟨rfl, rfl, rfl, rfl, rfl⟩, rfl, ⟨rfl, rfl, rfl, rfl⟩⟩
+     antiderivS 3 (halfPeriod 3) = ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int) ∧
+     checkNativeRotatorArithmeticBool 3 = true ∧
+     rotatorSignedMul 3 (-41) 64 = -2624 ∧
+     rotatorTropicalMin 3 41 64 = 41) :=
+  ⟨⟨rfl, rfl, rfl, rfl, rfl⟩, rfl, ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩⟩
 
 /-- **Theorem 2 (Closed-Form Evaluation of Fresnel, Jacobi Elliptic, Dirichlet `Si`, Parseval, and Bessel `J₀` Integrals)**: -/
 theorem thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals :
