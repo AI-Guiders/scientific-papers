@@ -894,11 +894,26 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   let p3_11  : Int := (((dOutEdge d ^ dInSquare : Nat) : Int) - ((d ^ normSqEdge d : Nat) : Int)) / cLock3
   let detP3  : Int := p3_00 * p3_11 - p3_01 * p3_10
   let trP3   : Int := p3_00 + p3_11
-  -- 4. 3-level recursive descent law C_0 - (x + y)*C_1 + x*y*C_2 = 0 on Lock II (palindrome 5 -> 7 -> 5)
+  -- 4. Lock IV on the positive light-cone sheet Tr(P̃) = +2 (k = 40 = 4^2 + 5^2 - 1):
+  -- 2^10 - 5^4 = 1024 - 625 = 399, difference resonance 2^7 - 2^3 = 5^3 - 5^1 = 120 = 5!,
+  -- P_IV / 399 = [[-39, -40], [40, 41]], Minkowski light-cone interval X^2 - T^2 = (-40)^2 - (-40)^2 = 0
+  let heis41 : Nat := dInSquare * dInSquare + dOutEdge d * dOutEdge d
+  let cLock4 : Int := ((normSqEdge d ^ (normSqEdge d * dOutEdge d) : Nat) : Int) - ((dOutEdge d ^ dInSquare : Nat) : Int)
+  let diff4L : Nat := (normSqEdge d ^ (nTriangles d - unitStep)) - (normSqEdge d ^ d)
+  let diff4R : Nat := (dOutEdge d ^ d) - dOutEdge d
+  let p4_00  : Int := (((normSqEdge d ^ nSquares d : Nat) : Int) - ((dOutEdge d ^ nSquares d : Nat) : Int)) / cLock4
+  let p4_01  : Int := -((heis41 - unitStep : Nat) : Int)
+  let p4_10  : Int :=  ((heis41 - unitStep : Nat) : Int)
+  let p4_11  : Int := (((normSqEdge d ^ (nSquares d + nTriangles d) : Nat) : Int) - ((dOutEdge d ^ normSqEdge d : Nat) : Int)) / cLock4
+  let detP4  : Int := p4_00 * p4_11 - p4_01 * p4_10
+  let trP4   : Int := p4_00 + p4_11
+  let cone4  : Int := ((p4_00 - p4_11) / (normSqEdge d : Int)) ^ 2 - (p4_01) ^ 2
+  -- 5. 3-level recursive descent law C_0 - (x + y)*C_1 + x*y*C_2 = 0 and Hankel-Wronskian C_1^2 - C_0*C_2 = 24 on Lock II (palindrome 5 -> 7 -> 5)
   let cDesc0 : Int := cLock2
   let cDesc1 : Int := ((normSqEdge d ^ dInSquare : Nat) : Int) - ((d ^ normSqEdge d : Nat) : Int)
   let cDesc2 : Int := ((normSqEdge d ^ d : Nat) : Int) - (d : Int)
   let recLaw : Int := cDesc0 - ((normSqEdge d + d : Nat) : Int) * cDesc1 + ((normSqEdge d * d : Nat) : Int) * cDesc2
+  let hankelW : Int := cDesc1 * cDesc1 - cDesc0 * cDesc2
   -- 5. Binomial skeletal divisibility reciprocity between floors k=2 and k=3 on Lock III ((12, 4) <-> (4, -12))
   let quotK2X : Int := (((dInSquare * dInSquare : Nat) : Int) + cLock3) / (dOutEdge d : Int)
   let quotK2Y : Int := (((dOutEdge d * dInSquare * dInSquare : Nat) : Int) - cLock3) / (nineFoldDivisor d : Int)
@@ -921,9 +936,17 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   eqIntBool p3_11 ((nSquares d + nTriangles d : Nat) : Int) &&
   eqIntBool detP3 (unitStep : Int) &&
   eqIntBool trP3 (-(normSqEdge d : Int)) &&
+  eqNatBool diff4L (nVertices d * normSqEdge d * dOutEdge d) &&
+  eqNatBool diff4R (nVertices d * normSqEdge d * dOutEdge d) &&
+  eqIntBool p4_00 (-((d * (nVertices d + unitStep) : Nat) : Int)) &&
+  eqIntBool p4_11 (heis41 : Int) &&
+  eqIntBool detP4 (unitStep : Int) &&
+  eqIntBool trP4 (normSqEdge d : Int) &&
+  eqIntBool cone4 0 &&
   eqIntBool cDesc1 ((nTriangles d - unitStep : Nat) : Int) &&
   eqIntBool cDesc2 (dOutEdge d : Int) &&
   eqIntBool recLaw 0 &&
+  eqIntBool hankelW ((normSqEdge d * nVertices d : Nat) : Int) &&
   eqIntBool quotK2X (nVertices d : Int) &&
   eqIntBool quotK2Y (dInSquare : Int) &&
   eqIntBool quotK3X (dInSquare : Int) &&

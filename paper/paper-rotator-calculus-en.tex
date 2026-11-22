@@ -430,11 +430,13 @@ For the exponential Diophantine equation $A x^m - B y^n = C$ ($m,n\ge 2$), the f
     \begin{aligned}
       3^2 - 2^3 &= 1 &\implies k &= 6 = |\square(3)|, &\quad \widetilde{P}_{\mathrm{I}} &= \begin{pmatrix} -7 & -6 \\ 6 & 5 \end{pmatrix} \quad (6^2 = 36), \\
       2^5 - 3^3 &= 5 &\implies k &= 12 = |V(O_2)|, &\quad \widetilde{P}_{\mathrm{II}} &= \begin{pmatrix} -13 & -12 \\ 12 & 11 \end{pmatrix} \quad (12^2 = 144), \\
-      5^3 - 3^4 &= 44 &\implies k &= 15 = 3\cdot 5, &\quad \widetilde{P}_{\mathrm{III}} &= \begin{pmatrix} -16 & -15 \\ 15 & 14 \end{pmatrix} \quad (30^2 = 900,\ s=2).
+      5^3 - 3^4 &= 44 &\implies k &= 15 = 3\cdot 5, &\quad \widetilde{P}_{\mathrm{III}} &= \begin{pmatrix} -16 & -15 \\ 15 & 14 \end{pmatrix} \quad (30^2 = 900,\ s=2,\ \operatorname{Tr}=-2), \\
+      2^{10} - 5^4 &= 399 &\implies k &= 40 = 4^2+5^2-1, &\quad \widetilde{P}_{\mathrm{IV}} &= \begin{pmatrix} -39 & -40 \\ 40 & 41 \end{pmatrix} \quad (2^7-2^3 = 5^3-5^1 = 120,\ \operatorname{Tr}=+2),
     \end{aligned}
   \]
-\item \textbf{Three-level recursive descent law and floor $k=2 \leftrightarrow k=3$ binomial divisibility reciprocity:}
-  along any skeletal ray $(k,j)$, consecutive floor differences $C_t = A x^{m-tk} - B y^{n-tj}$ satisfy the weight-independent three-term recurrence $C_0 - (x^k+y^j)C_1 + x^k y^j C_2 = 0$ (yielding the palindrome $(C_0,C_1,C_2) = (5,7,5)$ with $5 - 5\cdot 7 + 6\cdot 5 = 0$ on $2^5 - 3^3 = 5$), while the binomial floor divisibility laws $x^a \mid (B y^{r_y}(y^b-x^a)^k + C)$ and $y^b \mid (A x^{r_x}(x^a-y^b)^k - C)$ ($m = ka+r_x$, $n = kb+r_y$) exhibit exact quotient reciprocity $(12, 4) \leftrightarrow (4, -12)$ between floors $k=2$ and $k=3$ on $5^3 - 3^4 = 44$.
+  all lying on the null light cone $\frac{1}{4}(\operatorname{Tr}\widetilde{P}^2 - 4) = X^2 - T^2 = (-k)^2 - (-k)^2 = 0$.
+\item \textbf{Three-level recursive descent law, Hankel--Wronskian identity, and floor $k=2 \leftrightarrow k=3$ binomial divisibility reciprocity:}
+  along any skeletal ray $(k,j)$, consecutive floor differences $C_t = A x^{m-tk} - B y^{n-tj}$ satisfy the weight-independent three-term recurrence $C_0 - (x^k+y^j)C_1 + x^k y^j C_2 = 0$ and the Hankel--Wronskian square identity $C_1^2 - C_0 C_2 = A B x^{m-2k}y^{n-2j}(x^k-y^j)^2$ (yielding the palindrome $(C_0,C_1,C_2) = (5,7,5)$ with $7^2 - 5^2 = 24$ on $2^5 - 3^3 = 5$), while the binomial floor divisibility laws $x^a \mid (B y^{r_y}(y^b-x^a)^k + C)$ and $y^b \mid (A x^{r_x}(x^a-y^b)^k - C)$ ($m = ka+r_x$, $n = kb+r_y$) exhibit exact quotient reciprocity $(12, 4) \leftrightarrow (4, -12)$ between floors $k=2$ and $k=3$ on $5^3 - 3^4 = 44$.
 \end{enumerate}
 \end{theorem}
 

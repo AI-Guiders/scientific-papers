@@ -110,10 +110,11 @@ Completes the five pillars of **100% Constructive Mathematics over `ℤ` and `�
 - **Parabolic Resonance Square Law & the `SL₂(ℤ)` Nilpotent Jordan Lock Triptych (`k ∈ {6, 12, 15}`):**  
   The parabolic boundary `Tr(P̃) = -2` (`(P̃ + I₂)² = 0`) is equivalent to the exact square identity `A x^(m-Δa) (x^Δa + 1)² = B y^(n-Δb) (y^Δb + 1)²`. For coprime bases (`A = B = 1`), integrality `P̃_k = [[-(k+1), -k], [k, k-1]] ∈ SL₂(ℤ)` reduces on interior elbows to `(x^a - x^Δa) + (y^b - y^Δb) = 2 s`, yielding the closed cuboctahedral triptych:
   1. **`k = 6` (`3² - 2³ = 1`, `C = 1`, square `6² = 36`):** `P̃_I = [[-7, -6], [6, 5]]` (`6` square faces of `O₂`),
-  2. **`k = 12` (`2⁵ - 3³ = 5`, `C = 5`, square `12² = 144`):** `P̃_II = [[-13, -12], [12, 11]]` (`12` vertices of `O₂`),
-  3. **`k = 15` (`5³ - 3⁴ = 44`, `C = 44`, square `30² = 900`, `s = 2`):** `P̃_III = [[-16, -15], [15, 14]]`.
-- **Three-Level Recursive Descent Law & Floor `k = 2 ↔ k = 3` Binomial Divisibility Reciprocity:**  
-  Along any skeletal ray `(k, j)`, consecutive floor differences `C_t = A x^(m - t k) - B y^(n - t j)` satisfy the weight-independent 3-term linear recurrence `C₀ - (x^k + y^j) C₁ + x^k y^j C₂ = 0` (forming the palindrome `(C₀, C₁, C₂) = (5, 7, 5)` on `2⁵ - 3³ = 5`), while the binomial divisibility laws `x^a | (B y^(r_y) (y^b - x^a)^k + C)` and `y^b | (A x^(r_x) (x^a - y^b)^k - C)` exhibit exact quotient reciprocity `(12, 4) ↔ (4, -12)` between floors `k = 2` and `k = 3` on `5³ - 3⁴ = 44`.
+  2. **`k = 12` (`2⁵ - 3³ = 5`, `C = 5`, square `12² = 144`, `Tr = -2`):** `P̃_II = [[-13, -12], [12, 11]]` (`12` vertices of `O₂`),
+  3. **`k = 15` (`5³ - 3⁴ = 44`, `C = 44`, square `30² = 900`, `s = 2`, `Tr = -2`):** `P̃_III = [[-16, -15], [15, 14]]`,
+  4. **`k = 40` (`2¹⁰ - 5⁴ = 399`, `C = 399`, difference resonance `2⁷ - 2³ = 5³ - 5¹ = 120 = 5!`, `Tr = +2`, `(P̃_IV - I₂)² = 0`):** `P̃_IV = [[-39, -40], [40, 41]]` (`41 = 4² + 5²`), lying on the Minkowski light-cone sheet `(Tr(P̃)² - 4)/4 = X² - T² = (-40)² - (-40)² = 0`.
+- **Three-Level Recursive Descent Law, Hankel–Wronskian Identity, & Floor `k = 2 ↔ k = 3` Binomial Divisibility Reciprocity:**  
+  Along any skeletal ray `(k, j)`, consecutive floor differences `C_t = A x^(m - t k) - B y^(n - t j)` satisfy the weight-independent 3-term linear recurrence `C₀ - (x^k + y^j) C₁ + x^k y^j C₂ = 0` and the Hankel–Wronskian square identity `C₁² - C₀ C₂ = A B x^(m - 2k) y^(n - 2j) (x^k - y^j)²` (forming the palindrome `(C₀, C₁, C₂) = (5, 7, 5)` with `7² - 5² = 24` on `2⁵ - 3³ = 5`), while the binomial divisibility laws `x^a | (B y^(r_y) (y^b - x^a)^k + C)` and `y^b | (A x^(r_x) (x^a - y^b)^k - C)` exhibit exact quotient reciprocity `(12, 4) ↔ (4, -12)` between floors `k = 2` and `k = 3` on `5³ - 3⁴ = 44`.
 
 ---
 
