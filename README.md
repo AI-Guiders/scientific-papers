@@ -1,7 +1,7 @@
-# Cuboctahedral Rotator Calculus in Lean 4
+# AI-Guiders Scientific Papers & Formal Lean 4 Verifications
 
-**On a Remarkable Property of the Cuboctahedral Rotator, Euler's Identity, and Closed-Form Evaluation of Fresnel, Jacobi, Bessel, and Dirichlet Integrals in Lean 4**  
-*(Об одном замечательном свойстве кусочно-линейного ротатора на кубооктаэдре, тождестве Эйлера и замкнутом вычислении интегралов типа Френеля, Якоби, Бесселя и Дирихле)*
+**Series I: Constructive Cuboctahedral Rotator Calculus on `ℤ_{512}`, Closed-Form Quadrature, Finite-State Adversary Barriers, and Root-Free Diophantine Padé–Bézout–Wronskian Identities in Lean 4**  
+*(Серия I: Конструктивное ротаторное исчисление на кубооктаэдре и кольце `ℤ_{512}`, замкнутые квадратуры, барьеры конечных вычислителей и бескорневые диофантовы тождества Паде–Безу–Вронскиана в Lean 4)*
 
 **Author:** Dmitrii A. Karataev (Д. А. Каратаев)  
 **Formal Verification Partner:** Luch (Луч)  
