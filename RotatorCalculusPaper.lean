@@ -1775,41 +1775,7 @@ theorem thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
   rw [hABC, Int.zero_mul] at hFactor
   omega
 
-/-- **Theorem 16 (Universal `∀`-Quantified `ℤ_{512}` Quarter-Ring Floor Collapse `k = 128 = Q_□(3)`
-and Radical-Weight 512-Period Lock across all integers `ℤ`)**:
-Because `x^128 mod 512 = x mod 2 ∈ {0, 1}` for every integer `x ∈ ℤ` (verified across all 512
-residue classes in Theorem 8), any 128th-floor decomposition `Ã X₁₂₈ + B̃ Y₁₂₈ = C̃ Z₁₂₈` with
-`X₁₂₈ = 512 q_X + r_X`, `Y₁₂₈ = 512 q_Y + r_Y`, `Z₁₂₈ = 512 q_Z + r_Z` (`r_X, r_Y, r_Z ∈ {0, 1}`)
-eliminates the arbitrary bases `(X, Y, Z)` modulo `512` and forces the root weights `(Ã, B̃, C̃)` themselves
-to obey `Ã r_X + B̃ r_Y - C̃ r_Z = 512 (C̃ q_Z - Ã q_X - B̃ q_Y)`:
-1. When `Z` is even and `X, Y` are odd (`r_X = 1, r_Y = 1, r_Z = 0`), `512 | (Ã + B̃)`, so no solution
-   exists (`False`) whenever `0 < Ã + B̃ < 512` (in particular for `Ã = B̃ = 1`);
-2. When `X` is even and `Y, Z` are odd (`r_X = 0, r_Y = 1, r_Z = 1`), `512 | (C̃ - B̃)`, forcing
-   either `C̃ = B̃` or `|C̃ - B̃| ≥ 512`. -/
-theorem thm16_universal_z512_quarter_ring_collapse_and_radical_weight_lock
-    (At Bt Ct qX qY qZ rX rY rZ : Int)
-    (hFloor128 : At * (512 * qX + rX) + Bt * (512 * qY + rY) = Ct * (512 * qZ + rZ)) :
-    let C := Ct * (512 * qZ + rZ)
-    let W3 := At * Bt * Ct
-    (At * rX + Bt * rY - Ct * rZ = 512 * (Ct * qZ - At * qX - Bt * qY)) ∧
-    (rX = 1 → rY = 1 → rZ = 0 → 0 < At + Bt → At + Bt < 512 → C ≤ W3 * W3) ∧
-    (rX = 0 → rY = 1 → rZ = 1 → Ct ≠ Bt → -512 < Ct - Bt → Ct - Bt < 512 → C ≤ W3 * W3) := by
-  dsimp
-  have hMod : At * rX + Bt * rY - Ct * rZ = 512 * (Ct * qZ - At * qX - Bt * qY) := by
-    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
-               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm] at hFloor128 ⊢
-    omega
-  refine ⟨hMod, ?_, ?_⟩
-  · intro hrX hrY hrZ hPos hLt
-    rw [hrX, hrY, hrZ] at hMod
-    simp only [Int.mul_one, Int.mul_zero, Int.sub_zero] at hMod
-    omega
-  · intro hrX hrY hrZ hNe hGt hLt
-    rw [hrX, hrY, hrZ] at hMod
-    simp only [Int.mul_one, Int.mul_zero, Int.zero_add] at hMod
-    omega
-
-/-- **Theorem 17 (Universal `∀`-Quantified Weierstrass–Stereographic Embedding of Any Triple
+/-- **Theorem 16 (Universal `∀`-Quantified Weierstrass–Stereographic Embedding of Any Triple
 `A + B = C` in `ℤ³` into the First Quadrant `[0, 128]` of the `ℤ_{512}` Rotator via `[0, 512]/512 = [0, 1] ≅ ℝ`
 and the Exact Quarter-Ring Bézout–Rotator Invariant `C · Δ_rot - w · I_rot = 128`)**:
 For ANY integer triple `A + B = C` across all `ℤ³` (with no modular slicing by `512`), the stereographic
@@ -1818,7 +1784,7 @@ into a single quadrant cell `[φ₀, φ₀ + 1] ⊂ [0, 128]` of the `ℤ_{512}`
 `S₃(φ₀) = φ₀`, `I_rot = B C₃(φ₀) - A S₃(φ₀)`), and couples with the Bézout partner `(u, v, w = u + v)`
 (`A v - B u = 1`, `Δ_rot = C₃(φ₀) v - S₃(φ₀) u`) via the universal quarter-ring invariant
 `C · Δ_rot - w · I_rot = 128 = Q_□(3)`. -/
-theorem thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
+theorem thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
     (A B C u v w phi0 : Int)
     (hABC : A + B - C = 0)
     (hBez : A * v - B * u = 1)
@@ -1911,86 +1877,6 @@ theorem thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotato
       simp only [Int.mul_sub, Int.mul_one]
     omega
 
-/-- **Theorem 18 (Master End-to-End 5-Theorem Synthesis Chain Across All `ℤ³` — Combining
-Theorems 14, 15, 16, and 17 into One Unified Implication)**:
-For ANY triple `(A, B, C) ∈ ℤ³` with `A = Ã X³ = Ã₂ X₂²`, `B = B̃ Y³ = B̃₂ Y₂²`, `C = C̃ Z³ = C̃₂ Z₂²`,
-`A + B = C`, Bézout partner `A v - B u = 1`, `u + v = w`, and Mason–Stothers balance
-`Ã α X² + B̃ β Y² = C̃ γ Z²`:
-1. The stereographic Weierstrass map `[0, 512]/512 = [0, 1] ≅ ℝ` embeds `(A, B, C)` into the
-   first quadrant `[0, 128]` of the `ℤ_{512}` rotator with exact quarter-ring invariant
-   `C · Δ_rot - w · I_rot = 128` (`Theorem 17`);
-2. Coupling adjacent floors `k = 2` and `k = 3` via `3 - 2 = +1` locks `(X₂ Y Z, Y₂ X Z, Z₂ X Y)`
-   onto the 6th-degree Fermat–Selmer curve of genus `g(6) = 10 ≥ 2` (`Theorem 15`);
-3. On the 128th floor `k = Q_□(3) = 128`, the `ℤ_{512}` base collapse `x^128 mod 512 ∈ {0, 1}`
-   locks the root weights modulo `512` (`Theorem 16`);
-4. And the bilateral Padé–Bézout + Mason–Stothers convergence chain (`Theorem 14`) simultaneously
-   enforces the cubic Padé annihilation, the integer Mason–Stothers Wronskian `W* = k X² Y² Z²`,
-   the bilateral Cramer clash `w X² + B̃ γ = D_clash Z`, and the radical-bounded inequality
-   `C · I₁ ≤ B̃ C̃ (Y w + Z v)`. -/
-theorem thm18_master_end_to_end_rotator_bezout_pade_mason_stothers_genus10_synthesis
-    (A B C At Bt Ct X Y Z A2 B2 C2 X2 Y2 Z2 u0 v0 t uB vB wB w v phi0 : Int)
-    (hABC : A + B - C = 0)
-    (hA2 : A2 * (X2 * X2) = A) (hB2 : B2 * (Y2 * Y2) = B) (hC2 : C2 * (Z2 * Z2) = C)
-    (hA3 : At * (X * X * X) = A) (hB3 : Bt * (Y * Y * Y) = B) (hC3 : Ct * (Z * Z * Z) = C)
-    (hBez : A * vB - B * uB = 1)
-    (hwB : uB + vB - wB = 0)
-    (hBezBone : Y * w - Z * v = 1)
-    (hBezMS : At * X * v0 - Bt * Y * u0 = 1) :
-    let Crot := 128 - phi0
-    let Srot := phi0
-    let Irot := B * Crot - A * Srot
-    let Drot := Crot * vB - Srot * uB
-    let wx := At * X
-    let wy := Bt * Y
-    let wz := Ct * Z
-    let alpha := u0 * (Z * Z) + t * wx
-    let beta  := v0 * (Z * Z) + t * wy
-    let gamma := (X * X) * u0 + (Y * Y) * v0 + t * wz
-    let As := (X * X) * alpha
-    let Bs := (Y * Y) * beta
-    let Cs := (Z * Z) * gamma
-    let Up := Ct * w * w * w
-    let Vp := Bt * v * v * v
-    let I1 := Y * w * (Up + (Vp + Vp)) - Z * v * ((Up + Up) + Vp)
-    let dClash := Ct * w * beta - Bt * v * gamma
-    let U6 := X2 * Y * Z
-    let V6 := Y2 * X * Z
-    let W6 := Z2 * X * Y
-    -- 1. Quarter-ring Z_512 rotator-Bézout invariant & Weierstrass lift (from Theorem 17):
-    ((128 * A = C * Crot - Irot) ∧ (128 * B = C * Srot + Irot) ∧ (C * Drot - wB * Irot = 128)) ∧
-    -- 2. Cross-floor k=2 <-> k=3 lift onto the 6th-degree curve of genus g(6) = 10 >= 2 (from Theorem 15):
-    ((A2 * A2 * A2) * (Bt * Bt) * (Ct * Ct) * (U6 * U6 * U6 * U6 * U6 * U6) +
-     (B2 * B2 * B2) * (At * At) * (Ct * Ct) * (V6 * V6 * V6 * V6 * V6 * V6) =
-     (C2 * C2 * C2) * (At * At) * (Bt * Bt) * (W6 * W6 * W6 * W6 * W6 * W6)) ∧
-    -- 3. Bilateral Padé-Bézout + Mason-Stothers Wronskian + Cramer clash + radical bound (from Theorem 14):
-    ((As + Bs = Cs) ∧
-     ((At * X * X * X) * Bs - (Bt * Y * Y * Y) * As = (X * X) * (Y * Y) * (Z * Z)) ∧
-     (w * (X * X) + Bt * gamma = dClash * Z) ∧
-     (Z * Z * Z * I1 + wx * (wz * beta - wy * gamma) * (w * w * w) * ((Z * v + Z * v) - Y * w) =
-       Bt * (Y * w + Z * v)) ∧
-     ((At * X * X * X) * (Bt * Y * Y * Y) * (Ct * Z * Z * Z) =
-       (At * Bt * Ct) * (X * Y * Z) * ((At * X * X * X) * Bs - (Bt * Y * Y * Y) * As)) ∧
-     (Ct * (At * X * X * X) * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
-       (Ct * Z * Z * Z) * I1 ≤ Bt * Ct * (Y * w + Z * v))) := by
-  dsimp
-  have hABC3 : At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z = 0 := by
-    simp only [Int.mul_assoc] at hA3 hB3 hC3 ⊢
-    omega
-  have h17 := thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
-    A B C uB vB wB phi0 hABC hBez hwB
-  dsimp at h17
-  have h15 := thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
-    A B C A2 B2 C2 X2 Y2 Z2 At Bt Ct X Y Z hABC hA2 hB2 hC2 hA3 hB3 hC3
-  dsimp at h15
-  have h14 := thm14_master_pillai_and_abc_bilateral_convergence_chains
-    At Bt Ct X Y Z u0 v0 t w v hABC3 hBezBone hBezMS
-  dsimp at h14
-  exact ⟨⟨h17.2.2.2.2.2.2.1, h17.2.2.2.2.2.2.2.1, h17.2.2.2.2.2.2.2.2.2.1⟩,
-         h15.2.2.2,
-         ⟨h14.1, h14.2.1, h14.2.2.2.1, h14.2.2.2.2.2.1, h14.2.2.2.2.2.2.1, h14.2.2.2.2.2.2.2.1⟩⟩
-
-#print axioms thm18_master_end_to_end_rotator_bezout_pade_mason_stothers_genus10_synthesis
-
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2006,7 +1892,6 @@ theorem thm18_master_end_to_end_rotator_bezout_pade_mason_stothers_genus10_synth
 #print axioms thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
 #print axioms thm14_master_pillai_and_abc_bilateral_convergence_chains
 #print axioms thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
-#print axioms thm16_universal_z512_quarter_ring_collapse_and_radical_weight_lock
-#print axioms thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
+#print axioms thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
 
 end RotatorCalculusPaper
