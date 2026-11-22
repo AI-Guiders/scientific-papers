@@ -1,0 +1,128 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=blue!70!black,
+  urlcolor=blue!70!black,
+  pdftitle={Cuboctahedral Rotator Calculus, Part IV: Planetary Differential Geometry of Coprime Triples A + B = C, Integer Mason-Stothers-Bezout Wronskians, Circle-Remainder Degree Reduction, and Cross-Floor Genus-10 Locking in Lean 4},
+  pdfauthor={Dmitrii A. Karataev}
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Cuboctahedral Rotator Calculus, Part~IV:\\ Planetary Differential Geometry of Coprime Triples $A + B = C$: Integer Mason--Stothers--B\'ezout Wronskians, Circle-Remainder Degree Reduction, and Cross-Floor Genus-10 Locking in Lean~4}}
+\author{Dmitrii A.~Karataev}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In Part~IV of this series, we formulate any coprime additive triple $A + B = C$ ($A = a_1 a_2,\ B = b_1 b_2,\ C = c_1 c_2$, with $k$-th floor decomposition $A = \widetilde{A}_k X_k^k,\ B = \widetilde{B}_k Y_k^k,\ C = \widetilde{C}_k Z_k^k$ and root weights $\widetilde{A}_k\widetilde{B}_k\widetilde{C}_k \le \operatorname{rad}(ABC)^{k-1}$) as a three-shaft planetary gear differential with orthogonal $3\mathrm{D}$ frame $\mathcal{F}_3 = (\mathbf{r},\mathbf{\omega},\mathbf{r}\times\mathbf{\omega})\in\mathbb{Z}^{3\times 3}$ ($\mathbf{r} = (a_1,b_1,c_1)\perp\mathbf{\omega} = (a_2,b_2,-c_2)$), planar gear-slip Brahmagupta law $C^2 + S_{AB}^2 = (A-B)^2 + M_{AB}^2 = (a_1^2+b_1^2)(a_2^2+b_2^2)$, non-singular Hankel--Vandermonde moment matrix $-\det\mathcal{H}_3 = \widetilde{A}\widetilde{B}\widetilde{C}(X-Y)^2(Y-Z)^2(Z-X)^2 > 0$, Lagrange--Vandermonde shaft-gap projectors, and unimodular $2\times 3$ conjugate B\'ezout partner matrix $\mathcal{B}_{2\times 3}$ (\texttt{thm8}, \texttt{thm9}).
+
+We then prove five universally $\forall$-quantified Diophantine and geometric locking theorems across $\mathbb{Z}$:
+(1)~reverse Pad\'e--B\'ezout cubic annihilation $Z^3 I_1 + A w^3(2Zv-Yw) \equiv \widetilde{B} I_0^3(Yw+Zv)$ (\texttt{thm12});
+(2)~an integer analog of the Mason--Stothers polynomial derivative Wronskian on the cubic floor $\widetilde{A}X^3+\widetilde{B}Y^3=\widetilde{C}Z^3$ via B\'ezout turn coprimality $\widetilde{A}Xv_0-\widetilde{B}Yu_0=1$, yielding the derivative triple $A^*+B^*=C^*$ ($A^*=\alpha X^2,\ B^*=\beta Y^2,\ C^*=\gamma Z^2$) with exact shaft-square Wronskian $W^* = A B^* - B A^* \equiv X^2 Y^2 Z^2$ and fourth-power determinant $-\det\mathcal{W}_{\mathrm{MS}} \equiv X^4 + Y^4 + Z^4$ (\texttt{thm13});
+(3)~the master five-link bilateral convergence chain (\texttt{thm14}) with volume-radical equivalence $A B C = R_{\mathrm{full}} W^*$ for the full radical-shaft skeleton $R_{\mathrm{full}} = (\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)$ and unconditional circle-remainder degree reduction $0\le\alpha < \widetilde{A}X \implies (\widetilde{B}Y)C + (\widetilde{B}^2\widetilde{C})(Y^2 Z)\alpha = R_{\mathrm{full}}\beta \implies (\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$, $C\le R_{\mathrm{full}}^2$ (for $\beta\le R_{\mathrm{full}}$), and $C\le R_{\mathrm{full}}^3$;
+(4)~the cross-floor locking theorem (\texttt{thm15}) showing that while a single cubic floor $k=3$ has genus $g(3)=1$, coupling adjacent floors $k=2$ and $k=3$ on the same shafts via B\'ezout exponent coprimality $3-2=+1$ lifts $(U_6,V_6,W_6) = (X_2 Y_3 Z_3, Y_2 X_3 Z_3, Z_2 X_3 Y_3)$ onto the 6th-degree Fermat--Selmer curve $\widetilde{A}_2^3\widetilde{B}_3^2\widetilde{C}_3^2 U_6^6 + \widetilde{B}_2^3\widetilde{A}_3^2\widetilde{C}_3^2 V_6^6 = \widetilde{C}_2^3\widetilde{A}_3^2\widetilde{B}_3^2 W_6^6$ of genus $g(6)=10\ge 2$; and
+(5)~the universal Weierstrass--stereographic embedding (\texttt{thm16}) of any triple $A+B=C\in\mathbb{Z}^3$ via $[0,512]/512 = [0,1]\cong\mathbb{R}$ into Quadrant~I $[0,128]$ of the $\mathbb{Z}_{512}$ rotator with exact quarter-ring invariant $C\Delta_{\mathrm{rot}} - w I_{\mathrm{rot}} = 128$. All theorems are verified in pure \textbf{Lean~4} core (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\medskip\noindent
+\textbf{Keywords:} additive Diophantine triples, $abc$-triples, Mason--Stothers Wronskian, Pad\'e--B\'ezout annihilation, Fermat--Selmer curves, Weierstrass stereographic homeomorphism, Lean~4.
+
+\smallskip\noindent
+\textbf{MSC 2020:} 11D41, 11J86, 14H45, 68V20.
+\end{abstract}
+
+\section{Planetary Differential Frame \texorpdfstring{$\mathcal{F}_3$}{F3}, Hankel--Vandermonde Matrix \texorpdfstring{$\mathcal{H}_3$}{H3}, Three-Channel Pad\'e Matrix \texorpdfstring{$\mathcal{P}_3$}{P3}, and Carrier Transfer \texorpdfstring{$M\rightleftarrows T$}{M <-> T}}
+\label{sec:planetary-frame}
+
+\begin{theorem}[Radical-Bounded Floor Embedding, Bordered $3\times 3$ Matrix $\mathcal{M}_3$, Orthogonal Planetary Differential Frame $\mathcal{F}_3$, Hankel--Vandermonde Matrix $\mathcal{H}_3$, and Bilateral Carrier Transfer $M\rightleftarrows T$]
+\label{thm:main-8}
+For any coprime triple $A + B = C$ ($\gcd(A,B,C)=1$), the following identities hold (\texttt{thm8\_unified\_3x3\_pillai\_abc\_skeletal\_matrix\_and\_radical\_floor\_embedding}, \texttt{thm9\_universal\_pillai\_abc\_differential\_bezout\_and\_pade\_laws}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Radical-bounded floor embedding and bordered $3\times 3$ matrix $\mathcal{M}_3$:}
+  on every floor $k\ge 2$, $A = \widetilde{A}_k X_k^k,\ B = \widetilde{B}_k Y_k^k,\ C = \widetilde{C}_k Z_k^k$ satisfies $\widetilde{A}_k\widetilde{B}_k\widetilde{C}_k \le \operatorname{rad}(ABC)^{k-1}$, and for $A = a_1 a_2,\ B = b_1 b_2,\ C = c_1 c_2$, the matrix $\mathcal{M}_3 = \begin{pmatrix} c_2 & a_2 & b_2 \\ a_1 & c_1 & 0 \\ b_1 & 0 & c_1 \end{pmatrix}$ has $\det\mathcal{M}_3 = c_1(C-A-B) = 0$ and rank-$1$ adjugate $(\mathcal{M}_3^{\mathrm{adj}})^2 = (c_1^2+C)\mathcal{M}_3^{\mathrm{adj}}$.
+\item \textbf{Planetary differential $3\mathrm{D}$ orthogonal frame $\mathcal{F}_3$, gear-slip Brahmagupta law, Hankel--Vandermonde matrix $\mathcal{H}_3$, and Lagrange--Vandermonde shaft-gap projectors:}
+  the gear-radius vector $\mathbf{r} = (a_1,b_1,c_1)$ and turn-count vector $\mathbf{\omega} = (a_2,b_2,-c_2)$ obey $\mathbf{r}\cdot\mathbf{\omega} = A+B-C = 0$, $\det\mathcal{F}_3 = M_{BC}^2 + M_{CA}^2 + S_{AB}^2 \equiv \|\mathbf{r}\|_2^2\|\mathbf{\omega}\|_2^2 > 0$, and $C^2 + S_{AB}^2 = (A-B)^2 + M_{AB}^2 \equiv (a_1^2+b_1^2)(a_2^2+b_2^2)$. On floor $k=3$ ($S_m = \widetilde{A}X^m + \widetilde{B}Y^m - \widetilde{C}Z^m$, $S_3 = 0$), the Hankel matrix $\mathcal{H}_3 = \begin{pmatrix} S_0 & S_1 & S_2 \\ S_1 & S_2 & 0 \\ S_2 & 0 & S_4 \end{pmatrix}$ obeys $-\det\mathcal{H}_3 \equiv \widetilde{A}\widetilde{B}\widetilde{C}(X-Y)^2(Y-Z)^2(Z-X)^2 > 0$ and the shaft-gap projectors $\widetilde{A}X(X-Y)(X-Z) \equiv S_1 YZ - S_2(Y+Z)$, $\widetilde{B}Y(Y-X)(Y-Z) \equiv S_1 ZX - S_2(Z+X)$, and $\widetilde{C}Z(Z-X)(Z-Y) \equiv S_2(X+Y) - S_1 XY$.
+\item \textbf{Three-channel $3\times 3$ cubic Pad\'e matrix $\mathcal{P}_3(A,B,C)$ and universal $\mathbb{Z}_{512}$ base-collapse hierarchy:}
+  combining the three cubic Pad\'e channels forms $\mathcal{P}_3(A,B,C)$ with kernel $\mathcal{P}_3(A,B,C)(A,B,-C)^T = \mathbf{0}$ and trace $\operatorname{Tr}\mathcal{P}_3(A,B,C) = A C(A+C)$, while across all $512$ residue classes $x\in\mathbb{Z}_{512}$, the powers $x^k\bmod 512$ contract along the structural invariants $512\xrightarrow{k=4} 36\xrightarrow{k=8} 18\xrightarrow{k=16} 9\xrightarrow{k=32} 5\xrightarrow{k=64} 3\xrightarrow{k=128} 2 = \{0,1\}$ ($x^{128}\bmod 512 = x\bmod 2$).
+\end{enumerate}
+\end{theorem}
+
+\section{Reverse Pad\'e--B\'ezout Annihilation, Integer Mason--Stothers--B\'ezout Wronskian, Circle-Remainder Degree Reduction, Cross-Floor Genus-10 Lock, and Stereographic \texorpdfstring{$\mathbb{Z}_{512}$}{Z512} Embedding}
+\label{sec:universal-theorems}
+
+\begin{theorem}[Universal $\forall$-Quantified Reverse Pad\'e--B\'ezout, Integer Mason--Stothers Wronskian, Circle-Remainder Full-Skeleton Degree Reduction, Cross-Floor Genus-10 Lock, and Weierstrass Stereographic $\mathbb{Z}_{512}$ Embedding]
+\label{thm:main-12-16}
+Across all integers in $\mathbb{Z}$, the following universally quantified implications hold (\texttt{thm12}--\texttt{thm16}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Reverse Pad\'e--B\'ezout cubic annihilation (\texttt{thm12}):}
+  for $A = \widetilde{C}Z^3 - \widetilde{B}Y^3$, $I_0 = Yw - Zv$, and $I_1 = Yw(\widetilde{C}w^3+2\widetilde{B}v^3) - Zv(2\widetilde{C}w^3+\widetilde{B}v^3)$,
+  \begin{equation}
+    \label{eq:reverse-pade-bezout}
+    Z^3 I_1 \;+\; A\,w^3(2Zv - Yw) \;\equiv\; \widetilde{B}\,I_0^3(Yw + Zv),\qquad
+    Y^3 I_1 \;+\; A\,v^3(2Yw - Zv) \;\equiv\; \widetilde{C}\,I_0^3(Yw + Zv).
+  \end{equation}
+\item \textbf{Integer Mason--Stothers--B\'ezout cubic Wronskian and fourth-power determinant (\texttt{thm13}):}
+  for $\widetilde{A}X^3 + \widetilde{B}Y^3 = \widetilde{C}Z^3$ and $\widetilde{A}Xv_0 - \widetilde{B}Yu_0 = 1$, setting $\alpha = u_0 Z^2 + t\widetilde{A}X$, $\beta = v_0 Z^2 + t\widetilde{B}Y$, $\gamma = u_0 X^2 + v_0 Y^2 + t\widetilde{C}Z$ yields $A^*+B^*=C^*$ ($A^*=\alpha X^2,\ B^*=\beta Y^2,\ C^*=\gamma Z^2$) with shaft-square minors $(\widetilde{A}X\beta-\widetilde{B}Y\alpha,\ \widetilde{C}Z\alpha-\widetilde{A}X\gamma,\ \widetilde{C}Z\beta-\widetilde{B}Y\gamma) = (Z^2,Y^2,X^2)$, exact Wronskian
+  \begin{equation}
+    \label{eq:ms-wronskian}
+    W^* \;:=\; A B^* - B A^* \;\equiv\; X^2 Y^2 Z^2,\qquad
+    -\det\mathcal{W}_{\mathrm{MS}} \;\equiv\; X^4 + Y^4 + Z^4,
+  \end{equation}
+  and bilateral Cramer convergence $w X^2 + \widetilde{B}\gamma = D_{\mathrm{clash}}Z$, $v X^2 + \widetilde{C}\beta = D_{\mathrm{clash}}Y$ ($D_{\mathrm{clash}} = \widetilde{C}w\beta - \widetilde{B}v\gamma$).
+\item \textbf{Master bilateral chain and unconditional circle-remainder full-skeleton degree reduction (\texttt{thm14}):}
+  with the full radical-shaft skeleton $R_{\mathrm{full}} := (\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)$, the volume identity $A B C \equiv R_{\mathrm{full}} W^*$ holds alongside the exact circle-remainder decomposition
+  \begin{equation}
+    \label{eq:circle-remainder-rfull}
+    (\widetilde{B}Y)\,C \;+\; (\widetilde{B}^2\widetilde{C})(Y^2 Z)\,\alpha \;\equiv\; R_{\mathrm{full}}\,\beta,\qquad
+    (\widetilde{A}X)\,\beta \;=\; Z^2 + (\widetilde{B}Y)\,\alpha.
+  \end{equation}
+  Reducing $u_0 Z^2$ on the circle of circumference $\widetilde{A}X$ to its canonical non-negative remainder $0\le\alpha\le\widetilde{A}X-1$ unconditionally eliminates sign ambiguity: $(\widetilde{A}X)\beta \le Z^2 + (\widetilde{B}Y)(\widetilde{A}X-1)$ and $(\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$, implying $C \le R_{\mathrm{full}}^2 = \bigl((\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)\bigr)^2$ whenever $\beta\le R_{\mathrm{full}}$ and $C \le R_{\mathrm{full}}^3 = \bigl((\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)\bigr)^3$ across all positive shafts and weights ($R_{\mathrm{full}}^3 - C \equiv C((\widetilde{A}\widetilde{B}\widetilde{C})^2 A B - 1)$).
+\item \textbf{Cross-floor $k=2 \leftrightarrow k=3$ coupling onto the 6th-degree genus-10 curve (\texttt{thm15}):}
+  coupling floor $k=2$ ($A = A_2 X_2^2,\ B = B_2 Y_2^2,\ C = C_2 Z_2^2$, genus $g(2)=0$) and floor $k=3$ ($A = A_3 X_3^3,\ B = B_3 Y_3^3,\ C = C_3 Z_3^3$, genus $g(3)=1$) via $3-2=+1$ locks each shaft ($A A_3^2 X_3^6 = A_2^3 X_2^6$) and lifts $(U_6,V_6,W_6) = (X_2 Y_3 Z_3, Y_2 X_3 Z_3, Z_2 X_3 Y_3)$ onto the 6th-degree curve of genus $g(6) = \frac{5\times 4}{2} = 10 \ge 2$:
+  \begin{equation}
+    \label{eq:genus-10-curve}
+    A_2^3 B_3^2 C_3^2\,U_6^6 \;+\; B_2^3 A_3^2 C_3^2\,V_6^6 \;=\; C_2^3 A_3^2 B_3^2\,W_6^6.
+  \end{equation}
+\item \textbf{Weierstrass--stereographic embedding of $\mathbb{Z}^3$ into Quadrant~I $[0,128]$ of the $\mathbb{Z}_{512}$ rotator (\texttt{thm16}):}
+  for any $A+B=C\in\mathbb{Z}^3$ and $A v - B u = 1$ ($u+v=w$), the Weierstrass lift $X_T = A^2-B^2,\ Y_T = 2AB,\ R_T = A^2+B^2$ satisfies $X_T^2+Y_T^2=R_T^2$, $R_T+Y_T=C^2$, $(C^2+X_T,C^2-X_T)=(2CA,2CB)$, and $Y_T/(R_T+X_T) = B/A$, while for any rotator cell $\varphi_0\in[0,128]$ ($\mathcal{C}_3(\varphi_0)=128-\varphi_0,\ \mathcal{S}_3(\varphi_0)=\varphi_0,\ I_{\mathrm{rot}} = B\mathcal{C}_3(\varphi_0)-A\mathcal{S}_3(\varphi_0),\ \Delta_{\mathrm{rot}} = \mathcal{C}_3(\varphi_0)v-\mathcal{S}_3(\varphi_0)u$),
+  \begin{equation}
+    \label{eq:quarter-ring-invariant}
+    128 A \;=\; C\mathcal{C}_3(\varphi_0) - I_{\mathrm{rot}},\qquad
+    128 B \;=\; C\mathcal{S}_3(\varphi_0) + I_{\mathrm{rot}},\qquad
+    C\cdot\Delta_{\mathrm{rot}} \;-\; w\cdot I_{\mathrm{rot}} \;\equiv\; 128 \;=\; Q_\square(3).
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\section{Formal Verification in Lean~4}
+\label{sec:lean4}
+
+The formalization of Theorems~\ref{thm:main-8} and~\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm13}, \texttt{thm14}, \texttt{thm15}, \texttt{thm16}) resides in \texttt{RotatorCalculusPaper.lean} in \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\begin{thebibliography}{9}
+\bibitem{Mason1984}
+R.\,C.~Mason, \emph{Diophantine Equations over Function Fields}, LMS Lecture Note Series, vol.~96, Cambridge University Press, 1984.
+\bibitem{DarmonGranville1995}
+H.~Darmon and A.~Granville, ``On the equations $z^m = F(x,y)$ and $Ax^p + By^q = Cz^r$,'' \emph{Bulletin of the London Mathematical Society} \textbf{27}(6) (1995), 513--543.
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}

@@ -9,11 +9,19 @@
 
 ---
 
-## Manuscript PDFs & Sources
+## Four-Part Paper Series (PDFs & LaTeX Sources)
 
-- **English Preprint (PDF):** [`paper/paper-rotator-calculus-en.pdf`](paper/paper-rotator-calculus-en.pdf) ([LaTeX source](paper/paper-rotator-calculus-en.tex))
-- **Russian Preprint (PDF):** [`paper/paper-rotator-calculus-ru.pdf`](paper/paper-rotator-calculus-ru.pdf) ([LaTeX source](paper/paper-rotator-calculus-ru.tex))
-- **Self-Contained Lean 4 Formalization (604 lines, 0 external dependencies):** [`RotatorCalculusPaper.lean`](RotatorCalculusPaper.lean)
+The formalization is organized into a four-part series of self-contained papers (alongside the combined omnibus preprints):
+
+| Part | Topic & Verified Lean 4 Theorems | English PDF & TeX | Russian PDF & TeX |
+| :--- | :--- | :--- | :--- |
+| **Part I** | **Discrete Euler Exponential on `ℤ_{512}`, Universal Constant Wronskian `W ≡ 128`, and Closed-Form Quadrature on the Cuboctahedron `O₂(3)`** (`thm1`, `thm2`, `thm3`) | [PDF](paper/paper-1-rotator-quadrature-en.pdf) · [TeX](paper/paper-1-rotator-quadrature-en.tex) | [PDF](paper/paper-1-rotator-quadrature-ru.pdf) · [TeX](paper/paper-1-rotator-quadrature-ru.tex) |
+| **Part II** | **Post Functional Completeness, 3-SAT Phase-Polynomial Reduction, Constructive de Rham Cohomology, and Finite-State Adversary Barriers / Built-In Vernam Pad on `ℤ_{512}`** (`thm4`, `thm5`) | [PDF](paper/paper-2-logic-cohomology-barriers-en.pdf) · [TeX](paper/paper-2-logic-cohomology-barriers-en.tex) | [PDF](paper/paper-2-logic-cohomology-barriers-ru.pdf) · [TeX](paper/paper-2-logic-cohomology-barriers-ru.tex) |
+| **Part III** | **Root-Free Integer Padé–Thue Compression, Isotropic Cone Matrix Decomposition, and Parabolic `SL₂(ℤ)` Jordan Locks `k ∈ {6, 12, 15, 40}`** (`thm6`, `thm7`, `thm10`, `thm11`) | [PDF](paper/paper-3-pillai-pade-thue-en.pdf) · [TeX](paper/paper-3-pillai-pade-thue-en.tex) | [PDF](paper/paper-3-pillai-pade-thue-ru.pdf) · [TeX](paper/paper-3-pillai-pade-thue-ru.tex) |
+| **Part IV** | **Planetary Differential Geometry of Coprime Triples `A + B = C`: Integer Mason–Stothers–Bézout Wronskians, Circle-Remainder Degree Reduction, Cross-Floor Genus-10 Lock, and Stereographic `ℤ_{512}` Embedding** (`thm8`, `thm9`, `thm12`–`thm16`) | [PDF](paper/paper-4-planetary-differential-wronskian-en.pdf) · [TeX](paper/paper-4-planetary-differential-wronskian-en.tex) | [PDF](paper/paper-4-planetary-differential-wronskian-ru.pdf) · [TeX](paper/paper-4-planetary-differential-wronskian-ru.tex) |
+| **Omnibus** | **Combined Full Preprint (All 16 Theorems)** | [PDF](paper/paper-rotator-calculus-en.pdf) · [TeX](paper/paper-rotator-calculus-en.tex) | [PDF](paper/paper-rotator-calculus-ru.pdf) · [TeX](paper/paper-rotator-calculus-ru.tex) |
+
+- **Self-Contained Lean 4 Formalization (1,945 lines, 16 theorems, 0 external dependencies, `0 sorryAx`, `0 Classical.choice`):** [`RotatorCalculusPaper.lean`](RotatorCalculusPaper.lean)
 
 ---
 
