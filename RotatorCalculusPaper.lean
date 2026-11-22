@@ -1067,7 +1067,25 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
   eqNatBool nilA_67 (dInSquare * dInSquare + dOutEdge d * dOutEdge d) &&
   eqNatBool nilC_67 (nSquares d ^ d) &&
   eqNatBool (dyLock3 * dyLock3 + dCLock3 * dCLock3) hypLock3Sq &&
-  eqNatBool (kLock3 * kLock3 + dxLock3 * dxLock3) hypLock3Sq
+  eqNatBool (kLock3 * kLock3 + dxLock3 * dxLock3) hypLock3Sq &&
+  -- 5. Bilateral Discrete-Continuum Carrier Transfer Isomorphism M <-> T across all 512 points of Z_512:
+  -- Forward lift pi_{M->T}: (C, S) |-> (X, Y, R) = (C^2 - S^2, 2*C*S, C^2 + S^2) on X^2 + Y^2 = R^2
+  -- Carrier conservation invariant: R(phi) + |Y(phi)| == Q_□^2 = 16,384 for all phi in [0, 511]
+  -- Root-free linear retraction iota_{T->M}: ((16,384 + X(phi))/256, (16,384 - X(phi))/256) == (|C(phi)|, |S(phi)|) for all phi in [0, 511]!
+  allUpTo (nRing d) (fun phi =>
+    let cVal : Int := projC d (phi : Int)
+    let sVal : Int := projS d (phi : Int)
+    let xCircle : Int := cVal * cVal - sVal * sVal
+    let yCircle : Int := (normSqEdge d : Int) * cVal * sVal
+    let rCircle : Int := cVal * cVal + sVal * sVal
+    let qSqInt  : Int := ((quarterPeriod d * quarterPeriod d : Nat) : Int)
+    let twoQInt : Int := ((halfPeriod d : Nat) : Int)
+    let absC    : Int := (Int.natAbs cVal : Int)
+    let absS    : Int := (Int.natAbs sVal : Int)
+    eqIntBool (rCircle + (Int.natAbs yCircle : Int)) qSqInt &&
+    eqIntBool ((qSqInt + xCircle) / twoQInt) absC &&
+    eqIntBool ((qSqInt - xCircle) / twoQInt) absS &&
+    eqIntBool (xCircle % (quarterPeriod d : Int)) 0)
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
