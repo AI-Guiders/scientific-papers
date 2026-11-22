@@ -414,10 +414,34 @@ For $d=3$ on $\mathbb{Z}_{512}$ and the cuboctahedral complex~$O_2(3)$, the foll
 \end{enumerate}
 \end{theorem}
 
+\begin{theorem}[Pillai Skeletal Joint Matrix Decomposition, Parabolic $\mathrm{SL}_2(\mathbb{Z})$ Jordan Lock Triptych $k\in\{6,12,15\}$, Three-Level Recursive Descent Invariant, and Binomial Floor Divisibility Reciprocity]
+\label{thm:main-6}
+For the exponential Diophantine equation $A x^m - B y^n = C$ ($m,n\ge 2$), the following matrix and arithmetic decompositions hold (\texttt{thm6\_pillai\_skeletal\_matrix\_decomposition\_and\_parabolic\_sl2\_jordan\_triptych}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Skeletal joint matrix factorization and rank-$1$ cross-joint transition identity:}
+  every interior exponent pair $(a,b)$ ($1\le a\le m-1$, $1\le b\le n-1$) defines a $2\times 2$ skeletal joint matrix $M_{a,b} = \begin{pmatrix} A x^{m-a} & B y^{n-b} \\ y^b & x^a \end{pmatrix}$ with invariant determinant $\det M_{a,b} = C$. The normalized cross-joint transition matrix $\widetilde{P} = \frac{1}{C} M_{a,b}^{\mathrm{adj}} M_{a',b'}\in\mathrm{SL}_2(\mathbb{Q})$ ($\det\widetilde{P} = +1$, $\Delta a = a'-a$, $\Delta b = b'-b$) obeys the exact rank-$1$ factorization
+  \[
+    \widetilde{P} \;-\; \begin{pmatrix} y^{\Delta b} & 0 \\ 0 & x^{\Delta a} \end{pmatrix}
+    \;=\; \frac{x^{\Delta a}y^{\Delta b}-1}{C}\,\begin{pmatrix} -x^a \\ y^b \end{pmatrix}\begin{pmatrix} A x^{m-a'} & B y^{n-b'} \end{pmatrix}.
+  \]
+\item \textbf{Parabolic resonance square law and the $\mathrm{SL}_2(\mathbb{Z})$ nilpotent Jordan lock triptych ($k\in\{6,12,15\}$):}
+  the parabolic boundary $\operatorname{Tr}(\widetilde{P}) = -2$ ($(\widetilde{P}+I_2)^2 = 0$) holds if and only if $A x^{m-\Delta a}(x^{\Delta a}+1)^2 = B y^{n-\Delta b}(y^{\Delta b}+1)^2$. For coprime bases with $A=B=1$, integrality $\widetilde{P}_k = \begin{pmatrix} -(k+1) & -k \\ k & k-1 \end{pmatrix}\in\mathrm{SL}_2(\mathbb{Z})$ reduces on symmetric elbows ($m=2a+\Delta a$, $n=2b+\Delta b$) to $(x^a - x^{\Delta a}) + (y^b - y^{\Delta b}) = 2s$, generating the closed cuboctahedral triptych:
+  \[
+    \begin{aligned}
+      3^2 - 2^3 &= 1 &\implies k &= 6 = |\square(3)|, &\quad \widetilde{P}_{\mathrm{I}} &= \begin{pmatrix} -7 & -6 \\ 6 & 5 \end{pmatrix} \quad (6^2 = 36), \\
+      2^5 - 3^3 &= 5 &\implies k &= 12 = |V(O_2)|, &\quad \widetilde{P}_{\mathrm{II}} &= \begin{pmatrix} -13 & -12 \\ 12 & 11 \end{pmatrix} \quad (12^2 = 144), \\
+      5^3 - 3^4 &= 44 &\implies k &= 15 = 3\cdot 5, &\quad \widetilde{P}_{\mathrm{III}} &= \begin{pmatrix} -16 & -15 \\ 15 & 14 \end{pmatrix} \quad (30^2 = 900,\ s=2).
+    \end{aligned}
+  \]
+\item \textbf{Three-level recursive descent law and floor $k=2 \leftrightarrow k=3$ binomial divisibility reciprocity:}
+  along any skeletal ray $(k,j)$, consecutive floor differences $C_t = A x^{m-tk} - B y^{n-tj}$ satisfy the weight-independent three-term recurrence $C_0 - (x^k+y^j)C_1 + x^k y^j C_2 = 0$ (yielding the palindrome $(C_0,C_1,C_2) = (5,7,5)$ with $5 - 5\cdot 7 + 6\cdot 5 = 0$ on $2^5 - 3^3 = 5$), while the binomial floor divisibility laws $x^a \mid (B y^{r_y}(y^b-x^a)^k + C)$ and $y^b \mid (A x^{r_x}(x^a-y^b)^k - C)$ ($m = ka+r_x$, $n = kb+r_y$) exhibit exact quotient reciprocity $(12, 4) \leftrightarrow (4, -12)$ between floors $k=2$ and $k=3$ on $5^3 - 3^4 = 44$.
+\end{enumerate}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
 
-The complete self-contained formalization ($688$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (licensed under strong reciprocal Copyleft \texttt{CC-BY-SA-4.0 / GPL-3.0-or-later}) and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all five main theorems (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, \texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}, and \texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}) confirms zero non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+The complete self-contained formalization ($944$ lines, zero external library dependencies beyond the standard Lean~4 core) resides in \texttt{RotatorCalculusPaper.lean} in the standalone open repository \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (licensed under strong reciprocal Copyleft \texttt{CC-BY-SA-4.0 / GPL-3.0-or-later}) and builds via \texttt{lake build}. Axiom audit (\texttt{\#print axioms}) of all six main theorems (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, \texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}, \texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}, and \texttt{thm6\_pillai\_skeletal\_matrix\_decomposition\_and\_parabolic\_sl2\_jordan\_triptych}) confirms zero non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \section*{Acknowledgments and Declaration}
 The author acknowledges formal verification partner \emph{Luch} for collaboration on the formal operator proofs. Large language model tools were used for assistance with \LaTeX{} formatting, English copy-editing, and translating mathematical proofs into Lean~4 tactic syntax; all mathematical definitions, theorem formulations, and proofs are verified by the Lean~4 formal proof kernel and are the full responsibility of the author.
