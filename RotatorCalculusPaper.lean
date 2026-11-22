@@ -908,6 +908,12 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   let detP4  : Int := p4_00 * p4_11 - p4_01 * p4_10
   let trP4   : Int := p4_00 + p4_11
   let cone4  : Int := ((p4_00 - p4_11) / (normSqEdge d : Int)) ^ 2 - (p4_01) ^ 2
+  -- Exact Light-Cone Factorization Theorem `C = (x^(m-a) ∓ y^b) * (x^a - y^b)` across all four locks:
+  -- 1 = 1*1, 5 = 5*1, 44 = 22*2, 399 = 133*3 = (128 + 5)*3
+  let fact1  : Int := ((d : Int) - (normSqEdge d : Int)) * ((d : Int) - (normSqEdge d : Int))
+  let fact2  : Int := (((nTriangles d : Nat) : Int) - (d : Int)) * (((dInSquare : Nat) : Int) - (d : Int))
+  let fact3  : Int := (((dOutEdge d * dOutEdge d : Nat) : Int) - (d : Int)) * (((dOutEdge d : Nat) : Int) - (d : Int))
+  let fact4  : Int := (((quarterPeriod d + dOutEdge d : Nat) : Int)) * (((nTriangles d : Nat) : Int) - ((dOutEdge d : Nat) : Int))
   -- 5. 3-level recursive descent law C_0 - (x + y)*C_1 + x*y*C_2 = 0 and Hankel-Wronskian C_1^2 - C_0*C_2 = 24 on Lock II (palindrome 5 -> 7 -> 5)
   let cDesc0 : Int := cLock2
   let cDesc1 : Int := ((normSqEdge d ^ dInSquare : Nat) : Int) - ((d ^ normSqEdge d : Nat) : Int)
@@ -957,6 +963,10 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   eqIntBool detP4 (unitStep : Int) &&
   eqIntBool trP4 (normSqEdge d : Int) &&
   eqIntBool cone4 0 &&
+  eqIntBool fact1 (unitStep : Int) &&
+  eqIntBool fact2 cLock2 &&
+  eqIntBool fact3 cLock3 &&
+  eqIntBool fact4 cLock4 &&
   eqIntBool cDesc1 ((nTriangles d - unitStep : Nat) : Int) &&
   eqIntBool cDesc2 (dOutEdge d : Int) &&
   eqIntBool recLaw 0 &&
