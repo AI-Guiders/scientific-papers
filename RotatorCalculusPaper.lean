@@ -1901,7 +1901,7 @@ theorem thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotato
       simp only [Int.mul_add, Int.mul_one]
     have hC2 : C * (128 - phi0 - 1) = C * (128 - phi0) - C := by
       simp only [Int.mul_sub, Int.mul_one]
-    omega
+    exact ⟨by omega, by omega, by omega, by omega⟩
   · intro hD1
     have hCD : C * ((128 - phi0) * v - phi0 * u) = C * 1 := by rw [hD1]
     omega
