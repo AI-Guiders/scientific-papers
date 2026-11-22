@@ -1661,6 +1661,90 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     rw [hA] at hNeg
     exact hNeg
 
+/-- **Theorem 15 (Universal `∀`-Quantified Cross-Floor Locking Theorem `k = 2 ↔ k = 3 ⟹ K = 6`
+of Genus `g(6) = (6 - 1)(6 - 2)/2 = 10 ≥ 2` across all integers `ℤ`)**:
+When a single planetary differential triple `A + B = C` is decomposed simultaneously on the
+quadratic floor `k = 2` (`A = A₂ X₂², B = B₂ Y₂², C = C₂ Z₂²`, genus `g(2) = 0`) and on the
+adjacent cubic floor `k = 3` (`A = A₃ X₃³, B = B₃ Y₃³, C = C₃ Z₃³`, genus `g(3) = 1`),
+Bézout exponent coprimality `3 - 2 = +1` locks each shaft via `A A₃² X₃⁶ = A₂³ X₂⁶` and lifts
+the joint coordinates `(U₆, V₆, W₆) = (X₂ Y₃ Z₃, Y₂ X₃ Z₃, Z₂ X₃ Y₃)` directly onto the
+6th-degree Fermat–Selmer curve of genus `g(6) = 10 ≥ 2`:
+`A₂³ B₃² C₃² U₆⁶ + B₂³ A₃² C₃² V₆⁶ = C₂³ A₃² B₃² W₆⁶`! -/
+theorem thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
+    (A B C A2 B2 C2 X2 Y2 Z2 A3 B3 C3 X3 Y3 Z3 : Int)
+    (hABC : A + B - C = 0)
+    (hA2 : A2 * (X2 * X2) = A) (hB2 : B2 * (Y2 * Y2) = B) (hC2 : C2 * (Z2 * Z2) = C)
+    (hA3 : A3 * (X3 * X3 * X3) = A) (hB3 : B3 * (Y3 * Y3 * Y3) = B) (hC3 : C3 * (Z3 * Z3 * Z3) = C) :
+    (A * (A3 * A3) * (X3 * X3 * X3 * X3 * X3 * X3) = (A2 * A2 * A2) * (X2 * X2 * X2 * X2 * X2 * X2)) ∧
+    (B * (B3 * B3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3) = (B2 * B2 * B2) * (Y2 * Y2 * Y2 * Y2 * Y2 * Y2)) ∧
+    (C * (C3 * C3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3) = (C2 * C2 * C2) * (Z2 * Z2 * Z2 * Z2 * Z2 * Z2)) ∧
+    (let U6 := X2 * Y3 * Z3
+     let V6 := Y2 * X3 * Z3
+     let W6 := Z2 * X3 * Y3
+     (A2 * A2 * A2) * (B3 * B3) * (C3 * C3) * (U6 * U6 * U6 * U6 * U6 * U6) +
+     (B2 * B2 * B2) * (A3 * A3) * (C3 * C3) * (V6 * V6 * V6 * V6 * V6 * V6) =
+     (C2 * C2 * C2) * (A3 * A3) * (B3 * B3) * (W6 * W6 * W6 * W6 * W6 * W6)) := by
+  dsimp
+  have hShaftA :
+      A * (A3 * A3) * (X3 * X3 * X3 * X3 * X3 * X3) =
+      (A2 * A2 * A2) * (X2 * X2 * X2 * X2 * X2 * X2) := by
+    calc A * (A3 * A3) * (X3 * X3 * X3 * X3 * X3 * X3)
+      _ = A * (A3 * (X3 * X3 * X3)) * (A3 * (X3 * X3 * X3)) := by
+          simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      _ = A * A * A := by rw [hA3]
+      _ = (A2 * (X2 * X2)) * (A2 * (X2 * X2)) * (A2 * (X2 * X2)) := by rw [hA2]
+      _ = (A2 * A2 * A2) * (X2 * X2 * X2 * X2 * X2 * X2) := by
+          simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hShaftB :
+      B * (B3 * B3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3) =
+      (B2 * B2 * B2) * (Y2 * Y2 * Y2 * Y2 * Y2 * Y2) := by
+    calc B * (B3 * B3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3)
+      _ = B * (B3 * (Y3 * Y3 * Y3)) * (B3 * (Y3 * Y3 * Y3)) := by
+          simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      _ = B * B * B := by rw [hB3]
+      _ = (B2 * (Y2 * Y2)) * (B2 * (Y2 * Y2)) * (B2 * (Y2 * Y2)) := by rw [hB2]
+      _ = (B2 * B2 * B2) * (Y2 * Y2 * Y2 * Y2 * Y2 * Y2) := by
+          simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hShaftC :
+      C * (C3 * C3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3) =
+      (C2 * C2 * C2) * (Z2 * Z2 * Z2 * Z2 * Z2 * Z2) := by
+    calc C * (C3 * C3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3)
+      _ = C * (C3 * (Z3 * Z3 * Z3)) * (C3 * (Z3 * Z3 * Z3)) := by
+          simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      _ = C * C * C := by rw [hC3]
+      _ = (C2 * (Z2 * Z2)) * (C2 * (Z2 * Z2)) * (C2 * (Z2 * Z2)) := by rw [hC2]
+      _ = (C2 * C2 * C2) * (Z2 * Z2 * Z2 * Z2 * Z2 * Z2) := by
+          simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  refine ⟨hShaftA, hShaftB, hShaftC, ?_⟩
+  have hCurve :
+      (A2 * A2 * A2) * (B3 * B3) * (C3 * C3) *
+        ((X2 * Y3 * Z3) * (X2 * Y3 * Z3) * (X2 * Y3 * Z3) * (X2 * Y3 * Z3) * (X2 * Y3 * Z3) * (X2 * Y3 * Z3)) +
+      (B2 * B2 * B2) * (A3 * A3) * (C3 * C3) *
+        ((Y2 * X3 * Z3) * (Y2 * X3 * Z3) * (Y2 * X3 * Z3) * (Y2 * X3 * Z3) * (Y2 * X3 * Z3) * (Y2 * X3 * Z3)) -
+      (C2 * C2 * C2) * (A3 * A3) * (B3 * B3) *
+        ((Z2 * X3 * Y3) * (Z2 * X3 * Y3) * (Z2 * X3 * Y3) * (Z2 * X3 * Y3) * (Z2 * X3 * Y3) * (Z2 * X3 * Y3)) =
+      ((A2 * A2 * A2) * (X2 * X2 * X2 * X2 * X2 * X2)) *
+        ((B3 * B3) * (C3 * C3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3)) +
+      ((B2 * B2 * B2) * (Y2 * Y2 * Y2 * Y2 * Y2 * Y2)) *
+        ((A3 * A3) * (C3 * C3) * (X3 * X3 * X3 * X3 * X3 * X3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3)) -
+      ((C2 * C2 * C2) * (Z2 * Z2 * Z2 * Z2 * Z2 * Z2)) *
+        ((A3 * A3) * (B3 * B3) * (X3 * X3 * X3 * X3 * X3 * X3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3)) := by
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  rw [← hShaftA, ← hShaftB, ← hShaftC] at hCurve
+  have hFactor :
+      (A * (A3 * A3) * (X3 * X3 * X3 * X3 * X3 * X3)) *
+        ((B3 * B3) * (C3 * C3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3)) +
+      (B * (B3 * B3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3)) *
+        ((A3 * A3) * (C3 * C3) * (X3 * X3 * X3 * X3 * X3 * X3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3)) -
+      (C * (C3 * C3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3)) *
+        ((A3 * A3) * (B3 * B3) * (X3 * X3 * X3 * X3 * X3 * X3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3)) =
+      (A + B - C) * ((A3 * A3) * (B3 * B3) * (C3 * C3) *
+        (X3 * X3 * X3 * X3 * X3 * X3) * (Y3 * Y3 * Y3 * Y3 * Y3 * Y3) * (Z3 * Z3 * Z3 * Z3 * Z3 * Z3)) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  rw [hABC, Int.zero_mul] at hFactor
+  omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -1675,5 +1759,6 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
 #print axioms thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
 #print axioms thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
 #print axioms thm14_master_pillai_and_abc_bilateral_convergence_chains
+#print axioms thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
 
 end RotatorCalculusPaper
