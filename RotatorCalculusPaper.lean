@@ -1449,9 +1449,10 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
 /-- **Theorem 13 (Universal `∀`-Quantified Integer Mason–Stothers–Bézout Cubic Wronskian Law
 `W* = A B* - B A* = k X² Y² Z²`, Derivative Triple `A* + B* = C*`, Three Bone-Square Minor Laws
 `(Z², Y², X²)`, `3 × 3` Fourth-Power Determinant `-det W_MS = k (X⁴ + Y⁴ + Z⁴)`, Degree-Lowering
-Clash Identity `k A = Ã X (C̃ Z β - B̃ Y γ)`, and Explicit Derivative Bounds across all integers `ℤ`)**: -/
+Clash Identity `k A = Ã X (C̃ Z β - B̃ Y γ)`, Bilateral Cramer Convergence Law
+`D_clash Z = B̃ γ + w X²` & `D_clash Y = C̃ β + v X²`, and Explicit Derivative Bounds across all integers `ℤ`)**: -/
 theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
-    (At Bt Ct X Y Z u0 v0 t : Int) :
+    (At Bt Ct X Y Z u0 v0 t w v : Int) :
     let wx := At * X
     let wy := Bt * Y
     let wz := Ct * Z
@@ -1466,6 +1467,8 @@ theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_
     let As := (X * X) * alpha
     let Bs := (Y * Y) * beta
     let Cs := (Z * Z) * gamma
+    let I0 := Y * w - Z * v
+    let dClash := Ct * w * beta - Bt * v * gamma
     let detWMS :=
       (X * X) * (wy * gamma - wz * beta) -
       (Y * Y) * (wx * gamma - wz * alpha) -
@@ -1476,10 +1479,14 @@ theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_
     ((wz * beta - wy * gamma) - k * (X * X) = -(v0 * S3)) ∧
     (A * Bs - B * As = k * (X * X) * (Y * Y) * (Z * Z)) ∧
     (k * A - wx * (wz * beta - wy * gamma) = wx * v0 * S3) ∧
+    (dClash * Y = Ct * beta * I0 + v * (k * (X * X) - v0 * S3)) ∧
+    (dClash * Z = Bt * gamma * I0 + w * (k * (X * X) - v0 * S3)) ∧
     (-detWMS - k * (X * X * X * X + Y * Y * Y * Y + Z * Z * Z * Z) =
       ((Y * Y) * u0 - (X * X) * v0) * S3) ∧
     (k = 1 → wy * alpha ≥ 0 → Z * Z ≤ wx * beta) ∧
-    (k = 1 → S3 = 0 → wz * alpha ≥ 0 → Y * Y ≤ wx * gamma) := by
+    (k = 1 → S3 = 0 → wz * alpha ≥ 0 → Y * Y ≤ wx * gamma) ∧
+    (I0 = 1 → k = 1 → S3 = 0 → Bt * gamma ≥ 0 → w * (X * X) ≤ dClash * Z) ∧
+    (I0 = 1 → k = 1 → S3 = 0 → w * (X * X) ≥ 0 → Bt * gamma ≤ dClash * Z) := by
   dsimp
   have hMinorZ :
       At * X * (v0 * (Z * Z) + t * (Bt * Y)) - Bt * Y * (u0 * (Z * Z) + t * (At * X)) =
@@ -1495,7 +1502,19 @@ theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
-  refine ⟨?_, hMinorZ, hMinorY, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  have hClashZ :
+      (Ct * w * (v0 * (Z * Z) + t * (Bt * Y)) -
+        Bt * v * (X * X * u0 + Y * Y * v0 + t * (Ct * Z))) * Z =
+      Bt * (X * X * u0 + Y * Y * v0 + t * (Ct * Z)) * (Y * w - Z * v) +
+      w * ((At * X * v0 - Bt * Y * u0) * (X * X) -
+           v0 * (At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z)) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨?_, hMinorZ, hMinorY, ?_, ?_, ?_, ?_, hClashZ, ?_, ?_, ?_, ?_, ?_⟩
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
   · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
@@ -1518,6 +1537,14 @@ theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_
   · intro hk hS3 hPos
     rw [hk, hS3] at hMinorY
     simp only [Int.one_mul, Int.mul_zero] at hMinorY
+    omega
+  · intro hI0 hk hS3 hPos
+    rw [hI0, hk, hS3] at hClashZ
+    simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.sub_zero] at hClashZ
+    omega
+  · intro hI0 hk hS3 hPos
+    rw [hI0, hk, hS3] at hClashZ
+    simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.sub_zero] at hClashZ
     omega
 
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
