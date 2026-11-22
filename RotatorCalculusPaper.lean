@@ -1928,58 +1928,66 @@ For ANY triple `(A, B, C) ∈ ℤ³` with `A = Ã X³ = Ã₂ X₂²`, `B = B̃ 
    the bilateral Cramer clash `w X² + B̃ γ = D_clash Z`, and the radical-bounded inequality
    `C · I₁ ≤ B̃ C̃ (Y w + Z v)`. -/
 theorem thm18_master_end_to_end_rotator_bezout_pade_mason_stothers_genus10_synthesis
-    (A B C At Bt Ct X Y Z A2 B2 C2 X2 Y2 Z2 u v w alpha beta gamma k phi0 : Int)
-    (hA3 : A = At * (X * X * X))
-    (hB3 : B = Bt * (Y * Y * Y))
-    (hC3 : C = Ct * (Z * Z * Z))
-    (hA2 : A - A2 * (X2 * X2) = 0)
-    (hB2 : B - B2 * (Y2 * Y2) = 0)
-    (hC2 : C - C2 * (Z2 * Z2) = 0)
-    (hABC3 : At * (X * X * X) + Bt * (Y * Y * Y) - Ct * (Z * Z * Z) = 0)
-    (hBez3 : (At * (X * X * X)) * v - (Bt * (Y * Y * Y)) * u = 1)
-    (hw : u + v - w = 0)
-    (hMS : (At * alpha) * (X * X) + (Bt * beta) * (Y * Y) - (Ct * gamma) * (Z * Z) = 0) :
+    (A B C At Bt Ct X Y Z A2 B2 C2 X2 Y2 Z2 u0 v0 t uB vB wB w v phi0 : Int)
+    (hABC : A + B - C = 0)
+    (hA2 : A2 * (X2 * X2) = A) (hB2 : B2 * (Y2 * Y2) = B) (hC2 : C2 * (Z2 * Z2) = C)
+    (hA3 : At * (X * X * X) = A) (hB3 : Bt * (Y * Y * Y) = B) (hC3 : Ct * (Z * Z * Z) = C)
+    (hBez : A * vB - B * uB = 1)
+    (hwB : uB + vB - wB = 0)
+    (hBezBone : Y * w - Z * v = 1)
+    (hBezMS : At * X * v0 - Bt * Y * u0 = 1) :
     let Crot := 128 - phi0
     let Srot := phi0
     let Irot := B * Crot - A * Srot
-    let Drot := Crot * v - Srot * u
-    let I1 := (Ct * (Z * Z)) * v - (Bt * (Y * Y)) * w
-    let Dclash := (Ct * Z) * v - (Bt * Y) * beta
+    let Drot := Crot * vB - Srot * uB
+    let wx := At * X
+    let wy := Bt * Y
+    let wz := Ct * Z
+    let alpha := u0 * (Z * Z) + t * wx
+    let beta  := v0 * (Z * Z) + t * wy
+    let gamma := (X * X) * u0 + (Y * Y) * v0 + t * wz
+    let As := (X * X) * alpha
+    let Bs := (Y * Y) * beta
+    let Cs := (Z * Z) * gamma
+    let Up := Ct * w * w * w
+    let Vp := Bt * v * v * v
+    let I1 := Y * w * (Up + (Vp + Vp)) - Z * v * ((Up + Up) + Vp)
+    let dClash := Ct * w * beta - Bt * v * gamma
     let U6 := X2 * Y * Z
     let V6 := Y2 * X * Z
     let W6 := Z2 * X * Y
     -- 1. Quarter-ring Z_512 rotator-Bézout invariant & Weierstrass lift (from Theorem 17):
-    ((128 * A = C * Crot - Irot) ∧ (128 * B = C * Srot + Irot) ∧ (C * Drot - w * Irot = 128)) ∧
+    ((128 * A = C * Crot - Irot) ∧ (128 * B = C * Srot + Irot) ∧ (C * Drot - wB * Irot = 128)) ∧
     -- 2. Cross-floor k=2 <-> k=3 lift onto the 6th-degree curve of genus g(6) = 10 >= 2 (from Theorem 15):
     ((A2 * A2 * A2) * (Bt * Bt) * (Ct * Ct) * (U6 * U6 * U6 * U6 * U6 * U6) +
      (B2 * B2 * B2) * (At * At) * (Ct * Ct) * (V6 * V6 * V6 * V6 * V6 * V6) =
      (C2 * C2 * C2) * (At * At) * (Bt * Bt) * (W6 * W6 * W6 * W6 * W6 * W6)) ∧
     -- 3. Bilateral Padé-Bézout + Mason-Stothers Wronskian + Cramer clash + radical bound (from Theorem 14):
-    (((Z * Z * Z) * I1 + (At * (X * X * X)) * (w * w * w) * ((Z + Z) * v - Y * w) = Bt * (Y * w + Z * v)) ∧
-     (((Ct * gamma) * v - (Bt * beta) * w = 1) →
-       (At * (X * X * X)) * (Bt * (Y * Y * Y)) * (Ct * (Z * Z * Z)) * k =
-         (At * Bt * Ct) * (X * Y * Z) *
-           ((At * (X * X * X)) * (k * (Bt * beta * (Y * Y))) -
-            (Bt * (Y * Y * Y)) * (k * (At * alpha * (X * X))))) ∧
-     (I1 = 1 → ((Ct * gamma) * v - (Bt * beta) * w = 1) → w * (X * X) + Bt * gamma = Dclash * Z) ∧
-     (Ct ≥ 0 → (At * (X * X * X)) * (w * w * w) * ((Z + Z) * v - Y * w) ≥ 0 →
-       (Ct * (Z * Z * Z)) * I1 ≤ (Bt * Ct) * (Y * w + Z * v))) := by
+    ((As + Bs = Cs) ∧
+     ((At * X * X * X) * Bs - (Bt * Y * Y * Y) * As = (X * X) * (Y * Y) * (Z * Z)) ∧
+     (w * (X * X) + Bt * gamma = dClash * Z) ∧
+     (Z * Z * Z * I1 + wx * (wz * beta - wy * gamma) * (w * w * w) * ((Z * v + Z * v) - Y * w) =
+       Bt * (Y * w + Z * v)) ∧
+     ((At * X * X * X) * (Bt * Y * Y * Y) * (Ct * Z * Z * Z) =
+       (At * Bt * Ct) * (X * Y * Z) * ((At * X * X * X) * Bs - (Bt * Y * Y * Y) * As)) ∧
+     (Ct * (At * X * X * X) * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
+       (Ct * Z * Z * Z) * I1 ≤ Bt * Ct * (Y * w + Z * v))) := by
   dsimp
-  have hABC : A + B - C = 0 := by omega
-  have hBez : A * v - B * u = 1 := by
-    rw [hA3, hB3]
-    exact hBez3
+  have hABC3 : At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z = 0 := by
+    simp only [Int.mul_assoc] at hA3 hB3 hC3 ⊢
+    omega
   have h17 := thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
-    A B C u v w phi0 hABC hBez hw
+    A B C uB vB wB phi0 hABC hBez hwB
+  dsimp at h17
   have h15 := thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
-    A B C A2 B2 C2 X2 Y2 Z2 At Bt Ct X Y Z
-    hA2 hB2 hC2 (by omega) (by omega) (by omega) hABC
+    A B C A2 B2 C2 X2 Y2 Z2 At Bt Ct X Y Z hABC hA2 hB2 hC2 hA3 hB3 hC3
+  dsimp at h15
   have h14 := thm14_master_pillai_and_abc_bilateral_convergence_chains
-    At Bt Ct X Y Z (X + 1) (Y + 1) u v w alpha beta gamma k
-    hABC3 hBez3 hw hMS
+    At Bt Ct X Y Z u0 v0 t w v hABC3 hBezBone hBezMS
+  dsimp at h14
   exact ⟨⟨h17.2.2.2.2.2.2.1, h17.2.2.2.2.2.2.2.1, h17.2.2.2.2.2.2.2.2.2.1⟩,
          h15.2.2.2,
-         ⟨h14.2.1, h14.2.2.1.2, h14.2.2.2.1, h14.2.2.2.2.1⟩⟩
+         ⟨h14.1, h14.2.1, h14.2.2.2.1, h14.2.2.2.2.2.1, h14.2.2.2.2.2.2.1, h14.2.2.2.2.2.2.2.1⟩⟩
 
 #print axioms thm18_master_end_to_end_rotator_bezout_pade_mason_stothers_genus10_synthesis
 
