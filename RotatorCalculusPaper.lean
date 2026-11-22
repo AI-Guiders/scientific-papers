@@ -914,6 +914,13 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   let fact2  : Int := (((nTriangles d : Nat) : Int) - (d : Int)) * (((dInSquare : Nat) : Int) - (d : Int))
   let fact3  : Int := (((dOutEdge d * dOutEdge d : Nat) : Int) - (d : Int)) * (((dOutEdge d : Nat) : Int) - (d : Int))
   let fact4  : Int := (((quarterPeriod d + dOutEdge d : Nat) : Int)) * (((nTriangles d : Nat) : Int) - ((dOutEdge d : Nat) : Int))
+  -- Farey-Bézout exponent matrix `E_Bezout = [[a, b], [a', b']] ∈ SL_2(Z)` (`a*b' - a'*b = +1`)
+  -- and exact base reconstruction `(x^a)^b' = x * (x^a')^b`, `(y^b')^a = y * (y^b)^a'` on Lock II (`m=5, n=3 -> (2,1) & (3,2)`):
+  let detFarey2 : Int := ((normSqEdge d * normSqEdge d : Nat) : Int) - ((d * unitStep : Nat) : Int) -- 2*2 - 3*1 = +1
+  let recX2_L   : Nat := (normSqEdge d ^ normSqEdge d) ^ normSqEdge d             -- (2^2)^2 = 16
+  let recX2_R   : Nat := normSqEdge d * ((normSqEdge d ^ d) ^ unitStep)           -- 2 * 8^1 = 16
+  let recY2_L   : Nat := (d ^ normSqEdge d) ^ normSqEdge d                        -- (3^2)^2 = 81
+  let recY2_R   : Nat := d * ((d ^ unitStep) ^ d)                                 -- 3 * 3^3 = 81
   -- 5. 3-level recursive descent law C_0 - (x + y)*C_1 + x*y*C_2 = 0 and Hankel-Wronskian C_1^2 - C_0*C_2 = 24 on Lock II (palindrome 5 -> 7 -> 5)
   let cDesc0 : Int := cLock2
   let cDesc1 : Int := ((normSqEdge d ^ dInSquare : Nat) : Int) - ((d ^ normSqEdge d : Nat) : Int)
@@ -967,6 +974,9 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   eqIntBool fact2 cLock2 &&
   eqIntBool fact3 cLock3 &&
   eqIntBool fact4 cLock4 &&
+  eqIntBool detFarey2 (unitStep : Int) &&
+  eqNatBool recX2_L recX2_R &&
+  eqNatBool recY2_L recY2_R &&
   eqIntBool cDesc1 ((nTriangles d - unitStep : Nat) : Int) &&
   eqIntBool cDesc2 (dOutEdge d : Int) &&
   eqIntBool recLaw 0 &&
