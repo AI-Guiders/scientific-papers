@@ -100,21 +100,35 @@ Completes the five pillars of **100% Constructive Mathematics over `ℤ` and `�
 - **Choice-Free, Banach–Tarski-Free Finite Measure Additivity:**  
   Without `Classical.choice`, every partition of the cuboctahedral ball `B_{O₂}(T)` into concentric coordination shells `10 k² + 2` strictly preserves integer volume `1 + ∑_{k=1}^T (10 k² + 2) = V_{O₂}(T)`, with `12 * (4² + 5²) = 492 > 256`.
 
-### 6. Theorem 6 (`thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych`) — Pillai Exponential Diophantine Skeletal Joint Matrix Decomposition, Parabolic `SL₂(ℤ)` Jordan Lock Triptych `k ∈ {6, 12, 15}`, Three-Level Recursive Descent Invariant, and Binomial Floor Divisibility Reciprocity
+### 6. Theorem 6 (`thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych`) — Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`
 
 - **Skeletal Joint Matrix Factorization & Rank-1 Cross-Joint Transition Identity:**  
   Every solution of the exponential Diophantine equation `A x^m - B y^n = C` decomposes into `(m - 1)(n - 1)` interior `2 × 2` joint matrices `M_{a,b} = [[A x^(m-a), B y^(n-b)], [y^b, x^a]]` with invariant determinant `det M_{a,b} = C`. The normalized cross-joint transition matrix `P̃ = (1/C) M_{a,b}^adj M_{a',b'} ∈ SL₂(ℚ)` (`det P̃ = +1`) obeys the rank-1 decomposition:
   ```text
   P̃ - diag(y^Δb, x^Δa) = ((x^Δa y^Δb - 1) / C) * [[-x^a], [y^b]] * [[A x^(m-a'), B y^(n-b')]]
   ```
-- **Parabolic Resonance Square Law & the `SL₂(ℤ)` Nilpotent Jordan Lock Triptych (`k ∈ {6, 12, 15}`):**  
-  The parabolic boundary `Tr(P̃) = -2` (`(P̃ + I₂)² = 0`) is equivalent to the exact square identity `A x^(m-Δa) (x^Δa + 1)² = B y^(n-Δb) (y^Δb + 1)²`. For coprime bases (`A = B = 1`), integrality `P̃_k = [[-(k+1), -k], [k, k-1]] ∈ SL₂(ℤ)` reduces on interior elbows to `(x^a - x^Δa) + (y^b - y^Δb) = 2 s`, yielding the closed cuboctahedral triptych:
-  1. **`k = 6` (`3² - 2³ = 1`, `C = 1`, square `6² = 36`):** `P̃_I = [[-7, -6], [6, 5]]` (`6` square faces of `O₂`),
-  2. **`k = 12` (`2⁵ - 3³ = 5`, `C = 5`, square `12² = 144`, `Tr = -2`):** `P̃_II = [[-13, -12], [12, 11]]` (`12` vertices of `O₂`),
-  3. **`k = 15` (`5³ - 3⁴ = 44`, `C = 44`, square `30² = 900`, `s = 2`, `Tr = -2`):** `P̃_III = [[-16, -15], [15, 14]]`,
-  4. **`k = 40` (`2¹⁰ - 5⁴ = 399`, `C = 399`, difference resonance `2⁷ - 2³ = 5³ - 5¹ = 120 = 5!`, `Tr = +2`, `(P̃_IV - I₂)² = 0`):** `P̃_IV = [[-39, -40], [40, 41]]` (`41 = 4² + 5²`), lying on the Minkowski light-cone sheet `(Tr(P̃)² - 4)/4 = X² - T² = (-40)² - (-40)² = 0`.
+- **Isotropic Discriminant Cone Generators, Exact Generator Factorization, & the `SL₂(ℤ)` Nilpotent Jordan Lock Quartet (`k ∈ {6, 12, 15, 40}`):**  
+  In quadric coordinates `X = (P̃₁₁ - P̃₂₂)/2`, `Y = (P̃₁₂ + P̃₂₁)/2`, `T = (P̃₁₂ - P̃₂₁)/2`, the characteristic discriminant is `(Tr(P̃)² - 4)/4 = X² + Y² - T²`. On symmetric elbows (`m = a + a'`, `n = b + b'`, `A = B = 1`), `Y ≡ 0`, the linear generator (ruling) `X - T` obeys `2 C (X - T) = (x^a - y^b)² - (x^a' - y^b')²`, and `y^b (x^(m-a) - y^(n-b)) + x^(m-a) (x^a - y^b) = C` yields the exact generator factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)` along the isotropic cone `X² - T² = 0` (`Tr(P̃) = ∓2`). For coprime bases, integrality `P̃_k ∈ SL₂(ℤ)` generates the closed quartet:
+  1. **`k = 6` (`3² - 2³ = 1 = 1 × 1`, `C = 1`, square `6² = 36`, `Tr = -2`):** `P̃_I = [[-7, -6], [6, 5]]` (`6` square faces of `O₂`),
+  2. **`k = 12` (`2⁵ - 3³ = 5 = 5 × 1`, `C = 5`, square `12² = 144`, `Tr = -2`):** `P̃_II = [[-13, -12], [12, 11]]` (`12` vertices of `O₂`),
+  3. **`k = 15` (`5³ - 3⁴ = 44 = 22 × 2`, `C = 44`, square `30² = 900`, `s = 2`, `Tr = -2`):** `P̃_III = [[-16, -15], [15, 14]]`,
+  4. **`k = 40` (`2¹⁰ - 5⁴ = 399 = 133 × 3`, `C = 399`, difference resonance `2⁷ - 2³ = 5³ - 5¹ = 120 = 5!`, `Tr = +2`, `(P̃_IV - I₂)² = 0`):** `P̃_IV = [[-39, -40], [40, 41]]` (`41 = 4² + 5²`), lying on the isotropic cone generator `X² - T² = (-40)² - (-40)² = 0`.
+
+### 7. Theorem 7 (`thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower`) — Three-Level Recursive Descent Invariant, Hankel–Wronskian Square Law, Floor `k = 2 ↔ k = 3` Binomial Divisibility Reciprocity, Unimodular Farey–Bézout Exponent Matrix, and Padé–Thue Wronskian Tower
+
+- **Unimodular Farey–Bézout Exponent Matrix & Base Reconstruction:**  
+  For coprime exponents `gcd(m, n) = 1`, the canonical Farey–Bézout parent joints `(a, b)` and `(a', b') = (m - a, n - b)` form `E_Bezout = [[a, b], [a', b']] ∈ SL₂(ℤ)` (`a b' - a' b = +1`), reconstructing the bases via `(x^a)^b' = x * (x^a')^b` and `(y^b')^a = y * (y^b)^a'`.
 - **Three-Level Recursive Descent Law, Hankel–Wronskian Identity, & Floor `k = 2 ↔ k = 3` Binomial Divisibility Reciprocity:**  
   Along any skeletal ray `(k, j)`, consecutive floor differences `C_t = A x^(m - t k) - B y^(n - t j)` satisfy the weight-independent 3-term linear recurrence `C₀ - (x^k + y^j) C₁ + x^k y^j C₂ = 0` and the Hankel–Wronskian square identity `C₁² - C₀ C₂ = A B x^(m - 2k) y^(n - 2j) (x^k - y^j)²` (forming the palindrome `(C₀, C₁, C₂) = (5, 7, 5)` with `7² - 5² = 24` on `2⁵ - 3³ = 5`), while the binomial divisibility laws `x^a | (B y^(r_y) (y^b - x^a)^k + C)` and `y^b | (A x^(r_x) (x^a - y^b)^k - C)` exhibit exact quotient reciprocity `(12, 4) ↔ (4, -12)` between floors `k = 2` and `k = 3` on `5³ - 3⁴ = 44`.
+- **Non-Singular Padé–Thue Wronskian Tower on the Cubic Floor `k = 3`:**  
+  For `U - V = Ã X³ - B̃ Y³ = C`, the homogeneous integer Padé polynomials `P̂₁ = U + 2V`, `P̂₂ = 5U² + 35UV + 14V²`, `P̂₃ = 2U³ + 30U²V + 42UV² + 7V³` (with coefficient sums `1, 3, 54, 81 = 3⁴`) form `2 × 2` Wronskian matrices `M_N = [[X Q̂_N, Y P̂_N], [X Q̂_{N+1}, Y P̂_{N+1}]]` with exact determinants `det M_N = -(3N + 1) X Y C^(2N+1)` (multipliers `(1, 4, 7)` for `N = 0, 1, 2`).
+
+### 8. Theorem 8 (`thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding`) — Radical-Bounded Skeletal Floor Embedding of `abc`-Triples, Unified Bordered `3 × 3` Pillai–`abc` Matrix `M₃`, Rank-1 Adjugate Factorization, and Ternary Triangle-Defect Identity
+
+- **Radical-Bounded Skeletal Floor Embedding of `abc`-Triples:**  
+  Every coprime triple `A + B = C` (`gcd(A, B, C) = 1`) decomposes on floor `k ≥ 2` into `Ã_k X_k^k + B̃_k Y_k^k = C̃_k Z_k^k` with root weights bounded by the radical: `Ã_k B̃_k C̃_k ≤ rad(A B C)^(k-1)` (on the Lock IV top-floor triple `3 + 5³ = 2⁷ = 128` with `rad = 2 * 3 * 5 = 30`, floor `k = 3` yields `3 * 1³ + 1 * 5³ = 2 * 4³ = 128` with `Ã₃ B̃₃ C̃₃ = 6 ≤ 30²` and bone gap `5 - 4 = 1`).
+- **Unified Bordered `3 × 3` Pillai–`abc` Matrix & Ternary Triangle-Defect Identity:**  
+  For any factorization `A = a₁ a₂`, `B = b₁ b₂`, `C = c₁ c₂` with `A + B = C`, the bordered `3 × 3` matrix `M₃ = [[c₂, a₂, b₂], [a₁, c₁, 0], [b₁, 0, c₁]]` has `det M₃ = c₁ (C - A - B) ≡ 0`, principal `2 × 2` minors `(B, A, c₁²)`, and rank-1 adjugate `M₃^adj = [c₁, -a₁, -b₁]^T [c₁, -a₂, -b₂]` satisfying `(M₃^adj)² = (c₁² + C) M₃^adj` (`Tr(M₃^adj) = 4² + 128 = 144 = 12²` on `3 + 5³ = 2⁷ = 128`), while the lower and upper triangle defects `Δ_low = c₁ - (a₁ + b₁)` and `Δ_high = c₂ - (a₂ + b₂)` obey `(a₁ + b₁) Δ_high + c₂ Δ_low = -(a₁ b₂ + a₂ b₁) < 0`.
 
 ---
 
@@ -135,5 +149,7 @@ Expected `#print axioms` output at the end of `RotatorCalculusPaper.lean`:
 'RotatorCalculusPaper.thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality' depends on axioms: [propext]
 'RotatorCalculusPaper.thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski_free_measure' depends on axioms: [propext]
 'RotatorCalculusPaper.thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych' depends on axioms: [propext]
+'RotatorCalculusPaper.thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower' depends on axioms: [propext]
+'RotatorCalculusPaper.thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding' depends on axioms: [propext]
 ```
 (`0 sorryAx`, `0 Classical.choice`).
