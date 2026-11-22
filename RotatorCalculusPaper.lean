@@ -946,6 +946,15 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   let wPade1 : Int := pade1Q * pade2P - pade1P * pade2Q
   let wPade2 : Int := pade2Q * pade3P - pade2P * pade3Q
   let padeS3 : Nat := normSqEdge d + normSqEdge d * d * dOutEdge d + nSquares d * (nTriangles d - unitStep) + (nTriangles d - unitStep)
+  -- 8. Skeletal abc-triple radical floor decomposition `A_k*X_k^k + B_k*Y_k^k = C_k*Z_k^k` with `A_k*B_k*C_k ≤ rad(ABC)^(k-1)`
+  -- on `3 + 5^3 = 2^7 = 128` (`rad = 2*3*5 = 30`): at floor k=3, `3*1^3 + 1*5^3 = 2*4^3 = 128`, weights product `3*1*2 = 6 ≤ 30^2 = 900`, bone gap `5 - 4 = 1`
+  let abcA3  : Nat := d
+  let abcB3  : Nat := unitStep
+  let abcC3  : Nat := normSqEdge d
+  let abcRad : Nat := normSqEdge d * d * dOutEdge d
+  let abcLhs : Nat := abcA3 * (unitStep ^ d) + abcB3 * (dOutEdge d ^ d)
+  let abcRhs : Nat := abcC3 * (dInSquare ^ d)
+  let abcW3  : Nat := abcA3 * abcB3 * abcC3
   eqIntBool detP1 (unitStep : Int) &&
   eqIntBool trP1 (-(normSqEdge d : Int)) &&
   nilSq1 &&
@@ -988,7 +997,12 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   eqIntBool wPade0 (-((unitStep : Int) * cLock2)) &&
   eqIntBool wPade1 (-((dInSquare : Int) * (cLock2 ^ 3))) &&
   eqIntBool wPade2 (-(((nTriangles d - unitStep : Nat) : Int) * (cLock2 ^ 5))) &&
-  eqNatBool padeS3 (nineFoldDivisor d * nineFoldDivisor d)
+  eqNatBool padeS3 (nineFoldDivisor d * nineFoldDivisor d) &&
+  eqNatBool abcLhs (quarterPeriod d) &&
+  eqNatBool abcRhs (quarterPeriod d) &&
+  eqNatBool abcW3 (nSquares d) &&
+  decide (abcW3 <= abcRad * abcRad) &&
+  eqNatBool (dOutEdge d - dInSquare) unitStep
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Parabolic `SL₂(ℤ)` Jordan Lock Triptych `k ∈ {6, 12, 15}`, Three-Level Recursive Descent Invariant, and Binomial Floor Divisibility Reciprocity)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
