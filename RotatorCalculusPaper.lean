@@ -1631,8 +1631,17 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     (Z * Z * Z * I1 + wx * (wz * beta - wy * gamma) * (w * w * w) * ((Z * v + Z * v) - Y * w) =
       Bt * (Y * w + Z * v)) ∧
     -- Link 5: Bilateral Radical & Gap Diophantine Bounds on C = Ct * Z^3 and Z^3,
-    -- plus Exact Volume-Wronskian-Radical Equivalence A * B * C = (At * Bt * Ct) * (X * Y * Z) * W*:
-    (A * B * C = (At * Bt * Ct) * (X * Y * Z) * (A * Bs - B * As)) ∧
+    -- Exact Volume-Wronskian-Radical Equivalence A * B * C = (At * Bt * Ct) * (X * Y * Z) * W*,
+    -- and Circle-Remainder Full-Skeleton Degree Reduction with R_full = (At * Bt * Ct) * (X * Y * Z):
+    (let Rfull := (At * Bt * Ct) * (X * Y * Z)
+     (A * B * C = Rfull * (A * Bs - B * As)) ∧
+     (wy * C + (Bt * Bt * Ct) * (Y * Y * Z) * alpha = Rfull * beta) ∧
+     (wy * (wx - 1 - alpha) ≥ 0 → wx * beta ≤ Z * Z + wy * (wx - 1)) ∧
+     ((Bt * Bt * Ct) * (Y * Y * Z) * alpha ≥ 0 → wy * C ≤ Rfull * beta) ∧
+     ((wy - 1) * C ≥ 0 → (Bt * Bt * Ct) * (Y * Y * Z) * alpha ≥ 0 →
+       Rfull * (Rfull - beta) ≥ 0 → C ≤ Rfull * Rfull) ∧
+     (C * (((At * Bt * Ct) * (At * Bt * Ct)) * A * B - 1) ≥ 0 →
+       C ≤ Rfull * Rfull * Rfull)) ∧
     (Ct * A * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
       C * I1 ≤ Bt * Ct * (Y * w + Z * v)) ∧
     (Bt * (Y * w + Z * v) ≥ 0 →
@@ -1656,7 +1665,28 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  have hMinZ_eq : (At * X) * (v0 * (Z * Z) + t * (Bt * Y)) -
+                  (Bt * Y) * (u0 * (Z * Z) + t * (At * X)) = Z * Z := by
+    rw [hBezMS, Int.one_mul] at hMinZ
+    exact hMinZ
+  have hRfull_collapse :
+      (Bt * Y) * (Ct * Z * Z * Z) +
+      (Bt * Bt * Ct) * (Y * Y * Z) * (u0 * (Z * Z) + t * (At * X)) -
+      ((At * Bt * Ct) * (X * Y * Z)) * (v0 * (Z * Z) + t * (Bt * Y)) =
+      (Bt * Y) * Ct * Z * (Z * Z - ((At * X) * (v0 * (Z * Z) + t * (Bt * Y)) -
+                                    (Bt * Y) * (u0 * (Z * Z) + t * (At * X)))) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have hMinZ_zero : Z * Z - ((At * X) * (v0 * (Z * Z) + t * (Bt * Y)) -
+                             (Bt * Y) * (u0 * (Z * Z) + t * (At * X))) = 0 := by omega
+  rw [hMinZ_zero, Int.mul_zero] at hRfull_collapse
+  have hCube :
+      ((At * Bt * Ct) * (X * Y * Z)) * ((At * Bt * Ct) * (X * Y * Z)) * ((At * Bt * Ct) * (X * Y * Z)) -
+      (Ct * Z * Z * Z) =
+      (Ct * Z * Z * Z) * (((At * Bt * Ct) * (At * Bt * Ct)) * (At * X * X * X) * (Bt * Y * Y * Y) - 1) := by
+    simp only [Int.mul_sub, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ⟨?_, by omega, ?_, ?_, ?_, ?_⟩, ?_, ?_⟩
   · rw [hABC] at hDeriv; omega
   · rw [hBezMS] at hWronsk; simp only [Int.one_mul] at hWronsk; exact hWronsk
   · rw [hBezMS, hABC] at hDet4; omega
@@ -1681,6 +1711,24 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     simp only [Int.one_mul] at hWronsk
     rw [hWronsk]
     simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  · intro hCircle
+    have hSub : (Bt * Y) * ((At * X) - 1 - (u0 * (Z * Z) + t * (At * X))) =
+                (Bt * Y) * ((At * X) - 1) - (Bt * Y) * (u0 * (Z * Z) + t * (At * X)) := by
+      simp only [Int.mul_sub]
+    omega
+  · intro hAlphaPos
+    omega
+  · intro hBYC hAlphaPos hBetaLe
+    have h1 : (Bt * Y) * (Ct * Z * Z * Z) = (Ct * Z * Z * Z) + (Bt * Y - 1) * (Ct * Z * Z * Z) := by
+      simp only [Int.sub_mul, Int.one_mul]
+      omega
+    have h2 : ((At * Bt * Ct) * (X * Y * Z)) * (((At * Bt * Ct) * (X * Y * Z)) - (v0 * (Z * Z) + t * (Bt * Y))) =
+              ((At * Bt * Ct) * (X * Y * Z)) * ((At * Bt * Ct) * (X * Y * Z)) -
+              ((At * Bt * Ct) * (X * Y * Z)) * (v0 * (Z * Z) + t * (Bt * Y)) := by
+      simp only [Int.mul_sub]
+    omega
+  · intro hCubePos
+    omega
   · intro hPos
     rw [hBezShaft, hABC] at hBoundC
     simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.zero_mul, Int.add_zero] at hBoundC
