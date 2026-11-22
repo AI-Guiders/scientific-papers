@@ -1002,6 +1002,15 @@ def checkPillaiRecursiveDescentFareyBezoutAndPadeWronskianBool (d : Nat) : Bool 
   let phi3Coll : Int := uColl * uColl + uColl * vColl + vColl * vColl
   let cubicCollLhs : Int := (dInSquare : Int) * iColl1 * phi3Coll
   let cubicCollRhs : Int := (ypTest ^ 3) * (cLock2 ^ 3) * (uPade + vPade) - cpTest * (yColl1 ^ 3)
+  -- 5b. Internal Bone-Bézout Gauss-Shell Inversion Matrix K_Bezout = [[w^3, -Z^3], [v^3, -Y^3]]
+  -- inside a SINGLE solution `4*2^3 - 1*3^3 = 5` (`Z=2, Y=3 -> w=1, v=2`, `Z*v - Y*w = +1`, `A' = 4*1^3 - 1*2^3 = -4`):
+  -- `det(K_Bezout) = (Z*v)^3 - (Y*w)^3 = 4^3 - 3^3 = 37`, `w^3*A - Z^3*A' = Bt * 37 = 37`, `v^3*A - Y^3*A' = Ct * 37 = 148`:
+  let wBez2     : Int := (unitStep : Int)                                          -- w_3 = 1
+  let vBez2     : Int := (normSqEdge d : Int)                                      -- v_3 = 2
+  let apBez2    : Int := (dInSquare : Int) * (wBez2 ^ 3) - (vBez2 ^ 3)             -- 4*1 - 8 = -4
+  let phiGauss2 : Int := ((xColl0 * vBez2) ^ 3) - ((yColl0 * wBez2) ^ 3)           -- 4^3 - 3^3 = 37
+  let kBezRow1  : Int := (wBez2 ^ 3) * cLock2 - (xColl0 ^ 3) * apBez2              -- 1*5 - 8*(-4) = 37 = 1 * 37
+  let kBezRow2  : Int := (vBez2 ^ 3) * cLock2 - (yColl0 ^ 3) * apBez2              -- 8*5 - 27*(-4) = 148 = 4 * 37
   -- 6. Cross-floor Padé Wronskian W_{2,3} coupling quadratic floor k=2 (`P_{1,2} = U + 3V, Q_{1,2} = 3U + V`)
   -- and cubic floor k=3 (`P_{1,3} = U + 2V, Q_{1,3} = 2U + V`) of a SINGLE solution `(U, V)`:
   -- `(U + V)*P_{1,2}^2 - P_{1,3}^3 = V*(U^2 + 3UV + V^2)`, `(U + V)*Q_{1,2}^2 - Q_{1,3}^3 = U*(U^2 + 3UV + V^2)`,
@@ -1032,6 +1041,9 @@ def checkPillaiRecursiveDescentFareyBezoutAndPadeWronskianBool (d : Nat) : Bool 
   eqNatBool padeS3 (nineFoldDivisor d * nineFoldDivisor d) &&
   eqIntBool cramerLhs0 cramerRhs0 &&
   eqIntBool cubicCollLhs cubicCollRhs &&
+  eqIntBool (xColl0 * vBez2 - yColl0 * wBez2) (unitStep : Int) &&
+  eqIntBool kBezRow1 phiGauss2 &&
+  eqIntBool kBezRow2 ((dInSquare : Int) * phiGauss2) &&
   eqIntBool ((u1CF + v1CF) * (p1K2 * p1K2) - (p1K3 ^ 3)) (v1CF * phi23CF) &&
   eqIntBool ((u1CF + v1CF) * (q1K2 * q1K2) - (q1K3 ^ 3)) (u1CF * phi23CF) &&
   eqIntBool detW23 (root19 * root19)
@@ -1195,7 +1207,25 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
    eqIntBool detH3Neg ((nSquares d * nVertices d * nVertices d : Nat) : Int) &&
    eqIntBool (s1Mom * yBone * zBone - s2Mom * (yBone + zBone)) ((abcA3 : Int) * xBone * (xBone - yBone) * (xBone - zBone)) &&
    eqIntBool (s1Mom * zBone * xBone - s2Mom * (zBone + xBone)) ((abcB3 : Int) * yBone * (yBone - xBone) * (yBone - zBone)) &&
-   eqIntBool (s2Mom * (xBone + yBone) - s1Mom * xBone * yBone) ((abcC3 : Int) * zBone * (zBone - xBone) * (zBone - yBone)))
+   eqIntBool (s2Mom * (xBone + yBone) - s1Mom * xBone * yBone) ((abcC3 : Int) * zBone * (zBone - xBone) * (zBone - yBone)) &&
+   -- 9. Unimodular 2x3 Conjugate Bézout Partner Matrix B_{2x3} = [[A, B, C], [u, v, w]] (`u + v = w`, all three 2x2 minors = +1):
+   -- On Lock II `(5, 27, 32)`: `(u, v, w) = (2, 11, 13)` (matching Jordan Lock II diagonal `(-13, 11)`);
+   -- On Lock IV top `(3, 125, 128)`: `(u, v, w) = (1, 42, 43)` (`v = 42 = ||r||_2^2 = S_2(3)`), while the bone-Bézout parent
+   -- `(w_3, v_3) = (3, 4)` of `(Z_3, Y_3) = (4, 5)` (`4*4 - 5*3 = +1`) has cubic gap `A' = 2*3^3 - 1*4^3 = -10 = -S_AB`
+   -- and level-1 Padé collision invariant `I_1 = (C + 2B) - A*Y_3*w_3 = 378 - 45 = 333 = 9 * 37`!
+   (let uBez4 : Int := (unitStep : Int)                                            -- u = 1
+    let vBez4 : Int := rNormSq                                                     -- v = 42 = ||r||_2^2
+    let wBez4 : Int := uBez4 + vBez4                                               -- w = 43
+    let wBone4 : Int := (d : Int)                                                  -- w_3 = 3
+    let vBone4 : Int := (dInSquare : Int)                                          -- v_3 = 4
+    let apBone4 : Int := (abcC3 : Int) * (wBone4 ^ 3) - (abcB3 : Int) * (vBone4 ^ 3) -- 54 - 64 = -10 = -sAB
+    let i1Bone4 : Int := ((quarterPeriod d : Int) + (normSqEdge d : Int) * min3_B) - min3_A * yBone * wBone4 -- 378 - 45 = 333 = 9 * 37
+    eqIntBool (min3_A * vBez4 - min3_B * uBez4) (unitStep : Int) &&
+    eqIntBool (min3_A * wBez4 - (quarterPeriod d : Int) * uBez4) (unitStep : Int) &&
+    eqIntBool ((quarterPeriod d : Int) * vBez4 - min3_B * wBez4) (unitStep : Int) &&
+    eqIntBool (zBone * vBone4 - yBone * wBone4) (unitStep : Int) &&
+    eqIntBool apBone4 (-sAB) &&
+    eqIntBool i1Bone4 ((nineFoldDivisor d : Int) * (((dInSquare ^ 3) - (d ^ 3) : Nat) : Int))))
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
