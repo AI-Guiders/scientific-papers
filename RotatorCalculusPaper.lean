@@ -955,6 +955,19 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   let abcLhs : Nat := abcA3 * (unitStep ^ d) + abcB3 * (dOutEdge d ^ d)
   let abcRhs : Nat := abcC3 * (dInSquare ^ d)
   let abcW3  : Nat := abcA3 * abcB3 * abcC3
+  -- 9. Unified 3x3 Pillai-abc Skeletal Matrix `M_3 = [[c2, a2, b2], [a1, c1, 0], [b1, 0, c1]]`
+  -- on `3 + 125 = 128` (`a1=1, a2=3; b1=5, b2=25; c1=4, c2=32`):
+  -- det(M_3) = 0, principal 2x2 minors are `B = 125, A = 3, c1^2 = 16`, and `Tr(adj(M_3)) = c1^2 + C = 16 + 128 = 144 = 12^2`
+  let m3_a1  : Int := (unitStep : Int)
+  let m3_a2  : Int := (d : Int)
+  let m3_b1  : Int := (dOutEdge d : Int)
+  let m3_b2  : Int := ((dOutEdge d * dOutEdge d : Nat) : Int)
+  let m3_c1  : Int := (dInSquare : Int)
+  let m3_c2  : Int := ((normSqEdge d ^ dOutEdge d : Nat) : Int)
+  let min3_B : Int := m3_c2 * m3_c1 - m3_a2 * m3_a1
+  let min3_A : Int := m3_c2 * m3_c1 - m3_b2 * m3_b1
+  let detM3  : Int := m3_c1 * (m3_c1 * m3_c2 - m3_a1 * m3_a2 - m3_b1 * m3_b2)
+  let trAdj3 : Int := m3_c1 * m3_c1 + m3_a1 * m3_a2 + m3_b1 * m3_b2
   eqIntBool detP1 (unitStep : Int) &&
   eqIntBool trP1 (-(normSqEdge d : Int)) &&
   nilSq1 &&
@@ -1002,7 +1015,11 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   eqNatBool abcRhs (quarterPeriod d) &&
   eqNatBool abcW3 (nSquares d) &&
   decide (abcW3 <= abcRad * abcRad) &&
-  eqNatBool (dOutEdge d - dInSquare) unitStep
+  eqNatBool (dOutEdge d - dInSquare) unitStep &&
+  eqIntBool min3_B ((dOutEdge d ^ d : Nat) : Int) &&
+  eqIntBool min3_A (d : Int) &&
+  eqIntBool detM3 0 &&
+  eqIntBool trAdj3 ((nVertices d * nVertices d : Nat) : Int)
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Parabolic `SL₂(ℤ)` Jordan Lock Triptych `k ∈ {6, 12, 15}`, Three-Level Recursive Descent Invariant, and Binomial Floor Divisibility Reciprocity)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
