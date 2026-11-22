@@ -1350,6 +1350,57 @@ theorem thm11_universal_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 
+/-- **Theorem 12 (Universal `∀`-Quantified Reverse Padé–Bézout Cubic Annihilation Law and
+Explicit Diophantine Upper-Bound Inequalities `Z³ I₁ ≤ B̃ (Y w + Z v)` & `Y³ I₁ ≤ C̃ (Y w + Z v)`
+across all integers `ℤ`)**:
+When the level-1 Padé approximation is built at the bone-Bézout parent `(w, v)` (`I₀ = Y w - Z v = 1`)
+and evaluated at the solution `(Z, Y)` (`A = C̃ Z³ - B̃ Y³`), all cubic and quadratic terms in `(Y w, Z v)`
+annihilate identically, bounding `Z³ I₁` and `Y³ I₁` directly by the linear radical-weighted form
+`B̃ (Y w + Z v)` and `C̃ (Y w + Z v)` (attaining `I₁ = +3 = d` on Reyssat's record `abc`-triple `2 + 3¹⁰·109 = 23⁵`). -/
+theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
+    (Ct Bt Z Y w v : Int) :
+    let U  := Ct * Z * Z * Z
+    let V  := Bt * Y * Y * Y
+    let A  := U - V
+    let Up := Ct * w * w * w
+    let Vp := Bt * v * v * v
+    let I0 := Y * w - Z * v
+    let I1 := Y * w * (Up + (Vp + Vp)) - Z * v * ((Up + Up) + Vp)
+    (Z * Z * Z * I1 + A * (w * w * w) * ((Z * v + Z * v) - Y * w) =
+      Bt * (I0 * I0 * I0) * (Y * w + Z * v)) ∧
+    (Y * Y * Y * I1 + A * (v * v * v) * ((Y * w + Y * w) - Z * v) =
+      Ct * (I0 * I0 * I0) * (Y * w + Z * v)) ∧
+    (I0 = 1 → A * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
+      Z * Z * Z * I1 ≤ Bt * (Y * w + Z * v)) ∧
+    (I0 = 1 → A * (v * v * v) * ((Y * w + Y * w) - Z * v) ≥ 0 →
+      Y * Y * Y * I1 ≤ Ct * (Y * w + Z * v)) := by
+  dsimp
+  have h1 :
+      Z * Z * Z * (Y * w * (Ct * w * w * w + (Bt * v * v * v + Bt * v * v * v)) -
+        Z * v * ((Ct * w * w * w + Ct * w * w * w) + Bt * v * v * v)) +
+      (Ct * Z * Z * Z - Bt * Y * Y * Y) * (w * w * w) * ((Z * v + Z * v) - Y * w) =
+      Bt * ((Y * w - Z * v) * (Y * w - Z * v) * (Y * w - Z * v)) * (Y * w + Z * v) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have h2 :
+      Y * Y * Y * (Y * w * (Ct * w * w * w + (Bt * v * v * v + Bt * v * v * v)) -
+        Z * v * ((Ct * w * w * w + Ct * w * w * w) + Bt * v * v * v)) +
+      (Ct * Z * Z * Z - Bt * Y * Y * Y) * (v * v * v) * ((Y * w + Y * w) - Z * v) =
+      Ct * ((Y * w - Z * v) * (Y * w - Z * v) * (Y * w - Z * v)) * (Y * w + Z * v) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨h1, h2, ?_, ?_⟩
+  · intro hI0 hPos
+    rw [hI0] at h1
+    simp only [Int.mul_one, Int.one_mul] at h1
+    omega
+  · intro hI0 hPos
+    rw [hI0] at h2
+    simp only [Int.mul_one, Int.one_mul] at h2
+    omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -1361,5 +1412,6 @@ theorem thm11_universal_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
 #print axioms thm9_universal_pillai_abc_differential_bezout_and_pade_laws
 #print axioms thm10_universal_root_free_cubic_pade_compression
 #print axioms thm11_universal_cross_floor_wronskian_and_p3_kernel
+#print axioms thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
 
 end RotatorCalculusPaper
