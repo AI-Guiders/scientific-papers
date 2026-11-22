@@ -1242,6 +1242,114 @@ theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding 
     checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool 3 = true :=
   rfl
 
+set_option linter.unusedSimpArgs false
+set_option maxHeartbeats 800000
+
+/-- **Theorem 9 (Universal `∀`-Quantified Algebraic Laws of the Planetary Differential `F₃`,
+Gear-Slip Brahmagupta Law, Three-Level Descent & Hankel–Wronskian Identity, Conjugate Bézout
+Partner Matrix `B_{2×3}`, Bone-Bézout Gauss-Shell Cube Inversion `K_Bezout`, Lagrange–Vandermonde
+Bone-Gap Projectors, Three-Channel `3 × 3` Padé Trace Law, and Root-Free Cramer Lower-Bound Law
+across all integers `ℤ`)**: -/
+theorem thm9_universal_pillai_abc_differential_bezout_and_pade_laws
+    (A B u v a1 a2 b1 b2 c1 c2 At Bt Ct X Y Z wBone vBone : Int) :
+    let C := A + B
+    let w := u + v
+    -- 1. Unimodular 2x3 conjugate Bézout partner matrix minors equality:
+    (A * w - C * u = A * v - B * u) ∧
+    (C * v - B * w = A * v - B * u) ∧
+    -- 2. Ternary triangle-defect law of the 3x3 matrix M_3:
+    ((a1 + b1) * (c2 - (a2 + b2)) + c2 * (c1 - (a1 + b1)) =
+      (c1 * c2 - a1 * a2 - b1 * b2) - (a1 * b2 + a2 * b1)) ∧
+    -- 3. Planetary differential 2D gear-slip Brahmagupta law & 3D orthogonal frame F_3 law:
+    ((a1 * a2 + b1 * b2) * (a1 * a2 + b1 * b2) + (a1 * b2 - a2 * b1) * (a1 * b2 - a2 * b1) =
+      (a1 * a1 + b1 * b1) * (a2 * a2 + b2 * b2)) ∧
+    ((b1 * c2 + b2 * c1) * (b1 * c2 + b2 * c1) +
+     (c1 * a2 + c2 * a1) * (c1 * a2 + c2 * a1) +
+     (a1 * b2 - a2 * b1) * (a1 * b2 - a2 * b1) +
+     (a1 * a2 + b1 * b2 - c1 * c2) * (a1 * a2 + b1 * b2 - c1 * c2) =
+      (a1 * a1 + b1 * b1 + c1 * c1) * (a2 * a2 + b2 * b2 + c2 * c2)) ∧
+    -- 4. Three-level recursive descent & Hankel-Wronskian square law:
+    (let C0 := At * X * X - Bt * Y * Y
+     let C1 := At * X - Bt * Y
+     let C2 := At - Bt
+     (C0 - (X + Y) * C1 + X * Y * C2 = 0) ∧
+     (C1 * C1 - C0 * C2 = At * Bt * (X - Y) * (X - Y))) ∧
+    -- 5. Three Lagrange-Vandermonde bone-gap projectors on the cubic floor:
+    (let S1 := At * X + Bt * Y - Ct * Z
+     let S2 := At * X * X + Bt * Y * Y - Ct * Z * Z
+     let S3 := At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z
+     (S1 * Y * Z - S2 * (Y + Z) + S3 = At * X * (X - Y) * (X - Z)) ∧
+     (S1 * Z * X - S2 * (Z + X) + S3 = Bt * Y * (Y - X) * (Y - Z)) ∧
+     (S2 * (X + Y) - S1 * X * Y - S3 = Ct * Z * (Z - X) * (Z - Y))) ∧
+    -- 6. Bone-Bézout Gauss-shell cube inversion matrix K_Bezout:
+    (let gapA  := Ct * Z * Z * Z - Bt * Y * Y * Y
+     let gapAp := Ct * wBone * wBone * wBone - Bt * vBone * vBone * vBone
+     let phiB  := (Z * vBone) * (Z * vBone) * (Z * vBone) - (Y * wBone) * (Y * wBone) * (Y * wBone)
+     (wBone * wBone * wBone * gapA - Z * Z * Z * gapAp = Bt * phiB) ∧
+     (vBone * vBone * vBone * gapA - Y * Y * Y * gapAp = Ct * phiB)) ∧
+    -- 7. Trace law of the three-channel 3x3 cubic Padé-Thue matrix P_3(A, B, A+B):
+    (A * A * (B + C) + B * B * (A + C) + C * C * (A - B) = A * C * (A + C)) ∧
+    -- 8. Root-free Padé-Thue Cramer lower-bound identity at N=0..1 for any (U, V, a, b):
+    (let P1 := C + (B + B)
+     let Q1 := (C + C) + B
+     let I0 := u - v
+     let I1 := u * P1 - v * Q1
+     Q1 * I0 - I1 = u * A) := by
+  dsimp
+  refine ⟨?_, ?_, ?_, ?_, ?_, ⟨?_, ?_⟩, ⟨?_, ?_, ?_⟩, ⟨?_, ?_⟩, ?_, ?_⟩ <;>
+    (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
+
+/-- **Theorem 10 (Universal `∀`-Quantified Root-Free Cubic Padé–Thue Compression Identity
+`U * I₁ * Φ₃(a P̂₁, b Q̂₁) = a³ (U - V)³ (U + V) - (U b³ - V a³) Q̂₁³` across all integers `ℤ`)**: -/
+theorem thm10_universal_root_free_cubic_pade_compression (U V a b : Int) :
+    let Gap := U - V
+    let P1  := U + (V + V)
+    let Q1  := (U + U) + V
+    let I1  := a * P1 - b * Q1
+    let uP  := a * P1
+    let vQ  := b * Q1
+    let phi := uP * uP + uP * vQ + vQ * vQ
+    U * I1 * phi =
+      (a * a * a) * (Gap * Gap * Gap) * (U + V) -
+      (U * (b * b * b) - V * (a * a * a)) * (Q1 * Q1 * Q1) := by
+  dsimp
+  simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+             Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  omega
+
+/-- **Theorem 11 (Universal `∀`-Quantified Cross-Floor Padé Wronskian `W_{2,3}` Identity
+`Q̂_{1,2}² P̂_{1,3}³ - P̂_{1,2}² Q̂_{1,3}³ = (U - V)³ (U² + 3UV + V²)` and Universal Right Kernel
+`P₃(A, B, A+B) [A, B, -(A+B)]^T = [0, 0, 0]` across all integers `ℤ`)**: -/
+theorem thm11_universal_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
+    let C := A + B
+    let Gap := U - V
+    let P1_2 := U + (V + V + V)
+    let Q1_2 := (U + U + U) + V
+    let P1_3 := U + (V + V)
+    let Q1_3 := (U + U) + V
+    let phi23 := U * U + (U + U + U) * V + V * V
+    ((U + V) * (P1_2 * P1_2) - (P1_3 * P1_3 * P1_3) = V * phi23) ∧
+    ((U + V) * (Q1_2 * Q1_2) - (Q1_3 * Q1_3 * Q1_3) = U * phi23) ∧
+    ((Q1_2 * Q1_2) * (P1_3 * P1_3 * P1_3) - (P1_2 * P1_2) * (Q1_3 * Q1_3 * Q1_3) =
+      (Gap * Gap * Gap) * phi23) ∧
+    (let p00 := A * A * (B + C)
+     let p01 := (B + (C + C)) * (B + (C + C)) * (B + (C + C))
+     let p02 := ((B + B) + C) * ((B + B) + C) * ((B + B) + C)
+     let p10 := (A + (C + C)) * (A + (C + C)) * (A + (C + C))
+     let p11 := B * B * (A + C)
+     let p12 := ((A + A) + C) * ((A + A) + C) * ((A + A) + C)
+     let p20 := (A - (B + B)) * (A - (B + B)) * (A - (B + B))
+     let p21 := ((A + A) - B) * ((A + A) - B) * ((A + A) - B)
+     let p22 := C * C * (A - B)
+     (p00 * A + p01 * B - p02 * C = 0) ∧
+     (p10 * A + p11 * B - p12 * C = 0) ∧
+     (p20 * A + p21 * B - p22 * C = 0)) := by
+  dsimp
+  refine ⟨?_, ?_, ?_, ⟨?_, ?_, ?_⟩⟩ <;>
+    (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -1250,5 +1358,8 @@ theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding 
 #print axioms thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych
 #print axioms thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
 #print axioms thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
+#print axioms thm9_universal_pillai_abc_differential_bezout_and_pade_laws
+#print axioms thm10_universal_root_free_cubic_pade_compression
+#print axioms thm11_universal_cross_floor_wronskian_and_p3_kernel
 
 end RotatorCalculusPaper

@@ -154,5 +154,8 @@ Expected `#print axioms` output at the end of `RotatorCalculusPaper.lean`:
 'RotatorCalculusPaper.thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych' depends on axioms: [propext]
 'RotatorCalculusPaper.thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower' depends on axioms: [propext]
 'RotatorCalculusPaper.thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding' depends on axioms: [propext]
+'RotatorCalculusPaper.thm9_universal_pillai_abc_differential_bezout_and_pade_laws' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm10_universal_root_free_cubic_pade_compression' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm11_universal_cross_floor_wronskian_and_p3_kernel' depends on axioms: [propext, Quot.sound]
 ```
 (`0 sorryAx`, `0 Classical.choice`).
