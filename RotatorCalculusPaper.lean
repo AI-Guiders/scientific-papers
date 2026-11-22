@@ -1373,7 +1373,11 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     (I0 = 1 → A * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
       Z * Z * Z * I1 ≤ Bt * (Y * w + Z * v)) ∧
     (I0 = 1 → A * (v * v * v) * ((Y * w + Y * w) - Z * v) ≥ 0 →
-      Y * Y * Y * I1 ≤ Ct * (Y * w + Z * v)) := by
+      Y * Y * Y * I1 ≤ Ct * (Y * w + Z * v)) ∧
+    (I0 = 1 → Bt * (Y * w + Z * v) ≥ 0 →
+      Z * Z * Z * (-I1) ≤ A * (w * w * w) * ((Z * v + Z * v) - Y * w)) ∧
+    (I0 = 1 → Ct * (Y * w + Z * v) ≥ 0 →
+      Y * Y * Y * (-I1) ≤ A * (v * v * v) * ((Y * w + Y * w) - Z * v)) := by
   dsimp
   have h1 :
       Z * Z * Z * (Y * w * (Ct * w * w * w + (Bt * v * v * v + Bt * v * v * v)) -
@@ -1391,7 +1395,7 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
-  refine ⟨h1, h2, ?_, ?_⟩
+  refine ⟨h1, h2, ?_, ?_, ?_, ?_⟩
   · intro hI0 hPos
     rw [hI0] at h1
     simp only [Int.mul_one, Int.one_mul] at h1
@@ -1399,6 +1403,14 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
   · intro hI0 hPos
     rw [hI0] at h2
     simp only [Int.mul_one, Int.one_mul] at h2
+    omega
+  · intro hI0 hPos
+    rw [hI0] at h1
+    simp only [Int.mul_one, Int.one_mul, Int.mul_neg] at h1 ⊢
+    omega
+  · intro hI0 hPos
+    rw [hI0] at h2
+    simp only [Int.mul_one, Int.one_mul, Int.mul_neg] at h2 ⊢
     omega
 
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
