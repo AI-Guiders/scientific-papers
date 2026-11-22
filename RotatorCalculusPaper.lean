@@ -1846,10 +1846,10 @@ theorem thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotato
     (0 ≤ Irot → Irot < C → C * Srot ≤ 128 * B ∧ 128 * B < C * (Srot + 1) ∧
                            C * (Crot - 1) < 128 * A ∧ 128 * A ≤ C * Crot) ∧
     -- 6. Universal Quarter-Ring Bézout–Rotator Invariant across ALL (A, B, C) in Z^3:
-    --    C * Δ_rot - w * I_rot == 128 = Q_□(3), and direct upper bound C <= 128 + w * I_rot when Δ_rot >= 1:
+    --    C * Δ_rot - w * I_rot == 128 = Q_□(3), and direct upper bound C <= 128 + w * I_rot when C * (Δ_rot - 1) >= 0:
     (C * Drot - w * Irot = 128) ∧
     (Drot = 1 → C = 128 + w * Irot) ∧
-    (Drot ≥ 1 → C ≥ 0 → C ≤ 128 + w * Irot) := by
+    (C * (Drot - 1) ≥ 0 → C ≤ 128 + w * Irot) := by
   dsimp
   have h1 : (A * A - B * B) * (A * A - B * B) + ((A + A) * B) * ((A + A) * B) =
             (A * A + B * B) * (A * A + B * B) := by
@@ -1905,9 +1905,10 @@ theorem thm17_universal_weierstrass_stereographic_abc_embedding_into_z512_rotato
   · intro hD1
     have hCD : C * ((128 - phi0) * v - phi0 * u) = C * 1 := by rw [hD1]
     omega
-  · intro hDge1 hCge0
-    have hMul : C * 1 ≤ C * ((128 - phi0) * v - phi0 * u) :=
-      Int.mul_le_mul_of_nonneg_left hDge1 hCge0
+  · intro hCDge0
+    have hSub : C * (((128 - phi0) * v - phi0 * u) - 1) =
+                C * ((128 - phi0) * v - phi0 * u) - C := by
+      simp only [Int.mul_sub, Int.mul_one]
     omega
 
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
