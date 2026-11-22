@@ -1789,9 +1789,12 @@ to obey `Ã r_X + B̃ r_Y - C̃ r_Z = 512 (C̃ q_Z - Ã q_X - B̃ q_Y)`:
 theorem thm16_universal_z512_quarter_ring_collapse_and_radical_weight_lock
     (At Bt Ct qX qY qZ rX rY rZ : Int)
     (hFloor128 : At * (512 * qX + rX) + Bt * (512 * qY + rY) = Ct * (512 * qZ + rZ)) :
+    let C := Ct * (512 * qZ + rZ)
+    let W3 := At * Bt * Ct
     (At * rX + Bt * rY - Ct * rZ = 512 * (Ct * qZ - At * qX - Bt * qY)) ∧
-    (rX = 1 → rY = 1 → rZ = 0 → 0 < At + Bt → At + Bt < 512 → False) ∧
-    (rX = 0 → rY = 1 → rZ = 1 → Ct ≠ Bt → Ct - Bt ≥ 512 ∨ Bt - Ct ≥ 512) := by
+    (rX = 1 → rY = 1 → rZ = 0 → 0 < At + Bt → At + Bt < 512 → C ≤ W3 * W3) ∧
+    (rX = 0 → rY = 1 → rZ = 1 → Ct ≠ Bt → -512 < Ct - Bt → Ct - Bt < 512 → C ≤ W3 * W3) := by
+  dsimp
   have hMod : At * rX + Bt * rY - Ct * rZ = 512 * (Ct * qZ - At * qX - Bt * qY) := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm] at hFloor128 ⊢
@@ -1801,7 +1804,7 @@ theorem thm16_universal_z512_quarter_ring_collapse_and_radical_weight_lock
     rw [hrX, hrY, hrZ] at hMod
     simp only [Int.mul_one, Int.mul_zero, Int.sub_zero] at hMod
     omega
-  · intro hrX hrY hrZ hNe
+  · intro hrX hrY hrZ hNe hGt hLt
     rw [hrX, hrY, hrZ] at hMod
     simp only [Int.mul_one, Int.mul_zero, Int.zero_add] at hMod
     omega
