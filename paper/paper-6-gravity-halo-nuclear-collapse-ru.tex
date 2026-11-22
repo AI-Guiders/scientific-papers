@@ -1,0 +1,111 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{russian}
+\setotherlanguage{english}
+\setmainfont{Times New Roman}
+\setmonofont{Consolas}[Scale=0.90]
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=blue!70!black,
+  urlcolor=blue!70!black,
+  pdftitle={Теоретическая физика дискретного планковского носителя, Часть II: Несингулярная гравитация на импедансе ворот (>= 8192), голономное гало вакуума 16/3 без тёмной материи и когерентный 587-кратный коллапс кулоновского барьера к острову стабильности N = 184 в Lean 4},
+  pdfauthor={Каратаев Дмитрий Александрович}
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{corollary}[theorem]{Следствие}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{remark}[theorem]{Замечание}
+
+\title{\textbf{Теоретическая физика дискретного планковского носителя, Часть~II:\\ Несингулярная гравитация на импедансе ворот ($\ge 8\,192$), голономное гало вакуума $16/3$ без тёмной материи и когерентный $587$-кратный коллапс кулоновского барьера к острову стабильности $N = 184$ в Lean~4}}
+\author{Д.\,А.~Каратаев}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Во второй статье физической серии-сателлита к монографии \emph{«Теоретическая физика дискретного планковского носителя»} на двусортной системе носителей $\langle\mathcal{M},\mathcal{T}\rangle$ (в смысле теории моделей А.\,И.~Мальцева; дискретный $M$-носитель $\mathbb{Z}_{512}$ на оболочке кубооктаэдра $O_2(3)$ и непрерывный $T$-носитель макроскопических наблюдаемых) выводятся уравнения гравитационного преломления, галактической динамики без частиц тёмной материи, замкнутых атомных и ядерных оболочек и когерентного снижения кулоновского барьера. Доказано, что знаменатель фазового импеданса ячейки $D(\mathbf{x}) = \varepsilon(3) + Q_\square(3)\mu(\mathbf{x})^2 + \mu(\mathbf{x})\sum_{\mathbf{e}\in O_2(3)}\mu(\mathbf{x}+\mathbf{e})\mathcal{C}_3(\Delta\varphi_{\mathbf{e}}(\mathbf{x}))$ во всех состояниях строго ограничен снизу вакуумным полом $\varepsilon(3) = K_P(3)Q_\square(3) = 64\times 128 = 8\,192 = 2^{13} > 0$, а на потолке насыщения Паули ($\mu=64,\ \Delta\varphi=256$) достигает конечного максимума $D_{\max}(3) = (1 + 13\times 64)\varepsilon(3) = 833\times 8\,192 = 6\,823\,936$, тождественно исключая гравитационную сингулярность $1/0$, тогда как отношение $16$-состоянийного булева куба грани к $d=3$ пространственным осям даёт универсальный коэффициент голономного гало вакуума $2^{d_{\mathrm{in}}(\square)}/d = 16/3$ ($D_{\mathrm{dark}}\equiv 0$).
+
+Доказано, что заполнение координационных сфер кубооктаэдра $S_k(3) = 10k^2 + 2$ ($12,42,92,162$) и их спинорных полуоболочек порождает атомные номера благородных газов $Z\in\{2,10,18,36,54,86\}$, ядерные магические числа $\{2,8,20,28,50,82,126,184\}$ с нейтронным островом стабильности сверхтяжёлых ядер $N_{\mathrm{island}}(3) = 2S_3(3) = 2\times 92 = 184$, четыре канонических мультипликативных тождества Безу на $\mathbb{Z}_{512}$ ($25\times 41 - 2\times 512 = 1$, $197\times 13 - 5\times 512 = 1$, $417\times 97 - 79\times 512 = 1$, $183\times 263 - 94\times 512 = 1$) и точное снижение локального кулоновского барьера в $\lfloor D_{\max}(3)/D_{\mathrm{coh}}(3)\rfloor = \lfloor 6\,823\,936/11\,616\rfloor = 587 = 512 + 3\times 25$ раз при синфазной фокусировке всех $12$ лучей кубооктаэдра на фазе когерентного резонанса $A_{\mathrm{coh}}(3) = 128 + 11 = 139$. Все теоремы формально верифицированы в \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\medskip\noindent
+\textbf{Ключевые слова:} несингулярная дискретная гравитация, отскок Паули, голономное гало вакуума $16/3$, барионный закон Талли--Фишера, ядерные оболочки кубооктаэдра, остров стабильности $N=184$, когерентный коллапс кулоновского барьера, Lean~4.
+\end{abstract}
+
+\section{Несингулярная гравитация на импедансе ворот (\texorpdfstring{$\ge 8\,192$}{>= 8192}), предел запирания Паули \texorpdfstring{$833\,\varepsilon$}{833 epsilon} и голономное гало вакуума \texorpdfstring{$16/3$}{16/3}}
+\label{sec:gravity-halo}
+
+В двусортной системе носителей $\langle\mathcal{M},\mathcal{T}\rangle$ (где термин \emph{носитель} / \emph{carrier} понимается строго в смысле теории моделей А.\,И.~Мальцева~\cite{Malcev1970}) гравитационное преломление определяется локальным фазовым импедансом ячейки $D(\mathbf{x})$ по $12$ лучам кубооктаэдра $O_2(3)$:
+\begin{equation}
+  \label{eq:gravity-denom}
+  D(\mathbf{x}) \;=\; \varepsilon(3) \;+\; Q_\square(3)\,\mu(\mathbf{x})^2 \;+\; \mu(\mathbf{x})\sum_{\mathbf{e}\in O_2(3)}\mu(\mathbf{x}+\mathbf{e})\,\mathcal{C}_3\bigl(\Delta\varphi_{\mathbf{e}}(\mathbf{x})\bigr),
+  \qquad \varepsilon(3) := K_P(3)\,Q_\square(3) = 64\times 128 = 8\,192 = 2^{13}.
+\end{equation}
+
+\begin{theorem}[Строго положительный вакуумный пол гравитационного знаменателя $8\,192$, предел запирания Паули $833\times 8\,192$ и голономное гало вакуума $16/3$ без тёмной материи]
+\label{thm:gravity-halo}
+При $d=3$ на кольце $\mathbb{Z}_{512}$ и оболочке $O_2(3)$ (\texttt{gravity\_denominator\_strictly\_positive\_floor\_8192}, \texttt{gravitational\_strain\_tensor\_lock\_iff\_d3}, \texttt{catalan\_equivalence\_halo\_16\_3\_and\_automaton\_vacuum\_acceleration}, \texttt{no\_dark\_matter\_and\_vacuum\_holonomy\_halo}, \texttt{post\_island\_cavitated\_hypernuclei\_neutron\_pasta\_and\_nonsingular\_black\_hole\_core}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item во всех допустимых состояниях ($\mu\in[0,64]$, $|\mathcal{C}_3(\Delta\varphi)|\le 128$) знаменатель~\eqref{eq:gravity-denom} удовлетворяет $D(\mathbf{x}) \ge \varepsilon(3) = 8\,192 > 0$, а при максимальном противофазном сжатии на потолке Паули ($\mu = K_P(3) = 64$, $\Delta\varphi = \Phi_{\mathrm{Pauli}}(3) = 256$) достигает конечного максимума запирания
+  \begin{equation}
+    \label{eq:pauli-max-833}
+    D_{\max}(3) \;=\; \bigl(1 + N_\varphi(3)\,K_P(3)\bigr)\,\varepsilon(3) \;=\; (1 + 13\times 64)\times 8\,192 \;=\; 833\times 8\,192 \;=\; 6\,823\,936
+  \end{equation}
+  с максимальным контрастом преломления $D_{\max}(3)/\varepsilon(3) = 833 = 7^2\times 17$, заменяя сингулярность $1/0$ несингулярным ядром с отскоком Паули;
+\item в подпороговом внешнем галактическом режиме ($|\Phi|\le 40$) отношение $2^{d_{\mathrm{in}}(\square)} = 16$ булевых состояний квадратной грани к $d=3$ пространственным проекциям даёт универсальный коэффициент вакуумного гало $2^{d_{\mathrm{in}}(\square)}/d = 16/3$ (избыточный вклад $(16-3)/3 = 13/3 = N_\varphi(3)/d$) и барионный закон Талли--Фишера $v^4\propto M_b$ при нулевой плотности небарионной тёмной материи ($D_{\mathrm{dark}}\equiv 0$).
+\end{enumerate}
+\end{theorem}
+
+\section{Атомные и ядерные оболочки кубооктаэдра, остров стабильности \texorpdfstring{$N=184$}{N=184}, четыре замка Безу на \texorpdfstring{$\mathbb{Z}_{512}$}{Z512} и когерентный \texorpdfstring{$587$}{587}-кратный коллапс барьера}
+\label{sec:nuclear-587}
+
+\begin{theorem}[Замкнутые оболочки кубооктаэдра, остров стабильности $N_{\mathrm{island}}=184$, четыре тождества Безу на $\mathbb{Z}_{512}$ и когерентное снижение барьера в $587$ раз]
+\label{thm:nuclear-587}
+При $d=3$ (\texttt{generative\_periodic\_table\_feynman\_core\_limits\_and\_end\_to\_end\_dna\_genesis}, \texttt{superheavy\_synthesis\_recipes\_and\_uranium\_shell\_transfer\_to\_island\_184}, \texttt{coherent\_cuboctahedron\_barrier\_collapse\_587x}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item заполнение координационных сфер $S_k(3) = 10k^2 + 2 \in \{12,42,92,162\}$ и их спинорных подоболочек порождает атомные номера благородных газов $Z\in\{2,10,18,36,54,86,118\}$, критический предел ядра Фейнмана $Z_{\mathrm{crit}} = 137$ и ядерные магические числа $\{2,8,20,28,50,82,126,184\}$, где нейтронный остров стабильности сверхтяжёлых ядер равен удвоенной третьей сфере кубооктаэдра: $N_{\mathrm{island}}(3) = 2S_3(3) = 2\times 92 = 184$;
+\item вакуумная единица $\mu_{\mathrm{vac}}(3) = 1$ имеет четыре канонических мультипликативных разложения Безу по модулю $N_{\mathrm{ring}}(3) = 512$:
+  \begin{equation}
+    \label{eq:four-bezout-512}
+    \begin{aligned}
+      25\times 41 - 2\times 512 &= 1025 - 1024 = 1 &\quad &\bigl(d_{\mathrm{out}}(E)^2\cdot\Delta\varphi_{\mathrm{disc}}(3) \equiv 1\pmod{512}\bigr), \\
+      197\times 13 - 5\times 512 &= 2561 - 2560 = 1 &\quad &\bigl(A(^{197}_{79}\mathrm{Au})\cdot N_\varphi(3) \equiv 1\pmod{512}\bigr), \\
+      417\times 97 - 79\times 512 &= 40\,449 - 40\,448 = 1 &\quad &\bigl(3 A_{\mathrm{coh}}(139)\cdot\hat{M}(97) - Z(\mathrm{Au}_{79})\cdot 512 = 1\bigr), \\
+      183\times 263 - 94\times 512 &= 48\,129 - 48\,128 = 1 &\quad &\bigl((N_{\mathrm{island}}-1)\cdot\mathrm{IV}(263) - Z(\mathrm{Pu}_{94})\cdot 512 = 1\bigr);
+    \end{aligned}
+  \end{equation}
+\item синфазная фокусировка всех $12$ лучей $O_2(3)$ на фазе когерентного резонанса $A_{\mathrm{coh}}(3) = Q_\square(3) + |O_2(3)| - 1 = 128 + 11 = 139$ ($\mathcal{C}_3(139) = -11$, $\mathcal{S}_3(139) = +117 = 9\times 13$) вычитает $12\times 11 = 132$ из локального импеданса ворот, снижая барьер с $D_{\max}(3) = 6\,823\,936$ до $D_{\mathrm{coh}}(3) = 11\,616$ ровно в
+  \begin{equation}
+    \label{eq:collapse-587}
+    \left\lfloor \frac{D_{\max}(3)}{D_{\mathrm{coh}}(3)}\right\rfloor \;=\; \left\lfloor \frac{6\,823\,936}{11\,616}\right\rfloor \;=\; 587 \;=\; 512 + 3\times 25 \;=\; N_{\mathrm{ring}}(3) + d\cdot d_{\mathrm{out}}(E)^2 \text{ раз.}
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\section{Формальная верификация в Lean~4}
+Все теоремы формально верифицированы в пакете \texttt{lean/MtCarrier/} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} и \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\begin{thebibliography}{9}
+\bibitem{Malcev1970}
+А.\,И.~Мальцев, \emph{Алгебраические системы}, М.: Наука, 1970 (англ.\ пер.: Springer-Verlag, 1973).
+\bibitem{LandauLifshitz}
+Л.\,Д.~Ландау, Е.\,М.~Лифшиц, \emph{Теоретическая физика}, М.: Наука / Физматлит.
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}

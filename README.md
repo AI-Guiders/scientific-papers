@@ -9,9 +9,9 @@
 
 ---
 
-## Four-Part Paper Series (PDFs & LaTeX Sources)
+## Paper Series Catalog (PDFs & LaTeX Sources)
 
-The formalization is organized into a four-part series of self-contained papers (alongside the combined omnibus preprints):
+### Series I: Pure Mathematics, Logic, Cohomology & Diophantine Matrix Calculus (Parts I–IV)
 
 | Part | Topic & Verified Lean 4 Theorems | English PDF & TeX | Russian PDF & TeX |
 | :--- | :--- | :--- | :--- |
@@ -19,7 +19,15 @@ The formalization is organized into a four-part series of self-contained papers 
 | **Part II** | **Post Functional Completeness, 3-SAT Phase-Polynomial Reduction, Constructive de Rham Cohomology, and Finite-State Adversary Barriers / Built-In Vernam Pad on `ℤ_{512}`** (`thm4`, `thm5`) | [PDF](paper/paper-2-logic-cohomology-barriers-en.pdf) · [TeX](paper/paper-2-logic-cohomology-barriers-en.tex) | [PDF](paper/paper-2-logic-cohomology-barriers-ru.pdf) · [TeX](paper/paper-2-logic-cohomology-barriers-ru.tex) |
 | **Part III** | **Root-Free Integer Padé–Thue Compression, Isotropic Cone Matrix Decomposition, and Parabolic `SL₂(ℤ)` Jordan Locks `k ∈ {6, 12, 15, 40}`** (`thm6`, `thm7`, `thm10`, `thm11`) | [PDF](paper/paper-3-pillai-pade-thue-en.pdf) · [TeX](paper/paper-3-pillai-pade-thue-en.tex) | [PDF](paper/paper-3-pillai-pade-thue-ru.pdf) · [TeX](paper/paper-3-pillai-pade-thue-ru.tex) |
 | **Part IV** | **Planetary Differential Geometry of Coprime Triples `A + B = C`: Integer Mason–Stothers–Bézout Wronskians, Circle-Remainder Degree Reduction, Cross-Floor Genus-10 Lock, and Stereographic `ℤ_{512}` Embedding** (`thm8`, `thm9`, `thm12`–`thm16`) | [PDF](paper/paper-4-planetary-differential-wronskian-en.pdf) · [TeX](paper/paper-4-planetary-differential-wronskian-en.tex) | [PDF](paper/paper-4-planetary-differential-wronskian-ru.pdf) · [TeX](paper/paper-4-planetary-differential-wronskian-ru.tex) |
-| **Omnibus** | **Combined Full Preprint (All 16 Theorems)** | [PDF](paper/paper-rotator-calculus-en.pdf) · [TeX](paper/paper-rotator-calculus-en.tex) | [PDF](paper/paper-rotator-calculus-ru.pdf) · [TeX](paper/paper-rotator-calculus-ru.tex) |
+| **Omnibus I** | **Combined Pure-Math Preprint (All 16 Theorems)** | [PDF](paper/paper-rotator-calculus-en.pdf) · [TeX](paper/paper-rotator-calculus-en.tex) | [PDF](paper/paper-rotator-calculus-ru.pdf) · [TeX](paper/paper-rotator-calculus-ru.tex) |
+
+### Series II: Discrete Planckian Carrier Physics & Applied Photovoltaics (Satellite Papers to the Monograph)
+
+| Part | Topic & Verified Lean 4 Modules (`AI-Guiders/mt-lattice-fluid`) | English PDF & TeX | Russian PDF & TeX |
+| :--- | :--- | :--- | :--- |
+| **Physics Part I** | **Dimensional Uniqueness `1 + 2^d = d²` (`d = 3`), Symplectic Verlet Dynamics on `ℤ_{512}`, Born's Rule, Heisenberg Deadband `41`, and the Fine-Structure Constant `α_fs⁻¹`** (`Core.lean`, `Dynamics.lean`, `Topology.lean`, `Physics.lean`) | [PDF](paper/paper-5-carrier-maxwell-fine-structure-en.pdf) · [TeX](paper/paper-5-carrier-maxwell-fine-structure-en.tex) | [PDF](paper/paper-5-carrier-maxwell-fine-structure-ru.pdf) · [TeX](paper/paper-5-carrier-maxwell-fine-structure-ru.tex) |
+| **Physics Part II** | **Non-Singular Gate-Impedance Gravity (`≥ 8,192`), the `16/3` Vacuum Holonomy Halo Without Dark Matter, and Coherent `587×` Coulomb Barrier Collapse to the `N = 184` Island of Stability** (`Dynamics.lean`, `Physics.lean`, `UnifiedOperators.lean`) | [PDF](paper/paper-6-gravity-halo-nuclear-collapse-en.pdf) · [TeX](paper/paper-6-gravity-halo-nuclear-collapse-en.tex) | [PDF](paper/paper-6-gravity-halo-nuclear-collapse-ru.pdf) · [TeX](paper/paper-6-gravity-halo-nuclear-collapse-ru.tex) |
+| **Physics Part III** | **Impedance-Matched Phonon-Free Singlet-Fission Silicon Photovoltaics (`441 nm → 2 × 882 nm < 1,107 nm`) and Resolution of the Tetracene/`Si` Interface Paradoxes** (`UnifiedOperators.lean`) | [PDF](paper/paper-7-phonon-free-silicon-photovoltaics-en.pdf) · [TeX](paper/paper-7-phonon-free-silicon-photovoltaics-en.tex) | [PDF](paper/paper-7-phonon-free-silicon-photovoltaics-ru.pdf) · [TeX](paper/paper-7-phonon-free-silicon-photovoltaics-ru.tex) |
 
 - **Self-Contained Lean 4 Formalization (1,945 lines, 16 theorems, 0 external dependencies, `0 sorryAx`, `0 Classical.choice`):** [`RotatorCalculusPaper.lean`](RotatorCalculusPaper.lean)
 

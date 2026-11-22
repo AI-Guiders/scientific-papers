@@ -1,0 +1,110 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=blue!70!black,
+  urlcolor=blue!70!black,
+  pdftitle={Discrete Planckian Carrier Physics, Part II: Non-Singular Gate-Impedance Gravity (>= 8192), the 16/3 Vacuum Holonomy Halo Without Dark Matter, and Coherent 587x Coulomb Barrier Collapse to the N = 184 Island of Stability in Lean 4},
+  pdfauthor={Dmitrii A. Karataev}
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Discrete Planckian Carrier Physics, Part~II:\\ Non-Singular Gate-Impedance Gravity ($\ge 8\,192$), the $16/3$ Vacuum Holonomy Halo Without Dark Matter, and Coherent $587\times$ Coulomb Barrier Collapse to the $N = 184$ Island of Stability in Lean~4}}
+\author{Dmitrii A.~Karataev}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In Part~II of the physics satellite series to the monograph \emph{Theoretical Physics of the Discrete Planckian Carrier}, we derive gravitational refraction, galactic rotation dynamics without dark matter particles, atomic/nuclear shell closures, and coherent Coulomb barrier collapse on the two-sorted model-theoretic carrier system $\langle\mathcal{M},\mathcal{T}\rangle$ (A.\,I.~Mal'cev, \emph{Algebraic Systems}; discrete $M$-carrier $\mathbb{Z}_{512}$ on the cuboctahedral shell $O_2(3)$, continuous $T$-carrier of macroscopic observables). We prove that the local gate-impedance denominator $D(\mathbf{x}) = \varepsilon(3) + Q_\square(3)\mu(\mathbf{x})^2 + \mu(\mathbf{x})\sum_{\mathbf{e}\in O_2(3)}\mu(\mathbf{x}+\mathbf{e})\mathcal{C}_3(\Delta\varphi_{\mathbf{e}}(\mathbf{x}))$ is strictly bounded below by the vacuum floor $\varepsilon(3) = K_P(3)Q_\square(3) = 64\times 128 = 8\,192 = 2^{13} > 0$ across all states and bounded above at the Pauli saturation ceiling ($\mu=64,\ \Delta\varphi=256$) by $D_{\max}(3) = (1 + 13\times 64)\varepsilon(3) = 833\times 8\,192 = 6\,823\,936$, identically eliminating the $1/0$ gravitational singularity while the ratio of the $16$-state Boolean face cube to $d=3$ spatial axes yields the universal vacuum holonomy halo factor $2^{d_{\mathrm{in}}(\square)}/d = 16/3$ ($D_{\mathrm{dark}}\equiv 0$).
+
+We further prove that filling the cuboctahedral coordination shells $S_k(3) = 10k^2 + 2$ ($12,42,92,162$) and their spinor half-shells generates the noble-gas closures $Z\in\{2,10,18,36,54,86\}$, the nuclear magic numbers $\{2,8,20,28,50,82,126,184\}$ with superheavy neutron island of stability $N_{\mathrm{island}}(3) = 2S_3(3) = 2\times 92 = 184$, four canonical B\'ezout multiplicative identities on $\mathbb{Z}_{512}$ ($25\times 41 - 2\times 512 = 1$, $197\times 13 - 5\times 512 = 1$, $417\times 97 - 79\times 512 = 1$, $183\times 263 - 94\times 512 = 1$), and an exact $\lfloor D_{\max}(3)/D_{\mathrm{coh}}(3)\rfloor = \lfloor 6\,823\,936/11\,616\rfloor = 587 = 512 + 3\times 25$ coherent collapse of the local Coulomb barrier when all $12$ cuboctahedral beams are focused at the coherent resonance phase $A_{\mathrm{coh}}(3) = 128 + 11 = 139$. All theorems are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\medskip\noindent
+\textbf{Keywords:} non-singular discrete gravity, Pauli rebound, vacuum holonomy halo $16/3$, baryonic Tully--Fisher law, cuboctahedral nuclear shells, island of stability $N=184$, coherent Coulomb barrier collapse, Lean~4.
+\end{abstract}
+
+\section{Non-Singular Gate-Impedance Gravity (\texorpdfstring{$\ge 8\,192$}{>= 8192}), Pauli Saturation Ceiling \texorpdfstring{$833\,\varepsilon$}{833 epsilon}, and the \texorpdfstring{$16/3$}{16/3} Vacuum Holonomy Halo}
+\label{sec:gravity-halo}
+
+In the two-sorted structure $\langle\mathcal{M},\mathcal{T}\rangle$ (where the \emph{carrier} / \emph{носитель} is defined in the model-theoretic sense of A.\,I.~Mal'cev~\cite{Malcev1973}), gravitational refraction arises from the local phase-gate impedance denominator $D(\mathbf{x})$ governing inter-cell coupling across the $12$ beams of the cuboctahedron $O_2(3)$:
+\begin{equation}
+  \label{eq:gravity-denom}
+  D(\mathbf{x}) \;=\; \varepsilon(3) \;+\; Q_\square(3)\,\mu(\mathbf{x})^2 \;+\; \mu(\mathbf{x})\sum_{\mathbf{e}\in O_2(3)}\mu(\mathbf{x}+\mathbf{e})\,\mathcal{C}_3\bigl(\Delta\varphi_{\mathbf{e}}(\mathbf{x})\bigr),
+  \qquad \varepsilon(3) := K_P(3)\,Q_\square(3) = 64\times 128 = 8\,192 = 2^{13}.
+\end{equation}
+
+\begin{theorem}[Strictly Positive Gravitational Denominator Floor $8\,192$, Pauli Saturation Ceiling $833\times 8\,192$, and the $16/3$ Vacuum Holonomy Halo Without Dark Matter]
+\label{thm:gravity-halo}
+For $d=3$ on $\mathbb{Z}_{512}$ and $O_2(3)$ (\texttt{gravity\_denominator\_strictly\_positive\_floor\_8192}, \texttt{gravitational\_strain\_tensor\_lock\_iff\_d3}, \texttt{catalan\_equivalence\_halo\_16\_3\_and\_automaton\_vacuum\_acceleration}, \texttt{no\_dark\_matter\_and\_vacuum\_holonomy\_halo}, \texttt{post\_island\_cavitated\_hypernuclei\_neutron\_pasta\_and\_nonsingular\_black\_hole\_core}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Elimination of the $1/0$ gravitational singularity and Pauli saturation limit:}
+  across all admissible amplitude and phase configurations ($\mu\in[0,64]$, $|\mathcal{C}_3(\Delta\varphi)|\le 128$), the denominator~\eqref{eq:gravity-denom} satisfies $D(\mathbf{x}) \ge \varepsilon(3) = 8\,192 > 0$, and at maximum anti-phase Pauli compression ($\mu = K_P(3) = 64$, $\Delta\varphi = \Phi_{\mathrm{Pauli}}(3) = 256$) reaches the finite ceiling
+  \begin{equation}
+    \label{eq:pauli-max-833}
+    D_{\max}(3) \;=\; \bigl(1 + N_\varphi(3)\,K_P(3)\bigr)\,\varepsilon(3) \;=\; (1 + 13\times 64)\times 8\,192 \;=\; 833\times 8\,192 \;=\; 6\,823\,936,
+  \end{equation}
+  with maximum refractive index contrast $D_{\max}(3)/\varepsilon(3) = 833 = 7^2\times 17 = d_{\mathrm{out}}(V)^2(\mathrm{mod\_bits}(3)+|{\triangle}(3)|)$, replacing a singular black-hole point with a non-singular Pauli-rebound core.
+\item \textbf{The $16/3$ vacuum holonomy halo and flat galactic rotation curves without dark matter ($D_{\mathrm{dark}}\equiv 0$):}
+  in the sub-threshold outer galactic regime ($|\Phi|\le 40$), the ratio of the $2^{d_{\mathrm{in}}(\square)} = 16$ Boolean states of a square face to the $d=3$ spatial projection axes yields the exact vacuum holonomy amplification factor $2^{d_{\mathrm{in}}(\square)}/d = 16/3$ (excess halo ratio $(16-3)/3 = 13/3 = N_\varphi(3)/d$) and baryonic Tully--Fisher scaling $v^4\propto M_b$ with zero non-baryonic dark matter density ($D_{\mathrm{dark}}\equiv 0$).
+\end{enumerate}
+\end{theorem}
+
+\section{Cuboctahedral Atomic/Nuclear Shells, the \texorpdfstring{$N=184$}{N=184} Island of Stability, Four \texorpdfstring{$\mathbb{Z}_{512}$}{Z512} B\'ezout Locks, and Coherent \texorpdfstring{$587\times$}{587x} Coulomb Barrier Collapse}
+\label{sec:nuclear-587}
+
+\begin{theorem}[Cuboctahedral Shell Closures, the $N_{\mathrm{island}}=184$ Superheavy Island of Stability, Four Canonical $\mathbb{Z}_{512}$ B\'ezout Identities, and Coherent $587\times$ Barrier Collapse]
+\label{thm:nuclear-587}
+For $d=3$ (\texttt{generative\_periodic\_table\_feynman\_core\_limits\_and\_end\_to\_end\_dna\_genesis}, \texttt{superheavy\_synthesis\_recipes\_and\_uranium\_shell\_transfer\_to\_island\_184}, \texttt{coherent\_cuboctahedron\_barrier\_collapse\_587x}, \texttt{generative\_materials\_cooper\_pairing\_and\_superconductor\_shells\_operator}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Periodic table and nuclear magic numbers from $S_k(3) = 10k^2 + 2$:}
+  cumulative filling of the cuboctahedral shells $S_k(3)\in\{12,42,92,162\}$ and their spinor subshells generates the noble-gas atomic numbers $Z\in\{2,10,18,36,54,86,118\}$, the Feynman critical core limit $Z_{\mathrm{crit}} = 137$, and the nuclear magic closures $\{2,8,20,28,50,82,126,184\}$, where the superheavy neutron island of stability equals twice the third cuboctahedral shell: $N_{\mathrm{island}}(3) = 2S_3(3) = 2\times 92 = 184$.
+\item \textbf{Four canonical B\'ezout multiplicative identities on $\mathbb{Z}_{512}$:}
+  the vacuum unit $\mu_{\mathrm{vac}}(3) = 1$ admits four exact B\'ezout decompositions modulo $N_{\mathrm{ring}}(3) = 512$ linking hardware control invariants to heavy nuclear shells:
+  \begin{equation}
+    \label{eq:four-bezout-512}
+    \begin{aligned}
+      25\times 41 - 2\times 512 &= 1025 - 1024 = 1 &\quad &\bigl(d_{\mathrm{out}}(E)^2\cdot\Delta\varphi_{\mathrm{disc}}(3) \equiv 1\pmod{512}\bigr), \\
+      197\times 13 - 5\times 512 &= 2561 - 2560 = 1 &\quad &\bigl(A(^{197}_{79}\mathrm{Au})\cdot N_\varphi(3) \equiv 1\pmod{512}\bigr), \\
+      417\times 97 - 79\times 512 &= 40\,449 - 40\,448 = 1 &\quad &\bigl(3 A_{\mathrm{coh}}(139)\cdot\hat{M}(97) - Z(\mathrm{Au}_{79})\cdot 512 = 1\bigr), \\
+      183\times 263 - 94\times 512 &= 48\,129 - 48\,128 = 1 &\quad &\bigl((N_{\mathrm{island}}-1)\cdot\mathrm{IV}(263) - Z(\mathrm{Pu}_{94})\cdot 512 = 1\bigr).
+    \end{aligned}
+  \end{equation}
+\item \textbf{Coherent $587\times$ Coulomb barrier collapse on the $12$-beam cuboctahedron:}
+  focusing all $12$ beams of $O_2(3)$ at the coherent resonance phase $A_{\mathrm{coh}}(3) = Q_\square(3) + |O_2(3)| - 1 = 128 + 11 = 139$ ($\mathcal{C}_3(139) = -11$, $\mathcal{S}_3(139) = +117 = 9\times 13$) subtracts $12\times 11 = 132$ cosine units from the local gate impedance, collapsing the barrier from $D_{\max}(3) = 6\,823\,936$ to $D_{\mathrm{coh}}(3) = 11\,616$ by an exact factor of
+  \begin{equation}
+    \label{eq:collapse-587}
+    \left\lfloor \frac{D_{\max}(3)}{D_{\mathrm{coh}}(3)}\right\rfloor \;=\; \left\lfloor \frac{6\,823\,936}{11\,616}\right\rfloor \;=\; 587 \;=\; 512 + 3\times 25 \;=\; N_{\mathrm{ring}}(3) + d\cdot d_{\mathrm{out}}(E)^2.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\section{Formal Verification in Lean~4}
+All theorems above are formally verified in \texttt{lean/MtCarrier/} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} and \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\begin{thebibliography}{9}
+\bibitem{Malcev1973}
+A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, 1973 (Russian original: Nauka, Moscow, 1970).
+\bibitem{LandauLifshitz}
+L.\,D.~Landau and E.\,M.~Lifshitz, \emph{Course of Theoretical Physics}, Pergamon Press.
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}

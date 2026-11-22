@@ -1,0 +1,124 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{russian}
+\setotherlanguage{english}
+\setmainfont{Times New Roman}
+\setmonofont{Consolas}[Scale=0.90]
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=blue!70!black,
+  urlcolor=blue!70!black,
+  pdftitle={Теоретическая физика дискретного планковского носителя, Часть I: Единственность размерности 1 + 2^d = d^2 (d = 3), симплектическая динамика Верле на Z_512, правило Борна и постоянная тонкой структуры в Lean 4},
+  pdfauthor={Каратаев Дмитрий Александрович}
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{corollary}[theorem]{Следствие}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{remark}[theorem]{Замечание}
+
+\title{\textbf{Теоретическая физика дискретного планковского носителя, Часть~I:\\ Единственность размерности $1 + 2^d = d^2$ ($d = 3$), симплектическая динамика Верле на $\mathbb{Z}_{512}$, правило Борна и постоянная тонкой структуры $\alpha_{\mathrm{fs}}^{-1}$ в Lean~4}}
+\author{Д.\,А.~Каратаев}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+В первой статье физической серии-сателлита к монографии \emph{«Теоретическая физика дискретного планковского носителя»} строится обратимый локальный клеточный автомат над двусортной алгебраической системой $\langle\mathcal{M},\mathcal{T}\rangle$ в смысле теории моделей А.\,И.~Мальцева (\emph{«Алгебраические системы»}), где \textbf{дискретный $M$-носитель} есть конечное фазовое кольцо $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ на целочисленной решётке $\mathbb{Z}^d$, а \textbf{непрерывный $T$-носитель} --- континуальный сорт наблюдаемых полей, траекторий и интегралов Римана. Условие самозамкнутости регистра между $d^2$ битами осевых переходов и $2^d$ знаковыми октантами с центральным состоянием покоя даёт диофантово уравнение Каталана--Михайлеску $1 + 2^d = d^2$, однозначно выделяющее размерность пространства $d = 3$, разрядность регистра $\mathrm{mod\_bits}(3) = 9$, модуль фазового кольца $N_{\mathrm{ring}}(3) = 2^9 = 512$, вакуумный квант амплитуды $\mu_{\mathrm{vac}}(3) = d^2 - 2^d = 1$, четверть-период $Q_\square(3) = 128$, потолок Паули $\Phi_{\mathrm{Pauli}}(3) = 256$ и мантиссу Вейля--Швингера $K_P(3) = 64$.
+
+Доказано, что единичный симплектический якобиан ($\det J = +1$), обратимость во времени и глобальная калибровочная $U(1)$-инвариантность однозначно фиксируют двухшаговый закон эволюции Верле $\varphi(t+1)\equiv (2\varphi(t)-\varphi(t-1)+\Phi_{\mathrm{gate}})\bmod 512$ на $72$-битном регистре ячейки $B_2(3) = 72$, а изотропия второго момента ($M_{\alpha\beta} = 8\delta_{\alpha\beta}$) и замкнутость планарных $4$-циклов в кубе Мура $\{-1,0,+1\}^3$ однозначно выделяют $12$-вершинный кубооктаэдр Архимеда $O_2(3)$ ($13$-узловое причинное ядро $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$, закон роста слоёв $S_k(3) = 10k^2 + 2$). Деление с остатком разности фаз $\delta = 512 q(\delta) + r(\delta)$ расщепляет динамику на волновой остаток $r\in(-256,256]$ и корпускулярный перенос $q\in\{-1,0,+1\}$, детерминированно выводя правило Борна $P(\mu) = \mu^2/512$, дискретные уравнения Максвелла--Фарадея--Гаусса ($d_1\circ d_0 = 0$, $d_2\circ d_1 = 0$), мёртвую зону Гейзенберга $\Delta\varphi_{\mathrm{disc}}(3) = (512+21)/13 = 41$ (подпороговый коридор без тепла Ландауэра $|\Phi|\le 40$, УФ-ограничение $\hat{n}_E\le 6$ и закон проекционной слепоты $T$-прибора $64\times 81 = 72^2 = 5\,184$), размерность калибровочной группы Стандартной модели $\dim(\mathrm{U}(1)\times\mathrm{SU}(2)\times\mathrm{SU}(3)) = 1+3+8 = 12$ на кликовом комплексе $\mathcal{C}_{13}$ ($\chi(\mathcal{C}_{13}) = 13-36+32-8 = 1$) и постоянную тонкой структуры $\alpha_{\mathrm{fs}}^{-1}(3) = (4^2+9^2) + 40 + \frac{9}{80\pi^3} + \frac{1}{15(2\pi)^4} = 137{,}035999187\dots$ ($0{,}47\sigma$ от CODATA-2022). Все теоремы формально верифицированы в \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\medskip\noindent
+\textbf{Ключевые слова:} дискретный планковский носитель, теория моделей Мальцева, уравнение Каталана $1+2^d=d^2$, кубооктаэдр $O_2(3)$, симплектический автомат Верле, правило Борна, постоянная тонкой структуры, Lean~4.
+\end{abstract}
+
+\section{Теоретико-модельная двусортная структура носителей \texorpdfstring{$\langle\mathcal{M},\mathcal{T}\rangle$}{<M, T>} и теоремы единственности \texorpdfstring{$d=3$}{d=3}, закона Верле и кубооктаэдра \texorpdfstring{$O_2(3)$}{O2(3)}}
+\label{sec:axioms-uniqueness}
+
+Следуя терминологии теории алгебраических систем А.\,И.~Мальцева~\cite{Malcev1970}, термин \textbf{«носитель»} (\emph{carrier}) обозначает основное множество сорта в двусортной алгебраической структуре $\langle\mathcal{M},\mathcal{T}\rangle$:
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item \textbf{дискретный $M$-носитель} $\mathcal{M}$ --- конечное модулярное фазовое кольцо $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ на узлах целочисленной решётки $\mathbb{Z}^d$;
+\item \textbf{непрерывный $T$-носитель} $\mathcal{T}$ --- континуальный сорт наблюдаемых полей, траекторий и интегралов Римана, порождаемый макроскопической свёрткой и проекцией состояний $M$-носителя.
+\end{enumerate}
+
+\begin{theorem}[Единственность размерности $d=3$, констант кольца $\mathbb{Z}_{512}$, симплектического закона Верле и оболочки кубооктаэдра $O_2(3)$]
+\label{thm:d3-verlet-cuboct}
+При условиях самозамкнутости локального регистра $1 + 2^d = d^2$, единичного симплектического якобиана $\det J = +1$, калибровочной $U(1)$-инвариантности сдвига фазы и изотропии второго момента решётки:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Единственность размерности (\texttt{catalan\_lock\_iff\_d3}, \texttt{canonical\_d3\_constants}):}
+  диофантово уравнение $1 + 2^d = d^2$ выполняется в $\mathbb{N}$ тогда и только тогда, когда $d = 3$, однозначно фиксируя без свободных параметров:
+  \[
+    d = 3,\quad |\square(3)| = 6,\quad |{\triangle}(3)| = 8,\quad \mathrm{mod\_bits}(3) = d^2 = 9,\quad N_{\mathrm{ring}}(3) = 2^9 = 512,
+  \]
+  \[
+    \mu_{\mathrm{vac}}(3) = d^2 - 2^d = 1,\quad Q_\square(3) = 128,\quad \Phi_{\mathrm{Pauli}}(3) = 256,\quad K_P(3) = 64.
+  \]
+\item \textbf{Единственность симплектической рекурсии Верле (\texttt{verlet\_coefficients\_uniqueness\_from\_a13}, \texttt{polar\_step\_reverse\_exact}):}
+  среди всех двухшаговых линейных рекурсий $\varphi(t+1)\equiv \alpha\varphi(t)+\beta\varphi(t-1)+\Phi_{\mathrm{gate}}\pmod{512}$ условия $\det J = -\beta = 1$ и $\alpha+\beta = 1$ однозначно фиксируют $(\alpha,\beta) = (2,-1)$:
+  \begin{equation}
+    \label{eq:verlet-law}
+    \varphi(t+1) \;\equiv\; \bigl(2\varphi(t) - \varphi(t-1) + \Phi_{\mathrm{gate}}\bigr) \bmod 512,
+  \end{equation}
+  задавая точную инволюцию на $72$-битном двухтактовом фазовом пространстве ячейки $B_2(3) = 2\times 36 = 72\text{ бит}$.
+\item \textbf{Единственность оболочки кубооктаэдра (\texttt{cuboctahedron\_unique\_isotropic\_shell\_d3}, \texttt{cuboctahedron\_second\_moment\_isotropy\_tensor}):}
+  в трёхмерном кубе Мура $\{-1,0,+1\}^3$ ($26$ ненулевых соседей) единственной минимальной оболочкой, обеспечивающей изотропию второго момента $\sum_{\mathbf{e}} e_\alpha e_\beta = 8\delta_{\alpha\beta}$, замкнутость $4$-циклов в плоскостях $(xy,yz,zx)$ и точное воспроизведение оператора Лапласа на квадратичных полиномах, является $12$-вершинный кубооктаэдр $O_2(3) = \{\mathbf{e}\in\{-1,0,+1\}^3\mid |\mathbf{e}|^2 = 2\}$ ($13$-узловое причинное ядро $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$, сферические слои $S_k(3) = 10k^2 + 2 = 12,42,92,162$).
+\end{enumerate}
+\end{theorem}
+
+\section{Правило Борна, порог Гейзенберга \texorpdfstring{$\Delta\varphi_{\mathrm{disc}}=41$}{dphi=41}, уравнения Максвелла и закон проекционной слепоты \texorpdfstring{$72^2=5\,184$}{72^2=5184}}
+\label{sec:born-maxwell-heisenberg}
+
+\begin{theorem}[Правило Борна $P(\mu)=\mu^2/512$, порог Гейзенберга $41$, подпороговый коридор без тепла Ландауэра и дискретные уравнения Максвелла--Гаусса--Фарадея]
+\label{thm:born-heisenberg-maxwell}
+При $d=3$ на кольце $\mathbb{Z}_{512}$ и оболочке $O_2(3)$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item всякая разность фаз $\delta = \varphi_y - \varphi_x\in(-512,512)$ однозначно расщепляется на $\delta = 512 q(\delta) + r(\delta)$ с волновым остатком $r(\delta)\in(-256,256]$ и корпускулярным переносом $q(\delta)\in\{-1,0,+1\}$. Для волны амплитуды $\mu\in\{0,\dots,16\}$ ($\Phi_{\mathrm{wave}} = \mu^2\le 256$) на детекторе с равномерной фоновой фазой $\varphi_{\mathrm{bg}}\in\mathbb{Z}_{512}$ число срабатываний переноса $q(\varphi_{\mathrm{bg}}+\mu^2)=1$ тождественно равно $N_{\mathrm{clicks}}(\mu) \equiv \mu^2 = |\psi|^2$, откуда $P(\mu) = \mu^2/512$ (\texttt{bornClickCountOp});
+\item вокруг любой замкнутой $4$-грани $f$ циркуляция остатков удовлетворяет $\sum_{e\in\partial f} r_e = -512\sum_{e\in\partial f} q_e = 512 w_f$, а сумма вихревых потоков по $6$ граням замкнутого куба $\partial\square^3$ тождественно равна нулю: $\sum_{f\in\partial c} w_f \equiv 0$ (\texttt{d1\_d0\_zero}, \texttt{discrete\_gauss\_cube\_divergence\_zero});
+\item фазовый бюджет $13$-узлового ядра $B_1(3)$ со швом грани $\Delta\varphi_{\mathrm{seam}}(3) = \lfloor 256/12\rfloor = 21$ равен $512 + 21 = 533 = 13\times 41 = N_\varphi(3)\Delta\varphi_{\mathrm{disc}}(3)$, выделяя $d=3$ и фиксируя число излучённых квантов $\hat{n}_E(\Phi) = \lfloor |\Phi|/41\rfloor \in \{0,1,\dots,6\}$ (\texttt{heisenberg\_divisibility\_lock\_unique\_d3\_up\_to\_8}). В подпороговом коридоре $|\Phi|\le 40$ ($|\mathcal{E}_{\mathrm{Heis}}(3)| = 81 = 3^4$ состояние) логические шаги протекают обратимо без выделения тепла Ландауэра ($\hat{n}_E = 0$), а макроскопический $T$-прибор склеивает $K_P(3)\cdot |\mathcal{E}_{\mathrm{Heis}}(3)| = 64\times 81 = 5\,184 = 72^2 = (B_2(3))^2$ детерминированных микросостояний $M$-носителя в одно $T$-макросостояние.
+\end{enumerate}
+\end{theorem}
+
+\section{Кликовый комплекс \texorpdfstring{$\mathcal{C}_{13}$}{C13}, калибровочная размерность \texorpdfstring{$1+3+8=12$}{1+3+8=12} и постоянная тонкой структуры \texorpdfstring{$\alpha_{\mathrm{fs}}^{-1}$}{alpha\_fs\^{}(-1)}}
+\label{sec:sm-alpha}
+
+\begin{theorem}[Кликовый комплекс $\mathcal{C}_{13}$, размерность калибровочной алгебры Стандартной модели, гауссово простое число Кулона $\hat{M}(3)=97$ и постоянная тонкой структуры $\alpha_{\mathrm{fs}}^{-1}$]
+\label{thm:sm-alpha}
+На $13$-узловом причинном ядре $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$ (\texttt{gaussian\_coulomb\_lock\_iff\_d3}, \texttt{alpha\_fs\_exact\_z\_sqrt2\_canonical\_form\_and\_floor\_137}, \texttt{sm\_and\_cosmology\_closed\_rational\_operators}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item числа клик $B_1(3)$ равны $(K_1,K_2,K_3,K_4,K_{\ge 5}) = (13, 36, 32, 8, 0)$ с эйлеровой характеристикой $\chi(\mathcal{C}_{13}) = 13 - 36 + 32 - 8 = 1 = \mu_{\mathrm{vac}}(3)$, а $1$ глобальная фазовая связность $\mathbb{Z}_{512}$, $d=3$ экваториальных квадрата и $K_4(3)=8$ тетраэдров дают $\dim(\mathrm{U}(1)\times\mathrm{SU}(2)\times\mathrm{SU}(3)) = 1 + 3 + 8 = 12 = |O_2(3)|$;
+\item гауссова норма $\hat{M}(d) = d_{\mathrm{in}}(\square)^2 + \mathrm{mod\_bits}(d)^2 = 4^2 + 9^2 = 97$ в $\mathbb{Z}[i]$ проста исключительно при $d=3$, и в сумме с полушириной зоны Гейзенберга $\Delta\varphi_{\mathrm{disc}}(3)-1 = 40$ даёт $\lfloor\alpha_{\mathrm{fs}}^{-1}\rfloor = 97 + 40 = 137 = Q_\square(3) + \mathrm{mod\_bits}(3)$ и двух-/трёхпетлевое разложение на кубооктаэдре:
+  \begin{equation}
+    \label{eq:alpha-fs-137}
+    \alpha_{\mathrm{fs}}^{-1}(3) \;=\; 137 + \frac{9}{80\pi^3} + \frac{1}{15(2\pi)^4} \;=\; 137{,}035\,999\,187\dots
+    \qquad (\text{CODATA-2022: } 137{,}035\,999\,177(21),\ 0{,}47\sigma).
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\section{Формальная верификация в Lean~4}
+Все теоремы формально верифицированы в пакете \texttt{lean/MtCarrier/} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} и \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\begin{thebibliography}{9}
+\bibitem{Malcev1970}
+А.\,И.~Мальцев, \emph{Алгебраические системы}, М.: Наука, 1970 (англ.\ пер.: Springer-Verlag, 1973).
+\bibitem{LandauLifshitz}
+Л.\,Д.~Ландау, Е.\,М.~Лифшиц, \emph{Теоретическая физика}, Т.~I--IV, М.: Наука / Физматлит.
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,121 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=blue!70!black,
+  urlcolor=blue!70!black,
+  pdftitle={Discrete Planckian Carrier Physics, Part I: Dimensional Uniqueness 1 + 2^d = d^2 (d = 3), Symplectic Verlet Dynamics on Z_512, Born's Rule, and the Fine-Structure Constant in Lean 4},
+  pdfauthor={Dmitrii A. Karataev}
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Discrete Planckian Carrier Physics, Part~I:\\ Dimensional Uniqueness $1 + 2^d = d^2$ ($d = 3$), Symplectic Verlet Dynamics on $\mathbb{Z}_{512}$, Born's Rule, and the Fine-Structure Constant $\alpha_{\mathrm{fs}}^{-1}$ in Lean~4}}
+\author{Dmitrii A.~Karataev}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In Part~I of the physics satellite series to the monograph \emph{Theoretical Physics of the Discrete Planckian Carrier}, we formulate a local reversible cellular automaton over the two-sorted model-theoretic structure $\langle\mathcal{M},\mathcal{T}\rangle$ in the sense of A.\,I.~Mal'cev (\emph{Algebraic Systems}), where the \textbf{discrete $M$-carrier} is the finite phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ on the integer lattice $\mathbb{Z}^d$ and the \textbf{continuous $T$-carrier} is the continuum sort of observable fields, trajectories, and Riemann integrals. Requiring register self-closure between $d^2$ axial transition bits and $2^d$ signed octants plus the central rest state yields the Catalan--Mih\u{a}ilescu Diophantine lock $1 + 2^d = d^2$, which uniquely selects spatial dimension $d = 3$, register width $\mathrm{mod\_bits}(3) = 9$, phase ring modulus $N_{\mathrm{ring}}(3) = 2^9 = 512$, vacuum amplitude quantum $\mu_{\mathrm{vac}}(3) = d^2 - 2^d = 1$, quarter-period $Q_\square(3) = 128$, Pauli ceiling $\Phi_{\mathrm{Pauli}}(3) = 256$, and Weyl--Schwinger mantissa $K_P(3) = 64$.
+
+We prove that unit symplectic Jacobian ($\det J = +1$), time-reversal symmetry, and global $U(1)$ clock-shift invariance uniquely fix the two-step Verlet evolution law $\varphi(t+1)\equiv (2\varphi(t)-\varphi(t-1)+\Phi_{\mathrm{gate}})\bmod 512$ on the $72$-bit cell register $B_2(3) = 72$, while second-moment isotropy ($M_{\alpha\beta} = 8\delta_{\alpha\beta}$) and planar $4$-cycle closure in $\{-1,0,+1\}^3$ uniquely select the $12$-vertex Archimedean cuboctahedron $O_2(3)$ ($13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$, shell law $S_k(3) = 10k^2 + 2$). Euclidean division of phase differences $\delta = 512 q(\delta) + r(\delta)$ decomposes dynamics into a wave remainder $r\in(-256,256]$ and a corpuscular carry $q\in\{-1,0,+1\}$, deriving Born's rule $P(\mu) = \mu^2/512$ deterministically, discrete Maxwell--Faraday--Gauss electrodynamics ($d_1\circ d_0 = 0$, $d_2\circ d_1 = 0$), the Heisenberg deadband $\Delta\varphi_{\mathrm{disc}}(3) = (512+21)/13 = 41$ (sub-threshold zero-Landauer-heat corridor $|\Phi|\le 40$, UV cutoff $\hat{n}_E\le 6$, and $T$-measurement blindness $64\times 81 = 72^2 = 5\,184$), the Standard Model gauge dimension $\dim(\mathrm{U}(1)\times\mathrm{SU}(2)\times\mathrm{SU}(3)) = 1+3+8 = 12$ on the clique complex $\mathcal{C}_{13}$ ($\chi(\mathcal{C}_{13}) = 13-36+32-8 = 1$), and the inverse fine-structure constant $\alpha_{\mathrm{fs}}^{-1}(3) = (4^2+9^2) + 40 + \frac{9}{80\pi^3} + \frac{1}{15(2\pi)^4} = 137.035999187\dots$ ($0.47\sigma$ from CODATA-2022). All theorems are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\medskip\noindent
+\textbf{Keywords:} discrete Planckian carrier, model-theoretic algebraic systems, Catalan equation $1+2^d=d^2$, cuboctahedron $O_2(3)$, symplectic Verlet automaton, Born's rule, fine-structure constant, Lean~4.
+\end{abstract}
+
+\section{Model-Theoretic Two-Sorted Carrier Structure \texorpdfstring{$\langle\mathcal{M},\mathcal{T}\rangle$}{<M, T>} and Uniqueness of \texorpdfstring{$d=3$}{d=3}, Verlet Dynamics, and the Cuboctahedron \texorpdfstring{$O_2(3)$}{O2(3)}}
+\label{sec:axioms-uniqueness}
+
+Following the model-theoretic terminology of A.\,I.~Mal'cev (\emph{Algebraic Systems}~\cite{Malcev1973}), the term \textbf{carrier} (\emph{носитель}) denotes the underlying domain set of an algebraic sort in the two-sorted structure $\langle\mathcal{M},\mathcal{T}\rangle$:
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item the \textbf{discrete $M$-carrier} $\mathcal{M}$ is the finite modular phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ over the integer lattice $\mathbb{Z}^d$;
+\item the \textbf{continuous $T$-carrier} $\mathcal{T}$ is the continuum sort of macroscopic fields, trajectories, and Riemann integrals induced by coarse-grained projection and convolution of $M$-carrier states.
+\end{enumerate}
+
+\begin{theorem}[Uniqueness of Spatial Dimension $d=3$, the $\mathbb{Z}_{512}$ Ring Constants, the Symplectic Verlet Law, and the Cuboctahedral Shell $O_2(3)$]
+\label{thm:d3-verlet-cuboct}
+Under register self-closure $1 + 2^d = d^2$ (matching $d^2$ axial transition bits to $2^d$ signed octants plus $1$ central rest state), unit symplectic Jacobian $\det J = +1$, $U(1)$ clock-shift invariance, and second-moment lattice isotropy:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Dimensional uniqueness (\texttt{catalan\_lock\_iff\_d3}, \texttt{canonical\_d3\_constants}):}
+  $1 + 2^d = d^2$ holds for $d\in\mathbb{N}$ if and only if $d = 3$, fixing with zero free parameters:
+  \[
+    d = 3,\quad |\square(3)| = 6,\quad |{\triangle}(3)| = 8,\quad \mathrm{mod\_bits}(3) = d^2 = 9,\quad N_{\mathrm{ring}}(3) = 2^9 = 512,
+  \]
+  \[
+    \mu_{\mathrm{vac}}(3) = d^2 - 2^d = 1,\quad Q_\square(3) = 128,\quad \Phi_{\mathrm{Pauli}}(3) = 256,\quad K_P(3) = 64.
+  \]
+\item \textbf{Symplectic Verlet uniqueness (\texttt{verlet\_coefficients\_uniqueness\_from\_a13}, \texttt{polar\_step\_reverse\_exact}):}
+  among linear two-step recurrences $\varphi(t+1)\equiv \alpha\varphi(t)+\beta\varphi(t-1)+\Phi_{\mathrm{gate}}\pmod{512}$, unit Jacobian $\det J = -\beta = 1$ and $U(1)$ shift commutation $\alpha+\beta = 1$ uniquely fix $(\alpha,\beta) = (2,-1)$:
+  \begin{equation}
+    \label{eq:verlet-law}
+    \varphi(t+1) \;\equiv\; \bigl(2\varphi(t) - \varphi(t-1) + \Phi_{\mathrm{gate}}\bigr) \bmod 512,
+  \end{equation}
+  forming an exact involution on the $72$-bit two-tick cell space $B_2(3) = 2\times 36 = 72\text{ bits}$.
+\item \textbf{Cuboctahedral shell uniqueness (\texttt{cuboctahedron\_unique\_isotropic\_shell\_d3}, \texttt{cuboctahedron\_second\_moment\_isotropy\_tensor}):}
+  in the $3\mathrm{D}$ Moore cube $\{-1,0,+1\}^3$ ($26$ non-zero neighbors partitioned into $6$ face centers $|\mathbf{e}|^2=1$, $12$ edge centers $|\mathbf{e}|^2=2$, and $8$ corners $|\mathbf{e}|^2=3$), the unique minimal shell satisfying $\sum_{\mathbf{e}} e_\alpha e_\beta = 8\delta_{\alpha\beta}$, planar $4$-cycle closure in $(xy,yz,zx)$, and exact reproduction of the continuum Laplacian on quadratic polynomials is the $12$-vertex cuboctahedron $O_2(3) = \{\mathbf{e}\in\{-1,0,+1\}^3\mid |\mathbf{e}|^2 = 2\}$ ($13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$, shell growth $S_k(3) = 10k^2 + 2 = 12,42,92,162$).
+\end{enumerate}
+\end{theorem}
+
+\section{Deterministic Born's Rule, Heisenberg Deadband \texorpdfstring{$\Delta\varphi_{\mathrm{disc}}=41$}{dphi=41}, Discrete Maxwell Electrodynamics, and \texorpdfstring{$T$}{T}-Layer Projection Blindness \texorpdfstring{$72^2=5\,184$}{72^2=5184}}
+\label{sec:born-maxwell-heisenberg}
+
+\begin{theorem}[Born's Rule $P(\mu)=\mu^2/512$, Heisenberg Threshold $41$, Zero-Landauer-Heat Sub-Threshold Corridor, and Discrete Maxwell--Gauss--Faraday Laws]
+\label{thm:born-heisenberg-maxwell}
+For $d=3$ on $\mathbb{Z}_{512}$ and $O_2(3)$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Wave--particle quotient--remainder splitting and Born's rule (\texttt{quotient\_remainder\_512\_spec}, \texttt{bornClickCountOp}):}
+  every phase difference $\delta = \varphi_y - \varphi_x\in(-512,512)$ splits uniquely into $\delta = 512 q(\delta) + r(\delta)$ with wave remainder $r(\delta)\in(-256,256]$ and corpuscular carry $q(\delta)\in\{-1,0,+1\}$. For an incident wave of integer amplitude $\mu\in\{0,\dots,16\}$ ($\Phi_{\mathrm{wave}} = \mu^2\le 256$) interacting with a detector of uniform background phase $\varphi_{\mathrm{bg}}\in\mathbb{Z}_{512}$, the number of background states triggering a carry click $q(\varphi_{\mathrm{bg}}+\mu^2)=1$ is identically $N_{\mathrm{clicks}}(\mu) = |\{\varphi_{\mathrm{bg}}\in\mathbb{Z}_{512}\mid \varphi_{\mathrm{bg}}+\mu^2\ge 512\}| \equiv \mu^2 = |\psi|^2$, yielding $P(\mu) = \mu^2/512$.
+\item \textbf{Discrete Maxwell--Faraday--Gauss laws (\texttt{d1\_d0\_zero}, \texttt{plaquette\_flux\_eq\_512\_mul\_winding}, \texttt{discrete\_gauss\_cube\_divergence\_zero}):}
+  around any closed $4$-cycle face $f$, the remainder circulation satisfies $\sum_{e\in\partial f} r_e = -512\sum_{e\in\partial f} q_e = 512 w_f$, and over all $6$ faces of a closed cube $\partial\square^3$, the total magnetic monopole flux vanishes identically: $\sum_{f\in\partial c} w_f \equiv 0$.
+\item \textbf{Heisenberg deadband $\Delta\varphi_{\mathrm{disc}}(3)=41$, UV finiteness, zero Landauer heat, and the $72^2=5\,184$ projection blindness law (\texttt{heisenberg\_divisibility\_lock\_unique\_d3\_up\_to\_8}, \texttt{a6\_a8\_gate\_pauli\_ceiling\_256\_and\_heisenberg\_deadband\_41}):}
+  the total phase budget of the $13$-node core $B_1(3)$ with seam allowance $\Delta\varphi_{\mathrm{seam}}(3) = \lfloor 256/12\rfloor = 21$ equals $512 + 21 = 533 = 13\times 41 = N_\varphi(3)\Delta\varphi_{\mathrm{disc}}(3)$, uniquely selecting $d=3$ (for $1\le d\le 8$) and fixing the emission quantum $\hat{n}_E(\Phi) = \lfloor |\Phi|/41\rfloor \in \{0,1,\dots,6\}$. Sub-threshold operations $|\Phi|\le 40$ ($|\mathcal{E}_{\mathrm{Heis}}(3)| = 2\cdot 41 - 1 = 81 = 3^4$ states) propagate reversibly with zero emitted thermal quanta ($\hat{n}_E = 0$, overcoming Landauer's $k_{\mathrm{B}}T\ln 2$ dissipation bound), while a macroscopic $T$-instrument glues $K_P(3)\cdot |\mathcal{E}_{\mathrm{Heis}}(3)| = 64\times 81 = 5\,184 = 72^2 = (B_2(3))^2$ deterministic $M$-carrier microstates into a single $T$-macrostate.
+\end{enumerate}
+\end{theorem}
+
+\section{Simplicial Clique Complex \texorpdfstring{$\mathcal{C}_{13}$}{C13}, Standard Model Gauge Dimension \texorpdfstring{$1+3+8=12$}{1+3+8=12}, and the Fine-Structure Constant \texorpdfstring{$\alpha_{\mathrm{fs}}^{-1}$}{alpha\_fs\^{}(-1)}}
+\label{sec:sm-alpha}
+
+\begin{theorem}[Clique Complex $\mathcal{C}_{13}$, Standard Model Gauge Algebra Dimension, Gaussian Coulomb Prime $\hat{M}(3)=97$, and Fine-Structure Constant $\alpha_{\mathrm{fs}}^{-1}$]
+\label{thm:sm-alpha}
+On the $13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$ (\texttt{gaussian\_coulomb\_lock\_iff\_d3}, \texttt{alpha\_fs\_exact\_z\_sqrt2\_canonical\_form\_and\_floor\_137}, \texttt{sm\_and\_cosmology\_closed\_rational\_operators}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item the clique counts of $B_1(3)$ are $(K_1,K_2,K_3,K_4,K_{\ge 5}) = (13, 36, 32, 8, 0)$ with Euler characteristic $\chi(\mathcal{C}_{13}) = 13 - 36 + 32 - 8 = 1 = \mu_{\mathrm{vac}}(3)$, and the $1$ global $\mathbb{Z}_{512}$ phase connection, $d=3$ orthogonal equatorial square loops, and $K_4(3)=8$ tetrahedral cells yield $\dim(\mathrm{U}(1)\times\mathrm{SU}(2)\times\mathrm{SU}(3)) = 1 + 3 + 8 = 12 = |O_2(3)|$;
+\item the Gaussian norm $\hat{M}(d) = d_{\mathrm{in}}(\square)^2 + \mathrm{mod\_bits}(d)^2 = 4^2 + 9^2 = 97$ in $\mathbb{Z}[i]$ is prime uniquely at $d=3$, and its sum with the Heisenberg deadband half-width $\Delta\varphi_{\mathrm{disc}}(3)-1 = 40$ gives the integer floor $\lfloor\alpha_{\mathrm{fs}}^{-1}\rfloor = 97 + 40 = 137 = Q_\square(3) + \mathrm{mod\_bits}(3)$ and the two-/three-loop cuboctahedral spherical expansion
+  \begin{equation}
+    \label{eq:alpha-fs-137}
+    \alpha_{\mathrm{fs}}^{-1}(3) \;=\; 137 + \frac{9}{80\pi^3} + \frac{1}{15(2\pi)^4} \;=\; 137.035\,999\,187\dots
+    \qquad (\text{CODATA-2022: } 137.035\,999\,177(21),\ 0.47\sigma).
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\section{Formal Verification in Lean~4}
+All theorems above are formally verified in \texttt{lean/MtCarrier/} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} and \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+
+\begin{thebibliography}{9}
+\bibitem{Malcev1973}
+A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, 1973 (Russian original: Nauka, Moscow, 1970).
+\bibitem{LandauLifshitz}
+L.\,D.~Landau and E.\,M.~Lifshitz, \emph{Course of Theoretical Physics}, Vols.~1--4, Pergamon Press / Butterworth-Heinemann.
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}
