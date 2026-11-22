@@ -1262,11 +1262,11 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
        (if x % normSqEdge d == 0 then
           eqNatBool x64 0 &&
           eqNatBool (x8 % halfPeriod d) 0 &&
-          eqNatBool (x6 % kpConst d) 0
+          eqNatBool (x6 % (quarterPeriod d / normSqEdge d)) 0
         else
           eqNatBool (x64 % halfPeriod d) unitStep &&
           eqNatBool (x32 % quarterPeriod d) unitStep &&
-          eqNatBool (x16 % kpConst d) unitStep &&
+          eqNatBool (x16 % (quarterPeriod d / normSqEdge d)) unitStep &&
           eqNatBool (x8 % (normSqEdge d ^ dOutEdge d)) unitStep &&
           eqNatBool (x4 % (dInSquare * dInSquare)) unitStep &&
           eqNatBool (x2 % nTriangles d) unitStep)))))
