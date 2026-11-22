@@ -1002,7 +1002,7 @@ def checkPillaiRecursiveDescentFareyBezoutAndPadeWronskianBool (d : Nat) : Bool 
   let phi3Coll : Int := uColl * uColl + uColl * vColl + vColl * vColl
   let cubicCollLhs : Int := (dInSquare : Int) * iColl1 * phi3Coll
   let cubicCollRhs : Int := (ypTest ^ 3) * (cLock2 ^ 3) * (uPade + vPade) - cpTest * (yColl1 ^ 3)
-  -- 5b. Internal Bone-Bézout Gauss-Shell Inversion Matrix K_Bezout = [[w^3, -Z^3], [v^3, -Y^3]]
+  -- 5b. Internal Shaft-Bézout Gauss-Shell Inversion Matrix K_Bezout = [[w^3, -Z^3], [v^3, -Y^3]]
   -- inside a SINGLE solution `4*2^3 - 1*3^3 = 5` (`Z=2, Y=3 -> w=1, v=2`, `Z*v - Y*w = +1`, `A' = 4*1^3 - 1*2^3 = -4`):
   -- `det(K_Bezout) = (Z*v)^3 - (Y*w)^3 = 4^3 - 3^3 = 37`, `w^3*A - Z^3*A' = Bt * 37 = 37`, `v^3*A - Y^3*A' = Ct * 37 = 148`:
   let wBez2     : Int := (unitStep : Int)                                          -- w_3 = 1
@@ -1055,7 +1055,7 @@ Pillai-`abc` skeletal matrix `M_3 = [[c2, a2, b2], [a1, c1, 0], [b1, 0, c1]]` (`
 triangle-defect identity `(a1 + b1)(c2 - a2 - b2) + c2(c1 - a1 - b1) = -(a1 b2 + a2 b1)`. -/
 def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :=
   -- 1. Skeletal abc-triple radical floor decomposition `A_k*X_k^k + B_k*Y_k^k = C_k*Z_k^k` with `A_k*B_k*C_k ≤ rad(ABC)^(k-1)`
-  -- on `3 + 5^3 = 2^7 = 128` (`rad = 2*3*5 = 30`): at floor k=3, `3*1^3 + 1*5^3 = 2*4^3 = 128`, weights product `3*1*2 = 6 ≤ 30^2 = 900`, bone gap `5 - 4 = 1`
+  -- on `3 + 5^3 = 2^7 = 128` (`rad = 2*3*5 = 30`): at floor k=3, `3*1^3 + 1*5^3 = 2*4^3 = 128`, weights product `3*1*2 = 6 ≤ 30^2 = 900`, shaft gap `5 - 4 = 1`
   let abcA3  : Nat := d
   let abcB3  : Nat := unitStep
   let abcC3  : Nat := normSqEdge d
@@ -1179,21 +1179,21 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
    eqNatBool ((base13 * base13) + (base7 ^ d)) (nRing d)) &&
   -- 8. Planetary Differential 3D Orthogonal Frame F_3 = (r, omega, r x omega), Gear-Slip Brahmagupta Law,
   -- Checkerboard Hankel-Vandermonde Differential Matrix H_3 (S_1 = S_3 = 0, -det H_3 = 6 * 12^2 = 864),
-  -- and Three Lagrange-Vandermonde Bone-Gap Projectors on `3 + 5^3 = 2^7 = 128`:
+  -- and Three Lagrange-Vandermonde Shaft-Gap Projectors on `3 + 5^3 = 2^7 = 128`:
   (let mBC : Int := m3_b1 * m3_c2 + m3_b2 * m3_c1                                 -- 160 + 100 = 260
    let mCA : Int := m3_c1 * m3_a2 + m3_c2 * m3_a1                                 -- 12 + 32 = 44 = C_III!
    let sAB : Int := m3_a1 * m3_b2 - m3_a2 * m3_b1                                 -- 25 - 15 = 10
    let mAB : Int := m3_a1 * m3_b2 + m3_a2 * m3_b1                                 -- 25 + 15 = 40 = k_IV!
    let rNormSq : Int := m3_a1 * m3_a1 + m3_b1 * m3_b1 + m3_c1 * m3_c1             -- 1 + 25 + 16 = 42 = S_2(3)!
    let wNormSq : Int := m3_a2 * m3_a2 + m3_b2 * m3_b2 + m3_c2 * m3_c2             -- 9 + 625 + 1024 = 1658
-   let xBone : Int := (unitStep : Int)                                            -- X = 1
-   let yBone : Int := (dOutEdge d : Int)                                          -- Y = 5
-   let zBone : Int := (dInSquare : Int)                                           -- Z = 4
+   let xShaft : Int := (unitStep : Int)                                            -- X = 1
+   let yShaft : Int := (dOutEdge d : Int)                                          -- Y = 5
+   let zShaft : Int := (dInSquare : Int)                                           -- Z = 4
    let s0Mom : Int := (abcA3 : Int) + (abcB3 : Int) - (abcC3 : Int)               -- 3 + 1 - 2 = 2
-   let s1Mom : Int := (abcA3 : Int) * xBone + (abcB3 : Int) * yBone - (abcC3 : Int) * zBone -- 3 + 5 - 8 = 0!
-   let s2Mom : Int := (abcA3 : Int) * (xBone ^ 2) + (abcB3 : Int) * (yBone ^ 2) - (abcC3 : Int) * (zBone ^ 2) -- -4
-   let s4Mom : Int := (abcA3 : Int) * (xBone ^ 4) + (abcB3 : Int) * (yBone ^ 4) - (abcC3 : Int) * (zBone ^ 4) -- 116
-   let vand3 : Int := (xBone - yBone) * (yBone - zBone) * (zBone - xBone)         -- -12 = -|V(O_2)|!
+   let s1Mom : Int := (abcA3 : Int) * xShaft + (abcB3 : Int) * yShaft - (abcC3 : Int) * zShaft -- 3 + 5 - 8 = 0!
+   let s2Mom : Int := (abcA3 : Int) * (xShaft ^ 2) + (abcB3 : Int) * (yShaft ^ 2) - (abcC3 : Int) * (zShaft ^ 2) -- -4
+   let s4Mom : Int := (abcA3 : Int) * (xShaft ^ 4) + (abcB3 : Int) * (yShaft ^ 4) - (abcC3 : Int) * (zShaft ^ 4) -- 116
+   let vand3 : Int := (xShaft - yShaft) * (yShaft - zShaft) * (zShaft - xShaft)   -- -12 = -|V(O_2)|!
    let detH3Neg : Int := (s2Mom ^ 3) - s4Mom * (s0Mom * s2Mom - s1Mom * s1Mom)    -- 864 = 6 * 12^2
    eqIntBool (m3_a1 * m3_a2 + m3_b1 * m3_b2 - m3_c1 * m3_c2) 0 &&
    eqIntBool sAB ((normSqEdge d * dOutEdge d : Nat) : Int) &&
@@ -1205,40 +1205,40 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
    eqIntBool s1Mom 0 &&
    eqIntBool vand3 (-(nVertices d : Int)) &&
    eqIntBool detH3Neg ((nSquares d * nVertices d * nVertices d : Nat) : Int) &&
-   eqIntBool (s1Mom * yBone * zBone - s2Mom * (yBone + zBone)) ((abcA3 : Int) * xBone * (xBone - yBone) * (xBone - zBone)) &&
-   eqIntBool (s1Mom * zBone * xBone - s2Mom * (zBone + xBone)) ((abcB3 : Int) * yBone * (yBone - xBone) * (yBone - zBone)) &&
-   eqIntBool (s2Mom * (xBone + yBone) - s1Mom * xBone * yBone) ((abcC3 : Int) * zBone * (zBone - xBone) * (zBone - yBone)) &&
+   eqIntBool (s1Mom * yShaft * zShaft - s2Mom * (yShaft + zShaft)) ((abcA3 : Int) * xShaft * (xShaft - yShaft) * (xShaft - zShaft)) &&
+   eqIntBool (s1Mom * zShaft * xShaft - s2Mom * (zShaft + xShaft)) ((abcB3 : Int) * yShaft * (yShaft - xShaft) * (yShaft - zShaft)) &&
+   eqIntBool (s2Mom * (xShaft + yShaft) - s1Mom * xShaft * yShaft) ((abcC3 : Int) * zShaft * (zShaft - xShaft) * (zShaft - yShaft)) &&
    -- 9. Unimodular 2x3 Conjugate Bézout Partner Matrix B_{2x3} = [[A, B, C], [u, v, w]] (`u + v = w`, all three 2x2 minors = +1):
    -- On Lock II `(5, 27, 32)`: `(u, v, w) = (2, 11, 13)` (matching Jordan Lock II diagonal `(-13, 11)`);
-   -- On Lock IV top `(3, 125, 128)`: `(u, v, w) = (1, 42, 43)` (`v = 42 = ||r||_2^2 = S_2(3)`), while the bone-Bézout parent
+   -- On Lock IV top `(3, 125, 128)`: `(u, v, w) = (1, 42, 43)` (`v = 42 = ||r||_2^2 = S_2(3)`), while the shaft-Bézout parent
    -- `(w_3, v_3) = (3, 4)` of `(Z_3, Y_3) = (4, 5)` (`4*4 - 5*3 = +1`) has cubic gap `A' = 2*3^3 - 1*4^3 = -10 = -S_AB`
    -- and level-1 Padé collision invariant `I_1 = (C + 2B) - A*Y_3*w_3 = 378 - 45 = 333 = 9 * 37`!
    (let uBez4 : Int := (unitStep : Int)                                            -- u = 1
     let vBez4 : Int := rNormSq                                                     -- v = 42 = ||r||_2^2
     let wBez4 : Int := uBez4 + vBez4                                               -- w = 43
-    let wBone4 : Int := (d : Int)                                                  -- w_3 = 3
-    let vBone4 : Int := (dInSquare : Int)                                          -- v_3 = 4
-    let apBone4 : Int := (abcC3 : Int) * (wBone4 ^ 3) - (abcB3 : Int) * (vBone4 ^ 3) -- 54 - 64 = -10 = -sAB
-    let i1Bone4 : Int := ((quarterPeriod d : Int) + (normSqEdge d : Int) * min3_B) - min3_A * yBone * wBone4 -- 378 - 45 = 333 = 9 * 37
+    let wShaft4 : Int := (d : Int)                                                 -- w_3 = 3
+    let vShaft4 : Int := (dInSquare : Int)                                         -- v_3 = 4
+    let apShaft4 : Int := (abcC3 : Int) * (wShaft4 ^ 3) - (abcB3 : Int) * (vShaft4 ^ 3) -- 54 - 64 = -10 = -sAB
+    let i1Shaft4 : Int := ((quarterPeriod d : Int) + (normSqEdge d : Int) * min3_B) - min3_A * yShaft * wShaft4 -- 378 - 45 = 333 = 9 * 37
     eqIntBool (min3_A * vBez4 - min3_B * uBez4) (unitStep : Int) &&
     eqIntBool (min3_A * wBez4 - (quarterPeriod d : Int) * uBez4) (unitStep : Int) &&
     eqIntBool ((quarterPeriod d : Int) * vBez4 - min3_B * wBez4) (unitStep : Int) &&
-    eqIntBool (zBone * vBone4 - yBone * wBone4) (unitStep : Int) &&
-    eqIntBool apBone4 (-sAB) &&
-    eqIntBool i1Bone4 ((nineFoldDivisor d : Int) * (((dInSquare ^ 3) - (d ^ 3) : Nat) : Int)) &&
+    eqIntBool (zShaft * vShaft4 - yShaft * wShaft4) (unitStep : Int) &&
+    eqIntBool apShaft4 (-sAB) &&
+    eqIntBool i1Shaft4 ((nineFoldDivisor d : Int) * (((dInSquare ^ 3) - (d ^ 3) : Nat) : Int)) &&
     -- 10. Integer Mason-Stothers-Bézout Derivative Triple (alpha, beta, gamma) = (1, 7, 11) on `3*1^3 + 1*5^3 = 2*4^3 = 128`:
     -- `A* + B* = C*` (`1 + 175 = 176`), Wronskian `W* = 3*175 - 125*1 = 400 = 1^2 * 5^2 * 4^2`,
     -- and 3x3 fourth-power determinant `-det(W_MS) = 1^4 + 5^4 + 4^4 = 1 + 625 + 256 = 882 = 2 * 21^2 = 6 * 147`!
     (let alphaMS : Int := (unitStep : Int)                                          -- 1
      let betaMS  : Int := ((nTriangles d - unitStep : Nat) : Int)                   -- 7
      let gammaMS : Int := ((nVertices d - unitStep : Nat) : Int)                    -- 11
-     let aStar4  : Int := (xBone * xBone) * alphaMS                                 -- 1
-     let bStar4  : Int := (yBone * yBone) * betaMS                                  -- 175 = 7 * 25
-     let cStar4  : Int := (zBone * zBone) * gammaMS                                 -- 176 = 11 * 16
+     let aStar4  : Int := (xShaft * xShaft) * alphaMS                               -- 1
+     let bStar4  : Int := (yShaft * yShaft) * betaMS                                -- 175 = 7 * 25
+     let cStar4  : Int := (zShaft * zShaft) * gammaMS                               -- 176 = 11 * 16
      let wStar4  : Int := min3_A * bStar4 - min3_B * aStar4                         -- 3*175 - 125 = 400 = 20^2
-     let detWMS4 : Int := (xBone ^ 4) + (yBone ^ 4) + (zBone ^ 4)                   -- 1 + 625 + 256 = 882 = 2 * 21^2!
+     let detWMS4 : Int := (xShaft ^ 4) + (yShaft ^ 4) + (zShaft ^ 4)                -- 1 + 625 + 256 = 882 = 2 * 21^2!
      eqIntBool (aStar4 + bStar4) cStar4 &&
-     eqIntBool wStar4 ((xBone * xBone) * (yBone * yBone) * (zBone * zBone)) &&
+     eqIntBool wStar4 ((xShaft * xShaft) * (yShaft * yShaft) * (zShaft * zShaft)) &&
      eqIntBool detWMS4 (((normSqEdge d * ((d * (nTriangles d - unitStep)) ^ 2) : Nat) : Int)) &&
      -- 11. Universal M-Carrier Z_512 Base-Collapse Hierarchy across all 512 residue classes x in [0, 511]:
      -- (a) At floor k = 128 = Q_□(3): `(x^128) % 512 == x % 2` in `{0, 1}` (2 phases total, blocking 509/512 Pillai gaps C mod 512 for ALL bases x, y in Z!);
@@ -1291,11 +1291,11 @@ set_option maxHeartbeats 1600000
 
 /-- **Theorem 9 (Universal `∀`-Quantified Algebraic Laws of the Planetary Differential `F₃`,
 Gear-Slip Brahmagupta Law, Three-Level Descent & Hankel–Wronskian Identity, Conjugate Bézout
-Partner Matrix `B_{2×3}`, Bone-Bézout Gauss-Shell Cube Inversion `K_Bezout`, Lagrange–Vandermonde
-Bone-Gap Projectors, Three-Channel `3 × 3` Padé Trace Law, and Root-Free Cramer Lower-Bound Law
+Partner Matrix `B_{2×3}`, Shaft-Bézout Gauss-Shell Cube Inversion `K_Bezout`, Lagrange–Vandermonde
+Shaft-Gap Projectors, Three-Channel `3 × 3` Padé Trace Law, and Root-Free Cramer Lower-Bound Law
 across all integers `ℤ`)**: -/
 theorem thm9_universal_pillai_abc_differential_bezout_and_pade_laws
-    (A B u v a1 a2 b1 b2 c1 c2 At Bt Ct X Y Z wBone vBone : Int) :
+    (A B u v a1 a2 b1 b2 c1 c2 At Bt Ct X Y Z wShaft vShaft : Int) :
     let C := A + B
     let w := u + v
     -- 1. Unimodular 2x3 conjugate Bézout partner matrix minors equality:
@@ -1318,19 +1318,19 @@ theorem thm9_universal_pillai_abc_differential_bezout_and_pade_laws
      let C2 := At - Bt
      (C0 - (X + Y) * C1 + X * Y * C2 = 0) ∧
      (C1 * C1 - C0 * C2 = At * Bt * (X - Y) * (X - Y))) ∧
-    -- 5. Three Lagrange-Vandermonde bone-gap projectors on the cubic floor:
+    -- 5. Three Lagrange-Vandermonde shaft-gap projectors on the cubic floor:
     (let S1 := At * X + Bt * Y - Ct * Z
      let S2 := At * X * X + Bt * Y * Y - Ct * Z * Z
      let S3 := At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z
      (S1 * Y * Z - S2 * (Y + Z) + S3 = At * X * (X - Y) * (X - Z)) ∧
      (S1 * Z * X - S2 * (Z + X) + S3 = Bt * Y * (Y - X) * (Y - Z)) ∧
      (S2 * (X + Y) - S1 * X * Y - S3 = Ct * Z * (Z - X) * (Z - Y))) ∧
-    -- 6. Bone-Bézout Gauss-shell cube inversion matrix K_Bezout:
+    -- 6. Shaft-Bézout Gauss-shell cube inversion matrix K_Bezout:
     (let gapA  := Ct * Z * Z * Z - Bt * Y * Y * Y
-     let gapAp := Ct * wBone * wBone * wBone - Bt * vBone * vBone * vBone
-     let phiB  := (Z * vBone) * (Z * vBone) * (Z * vBone) - (Y * wBone) * (Y * wBone) * (Y * wBone)
-     (wBone * wBone * wBone * gapA - Z * Z * Z * gapAp = Bt * phiB) ∧
-     (vBone * vBone * vBone * gapA - Y * Y * Y * gapAp = Ct * phiB)) ∧
+     let gapAp := Ct * wShaft * wShaft * wShaft - Bt * vShaft * vShaft * vShaft
+     let phiB  := (Z * vShaft) * (Z * vShaft) * (Z * vShaft) - (Y * wShaft) * (Y * wShaft) * (Y * wShaft)
+     (wShaft * wShaft * wShaft * gapA - Z * Z * Z * gapAp = Bt * phiB) ∧
+     (vShaft * vShaft * vShaft * gapA - Y * Y * Y * gapAp = Ct * phiB)) ∧
     -- 7. Trace law of the three-channel 3x3 cubic Padé-Thue matrix P_3(A, B, A+B):
     (A * A * (B + C) + B * B * (A + C) + C * C * (A - B) = A * C * (A + C)) ∧
     -- 8. Root-free Padé-Thue Cramer lower-bound identity at N=0..1 for any (U, V, a, b):
@@ -1397,7 +1397,7 @@ theorem thm11_universal_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
 /-- **Theorem 12 (Universal `∀`-Quantified Reverse Padé–Bézout Cubic Annihilation Law and
 Explicit Diophantine Upper-Bound Inequalities `Z³ I₁ ≤ B̃ (Y w + Z v)` & `Y³ I₁ ≤ C̃ (Y w + Z v)`
 across all integers `ℤ`)**:
-When the level-1 Padé approximation is built at the bone-Bézout parent `(w, v)` (`I₀ = Y w - Z v = 1`)
+When the level-1 Padé approximation is built at the shaft-Bézout parent `(w, v)` (`I₀ = Y w - Z v = 1`)
 and evaluated at the solution `(Z, Y)` (`A = C̃ Z³ - B̃ Y³`), all cubic and quadratic terms in `(Y w, Z v)`
 annihilate identically, bounding `Z³ I₁` and `Y³ I₁` directly by the linear radical-weighted form
 `B̃ (Y w + Z v)` and `C̃ (Y w + Z v)` (attaining `I₁ = +3 = d` on Reyssat's record `abc`-triple `2 + 3¹⁰·109 = 23⁵`). -/
@@ -1477,7 +1477,7 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     omega
 
 /-- **Theorem 13 (Universal `∀`-Quantified Integer Mason–Stothers–Bézout Cubic Wronskian Law
-`W* = A B* - B A* = k X² Y² Z²`, Derivative Triple `A* + B* = C*`, Three Bone-Square Minor Laws
+`W* = A B* - B A* = k X² Y² Z²`, Derivative Triple `A* + B* = C*`, Three Shaft-Square Minor Laws
 `(Z², Y², X²)`, `3 × 3` Fourth-Power Determinant `-det W_MS = k (X⁴ + Y⁴ + Z⁴)`, Degree-Lowering
 Clash Identity `k A = Ã X (C̃ Z β - B̃ Y γ)`, Bilateral Cramer Convergence Law
 `D_clash Z = B̃ γ + w X²` & `D_clash Y = C̃ β + v X²`, and Explicit Derivative Bounds across all integers `ℤ`)**: -/
@@ -1580,7 +1580,7 @@ theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_
 /-- **Theorem 14 (Master End-to-End Implication Chain `→` for the Pillai and `abc` Bilateral
 Convergence System across all integers `ℤ`)**:
 Given any cubic-floor differential triple `hABC : Ã X³ + B̃ Y³ - C̃ Z³ = 0` (`A + B = C`),
-its bone-Bézout coprimality relation `hBezBone : Y w - Z v = 1` (`gcd(Y, Z) = 1`), and its
+its shaft-Bézout coprimality relation `hBezShaft : Y w - Z v = 1` (`gcd(Y, Z) = 1`), and its
 Mason–Stothers–Bézout turn coprimality relation `hBezMS : Ã X v₀ - B̃ Y u₀ = 1` (`gcd(Ã X, B̃ Y) = 1`),
 the following five-link logical chain holds simultaneously via direct implication `→`:
 1. **Link 1 (Mason–Stothers Derivative Balance & Exact Wronskian Factorization):**
@@ -1597,7 +1597,7 @@ the following five-link logical chain holds simultaneously via direct implicatio
 theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     (At Bt Ct X Y Z u0 v0 t w v : Int)
     (hABC : At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z = 0)
-    (hBezBone : Y * w - Z * v = 1)
+    (hBezShaft : Y * w - Z * v = 1)
     (hBezMS : At * X * v0 - Bt * Y * u0 = 1) :
     let wx := At * X
     let wy := Bt * Y
@@ -1660,13 +1660,13 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
   · rw [hABC] at hDeriv; omega
   · rw [hBezMS] at hWronsk; simp only [Int.one_mul] at hWronsk; exact hWronsk
   · rw [hBezMS, hABC] at hDet4; omega
-  · rw [hBezBone, hBezMS, hABC] at hClashZ
+  · rw [hBezShaft, hBezMS, hABC] at hClashZ
     simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.sub_zero] at hClashZ
     omega
-  · rw [hBezBone, hBezMS, hABC] at hClashY
+  · rw [hBezShaft, hBezMS, hABC] at hClashY
     simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.sub_zero] at hClashY
     omega
-  · rw [hBezBone] at hPadeZ
+  · rw [hBezShaft] at hPadeZ
     rw [hBezMS, hABC] at hMinX
     have hX2 : Ct * Z * (v0 * (Z * Z) + t * (Bt * Y)) -
                Bt * Y * (X * X * u0 + Y * Y * v0 + t * (Ct * Z)) = X * X := by omega
@@ -1682,11 +1682,11 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     rw [hWronsk]
     simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   · intro hPos
-    rw [hBezBone, hABC] at hBoundC
+    rw [hBezShaft, hABC] at hBoundC
     simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.zero_mul, Int.add_zero] at hBoundC
     omega
   · intro hPos
-    have hNeg := hNegZ hBezBone hPos
+    have hNeg := hNegZ hBezShaft hPos
     have hA : Ct * Z * Z * Z - Bt * Y * Y * Y = At * X * X * X := by omega
     rw [hA] at hNeg
     exact hNeg
