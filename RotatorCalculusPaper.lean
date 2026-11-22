@@ -919,6 +919,20 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   let quotK2Y : Int := (((dOutEdge d * dInSquare * dInSquare : Nat) : Int) - cLock3) / (nineFoldDivisor d : Int)
   let quotK3X : Int := (cLock3 - ((d * nTriangles d : Nat) : Int)) / (dOutEdge d : Int)
   let quotK3Y : Int := (((nTriangles d : Nat) : Int) - cLock3) / (d : Int)
+  -- 7. Padé-Thue Wronskian tower on the cubic floor k = 3 (U = 32, V = 27, C = 5):
+  -- W_0 = -1*C, W_1 = -4*C^3, W_2 = -7*C^5 with multipliers (1, 4, 7), and N=3 coefficient sum 2 + 30 + 42 + 7 = 81 = 3^4
+  let uPade  : Int := (normSqEdge d ^ dOutEdge d : Nat)
+  let vPade  : Int := (d ^ d : Nat)
+  let pade1P : Int := uPade + (normSqEdge d : Int) * vPade
+  let pade1Q : Int := (normSqEdge d : Int) * uPade + vPade
+  let pade2P : Int := (dOutEdge d : Int) * uPade * uPade + ((dOutEdge d * (nTriangles d - unitStep) : Nat) : Int) * uPade * vPade + ((nSquares d + nTriangles d : Nat) : Int) * vPade * vPade
+  let pade2Q : Int := ((nSquares d + nTriangles d : Nat) : Int) * uPade * uPade + ((dOutEdge d * (nTriangles d - unitStep) : Nat) : Int) * uPade * vPade + (dOutEdge d : Int) * vPade * vPade
+  let pade3P : Int := (normSqEdge d : Int) * (uPade ^ 3) + ((normSqEdge d * d * dOutEdge d : Nat) : Int) * (uPade ^ 2) * vPade + ((nSquares d * (nTriangles d - unitStep) : Nat) : Int) * uPade * (vPade ^ 2) + ((nTriangles d - unitStep : Nat) : Int) * (vPade ^ 3)
+  let pade3Q : Int := ((nTriangles d - unitStep : Nat) : Int) * (uPade ^ 3) + ((nSquares d * (nTriangles d - unitStep) : Nat) : Int) * (uPade ^ 2) * vPade + ((normSqEdge d * d * dOutEdge d : Nat) : Int) * uPade * (vPade ^ 2) + (normSqEdge d : Int) * (vPade ^ 3)
+  let wPade0 : Int := pade1P - pade1Q
+  let wPade1 : Int := pade1Q * pade2P - pade1P * pade2Q
+  let wPade2 : Int := pade2Q * pade3P - pade2P * pade3Q
+  let padeS3 : Nat := normSqEdge d + normSqEdge d * d * dOutEdge d + nSquares d * (nTriangles d - unitStep) + (nTriangles d - unitStep)
   eqIntBool detP1 (unitStep : Int) &&
   eqIntBool trP1 (-(normSqEdge d : Int)) &&
   nilSq1 &&
@@ -950,7 +964,11 @@ def checkPillaiSkeletalMatrixAndParabolicSl2TriptychBool (d : Nat) : Bool :=
   eqIntBool quotK2X (nVertices d : Int) &&
   eqIntBool quotK2Y (dInSquare : Int) &&
   eqIntBool quotK3X (dInSquare : Int) &&
-  eqIntBool quotK3Y (-(nVertices d : Int))
+  eqIntBool quotK3Y (-(nVertices d : Int)) &&
+  eqIntBool wPade0 (-((unitStep : Int) * cLock2)) &&
+  eqIntBool wPade1 (-((dInSquare : Int) * (cLock2 ^ 3))) &&
+  eqIntBool wPade2 (-(((nTriangles d - unitStep : Nat) : Int) * (cLock2 ^ 5))) &&
+  eqNatBool padeS3 (nineFoldDivisor d * nineFoldDivisor d)
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Parabolic `SL₂(ℤ)` Jordan Lock Triptych `k ∈ {6, 12, 15}`, Three-Level Recursive Descent Invariant, and Binomial Floor Divisibility Reciprocity)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
