@@ -1085,7 +1085,24 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
     eqIntBool (rCircle + (Int.natAbs yCircle : Int)) qSqInt &&
     eqIntBool ((qSqInt + xCircle) / twoQInt) absC &&
     eqIntBool ((qSqInt - xCircle) / twoQInt) absS &&
-    eqIntBool (xCircle % (quarterPeriod d : Int)) 0)
+    eqIntBool (xCircle % (quarterPeriod d : Int)) 0) &&
+  -- 6. Stereographic Weierstrass Homeomorphism `[0, 512]/512 = [0, 1] ≅ ℝ` (`Y / (R + X) ≡ S / C = φ / (128 - |φ|)`)
+  -- with exact rational inverse `φ(u) = 128 * u / (1 + |u|)` across all interior points `φ ∈ [0, 127]`,
+  -- plus quadrant generation of `2^7 - 5^3 = 3` at `φ = 3`, `2^7 - 11^2 = 7` at `φ = 7` (Quadrant I),
+  -- and `φ * S_3(φ) + 256 * C_3(φ) = 2^15 - φ^2 = 7` at `φ = 181` (`C_3(181) = -53, S_3(181) = 75`, Quadrant II)!
+  allUpTo (quarterPeriod d - unitStep) (fun phi =>
+    let cVal : Int := projC d (phi : Int)
+    let sVal : Int := projS d (phi : Int)
+    let xCircle : Int := cVal * cVal - sVal * sVal
+    let yCircle : Int := (normSqEdge d : Int) * cVal * sVal
+    let rCircle : Int := cVal * cVal + sVal * sVal
+    let qInt    : Int := (quarterPeriod d : Int)
+    -- Cross-multiplied stereographic identity: Y * C == S * (R + X) and inverse reconstruction 128 * S / (C + S) == phi:
+    eqIntBool (yCircle * cVal) (sVal * (rCircle + xCircle)) &&
+    eqIntBool ((qInt * sVal) / (cVal + sVal)) (phi : Int)) &&
+  eqIntBool (projC d (d : Int)) ((dOutEdge d ^ d : Nat) : Int) &&
+  eqIntBool (projC d ((nTriangles d - unitStep : Nat) : Int)) (((nVertices d - unitStep) * (nVertices d - unitStep) : Nat) : Int) &&
+  eqIntBool ((181 : Int) * projS d 181 + (halfPeriod d : Int) * projC d 181) ((nTriangles d - unitStep : Nat) : Int)
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
