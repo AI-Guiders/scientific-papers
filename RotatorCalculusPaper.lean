@@ -1042,6 +1042,14 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
   let nilA_67 : Nat := unitStep * (u7 - nSquares d) * (u7 * nSquares d - unitStep)                     -- 1*1*41 = 41
   let nilB_67 : Nat := u7 * (nSquares d - unitStep) * (unitStep * nSquares d - unitStep)               -- 7*5*5 = 175
   let nilC_67 : Nat := nSquares d * (u7 - unitStep) * (unitStep * u7 - unitStep)                       -- 6*6*6 = 216 = 6^3
+  -- 4. Dual 2x2 vertical / 3x3 horizontal cone invariants `I_vert ± I_horiz` and Brahmagupta-Fibonacci
+  -- double Pythagorean lock on Lock III (`5^3 - 3^4 = 44 = 4 * 11`):
+  -- `(3^3 - 3^1)^2 + (11 - 4)^2 = 24^2 + 7^2 = 15^2 + 20^2 = k_III^2 + (5^2 - 5^1)^2 = 25^2 = 625`!
+  let dyLock3 : Nat := (d ^ d) - d                                                                     -- 27 - 3 = 24
+  let dCLock3 : Nat := (nVertices d - unitStep) - dInSquare                                            -- 11 - 4 = 7
+  let kLock3  : Nat := d * dOutEdge d                                                                  -- 15
+  let dxLock3 : Nat := (dOutEdge d * dOutEdge d) - dOutEdge d                                          -- 25 - 5 = 20
+  let hypLock3Sq : Nat := (dOutEdge d * dOutEdge d) * (dOutEdge d * dOutEdge d)                        -- 25^2 = 625
   eqNatBool abcLhs (quarterPeriod d) &&
   eqNatBool abcRhs (quarterPeriod d) &&
   eqNatBool abcW3 (nSquares d) &&
@@ -1057,7 +1065,9 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
   eqNatBool nilC_25 (normSqEdge d ^ dOutEdge d) &&
   eqNatBool (nilA_67 + nilB_67) nilC_67 &&
   eqNatBool nilA_67 (dInSquare * dInSquare + dOutEdge d * dOutEdge d) &&
-  eqNatBool nilC_67 (nSquares d ^ d)
+  eqNatBool nilC_67 (nSquares d ^ d) &&
+  eqNatBool (dyLock3 * dyLock3 + dCLock3 * dCLock3) hypLock3Sq &&
+  eqNatBool (kLock3 * kLock3 + dxLock3 * dxLock3) hypLock3Sq
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
