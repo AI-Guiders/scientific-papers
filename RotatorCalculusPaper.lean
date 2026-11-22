@@ -1262,11 +1262,11 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
        (if x % normSqEdge d == 0 then
           eqNatBool x64 0 &&
           eqNatBool (x8 % halfPeriod d) 0 &&
-          eqNatBool (x6 % stationaryMantissa d) 0
+          eqNatBool (x6 % kpConst d) 0
         else
           eqNatBool (x64 % halfPeriod d) unitStep &&
           eqNatBool (x32 % quarterPeriod d) unitStep &&
-          eqNatBool (x16 % stationaryMantissa d) unitStep &&
+          eqNatBool (x16 % kpConst d) unitStep &&
           eqNatBool (x8 % (normSqEdge d ^ dOutEdge d)) unitStep &&
           eqNatBool (x4 % (dInSquare * dInSquare)) unitStep &&
           eqNatBool (x2 % nTriangles d) unitStep)))))
@@ -1793,14 +1793,17 @@ theorem thm16_universal_z512_quarter_ring_collapse_and_radical_weight_lock
     (rX = 1 → rY = 1 → rZ = 0 → 0 < At + Bt → At + Bt < 512 → False) ∧
     (rX = 0 → rY = 1 → rZ = 1 → Ct ≠ Bt → Ct - Bt ≥ 512 ∨ Bt - Ct ≥ 512) := by
   have hMod : At * rX + Bt * rY - Ct * rZ = 512 * (Ct * qZ - At * qX - Bt * qY) := by
-    simp only [Int.mul_add, Int.mul_sub] at hFloor128 ⊢
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm] at hFloor128 ⊢
     omega
   refine ⟨hMod, ?_, ?_⟩
   · intro hrX hrY hrZ hPos hLt
     rw [hrX, hrY, hrZ] at hMod
+    simp only [Int.mul_one, Int.mul_zero, Int.sub_zero] at hMod
     omega
   · intro hrX hrY hrZ hNe
     rw [hrX, hrY, hrZ] at hMod
+    simp only [Int.mul_one, Int.mul_zero, Int.zero_add] at hMod
     omega
 
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
