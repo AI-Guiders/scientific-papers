@@ -982,6 +982,26 @@ def checkPillaiRecursiveDescentFareyBezoutAndPadeWronskianBool (d : Nat) : Bool 
   let wPade1 : Int := pade1Q * pade2P - pade1P * pade2Q
   let wPade2 : Int := pade2Q * pade3P - pade2P * pade3Q
   let padeS3 : Nat := normSqEdge d + normSqEdge d * d * dOutEdge d + nSquares d * (nTriangles d - unitStep) + (nTriangles d - unitStep)
+  -- 5. Root-free Padé-Thue 9-cell collision identities on Lock II cubic floor `4*X^3 - Y^3 = 5` (`At=4, Bt=1, X=2, Y=3, C=5`):
+  -- tested against a second point `(X', Y') = (4, 5)` (`C' = 4*4^3 - 5^3 = 256 - 125 = 131`):
+  -- (a) Cramer Wronskian lower-bound law: `Y_1 * I_0 - Y_0 * I_1 = 1 * X * Y * Y' * C = 30 * Y' = 150`
+  -- (b) Root-free cubic upper-bound law: `At * I_1 * Phi_3(Y'*X_1, X'*Y_1) = Y'^3 * C^3 * (U + V) - C' * Y_1^3`
+  let xColl0 : Int := (normSqEdge d : Int)                                         -- X_0 = 2
+  let yColl0 : Int := (d : Int)                                                    -- Y_0 = 3
+  let xColl1 : Int := xColl0 * pade1P                                              -- X_1 = 2 * 86 = 172
+  let yColl1 : Int := yColl0 * pade1Q                                              -- Y_1 = 3 * 91 = 273
+  let xpTest : Int := (dInSquare : Int)                                            -- X' = 4
+  let ypTest : Int := (dOutEdge d : Int)                                           -- Y' = 5
+  let cpTest : Int := (dInSquare : Int) * (xpTest ^ 3) - (ypTest ^ 3)              -- 4*64 - 125 = 131
+  let iColl0 : Int := ypTest * xColl0 - xpTest * yColl0                            -- 5*2 - 4*3 = -2
+  let iColl1 : Int := ypTest * xColl1 - xpTest * yColl1                            -- 5*172 - 4*273 = 860 - 1092 = -232
+  let cramerLhs0 : Int := yColl1 * iColl0 - yColl0 * iColl1                        -- 273*(-2) - 3*(-232) = -546 + 696 = 150
+  let cramerRhs0 : Int := xColl0 * yColl0 * ypTest * cLock2                        -- 2 * 3 * 5 * 5 = 150
+  let uColl  : Int := ypTest * xColl1
+  let vColl  : Int := xpTest * yColl1
+  let phi3Coll : Int := uColl * uColl + uColl * vColl + vColl * vColl
+  let cubicCollLhs : Int := (dInSquare : Int) * iColl1 * phi3Coll
+  let cubicCollRhs : Int := (ypTest ^ 3) * (cLock2 ^ 3) * (uPade + vPade) - cpTest * (yColl1 ^ 3)
   eqIntBool detFarey2 (unitStep : Int) &&
   eqNatBool recX2_L recX2_R &&
   eqNatBool recY2_L recY2_R &&
@@ -996,7 +1016,9 @@ def checkPillaiRecursiveDescentFareyBezoutAndPadeWronskianBool (d : Nat) : Bool 
   eqIntBool wPade0 (-((unitStep : Int) * cLock2)) &&
   eqIntBool wPade1 (-((dInSquare : Int) * (cLock2 ^ 3))) &&
   eqIntBool wPade2 (-(((nTriangles d - unitStep : Nat) : Int) * (cLock2 ^ 5))) &&
-  eqNatBool padeS3 (nineFoldDivisor d * nineFoldDivisor d)
+  eqNatBool padeS3 (nineFoldDivisor d * nineFoldDivisor d) &&
+  eqIntBool cramerLhs0 cramerRhs0 &&
+  eqIntBool cubicCollLhs cubicCollRhs
 
 /-- **Theorem 8 verification:** Skeletal `abc`-triple radical floor decomposition
 `A_k X_k^k + B_k Y_k^k = C_k Z_k^k` with `A_k B_k C_k ≤ rad(ABC)^(k-1)`, unified bordered `3 × 3`
