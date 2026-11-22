@@ -158,5 +158,6 @@ Expected `#print axioms` output at the end of `RotatorCalculusPaper.lean`:
 'RotatorCalculusPaper.thm10_universal_root_free_cubic_pade_compression' depends on axioms: [propext, Quot.sound]
 'RotatorCalculusPaper.thm11_universal_cross_floor_wronskian_and_p3_kernel' depends on axioms: [propext, Quot.sound]
 'RotatorCalculusPaper.thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det' depends on axioms: [propext, Quot.sound]
 ```
 (`0 sorryAx`, `0 Classical.choice`).

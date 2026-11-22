@@ -1225,7 +1225,21 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
     eqIntBool ((quarterPeriod d : Int) * vBez4 - min3_B * wBez4) (unitStep : Int) &&
     eqIntBool (zBone * vBone4 - yBone * wBone4) (unitStep : Int) &&
     eqIntBool apBone4 (-sAB) &&
-    eqIntBool i1Bone4 ((nineFoldDivisor d : Int) * (((dInSquare ^ 3) - (d ^ 3) : Nat) : Int))))
+    eqIntBool i1Bone4 ((nineFoldDivisor d : Int) * (((dInSquare ^ 3) - (d ^ 3) : Nat) : Int)) &&
+    -- 10. Integer Mason-Stothers-Bézout Derivative Triple (alpha, beta, gamma) = (1, 7, 11) on `3*1^3 + 1*5^3 = 2*4^3 = 128`:
+    -- `A* + B* = C*` (`1 + 175 = 176`), Wronskian `W* = 3*175 - 125*1 = 400 = 1^2 * 5^2 * 4^2`,
+    -- and 3x3 fourth-power determinant `-det(W_MS) = 1^4 + 5^4 + 4^4 = 1 + 625 + 256 = 882 = 2 * 21^2 = 6 * 147`!
+    (let alphaMS : Int := (unitStep : Int)                                          -- 1
+     let betaMS  : Int := ((nTriangles d - unitStep : Nat) : Int)                   -- 7
+     let gammaMS : Int := ((nVertices d - unitStep : Nat) : Int)                    -- 11
+     let aStar4  : Int := (xBone * xBone) * alphaMS                                 -- 1
+     let bStar4  : Int := (yBone * yBone) * betaMS                                  -- 175 = 7 * 25
+     let cStar4  : Int := (zBone * zBone) * gammaMS                                 -- 176 = 11 * 16
+     let wStar4  : Int := min3_A * bStar4 - min3_B * aStar4                         -- 3*175 - 125 = 400 = 20^2
+     let detWMS4 : Int := (xBone ^ 4) + (yBone ^ 4) + (zBone ^ 4)                   -- 1 + 625 + 256 = 882 = 2 * 21^2!
+     eqIntBool (aStar4 + bStar4) cStar4 &&
+     eqIntBool wStar4 ((xBone * xBone) * (yBone * yBone) * (zBone * zBone)) &&
+     eqIntBool detWMS4 (((normSqEdge d * ((d * (nTriangles d - unitStep)) ^ 2) : Nat) : Int)))))
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
@@ -1432,6 +1446,80 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     simp only [Int.mul_one, Int.one_mul, Int.mul_neg] at h2 ⊢
     omega
 
+/-- **Theorem 13 (Universal `∀`-Quantified Integer Mason–Stothers–Bézout Cubic Wronskian Law
+`W* = A B* - B A* = k X² Y² Z²`, Derivative Triple `A* + B* = C*`, Three Bone-Square Minor Laws
+`(Z², Y², X²)`, `3 × 3` Fourth-Power Determinant `-det W_MS = k (X⁴ + Y⁴ + Z⁴)`, Degree-Lowering
+Clash Identity `k A = Ã X (C̃ Z β - B̃ Y γ)`, and Explicit Derivative Bounds across all integers `ℤ`)**: -/
+theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
+    (At Bt Ct X Y Z u0 v0 t : Int) :
+    let wx := At * X
+    let wy := Bt * Y
+    let wz := Ct * Z
+    let k  := wx * v0 - wy * u0
+    let alpha := u0 * (Z * Z) + t * wx
+    let beta  := v0 * (Z * Z) + t * wy
+    let gamma := (X * X) * u0 + (Y * Y) * v0 + t * wz
+    let A  := At * X * X * X
+    let B  := Bt * Y * Y * Y
+    let C  := Ct * Z * Z * Z
+    let S3 := A + B - C
+    let As := (X * X) * alpha
+    let Bs := (Y * Y) * beta
+    let Cs := (Z * Z) * gamma
+    let detWMS :=
+      (X * X) * (wy * gamma - wz * beta) -
+      (Y * Y) * (wx * gamma - wz * alpha) -
+      (Z * Z) * (wx * beta - wy * alpha)
+    (As + Bs - Cs = t * S3) ∧
+    (wx * beta - wy * alpha = k * (Z * Z)) ∧
+    ((wx * gamma - wz * alpha) - k * (Y * Y) = u0 * S3) ∧
+    ((wz * beta - wy * gamma) - k * (X * X) = -(v0 * S3)) ∧
+    (A * Bs - B * As = k * (X * X) * (Y * Y) * (Z * Z)) ∧
+    (k * A - wx * (wz * beta - wy * gamma) = wx * v0 * S3) ∧
+    (-detWMS - k * (X * X * X * X + Y * Y * Y * Y + Z * Z * Z * Z) =
+      ((Y * Y) * u0 - (X * X) * v0) * S3) ∧
+    (k = 1 → wy * alpha ≥ 0 → Z * Z ≤ wx * beta) ∧
+    (k = 1 → S3 = 0 → wz * alpha ≥ 0 → Y * Y ≤ wx * gamma) := by
+  dsimp
+  have hMinorZ :
+      At * X * (v0 * (Z * Z) + t * (Bt * Y)) - Bt * Y * (u0 * (Z * Z) + t * (At * X)) =
+      (At * X * v0 - Bt * Y * u0) * (Z * Z) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have hMinorY :
+      (At * X * (X * X * u0 + Y * Y * v0 + t * (Ct * Z)) -
+        Ct * Z * (u0 * (Z * Z) + t * (At * X))) -
+      (At * X * v0 - Bt * Y * u0) * (Y * Y) =
+      u0 * (At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨?_, hMinorZ, hMinorY, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  · intro hk hPos
+    rw [hk] at hMinorZ
+    simp only [Int.one_mul] at hMinorZ
+    omega
+  · intro hk hS3 hPos
+    rw [hk, hS3] at hMinorY
+    simp only [Int.one_mul, Int.mul_zero] at hMinorY
+    omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -1444,5 +1532,6 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
 #print axioms thm10_universal_root_free_cubic_pade_compression
 #print axioms thm11_universal_cross_floor_wronskian_and_p3_kernel
 #print axioms thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
+#print axioms thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
 
 end RotatorCalculusPaper
