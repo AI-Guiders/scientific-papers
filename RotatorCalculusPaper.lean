@@ -1547,6 +1547,120 @@ theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_
     simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.sub_zero] at hClashZ
     omega
 
+/-- **Theorem 14 (Master End-to-End Implication Chain `→` for the Pillai and `abc` Bilateral
+Convergence System across all integers `ℤ`)**:
+Given any cubic-floor differential triple `hABC : Ã X³ + B̃ Y³ - C̃ Z³ = 0` (`A + B = C`),
+its bone-Bézout coprimality relation `hBezBone : Y w - Z v = 1` (`gcd(Y, Z) = 1`), and its
+Mason–Stothers–Bézout turn coprimality relation `hBezMS : Ã X v₀ - B̃ Y u₀ = 1` (`gcd(Ã X, B̃ Y) = 1`),
+the following five-link logical chain holds simultaneously via direct implication `→`:
+1. **Link 1 (Mason–Stothers Derivative Balance & Exact Wronskian Factorization):**
+   `A* + B* = C*` and `W* = A B* - B A* = X² Y² Z²`;
+2. **Link 2 (`3 × 3` Fourth-Power Determinant Law):**
+   `-det W_MS = X⁴ + Y⁴ + Z⁴`;
+3. **Link 3 (Bilateral Cramer Convergence of Padé–Bézout and Mason–Stothers):**
+   `w X² + B̃ γ = D_clash Z` and `v X² + C̃ β = D_clash Y` (`D_clash = C̃ w β - B̃ v γ`);
+4. **Link 4 (Degree-Lowered Joint Padé–Bézout–Mason–Stothers Equation):**
+   `Z³ I₁ + Ã X (C̃ Z β - B̃ Y γ) w³ (2 Z v - Y w) = B̃ (Y w + Z v)`;
+5. **Link 5 (Bilateral Radical & Gap Diophantine Bounds on `C = C̃ Z³` and `Z³`):**
+   `C * I₁ ≤ B̃ C̃ (Y w + Z v)` in the non-negative branch (`C̃ A w³ (2 Z v - Y w) ≥ 0`) and
+   `Z³ * (-I₁) ≤ A w³ (2 Z v - Y w)` in the negative branch (`B̃ (Y w + Z v) ≥ 0`). -/
+theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
+    (At Bt Ct X Y Z u0 v0 t w v : Int)
+    (hABC : At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z = 0)
+    (hBezBone : Y * w - Z * v = 1)
+    (hBezMS : At * X * v0 - Bt * Y * u0 = 1) :
+    let wx := At * X
+    let wy := Bt * Y
+    let wz := Ct * Z
+    let alpha := u0 * (Z * Z) + t * wx
+    let beta  := v0 * (Z * Z) + t * wy
+    let gamma := (X * X) * u0 + (Y * Y) * v0 + t * wz
+    let A  := At * X * X * X
+    let B  := Bt * Y * Y * Y
+    let C  := Ct * Z * Z * Z
+    let As := (X * X) * alpha
+    let Bs := (Y * Y) * beta
+    let Cs := (Z * Z) * gamma
+    let Up := Ct * w * w * w
+    let Vp := Bt * v * v * v
+    let I1 := Y * w * (Up + (Vp + Vp)) - Z * v * ((Up + Up) + Vp)
+    let dClash := Ct * w * beta - Bt * v * gamma
+    let detWMS :=
+      (X * X) * (wy * gamma - wz * beta) -
+      (Y * Y) * (wx * gamma - wz * alpha) -
+      (Z * Z) * (wx * beta - wy * alpha)
+    -- Link 1: Derivative triple balance A* + B* = C* & Wronskian W* = X^2 * Y^2 * Z^2:
+    (As + Bs = Cs) ∧
+    (A * Bs - B * As = (X * X) * (Y * Y) * (Z * Z)) ∧
+    -- Link 2: 3x3 Fourth-Power Determinant Law -det(W_MS) = X^4 + Y^4 + Z^4:
+    (-detWMS = X * X * X * X + Y * Y * Y * Y + Z * Z * Z * Z) ∧
+    -- Link 3: Bilateral Cramer Convergence of Padé-Bézout and Mason-Stothers:
+    (w * (X * X) + Bt * gamma = dClash * Z) ∧
+    (v * (X * X) + Ct * beta  = dClash * Y) ∧
+    -- Link 4: Degree-Lowered Joint Padé-Bézout-Mason-Stothers Identity:
+    (Z * Z * Z * I1 + wx * (wz * beta - wy * gamma) * (w * w * w) * ((Z * v + Z * v) - Y * w) =
+      Bt * (Y * w + Z * v)) ∧
+    -- Link 5: Bilateral Radical & Gap Diophantine Bounds on C = Ct * Z^3 and Z^3,
+    -- plus Exact Volume-Wronskian-Radical Equivalence A * B * C = (At * Bt * Ct) * (X * Y * Z) * W*:
+    (A * B * C = (At * Bt * Ct) * (X * Y * Z) * (A * Bs - B * As)) ∧
+    (Ct * A * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
+      C * I1 ≤ Bt * Ct * (Y * w + Z * v)) ∧
+    (Bt * (Y * w + Z * v) ≥ 0 →
+      Z * Z * Z * (-I1) ≤ A * (w * w * w) * ((Z * v + Z * v) - Y * w)) := by
+  dsimp
+  have h13 := thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
+                At Bt Ct X Y Z u0 v0 t w v
+  dsimp at h13
+  rcases h13 with ⟨hDeriv, hMinZ, hMinY, hMinX, hWronsk, hDegLow, hClashY, hClashZ, hDet4, _⟩
+  have h12 := thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
+                Ct Bt Z Y w v
+  dsimp at h12
+  rcases h12 with ⟨hPadeZ, _, _, _, _, _, hNegZ, _⟩
+  have hBoundC :
+      (Ct * Z * Z * Z) * (Y * w * (Ct * w * w * w + (Bt * v * v * v + Bt * v * v * v)) -
+        Z * v * ((Ct * w * w * w + Ct * w * w * w) + Bt * v * v * v)) +
+      Ct * (At * X * X * X) * (w * w * w) * ((Z * v + Z * v) - Y * w) =
+      Bt * Ct * ((Y * w - Z * v) * (Y * w - Z * v) * (Y * w - Z * v)) * (Y * w + Z * v) +
+      Ct * (At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z) *
+        (w * w * w) * ((Z * v + Z * v) - Y * w) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [hABC] at hDeriv; omega
+  · rw [hBezMS] at hWronsk; simp only [Int.one_mul] at hWronsk; exact hWronsk
+  · rw [hBezMS, hABC] at hDet4; omega
+  · rw [hBezBone, hBezMS, hABC] at hClashZ
+    simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.sub_zero] at hClashZ
+    omega
+  · rw [hBezBone, hBezMS, hABC] at hClashY
+    simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.sub_zero] at hClashY
+    omega
+  · rw [hBezBone] at hPadeZ
+    rw [hBezMS, hABC] at hMinX
+    have hX2 : Ct * Z * (v0 * (Z * Z) + t * (Bt * Y)) -
+               Bt * Y * (X * X * u0 + Y * Y * v0 + t * (Ct * Z)) = X * X := by omega
+    rw [hX2]
+    have hA : At * X * (X * X) = Ct * Z * Z * Z - Bt * Y * Y * Y := by
+      simp only [Int.mul_assoc] at hABC ⊢
+      omega
+    rw [hA]
+    simp only [Int.mul_one, Int.one_mul] at hPadeZ
+    exact hPadeZ
+  · rw [hBezMS] at hWronsk
+    simp only [Int.one_mul] at hWronsk
+    rw [hWronsk]
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  · intro hPos
+    rw [hBezBone, hABC] at hBoundC
+    simp only [Int.mul_one, Int.one_mul, Int.mul_zero, Int.zero_mul, Int.add_zero] at hBoundC
+    omega
+  · intro hPos
+    have hNeg := hNegZ hBezBone hPos
+    have hA : Ct * Z * Z * Z - Bt * Y * Y * Y = At * X * X * X := by omega
+    rw [hA] at hNeg
+    exact hNeg
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -1560,5 +1674,6 @@ theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_
 #print axioms thm11_universal_cross_floor_wronskian_and_p3_kernel
 #print axioms thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
 #print axioms thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
+#print axioms thm14_master_pillai_and_abc_bilateral_convergence_chains
 
 end RotatorCalculusPaper
