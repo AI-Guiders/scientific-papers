@@ -100,6 +100,21 @@ Completes the five pillars of **100% Constructive Mathematics over `ℤ` and `�
 - **Choice-Free, Banach–Tarski-Free Finite Measure Additivity:**  
   Without `Classical.choice`, every partition of the cuboctahedral ball `B_{O₂}(T)` into concentric coordination shells `10 k² + 2` strictly preserves integer volume `1 + ∑_{k=1}^T (10 k² + 2) = V_{O₂}(T)`, with `12 * (4² + 5²) = 492 > 256`.
 
+### 6. Theorem 6 (`thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych`) — Pillai Exponential Diophantine Skeletal Joint Matrix Decomposition, Parabolic `SL₂(ℤ)` Jordan Lock Triptych `k ∈ {6, 12, 15}`, Three-Level Recursive Descent Invariant, and Binomial Floor Divisibility Reciprocity
+
+- **Skeletal Joint Matrix Factorization & Rank-1 Cross-Joint Transition Identity:**  
+  Every solution of the exponential Diophantine equation `A x^m - B y^n = C` decomposes into `(m - 1)(n - 1)` interior `2 × 2` joint matrices `M_{a,b} = [[A x^(m-a), B y^(n-b)], [y^b, x^a]]` with invariant determinant `det M_{a,b} = C`. The normalized cross-joint transition matrix `P̃ = (1/C) M_{a,b}^adj M_{a',b'} ∈ SL₂(ℚ)` (`det P̃ = +1`) obeys the rank-1 decomposition:
+  ```text
+  P̃ - diag(y^Δb, x^Δa) = ((x^Δa y^Δb - 1) / C) * [[-x^a], [y^b]] * [[A x^(m-a'), B y^(n-b')]]
+  ```
+- **Parabolic Resonance Square Law & the `SL₂(ℤ)` Nilpotent Jordan Lock Triptych (`k ∈ {6, 12, 15}`):**  
+  The parabolic boundary `Tr(P̃) = -2` (`(P̃ + I₂)² = 0`) is equivalent to the exact square identity `A x^(m-Δa) (x^Δa + 1)² = B y^(n-Δb) (y^Δb + 1)²`. For coprime bases (`A = B = 1`), integrality `P̃_k = [[-(k+1), -k], [k, k-1]] ∈ SL₂(ℤ)` reduces on interior elbows to `(x^a - x^Δa) + (y^b - y^Δb) = 2 s`, yielding the closed cuboctahedral triptych:
+  1. **`k = 6` (`3² - 2³ = 1`, `C = 1`, square `6² = 36`):** `P̃_I = [[-7, -6], [6, 5]]` (`6` square faces of `O₂`),
+  2. **`k = 12` (`2⁵ - 3³ = 5`, `C = 5`, square `12² = 144`):** `P̃_II = [[-13, -12], [12, 11]]` (`12` vertices of `O₂`),
+  3. **`k = 15` (`5³ - 3⁴ = 44`, `C = 44`, square `30² = 900`, `s = 2`):** `P̃_III = [[-16, -15], [15, 14]]`.
+- **Three-Level Recursive Descent Law & Floor `k = 2 ↔ k = 3` Binomial Divisibility Reciprocity:**  
+  Along any skeletal ray `(k, j)`, consecutive floor differences `C_t = A x^(m - t k) - B y^(n - t j)` satisfy the weight-independent 3-term linear recurrence `C₀ - (x^k + y^j) C₁ + x^k y^j C₂ = 0` (forming the palindrome `(C₀, C₁, C₂) = (5, 7, 5)` on `2⁵ - 3³ = 5`), while the binomial divisibility laws `x^a | (B y^(r_y) (y^b - x^a)^k + C)` and `y^b | (A x^(r_x) (x^a - y^b)^k - C)` exhibit exact quotient reciprocity `(12, 4) ↔ (4, -12)` between floors `k = 2` and `k = 3` on `5³ - 3⁴ = 44`.
+
 ---
 
 ## Reproducing the Lean 4 Verification
@@ -118,5 +133,6 @@ Expected `#print axioms` output at the end of `RotatorCalculusPaper.lean`:
 'RotatorCalculusPaper.thm3_continuum_integration_from_cuboctahedron_archimedes_layers' depends on axioms: [propext]
 'RotatorCalculusPaper.thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality' depends on axioms: [propext]
 'RotatorCalculusPaper.thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski_free_measure' depends on axioms: [propext]
+'RotatorCalculusPaper.thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych' depends on axioms: [propext]
 ```
 (`0 sorryAx`, `0 Classical.choice`).
