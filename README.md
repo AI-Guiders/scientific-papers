@@ -132,6 +132,11 @@ Completes the five pillars of **100% Constructive Mathematics over `ℤ` and `�
 
 ---
 
+- **Planetary Differential 3D Orthogonal Frame `F₃`, Gear-Slip Brahmagupta Law, Non-Singular Hankel–Vandermonde Matrix `H₃`, & Lagrange–Vandermonde Bone-Gap Projectors:**  
+  For any planetary differential `A + B = C` (`A = a₁ a₂`, `B = b₁ b₂`, `C = c₁ c₂`), the gear-radius vector `r = (a₁, b₁, c₁) ∈ ℤ³` and turn-count vector `ω = (a₂, b₂, -c₂) ∈ ℤ³` are strictly orthogonal (`r · ω = A + B - C = 0`) and together with the satellite normal `n = r × ω = (-M_{BC}, M_{CA}, S_{AB})` (`M_{BC} = b₁ c₂ + b₂ c₁`, `M_{CA} = c₁ a₂ + c₂ a₁`, `S_{AB} = a₁ b₂ - a₂ b₁`, `M_{AB} = a₁ b₂ + a₂ b₁`) form an orthogonal `3 × 3` frame `F₃` with `det F₃ = M_{BC}² + M_{CA}² + S_{AB}² ≡ (a₁² + b₁² + c₁²)(a₂² + b₂² + c₂²) > 0` and planar gear-slip law `C² + S_{AB}² = (A - B)² + M_{AB}² ≡ (a₁² + b₁²)(a₂² + b₂²)` (where `S_{AB} = 0` for `gcd(A, B) = 1` occurs solely at the Pell square degeneracy `(m, n) = (2, 2)`; on `3 + 5³ = 2⁷ = 128`, `‖r‖₂² = 1² + 5² + 4² = 42 = S₂(3)`, `S_{AB} = 10`, `M_{AB} = 40 = k_IV`, and `M_{CA} = 44 = C_III`). On the cubic floor `k = 3` (`S_m = Ã X^m + B̃ Y^m - C̃ Z^m`, `S₃ = 0`), the `3 × 3` Hankel moment matrix `H₃ = [[S₀, S₁, S₂], [S₁, S₂, 0], [S₂, 0, S₄]]` obeys `-det H₃ = S₂³ - S₄(S₀ S₂ - S₁²) ≡ Ã B̃ C̃ (X - Y)² (Y - Z)² (Z - X)² > 0` (`S₁ = S₃ = 0` and `-det H₃ = 6 × 12² = 864` on `3 + 5³ = 2⁷ = 128`) and the three Lagrange–Vandermonde bone-gap projectors `Ã X(X - Y)(X - Z) ≡ S₁ YZ - S₂(Y + Z)`, `B̃ Y(Y - X)(Y - Z) ≡ S₁ ZX - S₂(Z + X)`, and `C̃ Z(Z - X)(Z - Y) ≡ S₂(X + Y) - S₁ XY` (`max(|S₁|, |S₂|) ≥ 1` for distinct bones `X, Y, Z`).
+
+---
+
 ## Reproducing the Lean 4 Verification
 
 Requires Lean 4 (tested with Lean 4.15+ / 4.36.0; zero external packages or Mathlib required):

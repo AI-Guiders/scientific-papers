@@ -1164,7 +1164,38 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
    eqIntBool (p20 * pA + p21 * pB - p22 * pC) 0 &&
    eqIntBool (p00 + p11 + p22) (pA * pC * (pA + pC)) &&
    eqNatBool ((normSqEdge d ^ dOutEdge d) + (base7 * base7)) (nineFoldDivisor d * nineFoldDivisor d) &&
-   eqNatBool ((base13 * base13) + (base7 ^ d)) (nRing d))
+   eqNatBool ((base13 * base13) + (base7 ^ d)) (nRing d)) &&
+  -- 8. Planetary Differential 3D Orthogonal Frame F_3 = (r, omega, r x omega), Gear-Slip Brahmagupta Law,
+  -- Checkerboard Hankel-Vandermonde Differential Matrix H_3 (S_1 = S_3 = 0, -det H_3 = 6 * 12^2 = 864),
+  -- and Three Lagrange-Vandermonde Bone-Gap Projectors on `3 + 5^3 = 2^7 = 128`:
+  (let mBC : Int := m3_b1 * m3_c2 + m3_b2 * m3_c1                                 -- 160 + 100 = 260
+   let mCA : Int := m3_c1 * m3_a2 + m3_c2 * m3_a1                                 -- 12 + 32 = 44 = C_III!
+   let sAB : Int := m3_a1 * m3_b2 - m3_a2 * m3_b1                                 -- 25 - 15 = 10
+   let mAB : Int := m3_a1 * m3_b2 + m3_a2 * m3_b1                                 -- 25 + 15 = 40 = k_IV!
+   let rNormSq : Int := m3_a1 * m3_a1 + m3_b1 * m3_b1 + m3_c1 * m3_c1             -- 1 + 25 + 16 = 42 = S_2(3)!
+   let wNormSq : Int := m3_a2 * m3_a2 + m3_b2 * m3_b2 + m3_c2 * m3_c2             -- 9 + 625 + 1024 = 1658
+   let xBone : Int := (unitStep : Int)                                            -- X = 1
+   let yBone : Int := (dOutEdge d : Int)                                          -- Y = 5
+   let zBone : Int := (dInSquare : Int)                                           -- Z = 4
+   let s0Mom : Int := (abcA3 : Int) + (abcB3 : Int) - (abcC3 : Int)               -- 3 + 1 - 2 = 2
+   let s1Mom : Int := (abcA3 : Int) * xBone + (abcB3 : Int) * yBone - (abcC3 : Int) * zBone -- 3 + 5 - 8 = 0!
+   let s2Mom : Int := (abcA3 : Int) * (xBone ^ 2) + (abcB3 : Int) * (yBone ^ 2) - (abcC3 : Int) * (zBone ^ 2) -- -4
+   let s4Mom : Int := (abcA3 : Int) * (xBone ^ 4) + (abcB3 : Int) * (yBone ^ 4) - (abcC3 : Int) * (zBone ^ 4) -- 116
+   let vand3 : Int := (xBone - yBone) * (yBone - zBone) * (zBone - xBone)         -- -12 = -|V(O_2)|!
+   let detH3Neg : Int := (s2Mom ^ 3) - s4Mom * (s0Mom * s2Mom - s1Mom * s1Mom)    -- 864 = 6 * 12^2
+   eqIntBool (m3_a1 * m3_a2 + m3_b1 * m3_b2 - m3_c1 * m3_c2) 0 &&
+   eqIntBool sAB ((normSqEdge d * dOutEdge d : Nat) : Int) &&
+   eqIntBool mAB ((nTriangles d * dOutEdge d : Nat) : Int) &&
+   eqIntBool mCA ((dInSquare * (nVertices d - unitStep) : Nat) : Int) &&
+   eqIntBool (((quarterPeriod d : Int) ^ 2) + (sAB ^ 2)) (((min3_A - min3_B) ^ 2) + (mAB ^ 2)) &&
+   eqIntBool (((quarterPeriod d : Int) ^ 2) + (sAB ^ 2)) ((m3_a1 * m3_a1 + m3_b1 * m3_b1) * (m3_a2 * m3_a2 + m3_b2 * m3_b2)) &&
+   eqIntBool (mBC * mBC + mCA * mCA + sAB * sAB) (rNormSq * wNormSq) &&
+   eqIntBool s1Mom 0 &&
+   eqIntBool vand3 (-(nVertices d : Int)) &&
+   eqIntBool detH3Neg ((nSquares d * nVertices d * nVertices d : Nat) : Int) &&
+   eqIntBool (s1Mom * yBone * zBone - s2Mom * (yBone + zBone)) ((abcA3 : Int) * xBone * (xBone - yBone) * (xBone - zBone)) &&
+   eqIntBool (s1Mom * zBone * xBone - s2Mom * (zBone + xBone)) ((abcB3 : Int) * yBone * (yBone - xBone) * (yBone - zBone)) &&
+   eqIntBool (s2Mom * (xBone + yBone) - s1Mom * xBone * yBone) ((abcC3 : Int) * zBone * (zBone - xBone) * (zBone - yBone)))
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
