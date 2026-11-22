@@ -72,6 +72,16 @@ In this paper (Part~I of a four-part series), we resolve these obstacles by form
 \]
 All definitions and theorems below correspond to Theorems~1--3 (\texttt{thm1}--\texttt{thm3}) in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorCalculusPaper.lean}.
 
+\begin{definition}[Model-Theoretic Two-Sorted Algebraic System $\langle\mathcal{M},\mathcal{T}\rangle$ in the Sense of Mal'cev~\cite{Malcev1973}]
+\label{def:malcev-carriers}
+Throughout this series, the term \emph{carrier} (\emph{носитель} in the Russian model-theoretic tradition of A.\,I.~Mal'cev, \emph{Algebraic Systems}~\cite{Malcev1973}) is used strictly in its standard model-theoretic meaning: the underlying domain set of an algebraic structure $\mathfrak{A} = \langle A;\,\Sigma\rangle$. We formulate the calculus as a two-sorted algebraic structure $\mathfrak{S} = \langle \mathcal{M},\,\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ with two carriers:
+\begin{enumerate}[leftmargin=*,noitemsep]
+\item the \textbf{discrete $M$-carrier} $\mathcal{M} = \mathbb{Z}_{512}$ (equipped with $L^1$ diamond projections $\mathcal{C}_3,\mathcal{S}_3$ and modular arithmetic over the cuboctahedral lattice $\mathbb{Z}^3$);
+\item the \textbf{continuous (Euclidean) $T$-carrier} $\mathcal{T}$ (the continuum sort of $L^2$ Euclidean circle invariants $X^2+Y^2=R^2$, rational/real projective coordinates $\mathbb{Q}\subset\mathbb{R}$, and continuum Riemann integrals);
+\item connected by the root-free Weierstrass lift $\pi_{M\to T}(C,S) = (C^2-S^2,2CS,C^2+S^2)$, linear retraction $\iota_{T\to M}$, and stereographic homeomorphism $[0,512]/512 = [0,1] \cong \mathbb{R}$.
+\end{enumerate}
+\end{definition}
+
 \section{Discrete Euler Exponential, Euler's Identity \texorpdfstring{$e^{i\pi}+1=0$}{e\^{}(i pi)+1=0}, Constant Wronskian, and the Weierstrass 512-gon Lift}
 \label{sec:wronskian-euler}
 
@@ -269,6 +279,8 @@ For $d=3$, the following relations hold on the cuboctahedral shell $O_2(d)$ and 
 The formalization of Theorems~\ref{thm:main-1}--\ref{thm:main-3} (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, and \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}) resides in \texttt{RotatorCalculusPaper.lean} in \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
+\bibitem{Malcev1973}
+A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, Berlin--Heidelberg--New York, 1973 (Russian original: \emph{Алгебраические системы}, Nauka, Moscow, 1970).
 \bibitem{Krause1986}
 E.\,F.~Krause, \emph{Taxicab Geometry: An Adventure in Non-Euclidean Geometry}, Dover Publications, New York, 1986.
 \bibitem{Thompson2011}

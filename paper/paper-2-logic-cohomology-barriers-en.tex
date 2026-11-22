@@ -82,6 +82,8 @@ For $d=3$, the following exact relations hold across the pole octants $\{0,256\}
 \section{Embedded Finite-State Adversaries vs.\ External Turing Machines and the Built-In Shannon Vernam Cipher on \texorpdfstring{$\mathbb{Z}_{512}$}{Z512}}
 \label{sec:embedded-adversary-vernam}
 
+In the model-theoretic framework of A.\,I.~Mal'cev (\emph{Algebraic Systems}~\cite{Malcev1973}), the calculus is a two-sorted algebraic structure $\mathfrak{S} = \langle \mathcal{M},\,\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$, where the \emph{carrier} (\emph{носитель}) of a sort is its underlying domain set: the \textbf{discrete $M$-carrier} $\mathcal{M} = \mathbb{Z}_{512}$ (internal modular phase states on the cuboctahedral lattice) and the \textbf{continuous $T$-carrier} $\mathcal{T}$ (externally observable Euclidean/threshold invariants).
+
 Classical complexity-based cryptography models an adversary as an abstract Turing machine placed \emph{outside} the state space with an unbounded external tape and zero signal-propagation cost, leading to the fear that either a polynomial-time 3-SAT algorithm ($P=NP$) or quantum speedup could collapse cryptographic security. Theorem~\ref{thm:main-4} and Theorem~\ref{thm:main-5} expose two structural facts that decouple realizable channel security from abstract external-tape assumptions:
 \begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
 \item \textbf{Any realizable adversary is an embedded finite sub-automaton subject to four formal inversion barriers:}
@@ -126,6 +128,8 @@ For $d=3$ on $\mathbb{Z}_{512}$ and the cuboctahedral complex~$O_2(3)$, the foll
 The formalization of Theorems~\ref{thm:main-4} and~\ref{thm:main-5} (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality} and \texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}) resides in \texttt{RotatorCalculusPaper.lean} in \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
+\bibitem{Malcev1973}
+A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, Berlin--Heidelberg--New York, 1973 (Russian original: \emph{Алгебраические системы}, Nauka, Moscow, 1970).
 \bibitem{Post1941}
 E.\,L.~Post, \emph{The Two-Valued Iterative Systems of Mathematical Logic}, Annals of Mathematics Studies, no.~5, Princeton University Press, 1941.
 \bibitem{Shannon1949}

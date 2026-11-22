@@ -65,6 +65,8 @@
 \section{Внутренние конечные вычислители против внешних машин Тьюринга и встроенный блокнот Вернама Шеннона на \texorpdfstring{$\mathbb{Z}_{512}$}{Z512}}
 \label{sec:embedded-adversary-vernam}
 
+В терминологии классической теории моделей А.\,И.~Мальцева (\emph{«Алгебраические системы»}~\cite{Malcev1970}), где \emph{носителем} (\emph{carrier}) называется основное множество алгебраического сорта, рассматриваемое исчисление образует двусортную алгебраическую систему $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ с \textbf{дискретным $M$-носителем} $\mathcal{M}=\mathbb{Z}_{512}$ (внутренние модулярные фазовые состояния на решётке кубооктаэдра) и \textbf{непрерывным $T$-носителем} $\mathcal{T}$ (внешне наблюдаемые пороговые и евклидовы инварианты).
+
 В классической теории сложности взломщик моделируется абстрактной машиной Тьюринга, расположенной \emph{снаружи} фазового пространства с бесконечной внешней лентой и бесплатным чтением состояния. Из Теорем~\ref{thm:main-4} и~\ref{thm:main-5} следуют два структурных результата для любого \emph{реализуемого} вычислителя:
 \begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
 \item \textbf{Любой реализуемый вычислитель является конечным подавтоматом внутри носителя и подчинён четырём формальным барьерам обращения:}
@@ -96,6 +98,8 @@
 Формальное доказательство Теорем~\ref{thm:main-4} и~\ref{thm:main-5} (\texttt{thm4}, \texttt{thm5}) содержится в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
+\bibitem{Malcev1970}
+А.\,И.~Мальцев, \emph{Алгебраические системы}, М.: Наука, 1970 (англ.\ пер.: A.\,I.~Mal'cev, \emph{Algebraic Systems}, Springer-Verlag, 1973).
 \bibitem{Post1941}
 E.\,L.~Post, \emph{The Two-Valued Iterative Systems of Mathematical Logic}, Princeton University Press, 1941.
 \bibitem{Shannon1949}

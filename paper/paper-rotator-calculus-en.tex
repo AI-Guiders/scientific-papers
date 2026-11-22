@@ -126,7 +126,7 @@ In this paper, we resolve these obstacles by formulating the rotator over the th
   N_{\mathrm{ring}}(d) = 4\,Q_\square(d) = 512,\qquad
   K_P(d) = \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64.
 \]
-All definitions and theorems below are formally verified in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorCalculusPaper.lean}.
+All definitions and theorems below are formally verified in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorCalculusPaper.lean}. Throughout this work, the term \emph{carrier} (\emph{носитель}) is used strictly in its standard model-theoretic sense after A.\,I.~Mal'cev (\emph{Algebraic Systems}~\cite{Malcev1973}): the underlying domain set of a sort in the two-sorted algebraic structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$, where the \textbf{discrete $M$-carrier} is the finite modular phase ring $\mathbb{Z}_{512}$ on the cuboctahedral lattice $\mathbb{Z}^3$ ($L^1$ projections $\mathcal{C}_3,\mathcal{S}_3$) and the \textbf{continuous $T$-carrier} is the continuum sort of Euclidean circle invariants ($X^2+Y^2=R^2$), rational/real projective coordinates $\mathbb{Q}\subset\mathbb{R}$, and Riemann integrals.
 
 \section{Discrete Euler Exponential, Euler's Identity \texorpdfstring{$e^{i\pi}+1=0$}{e\^{}(i pi)+1=0}, Constant Wronskian, and the Weierstrass 512-gon Lift}
 \label{sec:wronskian-euler}
@@ -489,6 +489,8 @@ The complete self-contained formalization ($1\,897$ lines, zero external library
 The author acknowledges formal verification partner \emph{Luch} for collaboration on the formal operator proofs. Large language model tools were used for assistance with \LaTeX{} formatting, English copy-editing, and translating mathematical proofs into Lean~4 tactic syntax; all mathematical definitions, theorem formulations, and proofs are verified by the Lean~4 formal proof kernel and are the full responsibility of the author.
 
 \begin{thebibliography}{9}
+\bibitem{Malcev1973}
+A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, Berlin--Heidelberg--New York, 1973 (Russian original: \emph{Алгебраические системы}, Nauka, Moscow, 1970).
 \bibitem{Krause1986}
 E.\,F.~Krause, \emph{Taxicab Geometry: An Adventure in Non-Euclidean Geometry}, Dover Publications, New York, 1986.
 

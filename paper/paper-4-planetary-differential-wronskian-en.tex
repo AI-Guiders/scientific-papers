@@ -51,6 +51,8 @@ We then prove five universally $\forall$-quantified Diophantine and geometric lo
 \section{Planetary Differential Frame \texorpdfstring{$\mathcal{F}_3$}{F3}, Hankel--Vandermonde Matrix \texorpdfstring{$\mathcal{H}_3$}{H3}, Three-Channel Pad\'e Matrix \texorpdfstring{$\mathcal{P}_3$}{P3}, and Carrier Transfer \texorpdfstring{$M\rightleftarrows T$}{M <-> T}}
 \label{sec:planetary-frame}
 
+Following A.\,I.~Mal'cev's model-theoretic terminology (\emph{Algebraic Systems}~\cite{Malcev1973}, where the \emph{carrier} / \emph{носитель} is the underlying domain set of an algebraic sort), we treat the rotator system as a two-sorted algebraic structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ linking the \textbf{discrete $M$-carrier} ($\mathbb{Z}_{512}$ with $L^1$ projections $\mathcal{C}_3,\mathcal{S}_3$) and the \textbf{continuous Euclidean $T$-carrier} ($L^2$ circle $X^2+Y^2=R^2$ and continuum line $\mathbb{R}$) via the Weierstrass lift $\pi_{M\to T}$, linear retraction $\iota_{T\to M}$, and stereographic homeomorphism $[0,512]/512 = [0,1]\cong\mathbb{R}$.
+
 \begin{theorem}[Radical-Bounded Floor Embedding, Bordered $3\times 3$ Matrix $\mathcal{M}_3$, Orthogonal Planetary Differential Frame $\mathcal{F}_3$, Hankel--Vandermonde Matrix $\mathcal{H}_3$, and Bilateral Carrier Transfer $M\rightleftarrows T$]
 \label{thm:main-8}
 For any coprime triple $A + B = C$ ($\gcd(A,B,C)=1$), the following identities hold (\texttt{thm8\_unified\_3x3\_pillai\_abc\_skeletal\_matrix\_and\_radical\_floor\_embedding}, \texttt{thm9\_universal\_pillai\_abc\_differential\_bezout\_and\_pade\_laws}):
@@ -117,6 +119,8 @@ Across all integers in $\mathbb{Z}$, the following universally quantified implic
 The formalization of Theorems~\ref{thm:main-8} and~\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm13}, \texttt{thm14}, \texttt{thm15}, \texttt{thm16}) resides in \texttt{RotatorCalculusPaper.lean} in \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
+\bibitem{Malcev1973}
+A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, Berlin--Heidelberg--New York, 1973 (Russian original: \emph{Алгебраические системы}, Nauka, Moscow, 1970).
 \bibitem{Mason1984}
 R.\,C.~Mason, \emph{Diophantine Equations over Function Fields}, LMS Lecture Note Series, vol.~96, Cambridge University Press, 1984.
 \bibitem{DarmonGranville1995}

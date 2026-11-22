@@ -54,6 +54,8 @@
 \section{Репер планетарного дифференциала \texorpdfstring{$\mathcal{F}_3$}{F3}, матрица Ганкеля--Вандермонда \texorpdfstring{$\mathcal{H}_3$}{H3}, трёхканальная матрица Паде \texorpdfstring{$\mathcal{P}_3$}{P3} и перенос носителей \texorpdfstring{$M\rightleftarrows T$}{M <-> T}}
 \label{sec:planetary-frame}
 
+Следуя терминологии теории моделей А.\,И.~Мальцева (\emph{«Алгебраические системы»}~\cite{Malcev1970}, где \emph{носителем} / \emph{carrier} называется основное множество алгебраического сорта), мы рассматриваем систему как двусортную алгебраическую структуру $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$, связывающую \textbf{дискретный $M$-носитель} ($\mathbb{Z}_{512}$ с $L^1$-проекциями $\mathcal{C}_3,\mathcal{S}_3$) и \textbf{непрерывный евклидов $T$-носитель} ($L^2$-окружность $X^2+Y^2=R^2$ и континуальную прямую $\mathbb{R}$) через подъём Вейерштрасса $\pi_{M\to T}$, линейную ретракцию $\iota_{T\to M}$ и стереографический гомеоморфизм $[0,512]/512 = [0,1]\cong\mathbb{R}$.
+
 \begin{theorem}[Ограниченное через радикал этажное погружение, окаймлённая $3\times 3$-матрица $\mathcal{M}_3$, ортогональный репер дифференциала $\mathcal{F}_3$, матрица Ганкеля--Вандермонда $\mathcal{H}_3$ и перенос носителей $M\rightleftarrows T$]
 \label{thm:main-8}
 Для всякой взаимно простой тройки $A + B = C$ ($\gcd(A,B,C)=1$) выполнены тождества (\texttt{thm8}, \texttt{thm9}):
@@ -115,6 +117,8 @@
 Формальное доказательство Теорем~\ref{thm:main-8} и~\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm13}, \texttt{thm14}, \texttt{thm15}, \texttt{thm16}) содержится в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/KarataevDmitry/cuboctahedral-rotator-calculus} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
+\bibitem{Malcev1970}
+А.\,И.~Мальцев, \emph{Алгебраические системы}, М.: Наука, 1970 (англ.\ пер.: A.\,I.~Mal'cev, \emph{Algebraic Systems}, Springer-Verlag, 1973).
 \bibitem{Mason1984}
 R.\,C.~Mason, \emph{Diophantine Equations over Function Fields}, Cambridge University Press, 1984.
 \bibitem{DarmonGranville1995}

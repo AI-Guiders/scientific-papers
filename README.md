@@ -23,6 +23,9 @@ The formalization is organized into a four-part series of self-contained papers 
 
 - **Self-Contained Lean 4 Formalization (1,945 lines, 16 theorems, 0 external dependencies, `0 sorryAx`, `0 Classical.choice`):** [`RotatorCalculusPaper.lean`](RotatorCalculusPaper.lean)
 
+> **Model-Theoretic Terminology (A. I. Mal'cev, *Algebraic Systems*):**  
+> Throughout this work, the term **"carrier"** (*«носитель»*) is used strictly in its standard model-theoretic sense (A. I. Mal'cev, *Algebraic Systems*, Nauka, 1970 / Springer-Verlag, 1973): the underlying domain set of a sort in a two-sorted algebraic structure `⟨M, T; π_{M→T}, ι_{T→M}⟩`, where the **discrete `M`-carrier** is the finite modular phase ring `ℤ_{512}` on the cuboctahedral lattice `ℤ³` (`L¹` diamond projections `C₃, S₃`) and the **continuous `T`-carrier** is the continuum sort of Euclidean circle invariants (`X² + Y² = R²`), rational/real projective coordinates `ℚ ⊂ ℝ`, and continuum Riemann integrals.
+
 ---
 
 ## Main Mathematical Results (Formally Verified in Lean 4)
