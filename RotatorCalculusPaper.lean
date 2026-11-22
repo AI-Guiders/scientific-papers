@@ -1243,7 +1243,7 @@ theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding 
   rfl
 
 set_option linter.unusedSimpArgs false
-set_option maxHeartbeats 800000
+set_option maxHeartbeats 1600000
 
 /-- **Theorem 9 (Universal `∀`-Quantified Algebraic Laws of the Planetary Differential `F₃`,
 Gear-Slip Brahmagupta Law, Three-Level Descent & Hankel–Wronskian Identity, Conjugate Bézout
@@ -1359,17 +1359,30 @@ annihilate identically, bounding `Z³ I₁` and `Y³ I₁` directly by the linea
 `B̃ (Y w + Z v)` and `C̃ (Y w + Z v)` (attaining `I₁ = +3 = d` on Reyssat's record `abc`-triple `2 + 3¹⁰·109 = 23⁵`). -/
 theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     (Ct Bt Z Y w v : Int) :
+    let wm := Z - w
+    let vm := Y - v
     let U  := Ct * Z * Z * Z
     let V  := Bt * Y * Y * Y
     let A  := U - V
     let Up := Ct * w * w * w
     let Vp := Bt * v * v * v
+    let Um := Ct * wm * wm * wm
+    let Vm := Bt * vm * vm * vm
     let I0 := Y * w - Z * v
     let I1 := Y * w * (Up + (Vp + Vp)) - Z * v * ((Up + Up) + Vp)
+    let I1m := Y * wm * (Um + (Vm + Vm)) - Z * vm * ((Um + Um) + Vm)
     (Z * Z * Z * I1 + A * (w * w * w) * ((Z * v + Z * v) - Y * w) =
       Bt * (I0 * I0 * I0) * (Y * w + Z * v)) ∧
     (Y * Y * Y * I1 + A * (v * v * v) * ((Y * w + Y * w) - Z * v) =
       Ct * (I0 * I0 * I0) * (Y * w + Z * v)) ∧
+    (Z * Z * (I1 - I1m) +
+      A * (Y * (w - wm) * (w * w + wm * wm) -
+           (I0 + I0) * (w * w - w * wm + wm * wm)) =
+      (Bt + Bt) * Y * (I0 * I0 * I0)) ∧
+    (Y * Y * (I1 - I1m) +
+      A * (Z * (v - vm) * (v * v + vm * vm) +
+           (I0 + I0) * (v * v - v * vm + vm * vm)) =
+      (Ct + Ct) * Z * (I0 * I0 * I0)) ∧
     (I0 = 1 → A * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
       Z * Z * Z * I1 ≤ Bt * (Y * w + Z * v)) ∧
     (I0 = 1 → A * (v * v * v) * ((Y * w + Y * w) - Z * v) ≥ 0 →
@@ -1395,7 +1408,13 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
-  refine ⟨h1, h2, ?_, ?_, ?_, ?_⟩
+  refine ⟨h1, h2, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
   · intro hI0 hPos
     rw [hI0] at h1
     simp only [Int.mul_one, Int.one_mul] at h1
