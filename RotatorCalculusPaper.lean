@@ -1002,6 +1002,19 @@ def checkPillaiRecursiveDescentFareyBezoutAndPadeWronskianBool (d : Nat) : Bool 
   let phi3Coll : Int := uColl * uColl + uColl * vColl + vColl * vColl
   let cubicCollLhs : Int := (dInSquare : Int) * iColl1 * phi3Coll
   let cubicCollRhs : Int := (ypTest ^ 3) * (cLock2 ^ 3) * (uPade + vPade) - cpTest * (yColl1 ^ 3)
+  -- 6. Cross-floor Padé Wronskian W_{2,3} coupling quadratic floor k=2 (`P_{1,2} = U + 3V, Q_{1,2} = 3U + V`)
+  -- and cubic floor k=3 (`P_{1,3} = U + 2V, Q_{1,3} = 2U + V`) of a SINGLE solution `(U, V)`:
+  -- `(U + V)*P_{1,2}^2 - P_{1,3}^3 = V*(U^2 + 3UV + V^2)`, `(U + V)*Q_{1,2}^2 - Q_{1,3}^3 = U*(U^2 + 3UV + V^2)`,
+  -- and `det(W_{2,3}) = Q_{1,2}^2 * P_{1,3}^3 - P_{1,2}^2 * Q_{1,3}^3 = C^3 * (U^2 + 3UV + V^2) = 19^2 = 361` on Lock I `(U=9, V=8, C=1)`!
+  let u1CF    : Int := (nineFoldDivisor d : Int)                                   -- 9
+  let v1CF    : Int := (nTriangles d : Int)                                        -- 8
+  let p1K2    : Int := u1CF + (d : Int) * v1CF                                     -- 9 + 24 = 33
+  let q1K2    : Int := (d : Int) * u1CF + v1CF                                     -- 27 + 8 = 35
+  let p1K3    : Int := u1CF + (normSqEdge d : Int) * v1CF                          -- 9 + 16 = 25
+  let q1K3    : Int := (normSqEdge d : Int) * u1CF + v1CF                          -- 18 + 8 = 26
+  let phi23CF : Int := u1CF * u1CF + (d : Int) * u1CF * v1CF + v1CF * v1CF         -- 81 + 216 + 64 = 361 = 19^2
+  let root19  : Int := ((nVertices d + (nTriangles d - unitStep) : Nat) : Int)     -- 12 + 7 = 19
+  let detW23  : Int := (q1K2 * q1K2) * (p1K3 ^ 3) - (p1K2 * p1K2) * (q1K3 ^ 3)
   eqIntBool detFarey2 (unitStep : Int) &&
   eqNatBool recX2_L recX2_R &&
   eqNatBool recY2_L recY2_R &&
@@ -1018,7 +1031,10 @@ def checkPillaiRecursiveDescentFareyBezoutAndPadeWronskianBool (d : Nat) : Bool 
   eqIntBool wPade2 (-(((nTriangles d - unitStep : Nat) : Int) * (cLock2 ^ 5))) &&
   eqNatBool padeS3 (nineFoldDivisor d * nineFoldDivisor d) &&
   eqIntBool cramerLhs0 cramerRhs0 &&
-  eqIntBool cubicCollLhs cubicCollRhs
+  eqIntBool cubicCollLhs cubicCollRhs &&
+  eqIntBool ((u1CF + v1CF) * (p1K2 * p1K2) - (p1K3 ^ 3)) (v1CF * phi23CF) &&
+  eqIntBool ((u1CF + v1CF) * (q1K2 * q1K2) - (q1K3 ^ 3)) (u1CF * phi23CF) &&
+  eqIntBool detW23 (root19 * root19)
 
 /-- **Theorem 8 verification:** Skeletal `abc`-triple radical floor decomposition
 `A_k X_k^k + B_k Y_k^k = C_k Z_k^k` with `A_k B_k C_k ≤ rad(ABC)^(k-1)`, unified bordered `3 × 3`
@@ -1124,7 +1140,31 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
     eqIntBool ((qInt * sVal) / (cVal + sVal)) (phi : Int)) &&
   eqIntBool (projC d (d : Int)) ((dOutEdge d ^ d : Nat) : Int) &&
   eqIntBool (projC d ((nTriangles d - unitStep : Nat) : Int)) (((nVertices d - unitStep) * (nVertices d - unitStep) : Nat) : Int) &&
-  eqIntBool ((181 : Int) * projS d 181 + (halfPeriod d : Int) * projC d 181) ((nTriangles d - unitStep : Nat) : Int)
+  eqIntBool ((181 : Int) * projS d 181 + (halfPeriod d : Int) * projC d 181) ((nTriangles d - unitStep : Nat) : Int) &&
+  -- 7. Three-channel 3x3 cubic Padé-Thue matrix P_3(A, B, C) for any abc-triple A + B = C (tested on 3 + 5^3 = 2^7 = 128):
+  -- P_3 * [A, B, -C]^T == [0, 0, 0], det(P_3) == 0, and Tr(P_3) = A^2(B+C) + B^2(A+C) + C^2(A-B) == A * C * (A + C) = 3 * 128 * 131 = 50,304
+  -- plus dual Fermat-Catalan locks sharing base 7 = nTriangles(3) - 1:
+  -- `2^5 + 7^2 = 32 + 49 = 81 = 3^4` (Padé P_3 sum) and `13^2 + 7^3 = 169 + 343 = 512 = 2^9 = |Z_512|`!
+  (let pA : Int := (d : Int)
+   let pB : Int := ((dOutEdge d ^ d : Nat) : Int)
+   let pC : Int := (quarterPeriod d : Int)
+   let p00 : Int := (pA * pA) * (pB + pC)
+   let p01 : Int := (pB + (normSqEdge d : Int) * pC) ^ 3
+   let p02 : Int := ((normSqEdge d : Int) * pB + pC) ^ 3
+   let p10 : Int := (pA + (normSqEdge d : Int) * pC) ^ 3
+   let p11 : Int := (pB * pB) * (pA + pC)
+   let p12 : Int := ((normSqEdge d : Int) * pA + pC) ^ 3
+   let p20 : Int := (pA - (normSqEdge d : Int) * pB) ^ 3
+   let p21 : Int := ((normSqEdge d : Int) * pA - pB) ^ 3
+   let p22 : Int := (pC * pC) * (pA - pB)
+   let base7  : Nat := nTriangles d - unitStep
+   let base13 : Nat := nVertices d + unitStep
+   eqIntBool (p00 * pA + p01 * pB - p02 * pC) 0 &&
+   eqIntBool (p10 * pA + p11 * pB - p12 * pC) 0 &&
+   eqIntBool (p20 * pA + p21 * pB - p22 * pC) 0 &&
+   eqIntBool (p00 + p11 + p22) (pA * pC * (pA + pC)) &&
+   eqNatBool ((normSqEdge d ^ dOutEdge d) + (base7 * base7)) (nineFoldDivisor d * nineFoldDivisor d) &&
+   eqNatBool ((base13 * base13) + (base7 ^ d)) (nRing d))
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :
