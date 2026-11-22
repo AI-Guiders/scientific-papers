@@ -1031,6 +1031,17 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
   let dHigh3 : Int := m3_c2 - (m3_a2 + m3_b2)
   let ternL  : Int := (m3_a1 + m3_b1) * dHigh3 + m3_c2 * dLow3
   let ternR  : Int := -(m3_a1 * m3_b2 + m3_a2 * m3_b1)
+  -- 3. Cyclic 9-factor nilpotent cross-joint cone identity `Tr(adj(M_3) * M'_3) = 0`:
+  -- `ua*(ub - uc)*(ub*uc - 1) + ub*(uc - ua)*(ua*uc - 1) = uc*(ub - ua)*(ua*ub - 1)`
+  -- At `(ua, uc, ub) = (1, 2, 5)`: generates Lock II `27 + 5 = 32` (`3^3 + 5 = 2^5`)
+  -- At `(ua, uc, ub) = (1, 6, 7)`: generates `41 + 175 = 216` (`6^3 - 7*5^2 = 6*7 - 1 = 41`)
+  let nilA_25 : Nat := unitStep * (dOutEdge d - normSqEdge d) * (dOutEdge d * normSqEdge d - unitStep) -- 1*3*9 = 27 = 3^3
+  let nilB_25 : Nat := dOutEdge d * (normSqEdge d - unitStep) * (unitStep * normSqEdge d - unitStep)   -- 5*1*1 = 5
+  let nilC_25 : Nat := normSqEdge d * (dOutEdge d - unitStep) * (unitStep * dOutEdge d - unitStep)     -- 2*4*4 = 32 = 2^5
+  let u7      : Nat := nTriangles d - unitStep                                                         -- 7
+  let nilA_67 : Nat := unitStep * (u7 - nSquares d) * (u7 * nSquares d - unitStep)                     -- 1*1*41 = 41
+  let nilB_67 : Nat := u7 * (nSquares d - unitStep) * (unitStep * nSquares d - unitStep)               -- 7*5*5 = 175
+  let nilC_67 : Nat := nSquares d * (u7 - unitStep) * (unitStep * u7 - unitStep)                       -- 6*6*6 = 216 = 6^3
   eqNatBool abcLhs (quarterPeriod d) &&
   eqNatBool abcRhs (quarterPeriod d) &&
   eqNatBool abcW3 (nSquares d) &&
@@ -1040,7 +1051,13 @@ def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :
   eqIntBool min3_A (d : Int) &&
   eqIntBool detM3 0 &&
   eqIntBool trAdj3 ((nVertices d * nVertices d : Nat) : Int) &&
-  eqIntBool ternL ternR
+  eqIntBool ternL ternR &&
+  eqNatBool (nilA_25 + nilB_25) nilC_25 &&
+  eqNatBool nilA_25 (d ^ d) &&
+  eqNatBool nilC_25 (normSqEdge d ^ dOutEdge d) &&
+  eqNatBool (nilA_67 + nilB_67) nilC_67 &&
+  eqNatBool nilA_67 (dInSquare * dInSquare + dOutEdge d * dOutEdge d) &&
+  eqNatBool nilC_67 (nSquares d ^ d)
 
 /-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone Generators, Exact Generator Factorization `C = (x^(m-a) ∓ y^b)(x^a - y^b)`, and Parabolic `SL₂(ℤ)` Jordan Lock Quartet `k ∈ {6, 12, 15, 40}`)**: -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych :

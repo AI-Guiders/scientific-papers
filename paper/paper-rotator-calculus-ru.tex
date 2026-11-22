@@ -418,6 +418,12 @@
   на каждом этаже $k\ge 2$ разложение $A = \widetilde{A}_k X_k^k,\ B = \widetilde{B}_k Y_k^k,\ C = \widetilde{C}_k Z_k^k$ погружает тройку в уравнение $\widetilde{A}_k X_k^k + \widetilde{B}_k Y_k^k = \widetilde{C}_k Z_k^k$ с ограниченным через радикал произведением корневых весов $\widetilde{A}_k\widetilde{B}_k\widetilde{C}_k \le \operatorname{rad}(ABC)^{k-1}$ (на верхнем этаже Замка~IV $3 + 5^3 = 2^7 = 128$ с $\operatorname{rad}=2\cdot 3\cdot 5=30$ при $k=3$ имеем $3\cdot 1^3 + 1\cdot 5^3 = 2\cdot 4^3 = 128$ с $\widetilde{A}_3\widetilde{B}_3\widetilde{C}_3 = 6 \le 30^2$ и зазором костей $5 - 4 = 1$).
 \item \textbf{Единая $3\times 3$-скелетная матрица Пиллаи--$abc$ и тернарный закон треугольных дефектов:}
   для любого разбиения $A = a_1 a_2,\ B = b_1 b_2,\ C = c_1 c_2$ при $A + B = C$ окаймлённая $3\times 3$-матрица $\mathcal{M}_3 = \begin{pmatrix} c_2 & a_2 & b_2 \\ a_1 & c_1 & 0 \\ b_1 & 0 & c_1 \end{pmatrix}$ имеет определитель $\det\mathcal{M}_3 = c_1(C-A-B) \equiv 0$, главные $2\times 2$-миноры $(B, A, c_1^2)$ и союзную матрицу ранга~$1$ $\mathcal{M}_3^{\mathrm{adj}} = (c_1,-a_1,-b_1)^T(c_1,-a_2,-b_2)$, удовлетворяющую $(\mathcal{M}_3^{\mathrm{adj}})^2 = (c_1^2+C)\mathcal{M}_3^{\mathrm{adj}}$ (на $3 + 5^3 = 2^7 = 128$ след равен $\operatorname{Tr}\mathcal{M}_3^{\mathrm{adj}} = 4^2 + 128 = 144 = 12^2$), а нижний и верхний треугольные дефекты $\Delta_{\mathrm{low}} = c_1 - (a_1+b_1)$, $\Delta_{\mathrm{high}} = c_2 - (a_2+b_2)$ подчиняются балансу $(a_1+b_1)\Delta_{\mathrm{high}} + c_2\Delta_{\mathrm{low}} = -(a_1 b_2 + a_2 b_1) < 0$.
+\item \textbf{Циклическая $9$-факторная параметризация нильпотентного кросс-этажного конуса и расширение радикала:}
+  при сдвиге этажей $(u_a, u_b, u_c)$ ($1\le u_a < u_c < u_b$) переход ранга~$1$ $\mathcal{P}_3 = \mathcal{M}_3^{\mathrm{adj}}\mathcal{M}'_3$ имеет след $u_c\operatorname{Tr}\mathcal{P}_3 = -c_1\bigl[a_1 a'_2(u_a-u_c)(u_a u_c-1) + b_1 b'_2(u_b-u_c)(u_b u_c-1)\bigr]$, откуда условие нильпотентности $\mathcal{P}_3^2 = 0$ ($\operatorname{Tr}\mathcal{P}_3 = 0$) порождает универсальное циклическое $9$-факторное тождество
+  \[
+    u_a(u_b - u_c)(u_b u_c - 1) \;+\; u_b(u_c - u_a)(u_a u_c - 1) \;\equiv\; u_c(u_b - u_a)(u_a u_b - 1),
+  \]
+  в котором взаимная простота $\gcd(u_i u_j - 1,\,u_i u_j) = 1$ принудительно инжектирует в $\operatorname{rad}(A B C)$ новые простые делители, взаимно простые с $u_a u_b u_c$ (порождая $3^3 + 5 = 2^5$ при $(1,2,5)$ и $41 + 175 = 6^3$, т.е. $6^3 - 7\cdot 5^2 = 6\cdot 7 - 1 = 41$, при $(1,6,7)$).
 \end{enumerate}
 \end{theorem}
 

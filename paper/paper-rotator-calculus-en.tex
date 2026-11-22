@@ -458,6 +458,12 @@ For any coprime triple $A + B = C$ ($\gcd(A,B,C)=1$), the following ternary skel
   on every floor $k\ge 2$, the canonical decomposition $A = \widetilde{A}_k X_k^k,\ B = \widetilde{B}_k Y_k^k,\ C = \widetilde{C}_k Z_k^k$ embeds the triple into $\widetilde{A}_k X_k^k + \widetilde{B}_k Y_k^k = \widetilde{C}_k Z_k^k$ with root weights bounded by the radical: $\widetilde{A}_k\widetilde{B}_k\widetilde{C}_k \le \operatorname{rad}(ABC)^{k-1}$ (on the Lock~IV top-floor triple $3 + 5^3 = 2^7 = 128$ with $\operatorname{rad}=2\cdot 3\cdot 5=30$, floor $k=3$ yields $3\cdot 1^3 + 1\cdot 5^3 = 2\cdot 4^3 = 128$ with $\widetilde{A}_3\widetilde{B}_3\widetilde{C}_3 = 6 \le 30^2$ and bone gap $5 - 4 = 1$).
 \item \textbf{Unified bordered $3\times 3$ Pillai--$abc$ matrix and ternary triangle-defect identity:}
   for any factorization $A = a_1 a_2,\ B = b_1 b_2,\ C = c_1 c_2$ with $A + B = C$, the bordered $3\times 3$ matrix $\mathcal{M}_3 = \begin{pmatrix} c_2 & a_2 & b_2 \\ a_1 & c_1 & 0 \\ b_1 & 0 & c_1 \end{pmatrix}$ has $\det\mathcal{M}_3 = c_1(C-A-B) \equiv 0$, principal $2\times 2$ minors $(B, A, c_1^2)$, and rank-$1$ adjugate $\mathcal{M}_3^{\mathrm{adj}} = (c_1,-a_1,-b_1)^T(c_1,-a_2,-b_2)$ satisfying $(\mathcal{M}_3^{\mathrm{adj}})^2 = (c_1^2+C)\mathcal{M}_3^{\mathrm{adj}}$ ($\operatorname{Tr}\mathcal{M}_3^{\mathrm{adj}} = 4^2 + 128 = 144 = 12^2$ on $3 + 5^3 = 2^7 = 128$), while the lower and upper triangle defects $\Delta_{\mathrm{low}} = c_1 - (a_1+b_1)$, $\Delta_{\mathrm{high}} = c_2 - (a_2+b_2)$ obey $(a_1+b_1)\Delta_{\mathrm{high}} + c_2\Delta_{\mathrm{low}} = -(a_1 b_2 + a_2 b_1) < 0$.
+\item \textbf{Cyclic $9$-factor nilpotent cross-joint cone parameterization and radical expansion:}
+  under a cross-joint shift $(u_a, u_b, u_c)$ ($1\le u_a < u_c < u_b$), the rank-$1$ transition $\mathcal{P}_3 = \mathcal{M}_3^{\mathrm{adj}}\mathcal{M}'_3$ satisfies $u_c\operatorname{Tr}\mathcal{P}_3 = -c_1\bigl[a_1 a'_2(u_a-u_c)(u_a u_c-1) + b_1 b'_2(u_b-u_c)(u_b u_c-1)\bigr]$, so nilpotency $\mathcal{P}_3^2 = 0$ ($\operatorname{Tr}\mathcal{P}_3 = 0$) yields the universal cyclic $9$-factor identity
+  \[
+    u_a(u_b - u_c)(u_b u_c - 1) \;+\; u_b(u_c - u_a)(u_a u_c - 1) \;\equiv\; u_c(u_b - u_a)(u_a u_b - 1),
+  \]
+  where $\gcd(u_i u_j - 1,\,u_i u_j) = 1$ forces new prime factors coprime to $u_a u_b u_c$ into $\operatorname{rad}(A B C)$ (generating $3^3 + 5 = 2^5$ at $(1,2,5)$ and $41 + 175 = 6^3$, i.e., $6^3 - 7\cdot 5^2 = 6\cdot 7 - 1 = 41$, at $(1,6,7)$).
 \end{enumerate}
 \end{theorem}
 
