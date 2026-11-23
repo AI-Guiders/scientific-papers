@@ -73,13 +73,14 @@
 \label{thm:main-12-16}
 Для произвольных целых чисел в $\mathbb{Z}$ выполнены следующие универсально $\forall$-квантифицированные соотношения (\texttt{thm12}--\texttt{thm16}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Обратная аннигиляция кубов Паде--Безу (\texttt{thm12}):}
+\item \textbf{Обратная аннигиляция кубов Паде--Безу и двустороннее исключение медианты Штерна--Броко (\texttt{thm12}):}
   для $A = \widetilde{C}Z^3 - \widetilde{B}Y^3$, $I_0 = Yw - Zv$ и $I_1 = Yw(\widetilde{C}w^3+2\widetilde{B}v^3) - Zv(2\widetilde{C}w^3+\widetilde{B}v^3)$:
   \begin{equation}
     \label{eq:reverse-pade-bezout}
     Z^3 I_1 \;+\; A\,w^3(2Zv - Yw) \;\equiv\; \widetilde{B}\,I_0^3(Yw + Zv),\qquad
-    Y^3 I_1 \;+\; A\,v^3(2Yw - Zv) \;\equiv\; \widetilde{C}\,I_0^3(Yw + Zv).
+    Y^3 I_1 \;+\; A\,v^3(2Yw - Zv) \;\equiv\; \widetilde{C}\,I_0^3(Yw + Zv),
   \end{equation}
+  а между двумя родителями Штерна--Броко $(v,w)$ и $(v_m,w_m) = (Y-v,Z-w)$ медианты Фарея $(Y,Z)$ на $[0,1]$ ($p = v_m w,\ q = v w_m,\ K_+ = w^3(2Zv-Yw),\ K_- = w_m^3(2Zv_m-Yw_m)$) исключение $A$ сокращает $Z^3$ тождественно: $I_1 K_- - I_{1m} K_+ \equiv \widetilde{B} I_0^3\bigl((vw + v_m w_m)(p+q) - (p^2+q^2)\bigr)$.
 \item \textbf{Целочисленный кубический вронскиан Мейсона--Стотерса--Безу и определитель четвёртых степеней (\texttt{thm13}):}
   при $\widetilde{A}X^3 + \widetilde{B}Y^3 = \widetilde{C}Z^3$ и $\widetilde{A}Xv_0 - \widetilde{B}Yu_0 = 1$ подстановка $\alpha = u_0 Z^2 + t\widetilde{A}X$, $\beta = v_0 Z^2 + t\widetilde{B}Y$, $\gamma = u_0 X^2 + v_0 Y^2 + t\widetilde{C}Z$ даёт $A^*+B^*=C^*$ ($A^*=\alpha X^2,\ B^*=\beta Y^2,\ C^*=\gamma Z^2$) с минорами квадратов валов $(\widetilde{A}X\beta-\widetilde{B}Y\alpha,\ \widetilde{C}Z\alpha-\widetilde{A}X\gamma,\ \widetilde{C}Z\beta-\widetilde{B}Y\gamma) = (Z^2,Y^2,X^2)$, точным вронскианом
   \begin{equation}
@@ -96,8 +97,8 @@
     (\widetilde{A}X)\,\beta \;=\; Z^2 + (\widetilde{B}Y)\,\alpha.
   \end{equation}
   Выбор неотрицательного остатка $0\le\alpha\le\widetilde{A}X-1$ на круге длины $\widetilde{A}X$ безусловно устраняет неопределённость знака: $(\widetilde{A}X)\beta \le Z^2 + (\widetilde{B}Y)(\widetilde{A}X-1)$ и $(\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$, откуда $C \le R_{\mathrm{full}}^2 = \bigl((\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)\bigr)^2$ при $\beta\le R_{\mathrm{full}}$ и $C \le R_{\mathrm{full}}^3 = \bigl((\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)\bigr)^3$ для всех положительных валов и весов ($R_{\mathrm{full}}^3 - C \equiv C((\widetilde{A}\widetilde{B}\widetilde{C})^2 A B - 1)$).
-\item \textbf{Межэтажное сцепление $k=2 \leftrightarrow k=3$ на кривой 6-й степени рода~10 (\texttt{thm15}):}
-  сцепление этажа $k=2$ ($A = A_2 X_2^2,\ B = B_2 Y_2^2,\ C = C_2 Z_2^2$, род $g(2)=0$) и этажа $k=3$ ($A = A_3 X_3^3,\ B = B_3 Y_3^3,\ C = C_3 Z_3^3$, род $g(3)=1$) в силу $3-2=+1$ связывает каждый вал ($A A_3^2 X_3^6 = A_2^3 X_2^6$) и переводит $(U_6,V_6,W_6) = (X_2 Y_3 Z_3, Y_2 X_3 Z_3, Z_2 X_3 Y_3)$ на кривую 6-й степени рода $g(6) = \frac{5\times 4}{2} = 10 \ge 2$:
+\item \textbf{Межэтажное сцепление $k=2 \leftrightarrow k=3$ на кривой 6-й степени рода~10, трихотомия эйлеровой характеристики $\chi(\mathcal{C}_k) = k(3-k)$ и разложение Пуанкаре--Хегора (\texttt{thm15}):}
+  эйлерова характеристика плоской кривой степени $k$ удовлетворяет тождеству $\chi(\mathcal{C}_k) = 2 - 2g(k) = 2 - (k-1)(k-2) \equiv k(3-k)$ (обращаясь в нуль при $k = d = 3$ в соответствии с симплициальным разложением Пуанкаре--Хегора 3-сферы $S^3 = \mathcal{C}_{13}^{(+)}\cup_{O_2(3)}\mathcal{C}_{13}^{(-)}$, где $\chi(\mathcal{C}_{13}) = 13-36+32-8 = +1$, $\chi(O_2(3)) = 12-24+14 = +2 = \chi(\mathcal{C}_2)$ и $\chi(S^3) = 1+1-2 = 0 = \chi(\mathcal{C}_3)$). Сцепление односвязного сферического этажа $k=2$ ($A = A_2 X_2^2,\ B = B_2 Y_2^2,\ C = C_2 Z_2^2$, $g(2)=0,\ \chi(\mathcal{C}_2)=+2$) и торового кубического этажа $k=3$ ($A = A_3 X_3^3,\ B = B_3 Y_3^3,\ C = C_3 Z_3^3$, $g(3)=1,\ \chi(\mathcal{C}_3)=0$) в силу $3-2=+1$ связывает каждый вал ($A A_3^2 X_3^6 = A_2^3 X_2^6$) и переводит $(U_6,V_6,W_6) = (X_2 Y_3 Z_3, Y_2 X_3 Z_3, Z_2 X_3 Y_3)$ на кривую 6-й степени рода $g(6) = \frac{5\times 4}{2} = 10 \ge 2$ с отрицательной эйлеровой характеристикой $\chi(\mathcal{C}_6) = 6(3-6) = -18 < 0$:
   \begin{equation}
     \label{eq:genus-10-curve}
     A_2^3 B_3^2 C_3^2\,U_6^6 \;+\; B_2^3 A_3^2 C_3^2\,V_6^6 \;=\; C_2^3 A_3^2 B_3^2\,W_6^6.
