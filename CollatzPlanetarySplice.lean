@@ -866,6 +866,63 @@ theorem thm34_collatz_two_rotor_gap_squeeze_and_core_free_macro_gap_step
     simp only [Int.one_mul, Int.mul_one] at hMain
     omega
 
+/-- **Theorem 35 (Plus-Minus Rotor Duality `S_+ + S_d = 2^a - 3^b` and Core-Reduced Global Descent Law)**:
+For any `a`-binary, `b`-odd step trajectory `P_tot * n_b - Q_tot * n_0 = D_{a,b}` (`P_tot = 2^a, Q_tot = 3^b`)
+with centered coordinates `n_0 = 2 * m_0 + 1` (`m_0 + 1 = P_{r,0} * q_0`, `P_{r,0} = 2^{r_0}`) and
+`n_b = 2 * m_b + 1`:
+1. The Minus-Rotor sum `S_d = Q_tot * m_0 - P_tot * m_b` and the Plus-Rotor macro-sum
+   `S_+ = P_tot * (m_b + 1) - Q_tot * (m_0 + 1)` (`2 * S_+ = D_{a,b} + (P_tot - Q_tot) > 0`) satisfy the
+   path-endpoint-free identities `S_+ + S_d = P_tot - Q_tot` (`2^a - 3^b`) and `S_+ - S_d = D_{a,b}`;
+2. Factoring out the initial trailing-ones power `P_{r,0} = 2^{r_0}` (`m_0 + 1 = P_{r,0} * q_0`,
+   `S_+ = P_{r,0} * S_{+,red}`) yields the core-reduced descent law
+   `P_tot * (m_0 - m_b) = P_{r,0} * ((P_tot - Q_tot) * q_0 - S_{+,red})`,
+   so `(P_tot - Q_tot) * q_0 > S_{+,red}` unconditionally forces `m_b < m_0` (`n_b < n_0`). -/
+theorem thm35_collatz_plus_minus_rotor_duality_and_core_reduced_descent
+    (Ptot Qtot n0 nb m0 mb Dab Sd Splus Pr0 q0 Splus_red : Int)
+    (hn0 : n0 = 2 * m0 + 1)
+    (hnb : nb = 2 * mb + 1)
+    (hTraj : Ptot * nb - Qtot * n0 = Dab)
+    (hSd : Sd = Qtot * m0 - Ptot * mb)
+    (hSplus : Splus = Ptot * (mb + 1) - Qtot * (m0 + 1)) :
+    (Splus + Sd = Ptot - Qtot ∧
+     Splus - Sd = Dab ∧
+     2 * Splus = Dab + (Ptot - Qtot) ∧
+     2 * Sd = (Ptot - Qtot) - Dab) ∧
+    (Ptot * (m0 - mb) = (Ptot - Qtot) * (m0 + 1) - Splus ∧
+     (m0 + 1 = Pr0 * q0 → Splus = Pr0 * Splus_red →
+       Ptot * (m0 - mb) = Pr0 * ((Ptot - Qtot) * q0 - Splus_red) ∧
+       (Ptot > 0 → Pr0 > 0 → (Ptot - Qtot) * q0 > Splus_red → mb < m0 ∧ nb < n0))) := by
+  have hSum : (Ptot * (mb + 1) - Qtot * (m0 + 1)) + (Qtot * m0 - Ptot * mb) = Ptot - Qtot := by
+    simp only [Int.mul_add, Int.mul_one]
+    omega
+  have h2m0 : 2 * m0 + 1 = m0 + m0 + 1 := by omega
+  have h2mb : 2 * mb + 1 = mb + mb + 1 := by omega
+  have hDiff : (Ptot * (mb + 1) - Qtot * (m0 + 1)) - (Qtot * m0 - Ptot * mb) =
+               Ptot * (mb + mb + 1) - Qtot * (m0 + m0 + 1) := by
+    simp only [Int.mul_add, Int.mul_one]
+    omega
+  rw [← h2m0, ← h2mb, ← hn0, ← hnb, hTraj] at hDiff
+  have hDesc : Ptot * (m0 - mb) - ((Ptot - Qtot) * (m0 + 1) - (Ptot * (mb + 1) - Qtot * (m0 + 1))) = 0 := by
+    simp only [Int.mul_sub, Int.sub_mul, Int.mul_add, Int.mul_one]
+    omega
+  refine ⟨⟨by omega, by omega, by omega, by omega⟩, ⟨by omega, ?_⟩⟩
+  intro hm0Core hSplusCore
+  have hRed : (Ptot - Qtot) * (Pr0 * q0) - Pr0 * Splus_red =
+              Pr0 * ((Ptot - Qtot) * q0 - Splus_red) := by
+    simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  rw [← hm0Core, ← hSplusCore] at hRed
+  have hMainRed : Ptot * (m0 - mb) = Pr0 * ((Ptot - Qtot) * q0 - Splus_red) := by omega
+  refine ⟨hMainRed, ?_⟩
+  intro hPpos hPr0pos hGt
+  have hRhsPos : Pr0 * ((Ptot - Qtot) * q0 - Splus_red) > 0 := Int.mul_pos hPr0pos (by omega)
+  have hLhsPos : Ptot * (m0 - mb) > 0 := by omega
+  have hMbLt : mb < m0 := by
+    by_cases hLe : m0 - mb ≤ 0
+    · have hNonpos : Ptot * (m0 - mb) ≤ 0 := Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+      omega
+    · omega
+  exact ⟨hMbLt, by omega⟩
+
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -884,5 +941,6 @@ theorem thm34_collatz_two_rotor_gap_squeeze_and_core_free_macro_gap_step
 #print axioms thm32_collatz_two_macro_step_core_tail_compensation_law
 #print axioms thm33_collatz_pure_binary_F_polynomial_and_finite_centered_radix_representation
 #print axioms thm34_collatz_two_rotor_gap_squeeze_and_core_free_macro_gap_step
+#print axioms thm35_collatz_plus_minus_rotor_duality_and_core_reduced_descent
 
 end RotatorCalculusPaper

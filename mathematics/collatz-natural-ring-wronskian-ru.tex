@@ -289,8 +289,19 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 \end{equation}
 \end{theorem}
 
+\begin{theorem}[Двойственность Плюс-Винта и Минус-Винта $S_+ + S_d \equiv 2^a - 3^b$ и редуцированный по ядру закон спуска, \texttt{thm35}]
+\label{thm:plus-minus-rotor-duality}
+Телескопическая свёртка скачков зазора за $M$ макро-шагов ($a = A_M, b = B_M$) определяет строго положительную сумму Плюс-Винта $S_+ := 2^a(m_b + 1) - 3^b(m_0 + 1) = \sum_{m=0}^{M-1} 3^{b - B_{m+1}} 2^{A_m + r_m}(2^{\beta_m} - 1) > 0$, которая сопряжена с суммой цифр Минус-Винта $S_d = 3^b m_0 - 2^a m_b$ не зависящими от концов траектории законами сохранения
+\begin{equation}
+  \label{eq:plus-minus-rotor-duality}
+  S_+ \;+\; S_d \;\equiv\; 2^a - 3^b, \qquad
+  S_+ \;-\; S_d \;\equiv\; D_{a,b}, \qquad
+  2^{a - r_0}\bigl(m_0 - m_b\bigr) \;\equiv\; \bigl(2^a - 3^b\bigr) q_0 \;-\; \sum_{m=0}^{M-1} 3^{b - B_{m+1}} 2^{A_m + r_m - r_0}\bigl(2^{\beta_m} - 1\bigr).
+\end{equation}
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:two-rotor-gap-squeeze} (\texttt{thm18}--\texttt{thm34} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:plus-minus-rotor-duality} (\texttt{thm18}--\texttt{thm35} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
