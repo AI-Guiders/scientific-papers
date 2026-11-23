@@ -2097,6 +2097,115 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
   · intro α β eval sigma hNoFix p hEq
     exact hNoFix (eval p p) hEq.symm
 
+/-- **Theorem 18 (Universal Arbitrary-Modulus Rotator & Stereographic Embedding on `ℤ_{4Q}` for Any `Q ∈ ℤ`
+and Two-Arc Pillai–Wronskian Trajectory & Cycle Law)**:
+1. **Arbitrary-Modulus Rotator & Stereographic Embedding (`∀ Q ∈ ℤ`):**
+   On any four-quadrant ring `ℤ_{4Q}` with quarter-modulus `Q` (`C_{4Q}(φ₀) = Q - φ₀`, `S_{4Q}(φ₀) = φ₀`),
+   the `L¹` norm `C_{4Q} + S_{4Q} = Q`, the one-step difference Wronskian `W_{4Q}(φ₀) = Q`, and for any
+   Diophantine triple `A + B = C` with Bézout partner `A v - B u = 1` (`u + v = w`), the stereographic
+   decompositions `Q A = C C_{4Q} - I_{rot,Q}`, `Q B = C S_{4Q} + I_{rot,Q}`, and the quarter-modulus
+   invariant `C Δ_{rot,Q} - w I_{rot,Q} = Q` hold identically across all `ℤ`.
+2. **Two-Arc Pillai–Wronskian Trajectory & Cycle Law:**
+   For any two consecutive binary–ternary trajectory arcs `P₁ n_mid - Q₁ n_start = D₁` and
+   `P₂ n_final - Q₂ n_mid = D₂` (`C₁ = P₁ - Q₁`, `C₂ = P₂ - Q₂`, `C_tot = P₁ P₂ - Q₁ Q₂`,
+   `D_tot = Q₂ D₁ + P₁ D₂`), the composite displacement decomposes in `ℤ_{C_tot}` as
+   `(P₁ P₂)(n_final - n_start) + C_tot n_start = D_tot`, and on any closed cycle (`n_final = n_start`)
+   the chord displacement is locked to the `2 × 2` Wronskian determinant:
+   `C_tot (n_mid - n_start) = C₂ D₁ - C₁ D₂`. -/
+theorem thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
+    (Q A B C u v w phi0 P1 Q1 P2 Q2 n_start n_mid n_final D1 D2 : Int)
+    (hABC : A + B - C = 0)
+    (hBez : A * v - B * u = 1)
+    (hw   : u + v - w = 0) :
+    let cQ := Q - phi0
+    let sQ := phi0
+    let IrotQ := B * cQ - A * sQ
+    let DrotQ := cQ * v - sQ * u
+    (cQ + sQ = Q) ∧
+    (cQ * (phi0 + 1) - sQ * (Q - (phi0 + 1)) = Q) ∧
+    (Q * A = C * cQ - IrotQ) ∧
+    (Q * B = C * sQ + IrotQ) ∧
+    (C * DrotQ - w * IrotQ = Q) ∧
+    (P1 * n_mid - Q1 * n_start = D1 → P2 * n_final - Q2 * n_mid = D2 →
+      let C1 := P1 - Q1
+      let C2 := P2 - Q2
+      let Ctot := P1 * P2 - Q1 * Q2
+      let Dtot := Q2 * D1 + P1 * D2
+      ((P1 * P2) * n_final - (Q1 * Q2) * n_start = Dtot) ∧
+      ((P1 * P2) * (n_final - n_start) + Ctot * n_start = Dtot) ∧
+      (n_final = n_start →
+        Ctot * n_start = Dtot ∧
+        Ctot * n_mid   = P2 * D1 + Q1 * D2 ∧
+        Ctot * (n_mid - n_start) = C2 * D1 - C1 * D2)) := by
+  dsimp
+  have hWQ : (Q - phi0) * (phi0 + 1) - phi0 * (Q - (phi0 + 1)) = Q := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_comm]
+    omega
+  have hAQ : Q * A - (C * (Q - phi0) - (B * (Q - phi0) - A * phi0)) =
+             (Q - phi0) * (A + B - C) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have hBQ : Q * B - (C * phi0 + (B * (Q - phi0) - A * phi0)) =
+             phi0 * (A + B - C) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have hInvQ : (C * ((Q - phi0) * v - phi0 * u) - w * (B * (Q - phi0) - A * phi0)) -
+               Q * (A * v - B * u) =
+               (phi0 * u - (Q - phi0) * v) * (A + B - C) +
+               (B * (Q - phi0) - A * phi0) * (u + v - w) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  rw [hABC, Int.mul_zero] at hAQ hBQ hInvQ
+  rw [hw, hBez, Int.mul_zero, Int.mul_one] at hInvQ
+  refine ⟨by omega, hWQ, by omega, by omega, by omega, ?_⟩
+  intro hArc1 hArc2
+  have e1 : P1 * n_mid - Q1 * n_start - D1 = 0 := by omega
+  have e2 : P2 * n_final - Q2 * n_mid - D2 = 0 := by omega
+  have hComp :
+      (P1 * P2) * n_final - (Q1 * Q2) * n_start - (Q2 * D1 + P1 * D2) =
+      Q2 * (P1 * n_mid - Q1 * n_start - D1) + P1 * (P2 * n_final - Q2 * n_mid - D2) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  rw [e1, e2] at hComp
+  simp only [Int.mul_zero, Int.add_zero] at hComp
+  have hDisp :
+      (P1 * P2) * (n_final - n_start) + (P1 * P2 - Q1 * Q2) * n_start - (Q2 * D1 + P1 * D2) =
+      (P1 * P2) * n_final - (Q1 * Q2) * n_start - (Q2 * D1 + P1 * D2) := by
+    simp only [Int.mul_sub, Int.sub_mul]
+    omega
+  refine ⟨by omega, by omega, ?_⟩
+  intro hCycle
+  have e3 : n_final - n_start = 0 := by omega
+  have hStart : (P1 * P2 - Q1 * Q2) * n_start - (Q2 * D1 + P1 * D2) =
+                ((P1 * P2) * n_final - (Q1 * Q2) * n_start - (Q2 * D1 + P1 * D2)) -
+                (P1 * P2) * (n_final - n_start) := by
+    simp only [Int.mul_sub, Int.sub_mul]
+    omega
+  have hMid :
+      (P1 * P2 - Q1 * Q2) * n_mid - (P2 * D1 + Q1 * D2) =
+      P2 * (P1 * n_mid - Q1 * n_start - D1) + Q1 * (P2 * n_final - Q2 * n_mid - D2) -
+      Q1 * P2 * (n_final - n_start) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  rw [e3] at hStart
+  simp only [Int.mul_zero, Int.sub_zero] at hStart
+  rw [e1, e2, e3] at hMid
+  simp only [Int.mul_zero, Int.add_zero, Int.sub_zero] at hMid
+  have hWronsk :
+      (P1 * P2 - Q1 * Q2) * (n_mid - n_start) - ((P2 - Q2) * D1 - (P1 - Q1) * D2) =
+      ((P1 * P2 - Q1 * Q2) * n_mid - (P2 * D1 + Q1 * D2)) -
+      ((P1 * P2 - Q1 * Q2) * n_start - (Q2 * D1 + P1 * D2)) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  exact ⟨by omega, by omega, by omega⟩
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2114,5 +2223,6 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
 #print axioms thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
 #print axioms thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
 #print axioms thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_oracle_necessity
+#print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 
 end RotatorCalculusPaper

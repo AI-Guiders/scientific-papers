@@ -114,6 +114,11 @@
 \end{enumerate}
 \end{theorem}
 
+\begin{theorem}[Универсальное погружение ротатора на произвольном модуле $\mathbb{Z}_{4Q}$ и закон Вронскиана двухдуговых траекторий, \texttt{thm18}]
+\label{thm:arbitrary-modulus-thm18}
+Для любого четверть-модуля $Q\in\mathbb{Z}$ на четырёхквадрантном кольце $\mathbb{Z}_{4Q}$ ($\mathcal{C}_{4Q}(\varphi_0)=Q-\varphi_0,\ \mathcal{S}_{4Q}(\varphi_0)=\varphi_0$) тождественно выполняются $L^1$-норма $\mathcal{C}_{4Q}+\mathcal{S}_{4Q}\equiv Q$, разностный вронскиан $\mathcal{W}_{4Q}(\varphi_0)\equiv Q$, а для любой тройки $A+B=C\in\mathbb{Z}^3$ с $Av-Bu=1$ ($u+v=w$) --- стереографические разложения $Q A = C\mathcal{C}_{4Q} - I_{\mathrm{rot},Q}$, $Q B = C\mathcal{S}_{4Q} + I_{\mathrm{rot},Q}$ и инвариант четверти модуля $C\Delta_{\mathrm{rot},Q} - w I_{\mathrm{rot},Q} \equiv Q$. Кроме того, для любых двух последовательных бинарно-троичных дуг траектории $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$ ($C_i = P_i - Q_i$, $C_{\mathrm{tot}} = P_1 P_2 - Q_1 Q_2$, $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$) суммарное смещение раскладывается в $\mathbb{Z}_{C_{\mathrm{tot}}}$ как $(P_1 P_2)(n_{\mathrm{final}} - n_{\mathrm{start}}) + C_{\mathrm{tot}} n_{\mathrm{start}} \equiv D_{\mathrm{tot}}$, а на любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$) хордовое смещение определяется определителем Вронскиана $2\times 2$: $C_{\mathrm{tot}}(n_{\mathrm{mid}} - n_{\mathrm{start}}) \equiv C_2 D_1 - C_1 D_2$.
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
 Формальное доказательство Теорем~\ref{thm:main-8} и~\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm13}, \texttt{thm14}, \texttt{thm15}, \texttt{thm16}) содержится в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
