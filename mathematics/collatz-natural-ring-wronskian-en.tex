@@ -209,8 +209,23 @@ For any odd Collatz step $2^{\alpha_k} n_{k+1} = 3 n_k + 1$ and any reference he
 forcing strict descent $n_{\mathrm{final}} < n_0$ whenever $2^a n_0^b > (3 n_0 + 1)^b$ and trapping any closed cycle ($n_{\min} \le n_k \le n_{\max}$) inside $(3 n_{\max} + 1)^b \le 2^a n_{\max}^b$ and $2^a n_{\min}^b \le (3 n_{\min} + 1)^b$.
 \end{theorem}
 
+\begin{theorem}[Pure-binary $3$-free trajectory balance over $n^* = 1$ and dual-drift conservation, \texttt{thm27}]
+\label{thm:pure-binary-dual-drift}
+Setting the reference point to the stationary root $n_{\mathrm{ref}} = n^* = 1$ ($3 n^* + 1 = 4 = 2^2$) eliminates the ternary base $3$ from the step equation ($4 n_k - 2^{\alpha_k} n_{k+1} \equiv n_k - 1 \ge 0$) and telescopes over $b$ steps into the pure-binary balance law
+\begin{equation}
+  \label{eq:pure-binary-balance}
+  4^b \cdot n_0 \;-\; 2^a \cdot n_b \;\equiv\; \mathcal{E}_{a,b} \;:=\; \sum_{k=0}^{b-1} 4^{b-1-k}\,2^{s_k}\,\bigl(n_k - 1\bigr) \;\ge\; 0.
+\end{equation}
+Summing~\eqref{eq:pure-binary-balance} with the ternary equation $2^a n_b - 3^b n_0 = D_{a,b} > 0$ cancels $2^a n_b$ identically, yielding the path-independent dual-drift conservation law and negative-feedback descent identity
+\begin{equation}
+  \label{eq:dual-drift-conservation}
+  D_{a,b} \;+\; \mathcal{E}_{a,b} \;\equiv\; \bigl(4^b - 3^b\bigr)\cdot n_0, \qquad
+  2^a\bigl(n_0 - n_b\bigr) \;\equiv\; \mathcal{E}_{a,b} \;-\; \bigl(4^b - 2^a\bigr)\,n_0.
+\end{equation}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:bernoulli-euler-drift-bound} (\texttt{thm18}--\texttt{thm26} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:pure-binary-dual-drift} (\texttt{thm18}--\texttt{thm27} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

@@ -213,8 +213,23 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 что гарантирует строгий спуск $n_{\mathrm{final}} < n_0$ при $2^a n_0^b > (3 n_0 + 1)^b$ и зажимает всякий замкнутый цикл ($n_{\min} \le n_k \le n_{\max}$) в двустороннюю вилку $(3 n_{\max} + 1)^b \le 2^a n_{\max}^b$ и $2^a n_{\min}^b \le (3 n_{\min} + 1)^b$.
 \end{theorem}
 
+\begin{theorem}[Чисто двоичный баланс без участия тройки над корнем $n^* = 1$ и закон сохранения двух дрейфов, \texttt{thm27}]
+\label{thm:pure-binary-dual-drift}
+Выбор корневой стационарной точки в качестве опорной ($n_{\mathrm{ref}} = n^* = 1$, $3 n^* + 1 = 4 = 2^2$) полностью устраняет троичное основание $3$ из уравнения шага ($4 n_k - 2^{\alpha_k} n_{k+1} \equiv n_k - 1 \ge 0$) и после телескопической свёртки за $b$ шагов даёт чисто двоичный закон баланса
+\begin{equation}
+  \label{eq:pure-binary-balance}
+  4^b \cdot n_0 \;-\; 2^a \cdot n_b \;\equiv\; \mathcal{E}_{a,b} \;:=\; \sum_{k=0}^{b-1} 4^{b-1-k}\,2^{s_k}\,\bigl(n_k - 1\bigr) \;\ge\; 0.
+\end{equation}
+Сложение~\eqref{eq:pure-binary-balance} с троичным уравнением $2^a n_b - 3^b n_0 = D_{a,b} > 0$ тождественно сокращает $2^a n_b$, давая не зависящий от пути закон сохранения суммы двух дрейфов и формулу спуска с отрицательной обратной связью
+\begin{equation}
+  \label{eq:dual-drift-conservation}
+  D_{a,b} \;+\; \mathcal{E}_{a,b} \;\equiv\; \bigl(4^b - 3^b\bigr)\cdot n_0, \qquad
+  2^a\bigl(n_0 - n_b\bigr) \;\equiv\; \mathcal{E}_{a,b} \;-\; \bigl(4^b - 2^a\bigr)\,n_0.
+\end{equation}
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:bernoulli-euler-drift-bound} (\texttt{thm18}--\texttt{thm26} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:pure-binary-dual-drift} (\texttt{thm18}--\texttt{thm27} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
