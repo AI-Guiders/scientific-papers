@@ -599,6 +599,55 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
       omega
     exact ⟨hMacro, by omega⟩
 
+/-- **Theorem 30 (Minimal-Drift Macro-Step Law `2^{r_0 + 1 + β_0} n^{(1)} - 3^{r_0 + 1} n_0 = 3^{r_0 + 1} - 2^{r_0 + 1}`,
+Odd-Core Transition Law `2^{β_0 + r_1 + 1} q_1 - 3^{r_0 + 1} q_0 = 2^{β_0} - 1`, and Post-Burn Potential Evolution)**:
+For any macro-step from `n_0 = P_r1 * q_0 - 1` (`P_r1 = 2^{r_0 + 1}`, `Q_r1 = 3^{r_0 + 1}`) to
+`n_1 = P'_r1 * q_1 - 1` (`P'_r1 = 2^{r_1 + 1}`, `Q'_r1 = 3^{r_1 + 1}`) governed by `p_β * n_1 + 1 = Q_r1 * q_0`
+(`p_β = 2^{β_0} ≥ 2`):
+1. Eliminating `q_0` yields `(P_r1 * p_β) * n_1 - Q_r1 * n_0 = Q_r1 - P_r1` (`3^{r_0+1} - 2^{r_0+1}`,
+   attaining the exact lower bound of the Pillai drift envelope);
+2. The odd cores `q_0, q_1` satisfy `(p_β * P'_r1) * q_1 - Q_r1 * q_0 = p_β - 1` and
+   `(p_β * P'_r1) * (q_0 - q_1) = (p_β * P'_r1 - Q_r1) * q_0 - (p_β - 1)`;
+3. Setting `H_0 = Q_r1 * q_0` and `H_1 = Q'_r1 * q_1`,
+   `(p_β * P'_r1) * H_1 = Q'_r1 * (H_0 + (p_β - 1))`. -/
+theorem thm30_collatz_odd_core_transition_law_and_post_burn_potential
+    (Pr1 Qr1 Pr1_next Qr1_next pbeta q0 q1 n0 n1 : Int)
+    (hn0   : n0 + 1 = Pr1 * q0)
+    (hMac  : pbeta * n1 + 1 = Qr1 * q0)
+    (hn1   : n1 + 1 = Pr1_next * q1) :
+    let H0 := Qr1 * q0
+    let H1 := Qr1_next * q1
+    ((Pr1 * pbeta) * n1 - Qr1 * n0 = Qr1 - Pr1) ∧
+    ((pbeta * Pr1_next) * q1 - Qr1 * q0 = pbeta - 1 ∧
+     (pbeta * Pr1_next) * (q0 - q1) = (pbeta * Pr1_next - Qr1) * q0 - (pbeta - 1)) ∧
+    ((pbeta * Pr1_next) * H1 = Qr1_next * (H0 + (pbeta - 1))) := by
+  dsimp
+  have h1 : (Pr1 * pbeta) * n1 + Pr1 = Pr1 * (pbeta * n1 + 1) := by
+    simp only [Int.mul_add, Int.mul_one, Int.mul_assoc]
+  rw [hMac] at h1
+  have h2 : Qr1 * n0 + Qr1 = Qr1 * (n0 + 1) := by
+    simp only [Int.mul_add, Int.mul_one]
+  rw [hn0] at h2
+  have hComm12 : Pr1 * (Qr1 * q0) = Qr1 * (Pr1 * q0) := by
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hCore1 : (pbeta * Pr1_next) * q1 = pbeta * (Pr1_next * q1) := by
+    simp only [Int.mul_assoc]
+  rw [← hn1] at hCore1
+  have hCore2 : pbeta * (n1 + 1) = (pbeta * n1 + 1) + (pbeta - 1) := by
+    simp only [Int.mul_add, Int.mul_one]
+    omega
+  rw [hMac] at hCore2
+  have hCoreLaw : (pbeta * Pr1_next) * q1 - Qr1 * q0 = pbeta - 1 := by omega
+  have hCoreDesc : (pbeta * Pr1_next) * (q0 - q1) - ((pbeta * Pr1_next - Qr1) * q0 - (pbeta - 1)) =
+                   (Qr1 * q0 + (pbeta - 1)) - (pbeta * Pr1_next) * q1 := by
+    simp only [Int.mul_sub, Int.sub_mul]
+    omega
+  have hPot1 : (pbeta * Pr1_next) * (Qr1_next * q1) = Qr1_next * ((pbeta * Pr1_next) * q1) := by
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hPot2 : (pbeta * Pr1_next) * q1 = Qr1 * q0 + (pbeta - 1) := by omega
+  rw [hPot2] at hPot1
+  exact ⟨by omega, ⟨hCoreLaw, by omega⟩, hPot1⟩
+
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -612,5 +661,6 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
 #print axioms thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservation
 #print axioms thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
 #print axioms thm29_collatz_trailing_ones_burn_macro_step
+#print axioms thm30_collatz_odd_core_transition_law_and_post_burn_potential
 
 end RotatorCalculusPaper
