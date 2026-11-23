@@ -2522,6 +2522,53 @@ theorem thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
     rw [hRem0, Int.mul_zero] at hFactor
     omega
 
+/-- **Theorem 26 (Single-Step Wronskian Excess Identity `(3 n_ref + 1) n_k - 2^{α_k} n_ref n_{k+1} = n_k - n_ref`,
+Binary-Power-Free Bernoulli-Euler Drift Bound, and Guaranteed Descent Criterion)**:
+1. For any odd Collatz step `p_k * n_{k+1} = 3 * n_k + 1` (`p_k = 2^{α_k}`) and reference value `n_ref`:
+   `(3 * n_ref + 1) * n_k - p_k * n_ref * n_{k+1} = n_k - n_ref` and
+   `p_k * n_ref * n_{k+1} - (3 * n_ref + 1) * n_k = n_ref - n_k`.
+2. Along any arc `P_tot * n_final = Q_tot * n_0 + D_{a,b}` satisfying the accumulated non-descending bound
+   `P_tot * n_0^{b-1} * n_final ≤ (3 * n_0 + 1)^b`, the drift is bounded independently of `2^a`:
+   `n_0^{b-1} * D_{a,b} ≤ (3 * n_0 + 1)^b - Q_tot * n_0^b`, and `P_tot * n_0^b > (3 * n_0 + 1)^b`
+   unconditionally forces strict descent `n_final < n_0`. -/
+theorem thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_lock
+    (pk nk nk1 nref Ptot Qtot n0PowPrev n0 nfinal Dab Bpow : Int)
+    (hStep : pk * nk1 = 3 * nk + 1) :
+    ((3 * nref + 1) * nk - pk * nref * nk1 = nk - nref ∧
+     pk * nref * nk1 - (3 * nref + 1) * nk = nref - nk ∧
+     (nk ≥ nref → pk * nref * nk1 ≤ (3 * nref + 1) * nk) ∧
+     (nk ≤ nref → pk * nref * nk1 ≥ (3 * nref + 1) * nk)) ∧
+    (Ptot * nfinal = Qtot * n0 + Dab →
+     Ptot * n0PowPrev * nfinal ≤ Bpow →
+      n0PowPrev * Dab ≤ Bpow - Qtot * (n0PowPrev * n0) ∧
+      Ptot * n0PowPrev * (n0 - nfinal) ≥ Ptot * (n0PowPrev * n0) - Bpow ∧
+      (Ptot * n0PowPrev > 0 → Ptot * (n0PowPrev * n0) > Bpow → nfinal < n0)) := by
+  have hProd : pk * nref * nk1 = nref * (pk * nk1) := by
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  rw [hStep] at hProd
+  have hWronsk : (3 * nref + 1) * nk - nref * (3 * nk + 1) = nk - nref := by
+    simp only [Int.mul_add, Int.add_mul, Int.one_mul, Int.mul_one,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨⟨by omega, by omega, by intro _; omega, by intro _; omega⟩, ?_⟩
+  intro hTraj hBern
+  have hSub : Ptot * n0PowPrev * nfinal = n0PowPrev * (Ptot * nfinal) := by
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  rw [hTraj] at hSub
+  have hExpand : n0PowPrev * (Qtot * n0 + Dab) = Qtot * (n0PowPrev * n0) + n0PowPrev * Dab := by
+    simp only [Int.mul_add, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hDiff : Ptot * n0PowPrev * (n0 - nfinal) =
+               Ptot * (n0PowPrev * n0) - Ptot * n0PowPrev * nfinal := by
+    simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  refine ⟨by omega, by omega, ?_⟩
+  intro hPos hGt
+  have hPosDiff : (Ptot * n0PowPrev) * (n0 - nfinal) > 0 := by omega
+  by_cases hLe : n0 - nfinal ≤ 0
+  · have hNonpos : (Ptot * n0PowPrev) * (n0 - nfinal) ≤ 0 :=
+      Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+    omega
+  · omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2548,5 +2595,6 @@ theorem thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
 #print axioms thm23_collatz_dead_end_free_ternary_prefix_closure
 #print axioms thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
 #print axioms thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
+#print axioms thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_lock
 
 end RotatorCalculusPaper

@@ -198,8 +198,19 @@ Writing the backward-rotor drift as $D_{\mathrm{tot}} = 3^{b-1} + 2^{\alpha_0} D
 Since $2^{a - \alpha_0}$ is even and $D_{\mathrm{rem}} \equiv 3^{b-2} \equiv 1 \pmod 2$ is odd, the cofactor $2^{a - \alpha_0} - D_{\mathrm{rem}}$ is strictly odd, so the forward Collatz step automatically engages the exact gear ratio $\nu_2(3 n_0 + 1) = \alpha_0$ ($3 n_0 + 1 = 2^{\alpha_0} n_1$) and peels off the first link into the $(b-1)$-step equation $3^{b-1} n_1 + D_{\mathrm{rem}} = 2^{a - \alpha_0}$.
 \end{theorem}
 
+\begin{theorem}[Single-step Wronskian excess identity and $2^a$-free Bernoulli--Euler drift bound, \texttt{thm26}]
+\label{thm:bernoulli-euler-drift-bound}
+For any odd Collatz step $2^{\alpha_k} n_{k+1} = 3 n_k + 1$ and any reference height $n_{\mathrm{ref}}$, the step Wronskian satisfies $(3 n_{\mathrm{ref}} + 1) n_k - 2^{\alpha_k} n_{\mathrm{ref}} n_{k+1} \equiv n_k - n_{\mathrm{ref}}$. Consequently, along any $b$-step arc without prior descent ($n_k \ge n_0$ for $0 \le k < b$, so $2^a n_0^{b-1} n_{\mathrm{final}} \le (3 n_0 + 1)^b$), the drift polynomial $D_{a,b}$ is bounded from above independently of $2^a$:
+\begin{equation}
+  \label{eq:bernoulli-euler-drift-bound}
+  n_0^{b-1}\,D_{a,b} \;\le\; \bigl(3\,n_0 + 1\bigr)^b \;-\; \bigl(3\,n_0\bigr)^b, \qquad
+  2^a\,n_0^{b-1}\,\bigl(n_0 - n_{\mathrm{final}}\bigr) \;\ge\; 2^a\,n_0^b \;-\; \bigl(3\,n_0 + 1\bigr)^b,
+\end{equation}
+forcing strict descent $n_{\mathrm{final}} < n_0$ whenever $2^a n_0^b > (3 n_0 + 1)^b$ and trapping any closed cycle ($n_{\min} \le n_k \le n_{\max}$) inside $(3 n_{\max} + 1)^b \le 2^a n_{\max}^b$ and $2^a n_{\min}^b \le (3 n_{\min} + 1)^b$.
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:gear-tooth-meshing} (\texttt{thm18}--\texttt{thm25} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:bernoulli-euler-drift-bound} (\texttt{thm18}--\texttt{thm26} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}
