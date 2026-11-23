@@ -1287,7 +1287,7 @@ theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding 
   rfl
 
 set_option linter.unusedSimpArgs false
-set_option maxHeartbeats 3200000
+set_option maxHeartbeats 6400000
 
 /-- **Theorem 9 (Universal `∀`-Quantified Algebraic Laws of the Planetary Differential `F₃`,
 Gear-Slip Brahmagupta Law, Three-Level Descent & Hankel–Wronskian Identity, Conjugate Bézout
@@ -1439,9 +1439,20 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
       Z * Z * Z * (-I1) ≤ A * (w * w * w) * ((Z * v + Z * v) - Y * w)) ∧
     (I0 = 1 → Ct * (Y * w + Z * v) ≥ 0 →
       Y * Y * Y * (-I1) ≤ A * (v * v * v) * ((Y * w + Y * w) - Z * v)) ∧
-    -- Bilateral Stern-Brocot / Farey mediant elimination of A and Z^3 between left and right parents on [0, 1]:
-    (I1 * Km - I1m * Kp =
-      Bt * (I0 * I0 * I0) * ((v * w + vm * wm) * (p + q) - (p * p + q * q))) := by
+    -- Bilateral Stern-Brocot / Farey mediant elimination of A and Z^3 between left and right parents on [0, 1],
+    -- plus Quadratic-Shaft Reverse Padé-Cramer Descent I₂ with Parent-Free RHS and 2×2 Wronskian Determinant 3 I₀³:
+    ((I1 * Km - I1m * Kp =
+       Bt * (I0 * I0 * I0) * ((v * w + vm * wm) * (p + q) - (p * p + q * q))) ∧
+     (let K3y := (Z * v + Z * v + Z * v) - Y * w
+      let K3x := (Y * w + Y * w + Y * w) - Z * v
+      let K2y := (Z * v + Z * v) - Y * w
+      let K2x := (Y * w + Y * w) - Z * v
+      let I2  := Bt * Y * (v * v) * K3x - Ct * Z * (w * w) * K3y
+      (Z * Z * I2 + A * (w * w) * K3y = Bt * Y * (I0 * I0 * I0)) ∧
+      (Y * Y * I2 + A * (v * v) * K3x = Ct * Z * (I0 * I0 * I0)) ∧
+      (Z * K3y * I1 - w * K2y * I2 = (Bt * v * v + Bt * v * v + Bt * v * v) * (I0 * I0 * I0)) ∧
+      (Y * K3x * I1 - v * K2x * I2 = (Ct * w * w + Ct * w * w + Ct * w * w) * (I0 * I0 * I0)) ∧
+      ((Z * K3y) * (v * K2x) - (w * K2y) * (Y * K3x) = (I0 * I0 * I0) + (I0 * I0 * I0) + (I0 * I0 * I0)))) := by
   dsimp
   have h1 :
       Z * Z * Z * (Y * w * (Ct * w * w * w + (Bt * v * v * v + Bt * v * v * v)) -
@@ -1482,9 +1493,25 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     rw [hI0] at h2
     simp only [Int.mul_one, Int.one_mul, Int.mul_neg] at h2 ⊢
     omega
-  · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
-               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
-    omega
+  · refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+    · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    · simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
 
 /-- **Theorem 13 (Universal `∀`-Quantified Integer Mason–Stothers–Bézout Cubic Wronskian Law
 `W* = A B* - B A* = k X² Y² Z²`, Derivative Triple `A* + B* = C*`, Three Shaft-Square Minor Laws
