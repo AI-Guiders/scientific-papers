@@ -2299,6 +2299,53 @@ theorem thm20_collatz_dual_drift_tower_and_cyclic_shift_law
     simp only [Int.mul_sub]
   omega
 
+/-- **Theorem 21 (Uniqueness of the Planetary Gear Stationary Point `(2^α - 3) n* = 1 ⟹ (2^α = 4 ∧ n* = 1)`
+and Exact Differential Closure Criterion `3^b n_start + D_{a,b} = 2^a` for Reaching `n_final = 1`)**:
+1. **Planetary Gear Orthogonality & Unique Stationary Point (`n_{k+1} = n_k = n* = 1`):**
+   Each odd Collatz step is an orthogonal planetary gear link `r_k · ω_k = 3 n_k + 1 - p_k n_{k+1} = 0`
+   (`r_k = (3, 1, p_k)`, `ω_k = (n_k, 1, -n_{k+1})`, `p_k = 2^{α_k}`). At a stationary point
+   `n_{k+1} = n_k = n* ≥ 1`, the stationary equation `(p_k - 3) n* = 1` has the unique positive
+   integer solution `p_k = 4` (`α* = 2`) and `n* = 1`.
+2. **Differential Closure Criterion for Reaching the Stationary Point (`n_final = 1`):**
+   Along any `a`-step cascade `P n_final - Q n_start = D_{a,b}` (`P = 2^a, Q = 3^b`), the trajectory
+   reaches the unique stationary point `n_final = 1` if and only if the planetary differential
+   `A + B = C` closes the ternary shaft `A = Q n_start` and the carry cascade `B = D_{a,b}` into the
+   pure binary power `C = P = 2^a` (`n_final = 1 ↔ Q * n_start + D_{a,b} = P`), with exact distance
+   `P * (n_final - 1) = (Q * n_start + D_{a,b}) - P`. -/\ntheorem thm21_collatz_planetary_stationary_point_uniqueness_and_reachability_criterion
+    (pk nStar P Q n_start n_final Dab : Int) :
+    (nStar ≥ 1 → (pk - 3) * nStar = 1 → pk = 4 ∧ nStar = 1) ∧
+    (P * n_final - Q * n_start = Dab →
+      P * (n_final - 1) = (Q * n_start + Dab) - P ∧
+      (n_final = 1 → Q * n_start + Dab = P) ∧
+      (P ≠ 0 → Q * n_start + Dab = P → n_final = 1)) := by
+  refine ⟨?_, ?_⟩
+  · intro hN hStat
+    have hPos : pk - 3 ≥ 1 := by
+      by_cases h : pk - 3 ≤ 0
+      · have hMul : (pk - 3) * nStar ≤ 0 := Int.mul_nonpos_of_nonpos_of_nonneg h (by omega)
+        omega
+      · omega
+    have hLe : nStar ≤ (pk - 3) * nStar := by
+      have hDiff : (pk - 3) * nStar - nStar = (pk - 4) * nStar := by
+        simp only [Int.sub_mul]
+        omega
+      have hGe0 : (pk - 4) * nStar ≥ 0 := Int.mul_nonneg (by omega) (by omega)
+      omega
+    have hN1 : nStar = 1 := by omega
+    rw [hN1, Int.mul_one] at hStat
+    exact ⟨by omega, hN1⟩
+  · intro hEq
+    have hDist : P * (n_final - 1) - ((Q * n_start + Dab) - P) =
+                 (P * n_final - Q * n_start) - Dab := by
+      simp only [Int.mul_sub, Int.mul_one]
+      omega
+    refine ⟨by omega, by intro h1; rw [h1, Int.mul_one] at hEq; omega, ?_⟩
+    intro hPne0 hClose
+    have hP0 : P * (n_final - 1) = 0 := by omega
+    cases Int.mul_eq_zero.mp hP0 with
+    | inl hP => exact False.elim (hPne0 hP)
+    | inr hN => omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2319,5 +2366,6 @@ theorem thm20_collatz_dual_drift_tower_and_cyclic_shift_law
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
+#print axioms thm21_collatz_planetary_stationary_point_uniqueness_and_reachability_criterion
 
 end RotatorCalculusPaper

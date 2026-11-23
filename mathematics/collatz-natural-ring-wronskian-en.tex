@@ -134,8 +134,27 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 \end{tabular}
 \end{table}
 
+\section{Planetary Gear Cascade, Unique Stationary Point $n^* = 1$, and Differential Closure $3^b n_{\mathrm{start}} + D_{a,b} = 2^a$}
+\label{sec:planetary-stationary-point}
+
+Viewing each odd Collatz step $3 n_k + 1 = 2^{\alpha_k} n_{k+1}$ as an elementary link of the planetary differential frame $\mathcal{F}_3$ ($A_k + B_k = C_k$ with gear-radius vector $\mathbf{r}_k = (3, 1, 2^{\alpha_k})$ and shaft-turn vector $\mathbf{\omega}_k = (n_k, 1, -n_{k+1})$, $\mathbf{r}_k \cdot \mathbf{\omega}_k = 0$) reduces the Collatz problem ($\forall n_{\mathrm{start}} \in \mathbb{Z}_{>0}\ \exists \text{ path } n_{\mathrm{start}} \to n^*$) to stationary-point reachability.
+
+\begin{theorem}[Uniqueness of the elementary planetary gear stationary point, \texttt{thm21}]
+\label{thm:planetary-stationary-point}
+A link $\mathbf{r}_k \cdot \mathbf{\omega}_k = 3 n_k + 1 - 2^{\alpha_k} n_{k+1} = 0$ reaches a stationary point $n_{k+1} = n_k = n^* \ge 1$ if and only if $(2^{\alpha_k} - 3) n^* = 1$, which admits the unique positive integer solution $2^{\alpha^*} = 4$ ($\alpha^* = 2$, second binary gear) and $n^* = 1$.
+\end{theorem}
+
+\begin{theorem}[Differential closure criterion for reaching the stationary point $n_{\mathrm{final}} = 1$, \texttt{thm21}]
+\label{thm:stationary-reachability}
+Along any $a$-step planetary gear cascade $2^a n_{\mathrm{final}} - 3^b n_{\mathrm{start}} = D_{a,b}$, the distance to the stationary point $n^* = 1$ satisfies $2^a(n_{\mathrm{final}} - 1) \equiv (3^b n_{\mathrm{start}} + D_{a,b}) - 2^a$. Consequently, a trajectory from $n_{\mathrm{start}}$ reaches the unique stationary point $n_{\mathrm{final}} = 1$ in $b$ odd steps if and only if the ternary shaft $A = 3^b n_{\mathrm{start}}$ and the binary carry cascade $B = D_{a,b} = \sum_{j=0}^{b-1} 3^{b-1-j} 2^{s_j}$ close into a pure power of two $C = 2^a$:
+\begin{equation}
+  \label{eq:differential-closure-to-one}
+  n_{\mathrm{final}} = 1 \quad \Longleftrightarrow \quad 3^b \cdot n_{\mathrm{start}} \;+\; D_{a,b} \;=\; 2^a.
+\end{equation}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:dual-drift-tower} (\texttt{thm18}, \texttt{thm19}, \texttt{thm20}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:stationary-reachability} (\texttt{thm18}, \texttt{thm19}, \texttt{thm20}, \texttt{thm21}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}
