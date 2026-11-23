@@ -848,10 +848,21 @@ theorem thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski
     symplecticVerletInverse
       (symplecticVerletStep 173 132 41).1
       (symplecticVerletStep 173 132 41).2 41 = (173, 132) ∧
-    -- (v) Choice-free finite additivity of the cuboctahedral ball measure (Banach-Tarski-free partition) and 12-ray sub-threshold bound (12 * 41 = 492 > 256)
+    -- (v) Choice-free finite additivity of the cuboctahedral ball measure (Banach-Tarski-free partition), 12-ray sub-threshold bound (12 * 41 = 492 > 256),
+    -- and discrete AC/DC circuit laws (reactive power orthogonality ∑ C₃ S₃ = 0, half-wave rectifier ∑ (|S₃|+S₃)/2 = 16,384, full-wave Graetz bridge ∑ |S₃| = 32,768 with DC mean K_P(3) = 64, and LC resonance cancellation C₃(φ+128) + C₃(φ+384) = 0):
     cuboctBallNodes 3 0 + cuboctShellNodes 3 1 + cuboctShellNodes 3 2 + cuboctShellNodes 3 3 = cuboctBallNodes 3 3 ∧
-    halfPeriod 3 < nVertices 3 * (dInSquare * dInSquare + dOutEdge 3 * dOutEdge 3) :=
-  ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, by decide⟩
+    halfPeriod 3 < nVertices 3 * (dInSquare * dInSquare + dOutEdge 3 * dOutEdge 3) ∧
+    discreteIntegral (nRing 3) (fun phi => projC 3 phi * projS 3 phi) = 0 ∧
+    discreteIntegral (nRing 3) (fun phi => ((Int.natAbs (projS 3 phi) : Int) + projS 3 phi) / 2) =
+      ((quarterPeriod 3 * quarterPeriod 3 : Nat) : Int) ∧
+    discreteIntegral (nRing 3) (fun phi => (Int.natAbs (projS 3 phi) : Int)) =
+      ((2 * quarterPeriod 3 * quarterPeriod 3 : Nat) : Int) ∧
+    discreteIntegral (nRing 3) (fun phi => (Int.natAbs (projS 3 phi) : Int)) / (nRing 3 : Int) =
+      (octantStep 3 : Int) ∧
+    allUpTo (nRing 3) (fun phi =>
+      eqIntBool (projC 3 ((phi : Int) + (quarterPeriod 3 : Int)) + projC 3 ((phi : Int) + (3 * quarterPeriod 3 : Int))) 0 &&
+      eqIntBool (projS 3 ((phi : Int) + (quarterPeriod 3 : Int)) + projS 3 ((phi : Int) + (3 * quarterPeriod 3 : Int))) 0) = true :=
+  ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, by decide, rfl, rfl, rfl, rfl, rfl⟩
 
 /-- **Theorem 6 verification:** Pillai skeletal joint matrix decomposition
 `M_{a,b} = [[A x^(m-a), B y^(n-b)], [y^b, x^a]]` (`det M_{a,b} = C`), rank-1 cross-joint transition identity,
