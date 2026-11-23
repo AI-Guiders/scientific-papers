@@ -146,25 +146,25 @@ In conventional trial-and-error device fabrication, initial runs frequently fail
 
 \begin{enumerate}[label=\textbf{(F\arabic*)},leftmargin=*,noitemsep]
 \item \textbf{Dehydrogenated / dry oxide bridge ($Z = 45$ instead of $Z = 46 \implies$ Pauli gate leak $45^2 = 2025 < 2048$):}
-  \emph{Cause:} high-temperature vacuum annealing ($>400\,^\circ\mathrm{C}$) strips terminal protons from ALD $\mathrm{AlO_4H}$ or leaves sub-oxide $\mathrm{SiO_3}$ ($Z=38$).
+  \emph{Cause:} high-temperature vacuum annealing ($>670\;\text{K}$) strips terminal protons from ALD $\mathrm{AlO_4H}$ or leaves sub-oxide $\mathrm{SiO_3}$ ($Z=38$).
   \emph{Instrument signature:} tetracene singlet photoluminescence ($535\;\text{nm}$) is quenched, but Photocurrent MFE is zero and $\mathrm{EQE}(441\;\text{nm})\le 85\%$ (unsplit singlets $S_1$ dump directly into $\mathrm{Si}$).
-  \emph{Pre-emptive fix:} perform a $250\text{--}300\,^\circ\mathrm{C}$ forming-gas ($\mathrm{H_2/N_2}$, $Z(\mathrm{N_2})=14=Z(\mathrm{Si})$) or wet-silanol hydration step to restore $[\mathrm{AlO_4H}]$ / $\mathrm{SiO_4}$ ($Z=46,\ 46^2=2116>2048$); verify effective carrier lifetime $\tau_{\mathrm{eff}} > 2\;\text{ms}$ before tetracene deposition.
-\item \textbf{Over-thick dielectric tunnel bridge ($d_{\mathrm{ox}} > 1.5\;\text{nm} \implies$ triplet tunneling blockade):}
+  \emph{Pre-emptive fix:} perform a $520\text{--}570\;\text{K}$ forming-gas ($\mathrm{H_2/N_2}$) or wet-silanol hydration step to restore $[\mathrm{AlO_4H}]$ / $\mathrm{SiO_4}$ ($Z=46,\ 46^2=2116>2048$); verify effective carrier lifetime $\tau_{\mathrm{eff}} > 2\;\text{ms}$ before tetracene deposition.
+\item \textbf{Over-thick dielectric tunnel bridge ($>3$ coordination monolayers, $d_{\mathrm{ox}} > 1.5\;\text{nm} \implies$ triplet tunneling blockade):}
   \emph{Cause:} growing a standard $2.5\text{--}5\;\text{nm}$ passivation oxide.
   \emph{Instrument signature:} strong MFE in tetracene photoluminescence and clear $882\;\text{nm}$ triplet emission, but no boost in silicon photocurrent $\mathrm{EQE}(441\;\text{nm})$ (triplets cannot tunnel across the barrier).
-  \emph{Pre-emptive fix:} constrain bridge thickness strictly to $2\text{--}3$ cuboctahedral coordination monolayers, $d_{\mathrm{ox}} = \mathbf{0.8\text{--}1.2\;\text{nm}}$ ($8\text{--}12\;\text{\AA}$, where $12 = |O_2(3)|$).
+  \emph{Pre-emptive fix:} constrain bridge thickness strictly to $\mathbf{2\text{--}3}$ \textbf{coordination monolayers} ($d_{\mathrm{ox}} \approx \mathbf{0.8\text{--}1.2\;\text{nm}}$).
 \item \textbf{Disordered / amorphous tetracene or $\mathrm{Si}(111)$ substrate ($\Delta\varphi \to 0$ instead of $\Delta\varphi = 128 \implies$ Auger collapse):}
-  \emph{Cause:} rapid evaporation ($>5\;\text{\AA/s}$) onto a cold or $\mathrm{Si}(111)$ wafer produces parallel molecular packing ($\mathcal{C}_3(0) = +128$).
+  \emph{Cause:} rapid evaporation ($>5\;\text{\AA/s}$) onto a cryogenically cooled or $\mathrm{Si}(111)$ wafer produces parallel molecular packing ($\mathcal{C}_3(0) = +128$).
   \emph{Instrument signature:} quantum yield is high at low light but collapses sub-linearly at $1\;\text{Sun}$ ($100\;\text{mW/cm}^2$) due to biexciton Auger annihilation $T_1 + T_1 \to S_1$.
-  \emph{Pre-emptive fix:} use $\mathbf{\mathrm{Si}(100)}$ (matching the $d_{\mathrm{in}}(\square)=4$ equatorial square axes of $O_2(3)$) and quasi-equilibrium deposition at $\mathbf{0.2\text{--}0.5\;\text{\AA/s}}$ with substrate temperature $T_{\mathrm{sub}} = 20\text{--}27\,^\circ\mathrm{C}$ ($27=3^3$) to lock herringbone orthogonal ray separation $\Delta\varphi = Q_\square(3) = 128$ ($\mathcal{C}_3(128) = 0$).
+  \emph{Pre-emptive fix:} use $\mathbf{\mathrm{Si}(100)}$ (whose 4-fold surface symmetry matches the $d_{\mathrm{in}}(\square)=4$ equatorial square axes of $O_2(3)$) and quasi-equilibrium deposition at $\mathbf{0.2\text{--}0.5\;\text{\AA/s}}$ near room temperature ($T_{\mathrm{sub}} \approx 295\text{--}300\;\text{K}$, quantum thermal regime $\hat{n}_E = 0$) to lock herringbone orthogonal ray separation $\Delta\varphi = Q_\square(3) = 128$ ($\mathcal{C}_3(128) = 0$).
 \item \textbf{Over-thick tetracene absorber ($d_{\mathrm{Tc}} > 100\;\text{nm} \implies$ ``anti-absorption dip'' in $\mathrm{EQE}$ at $441\;\text{nm}$):}
-  \emph{Cause:} depositing $200\text{--}300\;\text{nm}$ of tetracene generates triplets near the top surface, farther from the $\mathrm{Si}$ interface than the triplet diffusion length.
+  \emph{Cause:} depositing $200\text{--}300\;\text{nm}$ of tetracene generates triplets near the top surface, farther from the $\mathrm{Si}$ interface than the triplet exciton diffusion length.
   \emph{Instrument signature:} $\mathrm{EQE}(\lambda)$ displays an inverted dip at $441\;\text{nm}$ mirroring tetracene absorption.
-  \emph{Pre-emptive fix:} keep tetracene thickness strictly within the carrier window $d_{\mathrm{Tc}} = \mathbf{30\text{--}64\;\text{nm}}$ (from $Z(\mathrm{SiO_2})=30$ to the octant step $K_P(3)=64\;\text{nm}$), using the $12$-ray quartz $O_2(3)$ texture (Layer~1, $n_1/n_2=9/8$) to fold the optical path obliquely.
+  \emph{Pre-emptive fix:} keep tetracene thickness strictly within the triplet exciton diffusion length ($d_{\mathrm{Tc}} \approx \mathbf{30\text{--}70\;\text{nm}}$), using the $12$-ray quartz $O_2(3)$ texture (Layer~1, $n_1/n_2=9/8$) to fold the optical path obliquely.
 \item \textbf{Ambient photo-oxidation during transfer (endoperoxide formation):}
   \emph{Cause:} exposing uncapped tetracene to ambient $\mathrm{O_2}$ under room light.
   \emph{Instrument signature:} rapid decay of the $441\;\text{nm}$ MFE signal within $10\text{--}20\;\text{min}$.
-  \emph{Pre-emptive fix:} perform Layer~2 deposition and Layer~1 quartz encapsulation in-situ or under dry $\mathrm{N_2}$ ($Z=14$) / $\mathrm{Ar}$ ($Z=18=-\chi(\mathcal{C}_6)$) without ambient light exposure.
+  \emph{Pre-emptive fix:} perform Layer~2 deposition and Layer~1 quartz encapsulation in-situ or under inert dry $\mathrm{N_2}$ / $\mathrm{Ar}$ atmosphere without ambient light exposure.
 \item \textbf{Substituting pentacene ($\mathrm{C_{22}H_{14}},\ Z=146$) for tetracene ($\mathrm{C_{18}H_{12}},\ Z=120$) on bare $\mathrm{Si}$:}
   \emph{Cause:} pentacene's shell $Z=146 > 128 = Q_\square(3)$ overshoots the quarter-ring saddle and its triplet energy ($\sim 0.86\;\text{eV},\ \lambda\approx 1440\;\text{nm} > 1107\;\text{nm}$) falls below the silicon bandgap.
   \emph{Pre-emptive fix:} use tetracene ($Z = 5^3 - 5 = 120$, Lock~IV $120 + 8 = 128$, $-\det\mathcal{W}_{\mathrm{MS}} = 1^4+5^4+4^4 = 882\;\text{nm} < 1107\;\text{nm}$).
