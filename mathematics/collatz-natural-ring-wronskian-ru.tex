@@ -249,8 +249,18 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 вследствие чего всякий длинный хвост младших единиц $r_{m+1} \ge 1$, возникающий в $n^{(m+1)}$, немедленно делит новое нечётное ядро $q_{m+1}$ на $2^{r_{m+1} + 1}$.
 \end{theorem}
 
+\begin{theorem}[Двойной $\mathrm{SL}_2(\mathbb{Z})$-замок Безу, однородный закон макро-шага и безусловный спуск ядра при $r_m = 0$, \texttt{thm31}]
+\label{thm:double-sl2-bezout-core-descent}
+На каждом макро-шаге $m$ нечётное ядро $q_m$ удовлетворяет одновременно двум уравнениям Безу в $\mathrm{SL}_2(\mathbb{Z})$ с единичным определителем: $2^{r_m + 1} q_m - n^{(m)} \equiv 1$ и $3^{r_m + 1} q_m - 2^{\beta_m} n^{(m+1)} \equiv 1$, разность которых устраняет константу $+1$ в однородный закон $2^{\beta_m} n^{(m+1)} - n^{(m)} \equiv (3^{r_m + 1} - 2^{r_m + 1}) q_m$. Более того, всякий раз при $r_m = 0$ ($n^{(m)} \equiv 1 \pmod 4$) числитель спуска ядра раскладывается в сумму трёх неотрицательных слагаемых для всех $2^{\beta_m} \ge 2$, $2^{r_{m+1}+1} \ge 2$ и $q_m \ge 1$:
+\begin{equation}
+  \label{eq:unconditional-r0-core-descent}
+  2^{\beta_m + r_{m+1} + 1}\bigl(q_m - q_{m+1}\bigr) \;\equiv\; 2^{\beta_m}\bigl(2^{r_{m+1}+1} - 2\bigr) q_m \;+\; \bigl(2^{\beta_m} - 2\bigr)(2 q_m - 1) \;+\; \bigl(q_m - 1\bigr) \;\ge\; q_m - 1,
+\end{equation}
+что доказывает безусловный строгий спуск ядра $q_{m+1} < q_m$ на каждом шаге с $r_m = 0$ и $q_m > 1$.
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:odd-core-transition} (\texttt{thm18}--\texttt{thm30} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:double-sl2-bezout-core-descent} (\texttt{thm18}--\texttt{thm31} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}

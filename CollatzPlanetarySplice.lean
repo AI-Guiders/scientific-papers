@@ -648,6 +648,68 @@ theorem thm30_collatz_odd_core_transition_law_and_post_burn_potential
   rw [hPot2] at hPot1
   exact ⟨by omega, ⟨hCoreLaw, by omega⟩, hPot1⟩
 
+/-- **Theorem 31 (Double `SL₂(ℤ)` Bézout Lock on Every Macro-Step, Homogeneous Core-Difference Law
+`2^{β_m} n^{(m+1)} - n^{(m)} = (3^{r_m+1} - 2^{r_m+1}) q_m`, and Unconditional Core Descent `q_{m+1} < q_m` at `r_m = 0`)**:
+For any macro-step from `n_0 = P_r1 * q_0 - 1` (`P_r1 = 2^{r_0 + 1}`, `Q_r1 = 3^{r_0 + 1}`) to
+`n_1 = P'_r1 * q_1 - 1` (`P'_r1 = 2^{r_1 + 1}`) governed by `p_β * n_1 + 1 = Q_r1 * q_0` (`p_β = 2^{β_0} ≥ 2`):
+1. Both the entry determinant `P_r1 * q_0 - 1 * n_0 = 1` and the exit determinant `Q_r1 * q_0 - p_β * n_1 = 1`
+   equal `+1`; subtracting them eliminates `+1` identically, yielding `p_β * n_1 - n_0 = (Q_r1 - P_r1) * q_0`;
+2. Whenever `r_0 = 0` (`n_0 ≡ 1 (mod 4)`, `Q_r1 = 3`), the core descent numerator decomposes into three
+   non-negative terms:
+   `(p_β * P'_r1) * (q_0 - q_1) = p_β * (P'_r1 - 2) * q_0 + (p_β - 2) * (2 * q_0 - 1) + (q_0 - 1)`,
+   proving unconditional strict core descent `q_1 < q_0` for ALL `p_β ≥ 2`, ALL `P'_r1 ≥ 2`, and ALL `q_0 ≥ 2`! -/
+theorem thm31_collatz_macro_step_double_sl2_bezout_lock_and_unconditional_r0_core_descent
+    (Pr1 Qr1 Pr1_next pbeta q0 q1 n0 n1 : Int)
+    (hn0  : n0 + 1 = Pr1 * q0)
+    (hMac : pbeta * n1 + 1 = Qr1 * q0)
+    (hn1  : n1 + 1 = Pr1_next * q1) :
+    (Pr1 * q0 - n0 = 1 ∧
+     Qr1 * q0 - pbeta * n1 = 1 ∧
+     pbeta * n1 - n0 = (Qr1 - Pr1) * q0) ∧
+    (Qr1 = 3 →
+      (pbeta * Pr1_next) * (q0 - q1) =
+        pbeta * (Pr1_next - 2) * q0 + (pbeta - 2) * (2 * q0 - 1) + (q0 - 1) ∧
+      (pbeta ≥ 2 → Pr1_next ≥ 2 → q0 ≥ 2 →
+        (pbeta * Pr1_next) * (q0 - q1) ≥ q0 - 1 ∧ q1 < q0)) := by
+  have hHomog : (pbeta * n1 - n0) - (Qr1 - Pr1) * q0 =
+               (pbeta * n1 + 1 - Qr1 * q0) - (n0 + 1 - Pr1 * q0) := by
+    simp only [Int.sub_mul]
+    omega
+  refine ⟨⟨by omega, by omega, by omega⟩, ?_⟩
+  intro hQr3
+  have hCore1 : (pbeta * Pr1_next) * q1 = pbeta * (Pr1_next * q1) := by
+    simp only [Int.mul_assoc]
+  rw [← hn1] at hCore1
+  have hCore2 : pbeta * (n1 + 1) = (pbeta * n1 + 1) + (pbeta - 1) := by
+    simp only [Int.mul_add, Int.mul_one]
+    omega
+  rw [hMac, hQr3] at hCore2
+  have hDecompId : ((pbeta * Pr1_next) * q0 - (3 * q0 + (pbeta - 1))) -
+                   (pbeta * (Pr1_next - 2) * q0 + (pbeta - 2) * (2 * q0 - 1) + (q0 - 1)) = 0 := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have hDiffExpand : (pbeta * Pr1_next) * (q0 - q1) = (pbeta * Pr1_next) * q0 - (pbeta * Pr1_next) * q1 := by
+    simp only [Int.mul_sub]
+  have hExactDecomp : (pbeta * Pr1_next) * (q0 - q1) =
+                      pbeta * (Pr1_next - 2) * q0 + (pbeta - 2) * (2 * q0 - 1) + (q0 - 1) := by
+    omega
+  refine ⟨hExactDecomp, ?_⟩
+  intro hpbeta hPrnext hq0
+  have hTerm1 : pbeta * (Pr1_next - 2) * q0 ≥ 0 :=
+    Int.mul_nonneg (Int.mul_nonneg (by omega) (by omega)) (by omega)
+  have hTerm2 : (pbeta - 2) * (2 * q0 - 1) ≥ 0 :=
+    Int.mul_nonneg (by omega) (by omega)
+  have hGe : (pbeta * Pr1_next) * (q0 - q1) ≥ q0 - 1 := by omega
+  have hPosProd : pbeta * Pr1_next > 0 := Int.mul_pos (by omega) (by omega)
+  have hLt : q1 < q0 := by
+    by_cases hLe : q0 - q1 ≤ 0
+    · have hNonpos : (pbeta * Pr1_next) * (q0 - q1) ≤ 0 :=
+        Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+      omega
+    · omega
+  exact ⟨hGe, hLt⟩
+
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -662,5 +724,6 @@ theorem thm30_collatz_odd_core_transition_law_and_post_burn_potential
 #print axioms thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
 #print axioms thm29_collatz_trailing_ones_burn_macro_step
 #print axioms thm30_collatz_odd_core_transition_law_and_post_burn_potential
+#print axioms thm31_collatz_macro_step_double_sl2_bezout_lock_and_unconditional_r0_core_descent
 
 end RotatorCalculusPaper

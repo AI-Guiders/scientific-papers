@@ -245,8 +245,18 @@ Writing consecutive macro-step states as $n^{(m)} + 1 = 2^{r_m + 1} q_m$ and $n^
 so any long trailing-ones tail $r_{m+1} \ge 1$ generated in $n^{(m+1)}$ immediately divides the new odd core $q_{m+1}$ by $2^{r_{m+1} + 1}$.
 \end{theorem}
 
+\begin{theorem}[Double $\mathrm{SL}_2(\mathbb{Z})$ Bézout lock, homogeneous core law, and unconditional core descent at $r_m = 0$, \texttt{thm31}]
+\label{thm:double-sl2-bezout-core-descent}
+At every macro-step $m$, the odd core $q_m$ satisfies two simultaneous unit-determinant $\mathrm{SL}_2(\mathbb{Z})$ Bézout equations, $2^{r_m + 1} q_m - n^{(m)} \equiv 1$ and $3^{r_m + 1} q_m - 2^{\beta_m} n^{(m+1)} \equiv 1$, whose difference eliminates the $+1$ constant into the homogeneous law $2^{\beta_m} n^{(m+1)} - n^{(m)} \equiv (3^{r_m + 1} - 2^{r_m + 1}) q_m$. Moreover, whenever $r_m = 0$ ($n^{(m)} \equiv 1 \pmod 4$), the core descent numerator decomposes into three non-negative terms for all $2^{\beta_m} \ge 2$, $2^{r_{m+1}+1} \ge 2$, and $q_m \ge 1$:
+\begin{equation}
+  \label{eq:unconditional-r0-core-descent}
+  2^{\beta_m + r_{m+1} + 1}\bigl(q_m - q_{m+1}\bigr) \;\equiv\; 2^{\beta_m}\bigl(2^{r_{m+1}+1} - 2\bigr) q_m \;+\; \bigl(2^{\beta_m} - 2\bigr)(2 q_m - 1) \;+\; \bigl(q_m - 1\bigr) \;\ge\; q_m - 1,
+\end{equation}
+proving unconditional strict core descent $q_{m+1} < q_m$ at every $r_m = 0$ step with $q_m > 1$.
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:odd-core-transition} (\texttt{thm18}--\texttt{thm30} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:double-sl2-bezout-core-descent} (\texttt{thm18}--\texttt{thm31} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}
