@@ -2311,7 +2311,8 @@ and Exact Differential Closure Criterion `3^b n_start + D_{a,b} = 2^a` for Reach
    reaches the unique stationary point `n_final = 1` if and only if the planetary differential
    `A + B = C` closes the ternary shaft `A = Q n_start` and the carry cascade `B = D_{a,b}` into the
    pure binary power `C = P = 2^a` (`n_final = 1 ↔ Q * n_start + D_{a,b} = P`), with exact distance
-   `P * (n_final - 1) = (Q * n_start + D_{a,b}) - P`. -/\ntheorem thm21_collatz_planetary_stationary_point_uniqueness_and_reachability_criterion
+   `P * (n_final - 1) = (Q * n_start + D_{a,b}) - P`. -/
+theorem thm21_collatz_planetary_stationary_point_uniqueness_and_reachability_criterion
     (pk nStar P Q n_start n_final Dab : Int) :
     (nStar ≥ 1 → (pk - 3) * nStar = 1 → pk = 4 ∧ nStar = 1) ∧
     (P * n_final - Q * n_start = Dab →
