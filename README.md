@@ -21,7 +21,7 @@
 | **Part IV** | **Planetary Differential Geometry of Coprime Triples `A + B = C`: Integer Mason–Stothers–Bézout Wronskians, Circle-Remainder Degree Reduction, Cross-Floor Genus-10 Lock, and Stereographic `ℤ_{512}` Embedding** (`thm8`, `thm9`, `thm12`–`thm16`) | [PDF](paper/paper-4-planetary-differential-wronskian-en.pdf) · [TeX](paper/paper-4-planetary-differential-wronskian-en.tex) | [PDF](paper/paper-4-planetary-differential-wronskian-ru.pdf) · [TeX](paper/paper-4-planetary-differential-wronskian-ru.tex) |
 | **Omnibus I** | **Combined Pure-Math Preprint (All 16 Theorems)** | [PDF](paper/paper-rotator-calculus-en.pdf) · [TeX](paper/paper-rotator-calculus-en.tex) | [PDF](paper/paper-rotator-calculus-ru.pdf) · [TeX](paper/paper-rotator-calculus-ru.tex) |
 
-### Series II: Discrete Planckian Carrier Physics & Applied Photovoltaics (Satellite Papers to the Monograph)
+### Series II: Discrete Quantum Mechanics (DQM), Continuum Convergence to CQM, and Applied Silicon Photovoltaics (Satellite Papers to the Monograph)
 
 | Part | Topic & Verified Lean 4 Modules (`AI-Guiders/mt-lattice-fluid`) | English PDF & TeX | Russian PDF & TeX |
 | :--- | :--- | :--- | :--- |
