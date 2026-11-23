@@ -173,8 +173,23 @@ For any prefix of $b - 1$ gear steps $0 = s_0 < s_1 < \dots < s_{b-1}$ with pref
 which admits a unique primitive-root class $a \pmod{2\cdot 3^{b-1}}$ ($\alpha_{b-1} = 2 m_0$ even) in $\mathbb{Z}_{3^b}^\times$ for every prefix $(s_1,\dots,s_{b-1})$.
 \end{theorem}
 
+\begin{theorem}[Counter-rotating forward--backward planetary gear splice in $\mathbb{Z}_{2^{a_1}} \times \mathbb{Z}_{3^{b_2}}$, \texttt{thm24}]
+\label{thm:counter-rotating-splice}
+Splitting a path from $n_{\mathrm{start}}$ to the root $n^* = 1$ ($2^2\cdot 1 - 3^1\cdot 1 = 1$) at an intermediate meeting point $n_{\mathrm{mid}}$ into a clockwise forward rotor $2^{a_1} n_{\mathrm{mid}} = 3^{b_1} n_{\mathrm{start}} + D_1$ in $\mathbb{Z}_{2^{a_1}}$ and a counter-clockwise backward rotor $3^{b_2} n_{\mathrm{mid}} = 2^{a_2} - D_2$ in $\mathbb{Z}_{3^{b_2}}^\times$ decouples their modular conditions via the coaxial splice identity
+\begin{equation}
+  \label{eq:counter-rotating-splice}
+  3^{b_2}\bigl(3^{b_1} n_{\mathrm{start}} + D_1\bigr) \;=\; 2^{a_1}\bigl(2^{a_2} - D_2\bigr), \qquad
+  n_{\mathrm{mid}} \;=\; v\,\bigl(3^{b_1} n_{\mathrm{start}} + D_1\bigr) \;-\; u\,\bigl(2^{a_2} - D_2\bigr)
+\end{equation}
+(where $2^{a_1} v - 3^{b_2} u = 1$), and replaces the sign-changing Pillai gap denominator $2^a - 3^b$ by the strictly positive pure-ternary chord coefficient $3^{b_1 + b_2} > 0$:
+\begin{equation}
+  \label{eq:pure-ternary-chord-law}
+  3^{b_1 + b_2}\,\bigl(n_{\mathrm{start}} - n_{\mathrm{mid}}\bigr) \;\equiv\; \bigl(2^{a_1} - 3^{b_1}\bigr)\,\bigl(2^{a_2} - D_2\bigr) \;-\; 3^{b_2}\,D_1.
+\end{equation}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:ternary-prefix-closure} (\texttt{thm18}--\texttt{thm23} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:counter-rotating-splice} (\texttt{thm18}--\texttt{thm24} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

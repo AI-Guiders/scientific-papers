@@ -2431,6 +2431,53 @@ theorem thm23_collatz_dead_end_free_ternary_prefix_closure
   · intro h
     omega
 
+/-- **Theorem 24 (Counter-Rotating Forward-Backward Planetary Gear Splice in `ℤ_{2^{a_1}} × ℤ_{3^{b_2}}`,
+Bézout Meeting-Point Reconstruction, and Pure-Ternary Chord Law)**:
+Splitting a trajectory from `n_start` to the stationary root `n* = 1` at an intermediate meeting point `n_mid`
+into two counter-rotating planetary gear cascades:
+- **Forward rotor (clockwise from `n_start` to `n_mid` in `ℤ_{2^{a_1}}`):** `P1 * n_mid = Q1 * n_start + D1`
+  (`P1 = 2^{a_1}, Q1 = 3^{b_1}`),
+- **Backward rotor (counter-clockwise from `n* = 1` to `n_mid` in `ℤ_{3^{b_2}}^×`):** `Q2 * n_mid = P2 - D2`
+  (`P2 = 2^{a_2}, Q2 = 3^{b_2}`):
+1. **Orthogonal Coaxial Splice Identity & Stationary Closure:**
+   `Q2 * (Q1 * n_start + D1) = P1 * (P2 - D2)` and `(Q1 * Q2) * n_start + (Q2 * D1 + P1 * D2) = P1 * P2`;
+2. **Division-Free Bézout Reconstruction of the Meeting Point `n_mid`:**
+   For any Bézout coefficients `P1 * v - Q2 * u = 1` (`gcd(2^{a_1}, 3^{b_2}) = 1`),
+   `n_mid = v * (Q1 * n_start + D1) - u * (P2 - D2)`;
+3. **Pure-Ternary Counter-Rotating Chord Law (`3^{b_1 + b_2} (n_start - n_mid)`):**
+   `(Q1 * Q2) * (n_start - n_mid) = (P1 - Q1) * (P2 - D2) - Q2 * D1`. -/
+theorem thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
+    (P1 Q1 D1 P2 Q2 D2 n_start n_mid u v : Int)
+    (hFwd : P1 * n_mid = Q1 * n_start + D1)
+    (hBwd : Q2 * n_mid = P2 - D2) :
+    (Q2 * (Q1 * n_start + D1) = P1 * (P2 - D2) ∧
+     (Q1 * Q2) * n_start + (Q2 * D1 + P1 * D2) = P1 * P2) ∧
+    (P1 * v - Q2 * u = 1 → n_mid = v * (Q1 * n_start + D1) - u * (P2 - D2)) ∧
+    ((Q1 * Q2) * (n_start - n_mid) = (P1 - Q1) * (P2 - D2) - Q2 * D1) := by
+  have hSplice1 : Q2 * (Q1 * n_start + D1) = Q2 * (P1 * n_mid) := by rw [hFwd]
+  have hSplice2 : P1 * (P2 - D2) = P1 * (Q2 * n_mid) := by rw [hBwd]
+  have hComm : Q2 * (P1 * n_mid) = P1 * (Q2 * n_mid) := by
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hSplice : Q2 * (Q1 * n_start + D1) = P1 * (P2 - D2) := by omega
+  have hGlobal : (Q1 * Q2) * n_start + (Q2 * D1 + P1 * D2) - P1 * P2 =
+                 Q2 * (Q1 * n_start + D1) - P1 * (P2 - D2) := by
+    simp only [Int.mul_add, Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have hChordId : (Q1 * Q2) * (n_start - n_mid) - ((P1 - Q1) * (Q2 * n_mid) - Q2 * D1) =
+                  Q2 * (Q1 * n_start + D1) - Q2 * (P1 * n_mid) := by
+    simp only [Int.mul_add, Int.mul_sub, Int.sub_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  rw [hBwd, ← hSplice1] at hChordId
+  refine ⟨⟨hSplice, by omega⟩, ?_, by omega⟩
+  intro hBez
+  rw [← hFwd, ← hBwd]
+  have hBezId : n_mid - (v * (P1 * n_mid) - u * (Q2 * n_mid)) =
+                (1 - (P1 * v - Q2 * u)) * n_mid := by
+    simp only [Int.mul_sub, Int.sub_mul, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  rw [hBez] at hBezId
+  omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2455,5 +2502,6 @@ theorem thm23_collatz_dead_end_free_ternary_prefix_closure
 #print axioms collatz_global_convergence_from_local_descent
 #print axioms thm22_collatz_arbitrary_stage_fermat_descent_reduction
 #print axioms thm23_collatz_dead_end_free_ternary_prefix_closure
+#print axioms thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
 
 end RotatorCalculusPaper
