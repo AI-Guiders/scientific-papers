@@ -20,55 +20,31 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Замечание}
 
-\title{\textbf{Динамика траекторий Коллатца на естественных модулярных кольцах $\mathbb{Z}_{2^a}$ и $\mathbb{Z}_{2^a - 3^b}$:\\ разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана, знакоположительные суммы Вронскиана и башня остаточных дрейфов в Lean~4}}
-\author{Дмитрий Каратаев \and Луч (AI-Guiders)}
+\title{\textbf{Динамика траекторий Коллатца на естественных модулярных кольцах $\mathbb{Z}_{2^a}$, $\mathbb{Z}_{3^b}$ и $\mathbb{Z}_{2^a - 3^b}$:\\ базис $\mathrm{SL}_2(\mathbb{Z})$ Каталана, встречное сцепление каскадов планетарных передач, закон сохранения двух дрейфов и динамика нечётных ядер в Lean~4}}
+\author{Д.\,А.~Каратаев\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Формальная верификация в Lean~4 и аналитическая разработка выполнены при участии ИИ-партнёра \emph{Луч} (\emph{Luch}, AI-Guiders).}}
 \date{2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Задача Коллатца $3n+1$ сформулирована как задача о дискретном движении на двусортной алгебраической системе носителей $\langle\mathcal{M},\mathcal{T}\rangle$ (в смысле А.\,И.~Мальцева) над естественными модулярными кольцами $\mathbb{Z}_{2^a} = \mathbb{Z}_{4Q}$ ($Q = 2^{a-2}$) и кольцом зазора Пиллаи $\mathbb{Z}_{C_{a,b}}$ ($C_{a,b} = 2^a - 3^b$). Во-первых, доказано, что кусочно-линейный ротатор $(\mathcal{C}_{4Q},\mathcal{S}_{4Q})$, его постоянный разностный вронскиан $\mathcal{W}_{4Q} \equiv Q$ и стереографический инвариант Вейерштрасса $C\Delta_{\mathrm{rot},Q} - w I_{\mathrm{rot},Q} \equiv Q$ выполняются на любом четырёхквадрантном кольце $\mathbb{Z}_{4Q}$ (\texttt{thm18}). Во-вторых, для любых двух последовательных дуг траектории и суммарный дрейф $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$, и суммарный зазор Пиллаи $C_{\mathrm{tot}} = Q_2 C_1 + P_1 C_2$ порождаются одним и тем же линейным оператором $(Q_2,P_1)$, связывая хордовое смещение на любом замкнутом цикле с определителем Вронскиана $2\times 2$: $C_{\mathrm{tot}}(n_{\mathrm{mid}} - n_{\mathrm{start}}) \equiv C_2 D_1 - C_1 D_2$. В-третьих, унимодулярная матрица $\mathcal{B}_{2,3} = \begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix} \in \mathrm{SL}_2(\mathbb{Z})$ раскладывает всякую пару показателей $(a,b)\in\mathbb{Z}^2$ по базису Каталана $u = 2a - 3b \ge 1$ и $v = 2b - a \ge 1$ ($2^a = 4^u 8^v,\ 3^b = 3^u 9^v$), превращая хордовое уравнение Вронскиана на цикле в сумму двух строго положительных слагаемых без вычитания: $(2^a - 3^b)(n_{\mathrm{start}} - n_{\mathrm{mid}}) \equiv (9^v - 8^v)D_1 + (4^u - 3^u)D_2 > 0$ (\texttt{thm19}). Наконец, установлены закон циклического сдвига полных дрейфов $2^{\alpha_k} D_{\mathrm{tot}}^{(k+1)} - 3 D_{\mathrm{tot}}^{(k)} \equiv 2^a - 3^b$ и не зависящий от вершин закон перехода двойственных остаточных дрейфов $2^{\alpha_{k+1}} D_2^{(k+1)} - 3 D_2^{(k)} \equiv 2^{a-\alpha_k} - 3^{b-1}$ (\texttt{thm20}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Задача Коллатца $3n+1$ сформулирована как задача о дискретной динамике траекторий на двусортной алгебраической системе носителей $\langle\mathcal{M},\mathcal{T}\rangle$ (в смысле А.\,И.~Мальцева) над естественными модулярными кольцами $\mathbb{Z}_{2^a}$, $\mathbb{Z}_{3^b}$ и кольцом зазора Пиллаи $\mathbb{Z}_{C_{a,b}}$ ($C_{a,b} = 2^a - 3^b$). Во-первых, установлены композиция двух дуг и хордовый закон Вронскиана $2\times 2$ на замкнутых циклах (\texttt{thm18}), унимодулярное разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана ($u = 2a - 3b \ge 1,\ v = 2b - a \ge 1$) со знакоположительной суммой Вронскиана (\texttt{thm19}) и башня двойственных остаточных дрейфов (\texttt{thm20}). Во-вторых, представляя каждый нечётный шаг $3 n_k + 1 = 2^{\alpha_k} n_{k+1}$ как ортогональное звено репера планетарного дифференциала $\mathcal{F}_3$ с единственной стационарной точкой $n^* = 1$ при $2^{\alpha^*} = 4$ (\texttt{thm21}) и конструктивной редукцией бесконечного спуска Ферма (\texttt{thm22}), мы рассекаем путь к корню $4\text{--}2\text{--}1$ на два встречных каскада передач: прямой ротор в $\mathbb{Z}_{2^{a_1}}$ и встречный ротор в $\mathbb{Z}_{3^{b_2}}^\times$. Доказано, что встречный ротор не имеет тупиковых ветвей по модулю~$3$ (\texttt{thm23}), сшивается с прямым ротором через строго положительный чисто троичный определитель Сикорского $3^{b_1+b_2}(n_{\mathrm{start}} - n_{\mathrm{mid}})$ (\texttt{thm24}) и обладает автоматическим $2$-адическим и $3$-адическим зацеплением зубьев (\texttt{thm25}). Наконец, из универсального тождества Вронскиана превышения одного шага (\texttt{thm26}) выведены чисто двоичный баланс без тройки и закон сохранения двух дрейфов $D_{a,b} + \mathcal{E}_{a,b} \equiv (4^b - 3^b) n_0$ (\texttt{thm27}), финитное центрированное $(2,3)$-разложение и двойственность Плюс-Винта и Минус-Винта $S_+ + S_d \equiv 2^a - 3^b$ (\texttt{thm28}), а также двойной $\mathrm{SL}_2(\mathbb{Z})$-замок Безу и безусловный спуск при $r_0 = 0$ для нечётных ядер $q_m = (n^{(m)} + 1)/2^{r_m + 1}$ (\texttt{thm29}, верифицировано в \texttt{CollatzPlanetarySplice.lean}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 \end{abstract}
 
-\section{Введение и уравнение движения на кольцах $\mathbb{Z}_{2^a}$ и $\mathbb{Z}_{2^a - 3^b}$}
-\label{sec:intro}
-
-Всюду далее термин \emph{носитель} (\emph{carrier}) употребляется строго в смысле классической теории моделей А.\,И.~Мальцева~\cite{Malcev1970} как основное множество сорта в двусортной алгебраической системе $\langle\mathcal{M},\mathcal{T}\rangle$. За $a \ge 1$ двоичных шагов сжатого оператора Коллатца $T(x) = x/2$ ($x$ чётно), $T(x) = (3x+1)/2$ ($x$ нечётно), содержащих $b \in \{0,\dots,a\}$ нечётных шагов на позициях $0 \le s_0 < s_1 < \dots < s_{b-1} \le a - 1$, траектория из $n_{\mathrm{start}}$ в $n_{\mathrm{final}} = T^{(a)}(n_{\mathrm{start}})$ удовлетворяет уравнению
-\begin{equation}
-  \label{eq:collatz-equation-of-motion}
-  2^a \cdot n_{\mathrm{final}} \;-\; 3^b \cdot n_{\mathrm{start}} \;=\; D_{a,b}, \qquad
-  D_{a,b} \;:=\; \sum_{j=0}^{b-1} 3^{b-1-j}\,2^{s_j}.
-\end{equation}
-При записи $n_{\mathrm{start}} = 2^a q + r$ ($r = n_{\mathrm{start}}\bmod 2^a \in \mathbb{Z}_{2^a}$) вектор чётностей $(e_0,\dots,e_{a-1})\in\{0,1\}^a$ биективно определяется остатком $r\in\mathbb{Z}_{2^a}$ и не зависит от $q = \lfloor n_{\mathrm{start}}/2^a\rfloor$, вследствие чего $b(r)$ подчиняется биномиальному распределению Паскаля $\binom{a}{b}$ на кольце $\mathbb{Z}_{2^a}$ при любом $a \ge 1$, а полином дрейфа $D_{a,b}$ зажат в вилке Пиллаи:
-\begin{equation}
-  \label{eq:drift-envelope}
-  3^b - 2^b \;\le\; D_{a,b} \;\le\; 2^{a-b}\,\bigl(3^b - 2^b\bigr).
-\end{equation}
-
-\section{Ротаторное исчисление на произвольном модуле $\mathbb{Z}_{4Q}$ и Вронскиан двух дуг}
+\section{Уравнение движения на $\mathbb{Z}_{2^a}$, $\mathbb{Z}_{3^b}$ и $\mathbb{Z}_{2^a - 3^b}$ и Вронскиан двух дуг}
 \label{sec:two-arc-wronskian}
 
-\begin{theorem}[Ротатор и стереографический инвариант на произвольном кольце $\mathbb{Z}_{4Q}$, \texttt{thm18}]
-\label{thm:arbitrary-modulus-rotator}
-Для любого четверть-модуля $Q\in\mathbb{Z}$ и любой фазы $\varphi_0\in\mathbb{Z}$ на четырёхквадрантном кольце $\mathbb{Z}_{4Q}$ проекции $\mathcal{C}_{4Q}(\varphi_0) = Q - \varphi_0$ и $\mathcal{S}_{4Q}(\varphi_0) = \varphi_0$ удовлетворяют $\mathcal{C}_{4Q}(\varphi_0) + \mathcal{S}_{4Q}(\varphi_0) \equiv Q$ и $\mathcal{W}_{4Q}(\varphi_0) = \mathcal{C}_{4Q}(\varphi_0)\mathcal{S}_{4Q}(\varphi_0+1) - \mathcal{S}_{4Q}(\varphi_0)\mathcal{C}_{4Q}(\varphi_0+1) \equiv Q$. Для любой тройки $A + B = C \in \mathbb{Z}^3$ с парой Безу $A v - B u = 1$ ($u + v = w$) при $I_{\mathrm{rot},Q} = B\mathcal{C}_{4Q}(\varphi_0) - A\mathcal{S}_{4Q}(\varphi_0)$ и $\Delta_{\mathrm{rot},Q} = \mathcal{C}_{4Q}(\varphi_0)v - \mathcal{S}_{4Q}(\varphi_0)u$ выполняются
+Всюду далее термин \emph{носитель} (\emph{carrier}) употребляется строго в смысле теории моделей А.\,И.~Мальцева~\cite{Malcev1970} как основное множество сорта в двусортной алгебраической системе $\langle\mathcal{M},\mathcal{T}\rangle$. За $a \ge 1$ двоичных шагов сжатого оператора Коллатца $T(x) = x/2$ ($x$ чётно), $T(x) = (3x+1)/2$ ($x$ нечётно), содержащих $b \in \{0,\dots,a\}$ нечётных шагов на кумулятивных показателях $0 = s_0 < s_1 < \dots < s_{b-1} < s_b = a$ ($\alpha_k = s_{k+1} - s_k \ge 1$), траектория из $n_0 = n_{\mathrm{start}}$ в $n_b = n_{\mathrm{final}} = T^{(a)}(n_0)$ удовлетворяет уравнению
 \begin{equation}
-  \label{eq:arbitrary-q-invariant}
-  Q\,A \;=\; C\,\mathcal{C}_{4Q}(\varphi_0) - I_{\mathrm{rot},Q}, \qquad
-  Q\,B \;=\; C\,\mathcal{S}_{4Q}(\varphi_0) + I_{\mathrm{rot},Q}, \qquad
-  C\cdot\Delta_{\mathrm{rot},Q} \;-\; w\cdot I_{\mathrm{rot},Q} \;\equiv\; Q.
+  \label{eq:collatz-equation-of-motion}
+  2^a \cdot n_b \;-\; 3^b \cdot n_0 \;=\; D_{a,b}, \qquad
+  D_{a,b} \;:=\; \sum_{k=0}^{b-1} 3^{b-1-k}\,2^{s_k}, \qquad
+  3^b - 2^b \;\le\; D_{a,b} \;\le\; 2^{a-b}\bigl(3^b - 2^b\bigr).
 \end{equation}
-\end{theorem}
 
 \begin{theorem}[Композиция двух дуг траектории и хордовый закон Вронскиана $2\times 2$, \texttt{thm18}]
 \label{thm:two-arc-wronskian}
-Для двух последовательных дуг траектории $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$ ($C_i = P_i - Q_i$, $C_{\mathrm{tot}} = P_1 P_2 - Q_1 Q_2$, $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$) суммарное смещение раскладывается в $\mathbb{Z}_{C_{\mathrm{tot}}}$ как
-\begin{equation}
-  \label{eq:composite-displacement}
-  (P_1 P_2)\,n_{\mathrm{final}} \;-\; (Q_1 Q_2)\,n_{\mathrm{start}} \;=\; D_{\mathrm{tot}}, \qquad
-  (P_1 P_2)\,\bigl(n_{\mathrm{final}} - n_{\mathrm{start}}\bigr) \;+\; C_{\mathrm{tot}}\,n_{\mathrm{start}} \;\equiv\; D_{\mathrm{tot}}.
-\end{equation}
-На любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$) обе вершины $n_{\mathrm{start}}$ и $n_{\mathrm{mid}}$ выражаются через $C_{\mathrm{tot}}$, а их хордовое смещение равно определителю Вронскиана $2\times 2$:
+Для двух последовательных дуг $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$ ($C_i = P_i - Q_i$, $C_{\mathrm{tot}} = P_1 P_2 - Q_1 Q_2 = Q_2 C_1 + P_1 C_2$, $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$) суммарное смещение удовлетворяет $(P_1 P_2)(n_{\mathrm{final}} - n_{\mathrm{start}}) + C_{\mathrm{tot}} n_{\mathrm{start}} \equiv D_{\mathrm{tot}}$. На любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$) хордовое смещение равно определителю Вронскиана $2\times 2$:
 \begin{equation}
   \label{eq:cycle-wronskian-chord}
   C_{\mathrm{tot}}\,n_{\mathrm{start}} = Q_2 D_1 + P_1 D_2, \qquad
@@ -77,237 +53,119 @@
 \end{equation}
 \end{theorem}
 
-\section{Базис показателей $\mathrm{SL}_2(\mathbb{Z})$ Каталана и знакоположительная сумма Вронскиана}
-\label{sec:catalan-basis}
-
-\begin{theorem}[Унимодулярное разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана, \texttt{thm19}]
+\begin{theorem}[Унимодулярный базис $\mathrm{SL}_2(\mathbb{Z})$ Каталана и знакоположительная сумма Вронскиана на циклах, \texttt{thm19}]
 \label{thm:catalan-sl2-basis}
-Матрица базисных показателей $\mathcal{B}_{2,3} = \begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix}$, порождённая единичными замками $E_0 = (2,1)$ ($2^2 - 3^1 = +1$) и $E_1 = (3,2)$ ($3^2 - 2^3 = +1$), имеет определитель $\det\mathcal{B}_{2,3} = +1$ и единственным образом раскладывает всякую пару показателей $(a,b)\in\mathbb{Z}^2$ по координатам
-\begin{equation}
-  \label{eq:catalan-uv-coords}
-  u \;:=\; 2a - 3b, \qquad v \;:=\; 2b - a, \qquad
-  2u + 3v \;=\; a, \qquad u + 2v \;=\; b, \qquad u + v \;=\; a - b.
-\end{equation}
-Для каждого сжимающего цикла ($\frac{3}{2} < \frac{a}{b} < 2$) обе координаты строго положительны ($u \ge 1,\ v \ge 1$), раскладывая $2^a = 4^u\cdot 8^v$ и $3^b = 3^u\cdot 9^v$ и представляя полный зазор Пиллаи $C_{\mathrm{tot}} = 2^a - 3^b$ через единичные замки $G_1 = 4^u - 3^u > 0$ и $G_2 = 9^v - 8^v > 0$:
-\begin{equation}
-  \label{eq:gap-split-g1-g2}
-  C_{\mathrm{tot}} \;\equiv\; 8^v\,\bigl(4^u - 3^u\bigr) \;-\; 3^u\,\bigl(9^v - 8^v\bigr) \;\equiv\; 9^v\,\bigl(4^u - 3^u\bigr) \;-\; 4^u\,\bigl(9^v - 8^v\bigr).
-\end{equation}
-\end{theorem}
-
-\begin{theorem}[Знакоположительная сумма Вронскиана на замкнутых циклах, \texttt{thm19}]
-\label{thm:positive-wronskian-sum}
-Разрезание любого замкнутого цикла ($n_{\mathrm{final}} = n_{\mathrm{start}}$) в промежуточной вершине $n_{\mathrm{mid}}$ между блоком $(P_1,Q_1) = (4^u,3^u)$ ($G_1 = P_1 - Q_1 > 0$, дрейф $D_1 \ge 1$) и блоком $(P_2,Q_2) = (8^v,9^v)$ ($G_2 = Q_2 - P_2 > 0$, дрейф $D_2 \ge 1$) устраняет вычитание из~\eqref{eq:cycle-wronskian-chord} и даёт сумму двух строго положительных слагаемых:
+Унимодулярная матрица $\mathcal{B}_{2,3} = \begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix} \in \mathrm{SL}_2(\mathbb{Z})$ ($\det\mathcal{B}_{2,3} = +1$) единственным образом раскладывает всякую пару показателей $(a,b)\in\mathbb{Z}^2$ по координатам $u = 2a - 3b$ и $v = 2b - a$ ($2u + 3v = a,\ u + 2v = b$). На всяком сжимающем цикле ($\frac{3}{2} < \frac{a}{b} < 2$) обе координаты строго положительны ($u \ge 1,\ v \ge 1$), раскладывая $2^a = 4^u\cdot 8^v$ и $3^b = 3^u\cdot 9^v$ и превращая~\eqref{eq:cycle-wronskian-chord} между блоками $(4^u,3^u)$ и $(8^v,9^v)$ в сумму двух строго положительных слагаемых без вычитания:
 \begin{equation}
   \label{eq:positive-wronskian-sum}
-  \bigl(2^a - 3^b\bigr)\cdot\bigl(n_{\mathrm{start}} - n_{\mathrm{mid}}\bigr) \;\equiv\; \underbrace{\bigl(9^v - 8^v\bigr)\,D_1}_{> 0} \;+\; \underbrace{\bigl(4^u - 3^u\bigr)\,D_2}_{> 0} \;>\; 0,
+  \bigl(2^a - 3^b\bigr)\cdot\bigl(n_{\mathrm{start}} - n_{\mathrm{mid}}\bigr) \;\equiv\; \underbrace{\bigl(9^v - 8^v\bigr)\,D_1}_{> 0} \;+\; \underbrace{\bigl(4^u - 3^u\bigr)\,D_2}_{> 0} \;>\; 0.
 \end{equation}
-откуда безусловно $n_{\mathrm{start}} > n_{\mathrm{mid}}$ и как $G_2 D_1$, так и $G_1 D_2$ ограничены сверху величиной $C_{\mathrm{tot}}(n_{\mathrm{start}} - n_{\mathrm{mid}})$.
 \end{theorem}
 
-\section{Закон циклического сдвига в $\mathbb{Z}_{2^a - 3^b}$ и башня остаточных дрейфов}
-\label{sec:dual-drift-tower}
-
-\begin{theorem}[Закон циклического сдвига дрейфов и переход двойственных остаточных дрейфов, \texttt{thm20}]
+\begin{theorem}[Закон циклического сдвига в $\mathbb{Z}_{2^a - 3^b}$ и башня остаточных дрейфов, \texttt{thm20}]
 \label{thm:dual-drift-tower}
-На каждом шаге $k$ траектории с полными степенями $(P_{\mathrm{tot}}, Q_{\mathrm{tot}}) = (2^a, 3^b)$ ($C_{\mathrm{tot}} = 2^a - 3^b$, $Q_{\mathrm{prev}} = 3^{b-1}$, $p_k = 2^{\alpha_k}$, $P_{\mathrm{rem},k} = 2^{a - \alpha_k}$) полные полиномы дрейфа соседних циклических сдвигов $D_{\mathrm{tot}}^{(k)} = Q_{\mathrm{prev}} + p_k D_2^{(k)}$ и $D_{\mathrm{tot}}^{(k+1)} = P_{\mathrm{rem},k} + 3 D_2^{(k)} = Q_{\mathrm{prev}} + p_{k+1} D_2^{(k+1)}$ удовлетворяют:
+На каждом шаге $k$ траектории со степенями $(2^a, 3^b)$ ($C_{\mathrm{tot}} = 2^a - 3^b$) полные полиномы дрейфа соседних циклических сдвигов $D_{\mathrm{tot}}^{(k)} = 3^{b-1} + 2^{\alpha_k} D_2^{(k)}$ и $D_{\mathrm{tot}}^{(k+1)} = 2^{a - \alpha_k} + 3 D_2^{(k)} = 3^{b-1} + 2^{\alpha_{k+1}} D_2^{(k+1)}$ удовлетворяют
 \begin{equation}
   \label{eq:cyclic-drift-shift}
   2^{\alpha_k}\,D_{\mathrm{tot}}^{(k+1)} \;-\; 3\,D_{\mathrm{tot}}^{(k)} \;\equiv\; 2^a - 3^b \;=\; C_{\mathrm{tot}}, \qquad
-  2^{\alpha_{k+1}}\,D_2^{(k+1)} \;-\; 3\,D_2^{(k)} \;\equiv\; 2^{a - \alpha_k} \;-\; 3^{b-1}.
+  2^{\alpha_{k+1}}\,D_2^{(k+1)} \;-\; 3\,D_2^{(k)} \;\equiv\; 2^{a - \alpha_k} \;-\; 3^{b-1},
 \end{equation}
-Поскольку $\gcd(6, C_{\mathrm{tot}}) = 1$, сравнение $2^{\alpha_k} D_{\mathrm{tot}}^{(k+1)} \equiv 3 D_{\mathrm{tot}}^{(k)} \pmod{C_{\mathrm{tot}}}$ переносит делимость $C_{\mathrm{tot}} \mid D_{\mathrm{tot}}^{(k)}$ инвариантно по всем $b$ циклическим сдвигам, а нижняя граница вилки $D_2^{(k)} \ge 3^{b-1} - 2^{b-1}$ задаёт оценку $(2^a - 3^b)n_k \ge 3^{b-1} + 2^{\alpha_k}(3^{b-1} - 2^{b-1})$ в каждой вершине цикла $n_k$.
+инвариантно перенося делимость $C_{\mathrm{tot}} \mid D_{\mathrm{tot}}^{(k)}$ по всем $b$ циклическим сдвигам ($\gcd(6, C_{\mathrm{tot}}) = 1$) и задавая оценку $(2^a - 3^b) n_k \ge 3^{b-1} + 2^{\alpha_k}(3^{b-1} - 2^{b-1})$ в каждой вершине цикла $n_k$.
 \end{theorem}
 
-\begin{table}[htbp]
-\centering
-\caption{Первые шесть резонансных ступеней Штерна--Броко для $\log_2 3$ и их координаты Каталана $(u,v)$.}
-\label{tab:collatz-stages}
-\small
-\begin{tabular}{@{}llllll@{}}
-\toprule
-\textbf{Ступень} & \textbf{Показатели $(a,b)$} & \textbf{Координаты $(u,v)$} & \textbf{Степени $(2^a, 3^b)$} & \textbf{Зазор $C_{a,b} = 2^a - 3^b$} & \textbf{Линейная комбинация} \\
-\midrule
-$E_0$ & $(2, 1)$ & $(1, 0)$ & $(4, 3)$ & $+1$ & Тривиальный цикл $n = 1/(4-3) = 1$ \\
-$E_1$ & $(3, 2)$ & $(0, 1)$ & $(8, 9)$ & $-1$ & Замок Каталана~I ($3^2 - 2^3 = 1$) \\
-$E_2$ & $(5, 3)$ & $(1, 1)$ & $(32, 27)$ & $+5$ & $3^2(+1) + 2^2(-1) = 9 - 4 = +5$ \\
-$E_3$ & $(8, 5)$ & $(1, 2)$ & $(256, 243)$ & $+13$ & $3^3(-1) + 2^3(+5) = -27 + 40 = +13$ \\
-$E_4$ & $(11, 7)$ & $(1, 3)$ & $(2048, 2187)$ & $-139$ & $3^5(-1) + 2^3(+13) = -243 + 104 = -139$ \\
-$E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-139) = -7153$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\section{Встречное сцепление каскадов в $\mathbb{Z}_{2^{a_1}} \times \mathbb{Z}_{3^{b_2}}^\times$ и автоматическое зацепление зубьев}
+\label{sec:planetary-splice}
 
-\section{Каскад планетарных передач, единственная стационарная точка $n^* = 1$ и замыкание дифференциала $3^b n_{\mathrm{start}} + D_{a,b} = 2^a$}
-\label{sec:planetary-stationary-point}
-
-Представление каждого нечётного шага Коллатца $3 n_k + 1 = 2^{\alpha_k} n_{k+1}$ как элементарного звена репера планетарного дифференциала $\mathcal{F}_3$ ($A_k + B_k = C_k$ с вектором радиусов шестерён $\mathbf{r}_k = (3, 1, 2^{\alpha_k})$ и вектором оборотов валов $\mathbf{\omega}_k = (n_k, 1, -n_{k+1})$, $\mathbf{r}_k \cdot \mathbf{\omega}_k = 0$) сводит гипотезу Коллатца ($\forall n_{\mathrm{start}} \in \mathbb{Z}_{>0}\ \exists \text{ путь } n_{\mathrm{start}} \to n^*$) к достижимости стационарной точки передачи.
-
-\begin{theorem}[Единственность стационарной точки элементарного звена планетарной передачи, \texttt{thm21}]
+\begin{theorem}[Единственность стационарной точки $n^* = 1$ и замыкание дифференциала $3^b n_0 + D_{a,b} = 2^a$, \texttt{thm21}]
 \label{thm:planetary-stationary-point}
-Звено передачи $\mathbf{r}_k \cdot \mathbf{\omega}_k = 3 n_k + 1 - 2^{\alpha_k} n_{k+1} = 0$ находится в стационарной точке $n_{k+1} = n_k = n^* \ge 1$ тогда и только тогда, когда $(2^{\alpha_k} - 3) n^* = 1$, что в натуральных числах имеет единственное решение $2^{\alpha^*} = 4$ ($\alpha^* = 2$, вторая двоичная ступень) и $n^* = 1$.
-\end{theorem}
-
-\begin{theorem}[Критерий замыкания дифференциала для достижения стационарной точки $n_{\mathrm{final}} = 1$, \texttt{thm21}]
-\label{thm:stationary-reachability}
-Вдоль любого $a$-шагового каскада планетарных передач $2^a n_{\mathrm{final}} - 3^b n_{\mathrm{start}} = D_{a,b}$ отклонение от стационарной точки $n^* = 1$ удовлетворяет тождеству $2^a(n_{\mathrm{final}} - 1) \equiv (3^b n_{\mathrm{start}} + D_{a,b}) - 2^a$. Следовательно, траектория из $n_{\mathrm{start}}$ попадает в единственную стационарную точку $n_{\mathrm{final}} = 1$ за $b$ нечётных шагов тогда и только тогда, когда троичный вал $A = 3^b n_{\mathrm{start}}$ и каскад двоичных переносов $B = D_{a,b} = \sum_{j=0}^{b-1} 3^{b-1-j} 2^{s_j}$ замыкаются в чистую степень двойки $C = 2^a$:
-\begin{equation}
-  \label{eq:differential-closure-to-one}
-  n_{\mathrm{final}} = 1 \quad \Longleftrightarrow \quad 3^b \cdot n_{\mathrm{start}} \;+\; D_{a,b} \;=\; 2^a.
-\end{equation}
+Каждый нечётный шаг Коллатца есть ортогональное звено $\mathbf{r}_k \cdot \mathbf{\omega}_k = 3 n_k + 1 - 2^{\alpha_k} n_{k+1} = 0$ репера планетарного дифференциала $\mathcal{F}_3$ ($\mathbf{r}_k = (3, 1, 2^{\alpha_k})$, $\mathbf{\omega}_k = (n_k, 1, -n_{k+1})$). Уравнение стационарной точки $(2^{\alpha_k} - 3) n^* = 1$ ($n^* \ge 1$) имеет в натуральных числах единственное решение $2^{\alpha^*} = 4$ ($\alpha^* = 2$) и $n^* = 1$, а $b$-шаговый каскад достигает $n_b = 1$ тогда и только тогда, когда $3^b n_0 + D_{a,b} = 2^a$.
 \end{theorem}
 
 \begin{theorem}[Конструктивная редукция бесконечного спуска Ферма на произвольной ступени $(2^a, 3^b)$, \texttt{thm22}]
 \label{thm:fermat-descent-reduction}
-На любой $a$-шаговой дуге $2^a n_{\mathrm{final}} - 3^b n_{\mathrm{start}} = D_{a,b}$ ($C_{a,b} = 2^a - 3^b$) величина спуска удовлетворяет тождеству $2^a(n_{\mathrm{start}} - n_{\mathrm{final}}) \equiv C_{a,b}\,n_{\mathrm{start}} - D_{a,b}$, так что строгий спуск $n_{\mathrm{final}} < n_{\mathrm{start}}$ равносилен неравенству
-\begin{equation}
-  \label{eq:strict-descent-inequality}
-  \bigl(2^a - 3^b\bigr)\cdot n_{\mathrm{start}} \;>\; D_{a,b} \qquad \Bigl(\text{в частности, при } \bigl(2^a - 3^b\bigr)n_{\mathrm{start}} > 2^{a-b}\bigl(3^b - 2^b\bigr)\Bigr).
-\end{equation}
-По конструктивной полной индукции на $\mathbb{N}$ (\texttt{collatz\_global\_convergence\_from\_local\_descent}, \texttt{0 Classical.choice}), если для каждого $n > 1$ существует ступень $(a,b)$, удовлетворяющая~\eqref{eq:strict-descent-inequality}, то всякое $n \ge 1$ достигает единственной стационарной точки $n^* = 1$ за конечное число шагов.
+На любой $a$-шаговой дуге $2^a n_b - 3^b n_0 = D_{a,b}$ выполняется $2^a(n_0 - n_b) \equiv (2^a - 3^b) n_0 - D_{a,b}$, так что строгий спуск $n_b < n_0$ равносилен неравенство $(2^a - 3^b) n_0 > D_{a,b}$. По конструктивной полной индукции на $\mathbb{N}$ (\texttt{collatz\_global\_convergence\_from\_local\_descent}, \texttt{0 Classical.choice}) локальный спуск для каждого $n_0 > 1$ конструктивно влечёт сходимость в $n^* = 1$ для каждого $n_0 \ge 1$.
 \end{theorem}
 
-\begin{theorem}[Беступиковое разложение префикса из $b - 1$ передач в кольце $\mathbb{Z}_{3^b}^\times$, \texttt{thm23}]
+\begin{theorem}[Беступиковое разложение префикса в $\mathbb{Z}_{3^b}^\times$ и модуль конструирования $2^{a+1}$, \texttt{thm23}]
 \label{thm:ternary-prefix-closure}
-Для любого префикса из $b - 1$ ступеней $0 = s_0 < s_1 < \dots < s_{b-1}$ с дрейфом префикса $D_{b-1} = \sum_{j=0}^{b-2} 3^{b-2-j} 2^{s_j}$ и последней передачей $2^{\alpha_{b-1}}$ ($a = s_{b-1} + \alpha_{b-1}$) полный дрейф расщепляется в виде $D_{a,b} = 2^{s_{b-1}} + 3 D_{b-1} \equiv 2^{s_{b-1}} \not\equiv 0 \pmod 3$, так что $\gcd(D_{a,b}, 3^b) = 1$ без тупиковых ветвей по модулю $3$, а уравнение замыкания в стационарную точку $3^b n_{\mathrm{start}} + D_{a,b} = 2^a$ равносильно
-\begin{equation}
-  \label{eq:ternary-prefix-closure}
-  2^{s_{b-1}}\bigl(2^{\alpha_{b-1}} - 1\bigr) \;=\; 3\,\bigl(3^{b-1} n_{\mathrm{start}} + D_{b-1}\bigr), \qquad 2^a \;\equiv\; D_{a,b} \pmod{3^b},
-\end{equation}
-что для каждого префикса $(s_1,\dots,s_{b-1})$ однозначно определяет класс первообразного корня $a \pmod{2\cdot 3^{b-1}}$ ($\alpha_{b-1} = 2 m_0$ чётно) в группе $\mathbb{Z}_{3^b}^\times$.
+Для любого префикса из $b - 1$ ступеней $0 = s_0 < s_1 < \dots < s_{b-1}$ с дрейфом префикса $D_{b-1}$ и последней передачей $2^{\alpha_{b-1}}$ ($a = s_{b-1} + \alpha_{b-1}$) полный дрейф расщепляется как $D_{a,b} = 2^{s_{b-1}} + 3 D_{b-1} \equiv 2^{s_{b-1}} \not\equiv 0 \pmod 3$ ($\gcd(D_{a,b}, 3^b) = 1$, ноль тупиков по модулю~$3$), а замыкание $3^b n_0 + D_{a,b} = 2^a$ равносильно $2^{s_{b-1}}(2^{\alpha_{b-1}} - 1) = 3(3^{b-1} n_0 + D_{b-1})$. Двойственно, любые два стартовых числа $n_0, n'_0$ с одинаковым $b$-шаговым вектором передач и нечётными выходами $n_b = 2 k_b + 1,\ n'_b = 2 k'_b + 1$ связаны по модулю $2^{a+1}$ равенством $3^b(n_0 - n'_0) = 2^{a+1}(k_b - k'_b)$.
 \end{theorem}
 
-\begin{theorem}[Соосное встречное сцепление каскадов «Вперёд–Назад» в $\mathbb{Z}_{2^{a_1}} \times \mathbb{Z}_{3^{b_2}}$, \texttt{thm24}]
+\begin{theorem}[Соосное встречное сцепление каскадов «Вперёд–Назад» в $\mathbb{Z}_{2^{a_1}} \times \mathbb{Z}_{3^{b_2}}^\times$, \texttt{thm24}]
 \label{thm:counter-rotating-splice}
-Рассечение пути из $n_{\mathrm{start}}$ в корневую стационарную точку $n^* = 1$ ($2^2\cdot 1 - 3^1\cdot 1 = 1$) в промежуточной точке встречи $n_{\mathrm{mid}}$ на прямой ротор «Вперёд» по часовой стрелке $2^{a_1} n_{\mathrm{mid}} = 3^{b_1} n_{\mathrm{start}} + D_1$ в кольце $\mathbb{Z}_{2^{a_1}}$ и встречный ротор «Назад» против часовой стрелки $3^{b_2} n_{\mathrm{mid}} = 2^{a_2} - D_2$ в кольце $\mathbb{Z}_{3^{b_2}}^\times$ расщепляет их модулярные условия через тождество соосного сцепления
+Рассечение пути из $n_{\mathrm{start}}$ в корень $n^* = 1$ в точке встречи $n_{\mathrm{mid}}$ на прямой ротор $2^{a_1} n_{\mathrm{mid}} = 3^{b_1} n_{\mathrm{start}} + D_1$ в $\mathbb{Z}_{2^{a_1}}$ и встречный ротор $3^{b_2} n_{\mathrm{mid}} = 2^{a_2} - D_2$ в $\mathbb{Z}_{3^{b_2}}^\times$ расщепляет их модулярные условия через
 \begin{equation}
   \label{eq:counter-rotating-splice}
   3^{b_2}\bigl(3^{b_1} n_{\mathrm{start}} + D_1\bigr) \;=\; 2^{a_1}\bigl(2^{a_2} - D_2\bigr), \qquad
   n_{\mathrm{mid}} \;=\; v\,\bigl(3^{b_1} n_{\mathrm{start}} + D_1\bigr) \;-\; u\,\bigl(2^{a_2} - D_2\bigr)
 \end{equation}
-(при $2^{a_1} v - 3^{b_2} u = 1$) и заменяет знакопеременный знаменатель зазора Пиллаи $2^a - 3^b$ строго положительным чисто троичным коэффициентом $3^{b_1 + b_2} > 0$:
+($2^{a_1} v - 3^{b_2} u = 1$) и заменяет знакопеременный знаменатель Пиллаи $2^a - 3^b$ строго положительным чисто троичным определителем Сикорского $3^{b_1 + b_2} > 0$:
 \begin{equation}
   \label{eq:pure-ternary-chord-law}
-  3^{b_1 + b_2}\,\bigl(n_{\mathrm{start}} - n_{\mathrm{mid}}\bigr) \;\equiv\; \bigl(2^{a_1} - 3^{b_1}\bigr)\,\bigl(2^{a_2} - D_2\bigr) \;-\; 3^{b_2}\,D_1.
+  3^{b_1 + b_2}\,\bigl(n_{\mathrm{start}} - n_{\mathrm{mid}}\bigr) \;\equiv\; \det\begin{pmatrix} 2^{a_1} - 3^{b_1} & D_1 \\ 3^{b_2} & 2^{a_2} - D_2 \end{pmatrix} \;=\; \bigl(2^{a_1} - 3^{b_1}\bigr)\,\bigl(2^{a_2} - D_2\bigr) \;-\; 3^{b_2}\,D_1.
 \end{equation}
 \end{theorem}
 
-\begin{theorem}[Автоматическое $2$-адическое и $3$-адическое зацепление зубьев и пошаговое отщепление звеньев, \texttt{thm25}]
+\begin{theorem}[Автоматическое $2$-адическое и $3$-адическое зацепление зубьев и отщепление звеньев, \texttt{thm25}]
 \label{thm:gear-tooth-meshing}
-При записи полинома дрейфа обратного ротора в виде $D_{\mathrm{tot}} = 3^{b-1} + 2^{\alpha_0} D_{\mathrm{rem}}$ ($a > \alpha_0 \ge 1$) одно $3$-адическое уравнение замыкания $3^b n_0 + D_{\mathrm{tot}} = 2^a$ тождественно равносильно соотношению зацепления зубьев
-\begin{equation}
-  \label{eq:gear-tooth-meshing}
-  3^{b-1}\,\bigl(3\,n_0 + 1\bigr) \;=\; 2^{\alpha_0}\,\bigl(2^{a - \alpha_0} - D_{\mathrm{rem}}\bigr).
-\end{equation}
-Поскольку $2^{a - \alpha_0}$ чётно, а $D_{\mathrm{rem}} \equiv 3^{b-2} \equiv 1 \pmod 2$ нечётно, сомножитель $2^{a - \alpha_0} - D_{\mathrm{rem}}$ строго нечётен, вследствие чего прямой шаг Коллатца автоматически включает точную передачу $\nu_2(3 n_0 + 1) = \alpha_0$ ($3 n_0 + 1 = 2^{\alpha_0} n_1$) и отщепляет первое звено в $(b-1)$-шаговое уравнение $3^{b-1} n_1 + D_{\mathrm{rem}} = 2^{a - \alpha_0}$.
+При записи дрейфа обратного ротора в виде $D_{\mathrm{tot}} = 3^{b-1} + 2^{\alpha_0} D_{\mathrm{rem}}$ ($a > \alpha_0 \ge 1$) одно $3$-адическое уравнение замыкания $3^b n_0 + D_{\mathrm{tot}} = 2^a$ тождественно равносильно $3^{b-1}(3 n_0 + 1) = 2^{\alpha_0}(2^{a - \alpha_0} - D_{\mathrm{rem}})$. Так как $2^{a - \alpha_0}$ чётно, а $D_{\mathrm{rem}} \equiv 3^{b-2} \equiv 1 \pmod 2$ нечётно, сомножитель $2^{a - \alpha_0} - D_{\mathrm{rem}}$ строго нечётен, поэтому прямой шаг Коллатца автоматически включает точную передачу $\nu_2(3 n_0 + 1) = \alpha_0$ ($3 n_0 + 1 = 2^{\alpha_0} n_1$) и отщепляет первое звено в $3^{b-1} n_1 + D_{\mathrm{rem}} = 2^{a - \alpha_0}$.
 \end{theorem}
 
-\begin{theorem}[Тождество Вронскиана превышения одного шага и не зависящая от $2^a$ оценка Бернулли--Эйлера на дрейф, \texttt{thm26}]
+\section{Закон сохранения двух дрейфов, двойственность Плюс- и Минус-Винтов и динамика нечётных ядер}
+\label{sec:dual-drift-and-odd-cores}
+
+\begin{theorem}[Универсальное тождество Вронскиана превышения одного шага и оценка Бернулли--Эйлера без $2^a$, \texttt{thm26}]
 \label{thm:bernoulli-euler-drift-bound}
-Для каждого нечётного шага Коллатца $2^{\alpha_k} n_{k+1} = 3 n_k + 1$ и любой опорной высоты $n_{\mathrm{ref}}$ вронскиан шага удовлетворяет тождеству $(3 n_{\mathrm{ref}} + 1) n_k - 2^{\alpha_k} n_{\mathrm{ref}} n_{k+1} \equiv n_k - n_{\mathrm{ref}}$. Вследствие этого вдоль любой $b$-шаговой дуги без предшествующего спуска ($n_k \ge n_0$ при $0 \le k < b$, откуда $2^a n_0^{b-1} n_{\mathrm{final}} \le (3 n_0 + 1)^b$) полином дрейфа $D_{a,b}$ ограничен сверху величиной, не зависящей от $2^a$:
+Для каждого нечётного шага Коллатца $2^{\alpha_k} n_{k+1} = 3 n_k + 1$ и любой опорной высоты $n_{\mathrm{ref}} \in \mathbb{Z}$ вронскиан шага удовлетворяет тождеству $(3 n_{\mathrm{ref}} + 1) n_k - 2^{\alpha_k} n_{\mathrm{ref}} n_{k+1} \equiv n_k - n_{\mathrm{ref}}$. Вдоль любой $b$-шаговой дуги без предшествующего спуска ($n_k \ge n_0$ при $0 \le k < b$, откуда $2^a n_0^{b-1} n_b \le (3 n_0 + 1)^b$) полином дрейфа $D_{a,b}$ ограничен сверху независимо от $2^a$:
 \begin{equation}
   \label{eq:bernoulli-euler-drift-bound}
   n_0^{b-1}\,D_{a,b} \;\le\; \bigl(3\,n_0 + 1\bigr)^b \;-\; \bigl(3\,n_0\bigr)^b, \qquad
-  2^a\,n_0^{b-1}\,\bigl(n_0 - n_{\mathrm{final}}\bigr) \;\ge\; 2^a\,n_0^b \;-\; \bigl(3\,n_0 + 1\bigr)^b,
+  2^a\,n_0^{b-1}\,\bigl(n_0 - n_b\bigr) \;\ge\; 2^a\,n_0^b \;-\; \bigl(3\,n_0 + 1\bigr)^b.
 \end{equation}
-что гарантирует строгий спуск $n_{\mathrm{final}} < n_0$ при $2^a n_0^b > (3 n_0 + 1)^b$ и зажимает всякий замкнутый цикл ($n_{\min} \le n_k \le n_{\max}$) в двустороннюю вилку $(3 n_{\max} + 1)^b \le 2^a n_{\max}^b$ и $2^a n_{\min}^b \le (3 n_{\min} + 1)^b$.
 \end{theorem}
 
-\begin{theorem}[Чисто двоичный баланс без участия тройки над корнем $n^* = 1$ и закон сохранения двух дрейфов, \texttt{thm27}]
+\begin{theorem}[Чисто двоичный баланс без тройки над корнем $n^* = 1$, сохранение двух дрейфов и потолок $F_{a,b}$, \texttt{thm27}]
 \label{thm:pure-binary-dual-drift}
-Выбор корневой стационарной точки в качестве опорной ($n_{\mathrm{ref}} = n^* = 1$, $3 n^* + 1 = 4 = 2^2$) полностью устраняет троичное основание $3$ из уравнения шага ($4 n_k - 2^{\alpha_k} n_{k+1} \equiv n_k - 1 \ge 0$) и после телескопической свёртки за $b$ шагов даёт чисто двоичный закон баланса
-\begin{equation}
-  \label{eq:pure-binary-balance}
-  4^b \cdot n_0 \;-\; 2^a \cdot n_b \;\equiv\; \mathcal{E}_{a,b} \;:=\; \sum_{k=0}^{b-1} 4^{b-1-k}\,2^{s_k}\,\bigl(n_k - 1\bigr) \;\ge\; 0.
-\end{equation}
-Сложение~\eqref{eq:pure-binary-balance} с троичным уравнением $2^a n_b - 3^b n_0 = D_{a,b} > 0$ тождественно сокращает $2^a n_b$, давая не зависящий от пути закон сохранения суммы двух дрейфов и формулу спуска с отрицательной обратной связью
+Подстановка корневой точки $n_{\mathrm{ref}} = n^* = 1$ ($3 n^* + 1 = 4 = 2^2$) в Теорему~\ref{thm:bernoulli-euler-drift-bound} устраняет троичное основание~$3$ ($4 n_k - 2^{\alpha_k} n_{k+1} \equiv n_k - 1 \ge 0$) и за $b$ шагов даёт $4^b n_0 - 2^a n_b = \mathcal{E}_{a,b} := \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}(n_k - 1) \ge 0$. Сложение с $2^a n_b - 3^b n_0 = D_{a,b} > 0$ сокращает $2^a n_b$, давая не зависящий от пути закон сохранения суммы двух дрейфов
 \begin{equation}
   \label{eq:dual-drift-conservation}
   D_{a,b} \;+\; \mathcal{E}_{a,b} \;\equiv\; \bigl(4^b - 3^b\bigr)\cdot n_0, \qquad
-  2^a\bigl(n_0 - n_b\bigr) \;\equiv\; \mathcal{E}_{a,b} \;-\; \bigl(4^b - 2^a\bigr)\,n_0.
+  2^a\bigl(n_0 - n_b\bigr) \;\equiv\; \bigl(F_{a,b} - (4^b - 2^a)\bigr) n_0 \;-\; F_{a,b} \;+\; \Delta\mathcal{E}_{a,b},
 \end{equation}
+где $F_{a,b} = \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}$ и $\Delta\mathcal{E}_{a,b} = \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}(n_k - n_0)$, что на любой дуге без спуска накладывает потолок $(F_{a,b} - (4^b - 2^a)) n_0 + \Delta\mathcal{E}_{a,b} \le F_{a,b}$.
 \end{theorem}
 
-\begin{theorem}[Центрированная координата $m_k = (n_k - 1)/2$, закон отклонения от стационарной передачи и макро-шаг сжигания единиц, \texttt{thm28}, \texttt{thm29}]
-\label{thm:centered-stationary-macro-step}
-В центрированной координате $m_k = (n_k - 1)/2 \ge 0$ ($n_k = 2 m_k + 1$, переносящей корень $n^* = 1$ в начало координат $m^* = 0$) нечётный шаг принимает вид $2^{\alpha_k} m_{k+1} - 3 m_k \equiv 2 - 2^{\alpha_k - 1}$ ($+1$ при $\alpha_k = 1$, $0$ на стационарной передаче $\alpha_k = 2$ и $\le -2$ при $\alpha_k \ge 3$), а бинарный запас $G_k = 2^{s_k} - D_k$ удовлетворяет рекурсии $G_{k+1} - 3 G_k = (2^{\alpha_k} - 4) 2^{s_k}$, сворачивающейся за $b$ шагов в тождество
-\begin{equation}
-  \label{eq:stationary-gear-deviation}
-  3^b\bigl(n_0 - 1\bigr) \;-\; 2^a\bigl(n_b - 1\bigr) \;\equiv\; 2^a - 3^b - D_{a,b} \;\equiv\; \sum_{k=0}^{b-1} 3^{b-1-k}\bigl(2^{\alpha_k} - 4\bigr)\,2^{s_k}.
-\end{equation}
-Более того, для всякого $n_0 = 2^{r+1} q - 1$ ($m_0 = 2^r q - 1$ с $r \ge 0$ младшими единицами и нечётным $q \ge 1$) сжигание всех $r$ единиц при $\alpha_0 = \dots = \alpha_{r-1} = 1$ приводит в строго чётную координату $m_r = 3^r q - 1$ ($n_r \equiv 1 \pmod 4$), что на шаге $r + 1$ принудительно включает сжимающую передачу $\alpha_r \ge 2$ с $2^{\alpha_r - 1} n_{r+1} = 3^{r+1} q - 1$.
-\end{theorem}
-
-\begin{theorem}[Закон макро-шага с минимальным дрейфом, переход нечётных ядер $q_m \mapsto q_{m+1}$ и потенциал после сжигания $H_m = 3^{r_m+1} q_m$, \texttt{thm30}]
-\label{thm:odd-core-transition}
-При записи соседних состояний макро-шага в виде $n^{(m)} + 1 = 2^{r_m + 1} q_m$ и $n^{(m+1)} + 1 = 2^{r_{m+1} + 1} q_{m+1}$ ($q_m, q_{m+1} \ge 1$ нечётны) с передачей сброса $2^{\beta_m} n^{(m+1)} + 1 = 3^{r_m + 1} q_m$ ($\beta_m = \alpha_{r_m} - 1 \ge 1$) исключение $q_m$ даёт уравнение макро-шага с минимальным дрейфом Пиллаи $2^{r_m + 1 + \beta_m} n^{(m+1)} - 3^{r_m + 1} n^{(m)} \equiv 3^{r_m + 1} - 2^{r_m + 1}$, а нечётные ядра $q_m$ и потенциалы $H_m := 3^{r_m + 1} q_m$ удовлетворяют
-\begin{equation}
-  \label{eq:odd-core-transition}
-  2^{\beta_m + r_{m+1} + 1}\,q_{m+1} \;-\; 3^{r_m + 1}\,q_m \;\equiv\; 2^{\beta_m} - 1, \qquad
-  2^{\beta_m + r_{m+1} + 1}\,H_{m+1} \;\equiv\; 3^{r_{m+1} + 1}\,\bigl(H_m + 2^{\beta_m} - 1\bigr),
-\end{equation}
-вследствие чего всякий длинный хвост младших единиц $r_{m+1} \ge 1$, возникающий в $n^{(m+1)}$, немедленно делит новое нечётное ядро $q_{m+1}$ на $2^{r_{m+1} + 1}$.
-\end{theorem}
-
-\begin{theorem}[Двойной $\mathrm{SL}_2(\mathbb{Z})$-замок Безу, однородный закон макро-шага и безусловный спуск ядра при $r_m = 0$, \texttt{thm31}]
-\label{thm:double-sl2-bezout-core-descent}
-На каждом макро-шаге $m$ нечётное ядро $q_m$ удовлетворяет одновременно двум уравнениям Безу в $\mathrm{SL}_2(\mathbb{Z})$ с единичным определителем: $2^{r_m + 1} q_m - n^{(m)} \equiv 1$ и $3^{r_m + 1} q_m - 2^{\beta_m} n^{(m+1)} \equiv 1$, разность которых устраняет константу $+1$ в однородный закон $2^{\beta_m} n^{(m+1)} - n^{(m)} \equiv (3^{r_m + 1} - 2^{r_m + 1}) q_m$. Более того, всякий раз при $r_m = 0$ ($n^{(m)} \equiv 1 \pmod 4$) числитель спуска ядра раскладывается в сумму трёх неотрицательных слагаемых для всех $2^{\beta_m} \ge 2$, $2^{r_{m+1}+1} \ge 2$ и $q_m \ge 1$:
-\begin{equation}
-  \label{eq:unconditional-r0-core-descent}
-  2^{\beta_m + r_{m+1} + 1}\bigl(q_m - q_{m+1}\bigr) \;\equiv\; 2^{\beta_m}\bigl(2^{r_{m+1}+1} - 2\bigr) q_m \;+\; \bigl(2^{\beta_m} - 2\bigr)(2 q_m - 1) \;+\; \bigl(q_m - 1\bigr) \;\ge\; q_m - 1,
-\end{equation}
-что доказывает безусловный строгий спуск ядра $q_{m+1} < q_m$ на каждом шаге с $r_m = 0$ и $q_m > 1$.
-\end{theorem}
-
-\begin{theorem}[Двухшаговый закон компенсации хвоста единиц для нечётных ядер $q_{m-1} \mapsto q_m \mapsto q_{m+1}$, \texttt{thm32}]
-\label{thm:two-macro-step-compensation}
-Для любых двух последовательных макро-шагов нечётных ядер $2^{\beta_0 + r_1 + 1} q_1 - 3^{r_0 + 1} q_0 = 2^{\beta_0} - 1$ и $2^{\beta_1 + r_2 + 1} q_2 - 3^{r_1 + 1} q_1 = 2^{\beta_1} - 1$ исключение промежуточного ядра $q_1$ спаривает промежуточный троичный рост $3^{r_1 + 1}$ с его собственным предшествующим двоичным делителем $2^{r_1 + 1}$ внутри $P_{\mathrm{comp}} = 2^{\beta_0 + \beta_1 + (r_1 + 1) + (r_2 + 1)}$ и $Q_{\mathrm{comp}} = 3^{(r_0 + 1) + (r_1 + 1)}$:
-\begin{equation}
-  \label{eq:two-macro-step-compensation}
-  P_{\mathrm{comp}}\,q_2 \;-\; Q_{\mathrm{comp}}\,q_0 \;\equiv\; 3^{r_1 + 1}\bigl(2^{\beta_0} - 1\bigr) \;+\; 2^{\beta_0 + r_1 + 1}\bigl(2^{\beta_1} - 1\bigr) \;=:\; D_{\mathrm{comp}}, \qquad
-  P_{\mathrm{comp}}\bigl(q_0 - q_2\bigr) \;\equiv\; \bigl(P_{\mathrm{comp}} - Q_{\mathrm{comp}}\bigr) q_0 \;-\; D_{\mathrm{comp}}.
-\end{equation}
-\end{theorem}
-
-\begin{theorem}[Чисто двоичное ограничение $F_{a,b}$, модуль конструирования $2^{a+1}$ и финитное центрированное $(2,3)$-разложение, \texttt{thm33}]
-\label{thm:finite-centered-radix}
-При $F_{a,b} := \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}$ и $\Delta\mathcal{E}_{a,b} := \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}(n_k - n_0)$ выполняется $2^a(n_0 - n_b) \equiv (F_{a,b} - (4^b - 2^a)) n_0 - F_{a,b} + \Delta\mathcal{E}_{a,b}$, а нечётность выхода $n_b = 2 m_b + 1$ фиксирует всякое конструируемое стартовое число $n_0 = 2 m_0 + 1$ по модулю $2^{a+1}$ через $3^b n_0 + D_{a,b} = 2^{a+1} m_b + 2^a$. В терминах центрированных цифр передач $d_k := 2^{\alpha_k - 1} - 2 \in \{-1, 0, +2, +6, \dots\}$ (обращающихся в точный нуль на стационарной передаче $\alpha_k = 2$) всякое целое $m_0$ удовлетворяет тождеству
-\begin{equation}
-  \label{eq:finite-centered-radix}
-  3^b\,m_0 \;-\; 2^a\,m_b \;\equiv\; \sum_{k=0}^{b-1} 3^{b-1-k}\,d_k\,2^{s_k} \quad \Longleftrightarrow \quad
-  m_0 \;-\; \frac{2^a}{3^b}\,m_b \;\equiv\; \sum_{k=0}^{b-1} \frac{2^{\alpha_k - 1} - 2}{3^{k+1}}\,2^{s_k},
-\end{equation}
-которое при достижении стационарной точки $n_b = 1$ ($m_b = 0$) обрывается в конечную рациональную сумму $m_0 = \sum_{k=0}^{b-1} (d_k / 3^{k+1}) 2^{s_k}$, а вдоль любой дуги без спуска ($m_b \ge m_0$) накладывает верхний потолок $\sum_{k=0}^{b-1} 3^{b-1-k} d_k 2^{s_k} \le (3^b - 2^a) m_0$.
-\end{theorem}
-
-\begin{theorem}[Сжатие зазора между двумя винтами $\Delta_b = m_0 - S_b = (2^a/3^b) m_b \ge 0$ и не зависящий от ядра скачок зазора за макро-шаг, \texttt{thm34}]
-\label{thm:two-rotor-gap-squeeze}
-Зазор $\Delta_b := m_0 - \sum_{k=0}^{b-1}(d_k/3^{k+1}) 2^{s_k} = (2^a/3^b) m_b$ между Винтом~1 ($m_0$) и Винтом~2 (частичной суммой $S_b$ от корня $4\text{--}2\text{--}1$) строго неотрицателен при всех $b \ge 0$, запирая $S_b \le m_0$ и обращаясь в нуль ($\Delta_b = 0$) тогда и только тогда, когда $m_b = 0$ ($n_b = 1$). За полный макро-шаг ($m_{\mathrm{cur}} = 2^r q - 1 \mapsto 2^\beta(2 m_{\mathrm{next}} + 1) + 1 = 3^{r+1} q$) нечётное ядро $q$ тождественно сокращается из скачка зазора:
-\begin{equation}
-  \label{eq:core-free-macro-gap-jump}
-  3^{r+1}\,m_{\mathrm{cur}} \;-\; 2^{r + 1 + \beta}\,m_{\mathrm{next}} \;\equiv\; 2^r\,\bigl(2^\beta + 1\bigr) \;-\; 3^{r+1} \qquad \bigl(\text{при } r = 0:\;\; 3\,m_{\mathrm{cur}} - 2^{\beta+1} m_{\mathrm{next}} = 2^\beta - 2 \ge 0\bigr).
-\end{equation}
-\end{theorem}
-
-\begin{theorem}[Двойственность Плюс-Винта и Минус-Винта $S_+ + S_d \equiv 2^a - 3^b$ и редуцированный по ядру закон спуска, \texttt{thm35}]
+\begin{theorem}[Центрированное $(2,3)$-разложение, двойственность Плюс- и Минус-Винтов $S_+ + S_d \equiv 2^a - 3^b$ и сжатие зазора, \texttt{thm28}]
 \label{thm:plus-minus-rotor-duality}
-Телескопическая свёртка скачков зазора за $M$ макро-шагов ($a = A_M, b = B_M$) определяет строго положительную сумму Плюс-Винта $S_+ := 2^a(m_b + 1) - 3^b(m_0 + 1) = \sum_{m=0}^{M-1} 3^{b - B_{m+1}} 2^{A_m + r_m}(2^{\beta_m} - 1) > 0$, которая сопряжена с суммой цифр Минус-Винта $S_d = 3^b m_0 - 2^a m_b$ не зависящими от концов траектории законами сохранения
+В центрированной координате $m_k = (n_k - 1)/2 \ge 0$ ($n_k = 2 m_k + 1$, корень $n^* = 1$ в $m^* = 0$) нечётный шаг имеет вид $2^{\alpha_k} m_{k+1} - 3 m_k = -d_k$, где цифры передач $d_k := 2^{\alpha_k - 1} - 2 \in \{-1, 0, +2, +6, \dots\}$ обращаются в нуль на стационарной передаче $\alpha_k = 2$. Сумма цифр Минус-Винта $S_d := 3^b m_0 - 2^a m_b = \sum_{k=0}^{b-1} 3^{b-1-k} d_k 2^{s_k}$ и строго положительная сумма Плюс-Винта $S_+ := 2^a(m_b + 1) - 3^b(m_0 + 1) = \sum_{m=0}^{M-1} 3^{b - B_{m+1}} 2^{A_m + r_m}(2^{\beta_m} - 1) > 0$ удовлетворяют:
 \begin{equation}
   \label{eq:plus-minus-rotor-duality}
   S_+ \;+\; S_d \;\equiv\; 2^a - 3^b, \qquad
   S_+ \;-\; S_d \;\equiv\; D_{a,b}, \qquad
-  2^{a - r_0}\bigl(m_0 - m_b\bigr) \;\equiv\; \bigl(2^a - 3^b\bigr) q_0 \;-\; \sum_{m=0}^{M-1} 3^{b - B_{m+1}} 2^{A_m + r_m - r_0}\bigl(2^{\beta_m} - 1\bigr).
+  \Delta_b \;:=\; m_0 - \frac{S_d}{3^b} \;=\; \frac{2^a}{3^b}\,m_b \;\ge\; 0,
 \end{equation}
+запирая $S_d/3^b \le m_0$ с $\Delta_b = 0 \iff m_b = 0$ ($n_b = 1$) и после сокращения на стартовый хвост единиц $m_0 + 1 = 2^{r_0} q_0$ ($S_+ = 2^{r_0} S_{+,\mathrm{red}}$) давая редуцированный закон спуска $2^{a - r_0}(m_0 - m_b) \equiv (2^a - 3^b) q_0 - S_{+,\mathrm{red}}$.
+\end{theorem}
+
+\begin{theorem}[Двойной $\mathrm{SL}_2(\mathbb{Z})$-замок Безу на макро-шаге, скачок зазора, безусловный спуск ядра при $r_0 = 0$ и компенсация хвоста, \texttt{thm29}]
+\label{thm:odd-core-dynamics}
+На каждом макро-шаге сжигания $r_0 \ge 0$ младших единиц из $n_0 + 1 = 2^{r_0 + 1} q_0$ ($m_0 = 2^{r_0} q_0 - 1$) со сбросом $2^{\beta_0} n_1 + 1 = 3^{r_0 + 1} q_0$ ($\beta_0 \ge 1$) в $n_1 + 1 = 2^{r_1 + 1} q_1$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Двойной замок Безу в $\mathrm{SL}_2(\mathbb{Z})$ и минимальный дрейф Пиллаи:} $2^{r_0 + 1} q_0 - n_0 = 1 = 3^{r_0 + 1} q_0 - 2^{\beta_0} n_1$, $2^{\beta_0} n_1 - n_0 = (3^{r_0 + 1} - 2^{r_0 + 1}) q_0$ и $2^{r_0 + 1 + \beta_0} n_1 - 3^{r_0 + 1} n_0 = 3^{r_0 + 1} - 2^{r_0 + 1}$;
+\item \textbf{Не зависящий от ядра скачок зазора за макро-шаг:} ядро $q_0$ тождественно сокращается из $3^{r_0 + 1} m_0 - 2^{r_0 + 1 + \beta_0} m_1 \equiv 2^{r_0}(2^{\beta_0} + 1) - 3^{r_0 + 1}$;
+\item \textbf{Переход нечётных ядер и безусловный спуск при $r_0 = 0$:} $2^{\beta_0 + r_1 + 1} q_1 - 3^{r_0 + 1} q_0 = 2^{\beta_0} - 1$, причём при $r_0 = 0$ ($n_0 \equiv 1 \pmod 4$) имеем $2^{\beta_0 + r_1 + 1}(q_0 - q_1) \equiv 2^{\beta_0}(2^{r_1 + 1} - 2) q_0 + (2^{\beta_0} - 2)(2 q_0 - 1) + (q_0 - 1) \ge q_0 - 1 > 0$, откуда безусловно $q_1 < q_0$ при всех $q_0 > 1$;
+\item \textbf{Двухшаговая компенсация хвоста единиц ($q_0 \mapsto q_1 \mapsto q_2$):} исключение $q_1$ спаривает промежуточный троичный рост $3^{r_1 + 1}$ с его же предшествующим двоичным делителем $2^{r_1 + 1}$ внутри $P_{\mathrm{comp}} = 2^{\beta_0 + \beta_1 + (r_1 + 1) + (r_2 + 1)}$ и $Q_{\mathrm{comp}} = 3^{(r_0 + 1) + (r_1 + 1)}$.
+\end{enumerate}
 \end{theorem}
 
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:plus-minus-rotor-duality} (\texttt{thm18}--\texttt{thm35} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:two-arc-wronskian}--\ref{thm:odd-core-dynamics} (\texttt{thm18}--\texttt{thm29} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
 А.\,И.~Мальцев, \emph{Алгебраические системы}, М.: Наука, 1970 (англ.\ пер.: Springer-Verlag, 1973).
 \bibitem{KarataevRotator1}
-Д.~Каратаев, Луч, «Ротаторное исчисление на кубооктаэдре: дискретная экспонента Эйлера на $\mathbb{Z}_{512}$, универсальный константный вронскиан и замкнутые квадратуры на кубооктаэдре $O_2(3)$ в Lean~4», \url{https://github.com/AI-Guiders/scientific-papers}, 2026.
+Д.\,А.~Каратаев, «Ротаторное исчисление на кубооктаэдре: дискретная экспонента Эйлера на $\mathbb{Z}_{512}$, универсальный константный вронскиан и замкнутые квадратуры на кубооктаэдре $O_2(3)$ в Lean~4», \url{https://github.com/AI-Guiders/scientific-papers}, 2026.
 \bibitem{Lagarias2010}
 J.\,C.~Lagarias (ed.), \emph{The Ultimate Challenge: The $3x+1$ Problem}, American Mathematical Society, Providence, RI, 2010.
 \bibitem{Moura2021}

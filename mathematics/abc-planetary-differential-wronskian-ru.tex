@@ -17,7 +17,7 @@
   linkcolor=blue!70!black,
   citecolor=blue!70!black,
   urlcolor=blue!70!black,
-  pdftitle={Ротаторное исчисление на кубооктаэдре: Геометрия планетарного дифференциала взаимно простых троек A + B = C, целочисленный вронскиан Мейсона-Стотерса-Безу, понижение степени на круге и межэтажный замок рода 10 в Lean 4},
+  pdftitle={Геометрия планетарного дифференциала взаимно простых троек A + B = C, целочисленный вронскиан Мейсона-Стотерса-Безу, понижение степени на круге и межэтажный замок рода 10 в Lean 4},
   pdfauthor={Каратаев Дмитрий Александрович}
 }
 
@@ -31,96 +31,91 @@
 \newtheorem{remark}[theorem]{Замечание}
 
 \title{\textbf{Геометрия планетарного дифференциала взаимно простых троек $A + B = C$ ($abc$-тройки):\\ целочисленный вронскиан Мейсона--Стотерса--Безу, понижение степени на круге и межэтажный замок рода~10 в Lean~4}}
-\author{Д.\,А.~Каратаев}
-\date{}
+\author{Д.\,А.~Каратаев\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Формальная верификация в Lean~4 и аналитическая разработка выполнены при участии ИИ-партнёра \emph{Луч} (\emph{Luch}, AI-Guiders).}}). Формальная верификация в Lean~4 и аналитическая разработка выполнены при участии ИИ-партнёра \emph{Луч} (\emph{Luch}, AI-Guiders).}}
+\date{2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-В четвёртой статье серии всякая взаимно простая аддитивная тройка $A + B = C$ ($A = a_1 a_2,\ B = b_1 b_2,\ C = c_1 c_2$, с этажным разложением $A = \widetilde{A}_k X_k^k,\ B = \widetilde{B}_k Y_k^k,\ C = \widetilde{C}_k Z_k^k$ и оценкой весов $\widetilde{A}_k\widetilde{B}_k\widetilde{C}_k \le \operatorname{rad}(ABC)^{k-1}$) формулируется как трёхвальный планетарный дифференциал с ортогональным $3\mathrm{D}$-репером $\mathcal{F}_3 = (\mathbf{r},\mathbf{\omega},\mathbf{r}\times\mathbf{\omega})\in\mathbb{Z}^{3\times 3}$ ($\mathbf{r} = (a_1,b_1,c_1)\perp\mathbf{\omega} = (a_2,b_2,-c_2)$), плоским законом скольжения шестерён Брахмагупты $C^2 + S_{AB}^2 = (A-B)^2 + M_{AB}^2 = (a_1^2+b_1^2)(a_2^2+b_2^2)$, невырожденной матрицей моментов Ганкеля--Вандермонда $-\det\mathcal{H}_3 = \widetilde{A}\widetilde{B}\widetilde{C}(X-Y)^2(Y-Z)^2(Z-X)^2 > 0$, проекторами Лагранжа--Вандермонда зазоров валов и унимодулярной $2\times 3$-матрицей партнёров Безу $\mathcal{B}_{2\times 3}$ (\texttt{thm8}, \texttt{thm9}).
-
-Доказаны пять универсально $\forall$-квантифицированных диофантовых и геометрических теорем в кольце $\mathbb{Z}$:
-(1)~обратная аннигиляция кубов Паде--Безу $Z^3 I_1 + A w^3(2Zv-Yw) \equiv \widetilde{B} I_0^3(Yw+Zv)$ (\texttt{thm12});
-(2)~целочисленный аналог полиномиального вронскиана Мейсона--Стотерса на кубическом этаже $\widetilde{A}X^3+\widetilde{B}Y^3=\widetilde{C}Z^3$ через взаимную простоту Безу $\widetilde{A}Xv_0-\widetilde{B}Yu_0=1$, порождающий производную тройку $A^*+B^*=C^*$ ($A^*=\alpha X^2,\ B^*=\beta Y^2,\ C^*=\gamma Z^2$) с точным квадратным вронскианом валов $W^* = A B^* - B A^* \equiv X^2 Y^2 Z^2$ и определителем четвёртых степеней $-\det\mathcal{W}_{\mathrm{MS}} \equiv X^4 + Y^4 + Z^4$ (\texttt{thm13});
-(3)~сквозная цепочка двустороннего схождения (\texttt{thm14}) с объёмно-радикальным тождеством $A B C = R_{\mathrm{full}} W^*$ для полного радикал-скелета с валами $R_{\mathrm{full}} = (\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)$ и безусловным понижением степени остатком на круге $0\le\alpha < \widetilde{A}X \implies (\widetilde{B}Y)C + (\widetilde{B}^2\widetilde{C})(Y^2 Z)\alpha = R_{\mathrm{full}}\beta \implies (\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$, $C\le R_{\mathrm{full}}^2$ (при $\beta\le R_{\mathrm{full}}$) и $C\le R_{\mathrm{full}}^3$;
-(4)~теорема о межэтажном сцеплении (\texttt{thm15}), показывающая, что в то время как один этаж $k=3$ имеет род $g(3)=1$, сцепление соседних этажей $k=2$ и $k=3$ на одних и тех же валах в силу $3-2=+1$ поднимает координаты $(U_6,V_6,W_6) = (X_2 Y_3 Z_3, Y_2 X_3 Z_3, Z_2 X_3 Y_3)$ на кривую 6-й степени Ферма--Сельмера $\widetilde{A}_2^3\widetilde{B}_3^2\widetilde{C}_3^2 U_6^6 + \widetilde{B}_2^3\widetilde{A}_3^2\widetilde{C}_3^2 V_6^6 = \widetilde{C}_2^3\widetilde{A}_3^2\widetilde{B}_3^2 W_6^6$ рода $g(6)=10\ge 2$;
-(5)~универсальное стереографическое погружение Вейерштрасса (\texttt{thm16}) любой тройки $A+B=C\in\mathbb{Z}^3$ через $[0,512]/512 = [0,1]\cong\mathbb{R}$ в Квадрант~I $[0,128]$ ротатора $\mathbb{Z}_{512}$ с точным инвариантом четверти кольца $C\Delta_{\mathrm{rot}} - w I_{\mathrm{rot}} = 128$. Все теоремы верифицированы в ядре \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Всякая взаимно простая аддитивная тройка $A + B = C$ ($A = a_1 a_2,\ B = b_1 b_2,\ C = c_1 c_2$, с этажным разложением $A = \widetilde{A}_k X_k^k,\ B = \widetilde{B}_k Y_k^k,\ C = \widetilde{C}_k Z_k^k$ и оценкой весов $\widetilde{A}_k\widetilde{B}_k\widetilde{C}_k \le \operatorname{rad}(ABC)^{k-1}$) формулируется как трёхвальный планетарный дифференциал с ортогональным $3\mathrm{D}$-репером $\mathcal{F}_3 = (\mathbf{r},\mathbf{\omega},\mathbf{r}\times\mathbf{\omega})\in\mathbb{Z}^{3\times 3}$ ($\mathbf{r} = (a_1,b_1,c_1)\perp\mathbf{\omega} = (a_2,b_2,-c_2)$), плоским законом скольжения шестерён Брахмагупты $C^2 + S_{AB}^2 = (A-B)^2 + M_{AB}^2 = (a_1^2+b_1^2)(a_2^2+b_2^2)$, невырожденной матрицей моментов Ганкеля--Вандермонда $-\det\mathcal{H}_3 = \widetilde{A}\widetilde{B}\widetilde{C}(X-Y)^2(Y-Z)^2(Z-X)^2 > 0$, проекторами Лагранжа--Вандермонда зазоров валов и унимодулярной $2\times 3$-матрицей партнёров Безу $\mathcal{B}_{2\times 3}$ (\texttt{thm8}, \texttt{thm9}). Далее доказаны пять отдельных универсально $\forall$-квантифицированных теорем в кольце $\mathbb{Z}$: обратная аннигиляция кубов Паде--Безу и квадратичный спуск $I_2$ (\texttt{thm12}); целочисленный вронскиан Мейсона--Стотерса--Безу $W^* = A B^* - B A^* \equiv X^2 Y^2 Z^2$ с определителем четвёртых степеней $-\det\mathcal{W}_{\mathrm{MS}} \equiv X^4 + Y^4 + Z^4$ (\texttt{thm13}); безусловное понижение степени остатком на круге с полным радикал-скелетом валов $R_{\mathrm{full}} = (\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)$ (\texttt{thm14}); межэтажное сцепление $k=2\leftrightarrow k=3$ на кривой Ферма--Сельмера 6-й степени рода $g(6)=10\ge 2$ (\texttt{thm15}); и универсальное стереографическое погружение Вейерштрасса в четырёхквадрантный ротатор произвольного модуля $\mathbb{Z}_{4Q}$ ($\forall Q\in\mathbb{Z}$, включая $\mathbb{Z}_{512}$ при $Q=128$) с инвариантом четверти кольца $C\Delta_{\mathrm{rot},Q} - w I_{\mathrm{rot},Q} \equiv Q$ (\texttt{thm16}). Все теоремы верифицированы в \texttt{AbcPlanetaryWronskian.lean} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \medskip\noindent
 \textbf{Ключевые слова:} аддитивные диофантовы тройки, $abc$-тройки, вронскиан Мейсона--Стотерса, аннигиляция Паде--Безу, кривые Ферма--Сельмера, стереографический гомеоморфизм Вейерштрасса, Lean~4.
 \end{abstract}
 
-\section{Репер планетарного дифференциала \texorpdfstring{$\mathcal{F}_3$}{F3}, матрица Ганкеля--Вандермонда \texorpdfstring{$\mathcal{H}_3$}{H3}, трёхканальная матрица Паде \texorpdfstring{$\mathcal{P}_3$}{P3} и перенос носителей \texorpdfstring{$M\rightleftarrows T$}{M <-> T}}
+\section{Репер планетарного дифференциала \texorpdfstring{$\mathcal{F}_3$}{F3}, матрица Ганкеля--Вандермонда \texorpdfstring{$\mathcal{H}_3$}{H3} и трёхканальная матрица Паде \texorpdfstring{$\mathcal{P}_3$}{P3}}
 \label{sec:planetary-frame}
 
-Следуя терминологии теории моделей А.\,И.~Мальцева (\emph{«Алгебраические системы»}~\cite{Malcev1970}, где \emph{носителем} / \emph{carrier} называется основное множество алгебраического сорта), мы рассматриваем систему как двусортную алгебраическую структуру $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$, связывающую \textbf{дискретный $M$-носитель} ($\mathbb{Z}_{512}$ с $L^1$-проекциями $\mathcal{C}_3,\mathcal{S}_3$) и \textbf{непрерывный евклидов $T$-носитель} ($L^2$-окружность $X^2+Y^2=R^2$ и континуальную прямую $\mathbb{R}$) через подъём Вейерштрасса $\pi_{M\to T}$, линейную ретракцию $\iota_{T\to M}$ и стереографический гомеоморфизм $[0,512]/512 = [0,1]\cong\mathbb{R}$.
+Следуя терминологии теории моделей А.\,И.~Мальцева (\emph{«Алгебраические системы»}~\cite{Malcev1970}, где \emph{носителем} / \emph{carrier} называется основное множество алгебраического сорта), мы рассматриваем систему как двусортную алгебраическую структуру $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$, связывающую \textbf{дискретный $M$-носитель} ($\mathbb{Z}_{4Q}$ с $L^1$-проекциями $\mathcal{C}_{4Q},\mathcal{S}_{4Q}$) и \textbf{непрерывный евклидов $T$-носитель} ($L^2$-окружность $X^2+Y^2=R^2$ и прямую $\mathbb{R}$).
 
-\begin{theorem}[Ограниченное через радикал этажное погружение, окаймлённая $3\times 3$-матрица $\mathcal{M}_3$, ортогональный репер дифференциала $\mathcal{F}_3$, матрица Ганкеля--Вандермонда $\mathcal{H}_3$ и перенос носителей $M\rightleftarrows T$]
+\begin{theorem}[Окаймлённая $3\times 3$-матрица $\mathcal{M}_3$, ортогональный репер дифференциала $\mathcal{F}_3$ и матрица Ганкеля--Вандермонда $\mathcal{H}_3$, \texttt{thm8}]
 \label{thm:main-8}
-Для всякой взаимно простой тройки $A + B = C$ ($\gcd(A,B,C)=1$) выполнены тождества (\texttt{thm8}, \texttt{thm9}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item на каждом этаже $k\ge 2$ разложение $A = \widetilde{A}_k X_k^k,\ B = \widetilde{B}_k Y_k^k,\ C = \widetilde{C}_k Z_k^k$ удовлетворяет $\widetilde{A}_k\widetilde{B}_k\widetilde{C}_k \le \operatorname{rad}(ABC)^{k-1}$, а матрица $\mathcal{M}_3 = \begin{pmatrix} c_2 & a_2 & b_2 \\ a_1 & c_1 & 0 \\ b_1 & 0 & c_1 \end{pmatrix}$ имеет $\det\mathcal{M}_3 = c_1(C-A-B) = 0$ и союзную матрицу ранга~$1$ $(\mathcal{M}_3^{\mathrm{adj}})^2 = (c_1^2+C)\mathcal{M}_3^{\mathrm{adj}}$;
-\item вектор радиусов шестерён $\mathbf{r} = (a_1,b_1,c_1)$ и вектор чисел оборотов $\mathbf{\omega} = (a_2,b_2,-c_2)$ ортогональны ($\mathbf{r}\cdot\mathbf{\omega} = 0$), $\det\mathcal{F}_3 = M_{BC}^2 + M_{CA}^2 + S_{AB}^2 \equiv \|\mathbf{r}\|_2^2\|\mathbf{\omega}\|_2^2 > 0$, $C^2 + S_{AB}^2 = (A-B)^2 + M_{AB}^2 \equiv (a_1^2+b_1^2)(a_2^2+b_2^2)$, а на этаже $k=3$ ($S_m = \widetilde{A}X^m + \widetilde{B}Y^m - \widetilde{C}Z^m$, $S_3 = 0$) матрица Ганкеля $\mathcal{H}_3$ имеет $-\det\mathcal{H}_3 \equiv \widetilde{A}\widetilde{B}\widetilde{C}(X-Y)^2(Y-Z)^2(Z-X)^2 > 0$ и проекторы Лагранжа--Вандермонда зазоров валов $\widetilde{A}X(X-Y)(X-Z) \equiv S_1 YZ - S_2(Y+Z)$, $\widetilde{B}Y(Y-X)(Y-Z) \equiv S_1 ZX - S_2(Z+X)$ и $\widetilde{C}Z(Z-X)(Z-Y) \equiv S_2(X+Y) - S_1 XY$;
-\item трёхканальная кубическая матрица Паде $\mathcal{P}_3(A,B,C)$ имеет ядро $\mathcal{P}_3(A,B,C)(A,B,-C)^T = \mathbf{0}$ и след $\operatorname{Tr}\mathcal{P}_3(A,B,C) = A C(A+C)$, а по всем $512$ классам вычетов $x\in\mathbb{Z}_{512}$ степени $x^k\bmod 512$ сжимаются по лестнице $512\xrightarrow{k=4} 36\xrightarrow{k=8} 18\xrightarrow{k=16} 9\xrightarrow{k=32} 5\xrightarrow{k=64} 3\xrightarrow{k=128} 2 = \{0,1\}$ ($x^{128}\bmod 512 = x\bmod 2$).
-\end{enumerate}
+Для всякой аддитивной тройки $A + B = C$ ($A = a_1 a_2,\ B = b_1 b_2,\ C = c_1 c_2$) матрица $\mathcal{M}_3 = \begin{pmatrix} c_2 & a_2 & b_2 \\ a_1 & c_1 & 0 \\ b_1 & 0 & c_1 \end{pmatrix}$ имеет $\det\mathcal{M}_3 = c_1(C-A-B) = 0$ и союзную матрицу ранга~$1$ $(\mathcal{M}_3^{\mathrm{adj}})^2 = (c_1^2+C)\mathcal{M}_3^{\mathrm{adj}}$. Вектор радиусов шестерён $\mathbf{r} = (a_1,b_1,c_1)$ и вектор чисел оборотов $\mathbf{\omega} = (a_2,b_2,-c_2)$ ортогональны ($\mathbf{r}\cdot\mathbf{\omega} = 0$), $\det\mathcal{F}_3 = M_{BC}^2 + M_{CA}^2 + S_{AB}^2 \equiv \|\mathbf{r}\|_2^2\|\mathbf{\omega}\|_2^2$, $C^2 + S_{AB}^2 = (A-B)^2 + M_{AB}^2 \equiv (a_1^2+b_1^2)(a_2^2+b_2^2)$, а на этаже $k=3$ ($S_m = \widetilde{A}X^m + \widetilde{B}Y^m - \widetilde{C}Z^m$, $S_3 = 0$) матрица Ганкеля $\mathcal{H}_3$ имеет $-\det\mathcal{H}_3 \equiv \widetilde{A}\widetilde{B}\widetilde{C}(X-Y)^2(Y-Z)^2(Z-X)^2$ и проекторы Лагранжа--Вандермонда зазоров валов $\widetilde{A}X(X-Y)(X-Z) \equiv S_1 YZ - S_2(Y+Z)$, $\widetilde{B}Y(Y-X)(Y-Z) \equiv S_1 ZX - S_2(Z+X)$ и $\widetilde{C}Z(Z-X)(Z-Y) \equiv S_2(X+Y) - S_1 XY$.
 \end{theorem}
 
-\section{Обратная аннигиляция Паде--Безу, целочисленный вронскиан Мейсона--Стотерса--Безу, понижение степени на круге, межэтажный замок рода~10 и стереографическое погружение в \texorpdfstring{$\mathbb{Z}_{512}$}{Z512}}
+\begin{theorem}[Унимодулярная $2\times 3$-матрица партнёров Безу $\mathcal{B}_{2\times 3}$ и трёхканальная матрица Паде $\mathcal{P}_3(A,B,C)$, \texttt{thm9}]
+\label{thm:main-9}
+Для любых $A + B = C$ и пары Безу $A v - B u = 1$ ($w = u + v$) все три минора $2\times 2$ матрицы $\mathcal{B}_{2\times 3} = \begin{pmatrix} A & B & C \\ u & v & w \end{pmatrix}$ равны $+1$ ($Av-Bu = Aw-Cu = Bw-Cv = 1$), а трёхканальная кубическая матрица Паде $\mathcal{P}_3(A,B,C)$ имеет ядро $\mathcal{P}_3(A,B,C)(A,B,-C)^T = \mathbf{0}$ и след $\operatorname{Tr}\mathcal{P}_3(A,B,C) = A C(A+C)$.
+\end{theorem}
+
+\section{Универсальные \texorpdfstring{$\forall$}{For-All}-квантифицированные теоремы: вронскиан Мейсона--Стотерса, понижение степени на круге, замок рода~10 и погружение в \texorpdfstring{$\mathbb{Z}_{4Q}$}{Z\_4Q}}
 \label{sec:universal-theorems}
 
-\begin{theorem}[Универсальные законы обратной аннигиляции Паде--Безу, вронскиана Мейсона--Стотерса, понижения степени на круге, межэтажного замка рода~10 и стереографического погружения в ротатор $\mathbb{Z}_{512}$]
-\label{thm:main-12-16}
-Для произвольных целых чисел в $\mathbb{Z}$ выполнены следующие универсально $\forall$-квантифицированные соотношения (\texttt{thm12}--\texttt{thm16}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Обратная аннигиляция кубов Паде--Безу и двустороннее исключение медианты Штерна--Броко (\texttt{thm12}):}
-  для $A = \widetilde{C}Z^3 - \widetilde{B}Y^3$, $I_0 = Yw - Zv$ и $I_1 = Yw(\widetilde{C}w^3+2\widetilde{B}v^3) - Zv(2\widetilde{C}w^3+\widetilde{B}v^3)$:
-  \begin{equation}
-    \label{eq:reverse-pade-bezout}
-    Z^3 I_1 \;+\; A\,w^3(2Zv - Yw) \;\equiv\; \widetilde{B}\,I_0^3(Yw + Zv),\qquad
-    Y^3 I_1 \;+\; A\,v^3(2Yw - Zv) \;\equiv\; \widetilde{C}\,I_0^3(Yw + Zv),
-  \end{equation}
-  а между двумя родителями Штерна--Броко $(v,w)$ и $(v_m,w_m) = (Y-v,Z-w)$ медианты Фарея $(Y,Z)$ на $[0,1]$ ($p = v_m w,\ q = v w_m,\ K_+ = w^3(2Zv-Yw),\ K_- = w_m^3(2Zv_m-Yw_m)$) исключение $A$ сокращает $Z^3$ тождественно: $I_1 K_- - I_{1m} K_+ \equiv \widetilde{B} I_0^3\bigl((vw + v_m w_m)(p+q) - (p^2+q^2)\bigr)$. Кроме того, инвариант квадратичного спуска $I_2 := \widetilde{B}Yv^2(3Yw-Zv) - \widetilde{C}Zw^2(3Zv-Yw)$ исключает родителя $(v,w)$ из правой части ($Z^2 I_2 + A w^2(3Zv-Yw) \equiv \widetilde{B}Y I_0^3$, $Y^2 I_2 + A v^2(3Yw-Zv) \equiv \widetilde{C}Z I_0^3$) и образует с $I_1$ не зависящую от $A$ систему Вронскиана $2\times 2$ определителя $3 I_0^3$: $Z(3Zv-Yw)I_1 - w(2Zv-Yw)I_2 \equiv 3\widetilde{B}v^2 I_0^3$ и $Y(3Yw-Zv)I_1 - v(2Yw-Zv)I_2 \equiv 3\widetilde{C}w^2 I_0^3$.
-\item \textbf{Целочисленный кубический вронскиан Мейсона--Стотерса--Безу и определитель четвёртых степеней (\texttt{thm13}):}
-  при $\widetilde{A}X^3 + \widetilde{B}Y^3 = \widetilde{C}Z^3$ и $\widetilde{A}Xv_0 - \widetilde{B}Yu_0 = 1$ подстановка $\alpha = u_0 Z^2 + t\widetilde{A}X$, $\beta = v_0 Z^2 + t\widetilde{B}Y$, $\gamma = u_0 X^2 + v_0 Y^2 + t\widetilde{C}Z$ даёт $A^*+B^*=C^*$ ($A^*=\alpha X^2,\ B^*=\beta Y^2,\ C^*=\gamma Z^2$) с минорами квадратов валов $(\widetilde{A}X\beta-\widetilde{B}Y\alpha,\ \widetilde{C}Z\alpha-\widetilde{A}X\gamma,\ \widetilde{C}Z\beta-\widetilde{B}Y\gamma) = (Z^2,Y^2,X^2)$, точным вронскианом
-  \begin{equation}
-    \label{eq:ms-wronskian}
-    W^* \;:=\; A B^* - B A^* \;\equiv\; X^2 Y^2 Z^2,\qquad
-    -\det\mathcal{W}_{\mathrm{MS}} \;\equiv\; X^4 + Y^4 + Z^4,
-  \end{equation}
-  и двусторонним схождением Крамера $w X^2 + \widetilde{B}\gamma = D_{\mathrm{clash}}Z$, $v X^2 + \widetilde{C}\beta = D_{\mathrm{clash}}Y$ ($D_{\mathrm{clash}} = \widetilde{C}w\beta - \widetilde{B}v\gamma$).
-\item \textbf{Сквозная цепочка и безусловное понижение степени остатком на круге с полным радикал-скелетом валов (\texttt{thm14}):}
-  для полного радикал-скелета с валами $R_{\mathrm{full}} := (\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)$ выполнено объёмное тождество $A B C \equiv R_{\mathrm{full}} W^*$ и точное круговое разложение
-  \begin{equation}
-    \label{eq:circle-remainder-rfull}
-    (\widetilde{B}Y)\,C \;+\; (\widetilde{B}^2\widetilde{C})(Y^2 Z)\,\alpha \;\equiv\; R_{\mathrm{full}}\,\beta,\qquad
-    (\widetilde{A}X)\,\beta \;=\; Z^2 + (\widetilde{B}Y)\,\alpha.
-  \end{equation}
-  Выбор неотрицательного остатка $0\le\alpha\le\widetilde{A}X-1$ на круге длины $\widetilde{A}X$ безусловно устраняет неопределённость знака: $(\widetilde{A}X)\beta \le Z^2 + (\widetilde{B}Y)(\widetilde{A}X-1)$ и $(\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$, откуда $C \le R_{\mathrm{full}}^2 = \bigl((\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)\bigr)^2$ при $\beta\le R_{\mathrm{full}}$ и $C \le R_{\mathrm{full}}^3 = \bigl((\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)\bigr)^3$ для всех положительных валов и весов ($R_{\mathrm{full}}^3 - C \equiv C((\widetilde{A}\widetilde{B}\widetilde{C})^2 A B - 1)$). Кроме того, для $3\times 3$ кубической системы Крамера--Безу $U_0 Y^3 - V_0 X^3 = 1$ ($1\le U_0\le X^3,\ 0\le V_0 < Y^3$) и $V_1 Z^3 - U_1 Y^3 = 1$ ($0\le U_1 < Z^3,\ 1\le V_1\le Y^3$) определитель $\Delta_{\mathrm{cube}} := \widetilde{A}U_0 V_1 + \widetilde{B}V_0 V_1 - \widetilde{C}U_1 V_0$ удовлетворяет $1 \le \Delta_{\mathrm{cube}} \le \widetilde{A} + \widetilde{C}$ и $\Delta_{\mathrm{cube}}(X^3, Y^3, Z^3) = \bigl(\widetilde{C}(U_0+U_1)-\widetilde{B}V_1,\ \widetilde{A}V_1+\widetilde{C}V_0,\ \widetilde{A}(U_0+U_1)+\widetilde{B}V_0\bigr)$, давая дихотомию $Z^3 \le \widetilde{B}V_0$ (при $\Delta_{\mathrm{cube}}\ge\widetilde{A}+1,\ U_0+U_1\le Z^3$) либо $\widetilde{C}V_0 \le \widetilde{A}(Y^3-V_1)$ (при $\Delta_{\mathrm{cube}}\le\widetilde{A}$).
-\item \textbf{Межэтажное сцепление $k=2 \leftrightarrow k=3$ на кривой 6-й степени рода~10, трихотомия эйлеровой характеристики $\chi(\mathcal{C}_k) = k(3-k)$ и разложение Пуанкаре--Хегора (\texttt{thm15}):}
-  эйлерова характеристика плоской кривой степени $k$ удовлетворяет тождеству $\chi(\mathcal{C}_k) = 2 - 2g(k) = 2 - (k-1)(k-2) \equiv k(3-k)$ (обращаясь в нуль при $k = d = 3$ в соответствии с симплициальным разложением Пуанкаре--Хегора 3-сферы $S^3 = \mathcal{C}_{13}^{(+)}\cup_{O_2(3)}\mathcal{C}_{13}^{(-)}$, где $\chi(\mathcal{C}_{13}) = 13-36+32-8 = +1$, $\chi(O_2(3)) = 12-24+14 = +2 = \chi(\mathcal{C}_2)$ и $\chi(S^3) = 1+1-2 = 0 = \chi(\mathcal{C}_3)$). Сцепление односвязного сферического этажа $k=2$ ($A = A_2 X_2^2,\ B = B_2 Y_2^2,\ C = C_2 Z_2^2$, $g(2)=0,\ \chi(\mathcal{C}_2)=+2$) и торового кубического этажа $k=3$ ($A = A_3 X_3^3,\ B = B_3 Y_3^3,\ C = C_3 Z_3^3$, $g(3)=1,\ \chi(\mathcal{C}_3)=0$) в силу $3-2=+1$ связывает каждый вал ($A A_3^2 X_3^6 = A_2^3 X_2^6$) и переводит $(U_6,V_6,W_6) = (X_2 Y_3 Z_3, Y_2 X_3 Z_3, Z_2 X_3 Y_3)$ на кривую 6-й степени рода $g(6) = \frac{5\times 4}{2} = 10 \ge 2$ с отрицательной эйлеровой характеристикой $\chi(\mathcal{C}_6) = 6(3-6) = -18 < 0$:
-  \begin{equation}
-    \label{eq:genus-10-curve}
-    A_2^3 B_3^2 C_3^2\,U_6^6 \;+\; B_2^3 A_3^2 C_3^2\,V_6^6 \;=\; C_2^3 A_3^2 B_3^2\,W_6^6.
-  \end{equation}
-\item \textbf{Стереографическое погружение Вейерштрасса $\mathbb{Z}^3$ в Квадрант~I $[0,128]$ ротатора $\mathbb{Z}_{512}$ (\texttt{thm16}):}
-  для любой тройки $A+B=C\in\mathbb{Z}^3$ и $A v - B u = 1$ ($u+v=w$) подъём Вейерштрасса $X_T = A^2-B^2,\ Y_T = 2AB,\ R_T = A^2+B^2$ удовлетворяет $X_T^2+Y_T^2=R_T^2$, $R_T+Y_T=C^2$, $(C^2+X_T,C^2-X_T)=(2CA,2CB)$ и $Y_T/(R_T+X_T) = B/A$, а в ячейке ротатора $\varphi_0\in[0,128]$ ($\mathcal{C}_3(\varphi_0)=128-\varphi_0,\ \mathcal{S}_3(\varphi_0)=\varphi_0,\ I_{\mathrm{rot}} = B\mathcal{C}_3(\varphi_0)-A\mathcal{S}_3(\varphi_0),\ \Delta_{\mathrm{rot}} = \mathcal{C}_3(\varphi_0)v-\mathcal{S}_3(\varphi_0)u$) выполняется точный инвариант четверти кольца:
-  \begin{equation}
-    \label{eq:quarter-ring-invariant}
-    128 A \;=\; C\mathcal{C}_3(\varphi_0) - I_{\mathrm{rot}},\qquad
-    128 B \;=\; C\mathcal{S}_3(\varphi_0) + I_{\mathrm{rot}},\qquad
-    C\cdot\Delta_{\mathrm{rot}} \;-\; w\cdot I_{\mathrm{rot}} \;\equiv\; 128 \;=\; Q_\square(3).
-  \end{equation}
-\end{enumerate}
+\begin{theorem}[Обратная аннигиляция кубов Паде--Безу, исключение медианты Штерна--Броко и квадратичный спуск $I_2$, \texttt{thm12}]
+\label{thm:reverse-pade-thm12}
+Для $A = \widetilde{C}Z^3 - \widetilde{B}Y^3$, $I_0 = Yw - Zv$ и $I_1 = Yw(\widetilde{C}w^3+2\widetilde{B}v^3) - Zv(2\widetilde{C}w^3+\widetilde{B}v^3)$:
+\begin{equation}
+  \label{eq:reverse-pade-bezout}
+  Z^3 I_1 \;+\; A\,w^3(2Zv - Yw) \;\equiv\; \widetilde{B}\,I_0^3(Yw + Zv),\qquad
+  Y^3 I_1 \;+\; A\,v^3(2Yw - Zv) \;\equiv\; \widetilde{C}\,I_0^3(Yw + Zv),
+\end{equation}
+а между двумя родителями Штерна--Броко $(v,w)$ и $(v_m,w_m) = (Y-v,Z-w)$ медианты Фарея $(Y,Z)$ ($p = v_m w,\ q = v w_m,\ K_+ = w^3(2Zv-Yw),\ K_- = w_m^3(2Zv_m-Yw_m)$) исключение $A$ сокращает $Z^3$ тождественно: $I_1 K_- - I_{1m} K_+ \equiv \widetilde{B} I_0^3\bigl((vw + v_m w_m)(p+q) - (p^2+q^2)\bigr)$. Инвариант квадратичного спуска $I_2 := \widetilde{B}Yv^2(3Yw-Zv) - \widetilde{C}Zw^2(3Zv-Yw)$ исключает родителя $(v,w)$ из правой части ($Z^2 I_2 + A w^2(3Zv-Yw) \equiv \widetilde{B}Y I_0^3$, $Y^2 I_2 + A v^2(3Yw-Zv) \equiv \widetilde{C}Z I_0^3$) и образует с $I_1$ не зависящую от $A$ систему Вронскиана $2\times 2$ определителя $3 I_0^3$.
 \end{theorem}
 
-\begin{theorem}[Универсальное погружение ротатора на произвольном модуле $\mathbb{Z}_{4Q}$ и закон Вронскиана двухдуговых траекторий, \texttt{thm18}]
-\label{thm:arbitrary-modulus-thm18}
-Для любого четверть-модуля $Q\in\mathbb{Z}$ на четырёхквадрантном кольце $\mathbb{Z}_{4Q}$ ($\mathcal{C}_{4Q}(\varphi_0)=Q-\varphi_0,\ \mathcal{S}_{4Q}(\varphi_0)=\varphi_0$) тождественно выполняются $L^1$-норма $\mathcal{C}_{4Q}+\mathcal{S}_{4Q}\equiv Q$, разностный вронскиан $\mathcal{W}_{4Q}(\varphi_0)\equiv Q$, а для любой тройки $A+B=C\in\mathbb{Z}^3$ с $Av-Bu=1$ ($u+v=w$) --- стереографические разложения $Q A = C\mathcal{C}_{4Q} - I_{\mathrm{rot},Q}$, $Q B = C\mathcal{S}_{4Q} + I_{\mathrm{rot},Q}$ и инвариант четверти модуля $C\Delta_{\mathrm{rot},Q} - w I_{\mathrm{rot},Q} \equiv Q$. Кроме того, для любых двух последовательных бинарно-троичных дуг траектории $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$ ($C_i = P_i - Q_i$, $C_{\mathrm{tot}} = P_1 P_2 - Q_1 Q_2$, $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$) суммарное смещение раскладывается в $\mathbb{Z}_{C_{\mathrm{tot}}}$ как $(P_1 P_2)(n_{\mathrm{final}} - n_{\mathrm{start}}) + C_{\mathrm{tot}} n_{\mathrm{start}} \equiv D_{\mathrm{tot}}$, а на любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$) хордовое смещение определяется определителем Вронскиана $2\times 2$: $C_{\mathrm{tot}}(n_{\mathrm{mid}} - n_{\mathrm{start}}) \equiv C_2 D_1 - C_1 D_2$.
+\begin{theorem}[Целочисленный кубический вронскиан Мейсона--Стотерса--Безу и определитель четвёртых степеней, \texttt{thm13}]
+\label{thm:mason-stothers-thm13}
+При $\widetilde{A}X^3 + \widetilde{B}Y^3 = \widetilde{C}Z^3$ и $\widetilde{A}Xv_0 - \widetilde{B}Yu_0 = 1$ подстановка $\alpha = u_0 Z^2 + t\widetilde{A}X$, $\beta = v_0 Z^2 + t\widetilde{B}Y$, $\gamma = u_0 X^2 + v_0 Y^2 + t\widetilde{C}Z$ даёт $A^*+B^*=C^*$ ($A^*=\alpha X^2,\ B^*=\beta Y^2,\ C^*=\gamma Z^2$) с минорами квадратов валов $(\widetilde{A}X\beta-\widetilde{B}Y\alpha,\ \widetilde{C}Z\alpha-\widetilde{A}X\gamma,\ \widetilde{C}Z\beta-\widetilde{B}Y\gamma) = (Z^2,Y^2,X^2)$ и точным вронскианом
+\begin{equation}
+  \label{eq:ms-wronskian}
+  W^* \;:=\; A B^* - B A^* \;\equiv\; X^2 Y^2 Z^2,\qquad
+  -\det\mathcal{W}_{\mathrm{MS}} \;\equiv\; X^4 + Y^4 + Z^4.
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[Понижение степени остатком на круге с полным радикал-скелетом валов и кубический замок Крамера--Безу $3\times 3$, \texttt{thm14}]
+\label{thm:circle-remainder-thm14}
+Для полного радикал-скелета с валами $R_{\mathrm{full}} := (\widetilde{A}\widetilde{B}\widetilde{C})(X Y Z)$ выполнено объёмное тождество $A B C \equiv R_{\mathrm{full}} W^*$ и круговое разложение
+\begin{equation}
+  \label{eq:circle-remainder-rfull}
+  (\widetilde{B}Y)\,C \;+\; (\widetilde{B}^2\widetilde{C})(Y^2 Z)\,\alpha \;\equiv\; R_{\mathrm{full}}\,\beta,\qquad
+  (\widetilde{A}X)\,\beta \;=\; Z^2 + (\widetilde{B}Y)\,\alpha.
+\end{equation}
+Выбор неотрицательного остатка $0\le\alpha\le\widetilde{A}X-1$ на круге длины $\widetilde{A}X$ даёт $(\widetilde{A}X)\beta \le Z^2 + (\widetilde{B}Y)(\widetilde{A}X-1)$ и $(\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$ (откуда $C \le R_{\mathrm{full}}^2$ при $\beta\le R_{\mathrm{full}}$ и $C \le R_{\mathrm{full}}^3$ для всех положительных валов и весов). Для $3\times 3$ кубической системы Крамера--Безу $U_0 Y^3 - V_0 X^3 = 1$ и $V_1 Z^3 - U_1 Y^3 = 1$ определитель $\Delta_{\mathrm{cube}} := \widetilde{A}U_0 V_1 + \widetilde{B}V_0 V_1 - \widetilde{C}U_1 V_0 \in [1, \widetilde{A}+\widetilde{C}]$ удовлетворяет $\Delta_{\mathrm{cube}}(X^3, Y^3, Z^3) = \bigl(\widetilde{C}(U_0+U_1)-\widetilde{B}V_1,\ \widetilde{A}V_1+\widetilde{C}V_0,\ \widetilde{A}(U_0+U_1)+\widetilde{B}V_0\bigr)$.
+\end{theorem}
+
+\begin{theorem}[Межэтажное сцепление $k=2 \leftrightarrow k=3$ на кривой рода~10 и трихотомия эйлеровой характеристики, \texttt{thm15}]
+\label{thm:genus-10-thm15}
+Эйлерова характеристика плоской кривой степени $k$ удовлетворяет тождеству $\chi(\mathcal{C}_k) = 2 - (k-1)(k-2) \equiv k(3-k)$ (обращаясь в нуль при $k = 3$ в соответствии с разложением Пуанкаре--Хегора 3-сферы $S^3 = \mathcal{C}_{13}^{(+)}\cup_{O_2(3)}\mathcal{C}_{13}^{(-)}$, где $\chi(\mathcal{C}_{13}) = +1,\ \chi(O_2(3)) = +2,\ \chi(S^3) = 0$). Сцепление сферического этажа $k=2$ ($A = A_2 X_2^2,\ B = B_2 Y_2^2,\ C = C_2 Z_2^2$, $\chi=+2$) и торового этажа $k=3$ ($A = A_3 X_3^3,\ B = B_3 Y_3^3,\ C = C_3 Z_3^3$, $\chi=0$) в силу $3-2=+1$ поднимает $(U_6,V_6,W_6) = (X_2 Y_3 Z_3, Y_2 X_3 Z_3, Z_2 X_3 Y_3)$ на кривую 6-й степени рода $g(6) = 10 \ge 2$ ($\chi(\mathcal{C}_6) = -18 < 0$):
+\begin{equation}
+  \label{eq:genus-10-curve}
+  A_2^3 B_3^2 C_3^2\,U_6^6 \;+\; B_2^3 A_3^2 C_3^2\,V_6^6 \;=\; C_2^3 A_3^2 B_3^2\,W_6^6.
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[Универсальное стереографическое погружение Вейерштрасса в четырёхквадрантный ротатор произвольного модуля $\mathbb{Z}_{4Q}$, \texttt{thm16}]
+\label{thm:main-12-16}
+Для любой тройки $A+B=C\in\mathbb{Z}^3$ с партнёром Безу $A v - B u = 1$ ($u+v=w$) подъём Вейерштрасса $X_T = A^2-B^2,\ Y_T = 2AB,\ R_T = A^2+B^2$ удовлетворяет $X_T^2+Y_T^2=R_T^2$, $R_T+Y_T=C^2$ и $(C^2+X_T,C^2-X_T)=(2CA,2CB)$, а для любого четверть-модуля $Q\in\mathbb{Z}$ на кольце $\mathbb{Z}_{4Q}$ (включая $\mathbb{Z}_{512}$ при $Q = 128$) и любой ячейки ротатора $\varphi_0\in\mathbb{Z}$ ($\mathcal{C}_{4Q}(\varphi_0)=Q-\varphi_0,\ \mathcal{S}_{4Q}(\varphi_0)=\varphi_0,\ I_{\mathrm{rot},Q} = B\mathcal{C}_{4Q}(\varphi_0)-A\mathcal{S}_{4Q}(\varphi_0),\ \Delta_{\mathrm{rot},Q} = \mathcal{C}_{4Q}(\varphi_0)v-\mathcal{S}_{4Q}(\varphi_0)u$) выполняется точный инвариант четверти кольца:
+\begin{equation}
+  \label{eq:quarter-ring-invariant}
+  Q\,A \;=\; C\,\mathcal{C}_{4Q}(\varphi_0) - I_{\mathrm{rot},Q},\qquad
+  Q\,B \;=\; C\,\mathcal{S}_{4Q}(\varphi_0) + I_{\mathrm{rot},Q},\qquad
+  C\cdot\Delta_{\mathrm{rot},Q} \;-\; w\cdot I_{\mathrm{rot},Q} \;\equiv\; Q.
+\end{equation}
 \end{theorem}
 
 \section{Формальная верификация в Lean~4}
-Формальное доказательство Теорем~\ref{thm:main-8} и~\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm13}, \texttt{thm14}, \texttt{thm15}, \texttt{thm16}) содержится в модуле \texttt{AbcPlanetaryWronskian.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Формальное доказательство Теорем~\ref{thm:main-8}--\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm13}, \texttt{thm14}, \texttt{thm15}, \texttt{thm16}) содержится в модуле \texttt{AbcPlanetaryWronskian.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}

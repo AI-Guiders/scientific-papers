@@ -1,244 +1,46 @@
-import RotatorQuadrature
-
 namespace RotatorCalculusPaper
 
-set_option maxHeartbeats 6400000
-set_option maxRecDepth 200000
-
 set_option linter.unusedSimpArgs false
 set_option maxHeartbeats 6400000
 
-/-- **Theorem 8 verification:** Skeletal `abc`-triple radical floor decomposition
-`A_k X_k^k + B_k Y_k^k = C_k Z_k^k` with `A_k B_k C_k ≤ rad(ABC)^(k-1)`, unified bordered `3 × 3`
-Pillai-`abc` skeletal matrix `M_3 = [[c2, a2, b2], [a1, c1, 0], [b1, 0, c1]]` (`det M_3 = 0`, principal
-`2 × 2` minors `B, A, c1²`, rank-1 adjugate with `Tr(adj(M_3)) = c1² + C = 144 = 12²`), and ternary
-triangle-defect identity `(a1 + b1)(c2 - a2 - b2) + c2(c1 - a1 - b1) = -(a1 b2 + a2 b1)`. -/
-def checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool (d : Nat) : Bool :=
-  -- 1. Skeletal abc-triple radical floor decomposition `A_k*X_k^k + B_k*Y_k^k = C_k*Z_k^k` with `A_k*B_k*C_k ≤ rad(ABC)^(k-1)`
-  -- on `3 + 5^3 = 2^7 = 128` (`rad = 2*3*5 = 30`): at floor k=3, `3*1^3 + 1*5^3 = 2*4^3 = 128`, weights product `3*1*2 = 6 ≤ 30^2 = 900`, shaft gap `5 - 4 = 1`
-  let abcA3  : Nat := d
-  let abcB3  : Nat := unitStep
-  let abcC3  : Nat := normSqEdge d
-  let abcRad : Nat := normSqEdge d * d * dOutEdge d
-  let abcLhs : Nat := abcA3 * (unitStep ^ d) + abcB3 * (dOutEdge d ^ d)
-  let abcRhs : Nat := abcC3 * (dInSquare ^ d)
-  let abcW3  : Nat := abcA3 * abcB3 * abcC3
-  -- 2. Unified 3x3 Pillai-abc Skeletal Matrix `M_3 = [[c2, a2, b2], [a1, c1, 0], [b1, 0, c1]]`
-  -- on `3 + 125 = 128` (`a1=1, a2=3; b1=5, b2=25; c1=4, c2=32`):
-  -- det(M_3) = 0, principal 2x2 minors are `B = 125, A = 3, c1^2 = 16`, `Tr(adj(M_3)) = c1^2 + C = 16 + 128 = 144 = 12^2`,
-  -- and ternary triangle-defect identity `(a1 + b1)*d_high + c2*d_low = -(a1*b2 + a2*b1)`
-  let m3_a1  : Int := (unitStep : Int)
-  let m3_a2  : Int := (d : Int)
-  let m3_b1  : Int := (dOutEdge d : Int)
-  let m3_b2  : Int := ((dOutEdge d * dOutEdge d : Nat) : Int)
-  let m3_c1  : Int := (dInSquare : Int)
-  let m3_c2  : Int := ((normSqEdge d ^ dOutEdge d : Nat) : Int)
-  let min3_B : Int := m3_c2 * m3_c1 - m3_a2 * m3_a1
-  let min3_A : Int := m3_c2 * m3_c1 - m3_b2 * m3_b1
-  let detM3  : Int := m3_c1 * (m3_c1 * m3_c2 - m3_a1 * m3_a2 - m3_b1 * m3_b2)
-  let trAdj3 : Int := m3_c1 * m3_c1 + m3_a1 * m3_a2 + m3_b1 * m3_b2
-  let dLow3  : Int := m3_c1 - (m3_a1 + m3_b1)
-  let dHigh3 : Int := m3_c2 - (m3_a2 + m3_b2)
-  let ternL  : Int := (m3_a1 + m3_b1) * dHigh3 + m3_c2 * dLow3
-  let ternR  : Int := -(m3_a1 * m3_b2 + m3_a2 * m3_b1)
-  -- 3. Cyclic 9-factor nilpotent cross-joint cone identity `Tr(adj(M_3) * M'_3) = 0`:
-  -- `ua*(ub - uc)*(ub*uc - 1) + ub*(uc - ua)*(ua*uc - 1) = uc*(ub - ua)*(ua*ub - 1)`
-  -- At `(ua, uc, ub) = (1, 2, 5)`: generates Lock II `27 + 5 = 32` (`3^3 + 5 = 2^5`)
-  -- At `(ua, uc, ub) = (1, 6, 7)`: generates `41 + 175 = 216` (`6^3 - 7*5^2 = 6*7 - 1 = 41`)
-  let nilA_25 : Nat := unitStep * (dOutEdge d - normSqEdge d) * (dOutEdge d * normSqEdge d - unitStep) -- 1*3*9 = 27 = 3^3
-  let nilB_25 : Nat := dOutEdge d * (normSqEdge d - unitStep) * (unitStep * normSqEdge d - unitStep)   -- 5*1*1 = 5
-  let nilC_25 : Nat := normSqEdge d * (dOutEdge d - unitStep) * (unitStep * dOutEdge d - unitStep)     -- 2*4*4 = 32 = 2^5
-  let u7      : Nat := nTriangles d - unitStep                                                         -- 7
-  let nilA_67 : Nat := unitStep * (u7 - nSquares d) * (u7 * nSquares d - unitStep)                     -- 1*1*41 = 41
-  let nilB_67 : Nat := u7 * (nSquares d - unitStep) * (unitStep * nSquares d - unitStep)               -- 7*5*5 = 175
-  let nilC_67 : Nat := nSquares d * (u7 - unitStep) * (unitStep * u7 - unitStep)                       -- 6*6*6 = 216 = 6^3
-  -- 4. Dual 2x2 vertical / 3x3 horizontal cone invariants `I_vert ± I_horiz` and Brahmagupta-Fibonacci
-  -- double Pythagorean lock on Lock III (`5^3 - 3^4 = 44 = 4 * 11`):
-  -- `(3^3 - 3^1)^2 + (11 - 4)^2 = 24^2 + 7^2 = 15^2 + 20^2 = k_III^2 + (5^2 - 5^1)^2 = 25^2 = 625`!
-  let dyLock3 : Nat := (d ^ d) - d                                                                     -- 27 - 3 = 24
-  let dCLock3 : Nat := (nVertices d - unitStep) - dInSquare                                            -- 11 - 4 = 7
-  let kLock3  : Nat := d * dOutEdge d                                                                  -- 15
-  let dxLock3 : Nat := (dOutEdge d * dOutEdge d) - dOutEdge d                                          -- 25 - 5 = 20
-  let hypLock3Sq : Nat := (dOutEdge d * dOutEdge d) * (dOutEdge d * dOutEdge d)                        -- 25^2 = 625
-  eqNatBool abcLhs (quarterPeriod d) &&
-  eqNatBool abcRhs (quarterPeriod d) &&
-  eqNatBool abcW3 (nSquares d) &&
-  decide (abcW3 <= abcRad * abcRad) &&
-  eqNatBool (dOutEdge d - dInSquare) unitStep &&
-  eqIntBool min3_B ((dOutEdge d ^ d : Nat) : Int) &&
-  eqIntBool min3_A (d : Int) &&
-  eqIntBool detM3 0 &&
-  eqIntBool trAdj3 ((nVertices d * nVertices d : Nat) : Int) &&
-  eqIntBool ternL ternR &&
-  eqNatBool (nilA_25 + nilB_25) nilC_25 &&
-  eqNatBool nilA_25 (d ^ d) &&
-  eqNatBool nilC_25 (normSqEdge d ^ dOutEdge d) &&
-  eqNatBool (nilA_67 + nilB_67) nilC_67 &&
-  eqNatBool nilA_67 (dInSquare * dInSquare + dOutEdge d * dOutEdge d) &&
-  eqNatBool nilC_67 (nSquares d ^ d) &&
-  eqNatBool (dyLock3 * dyLock3 + dCLock3 * dCLock3) hypLock3Sq &&
-  eqNatBool (kLock3 * kLock3 + dxLock3 * dxLock3) hypLock3Sq &&
-  -- 5. Bilateral Discrete-Continuum Carrier Transfer Isomorphism M <-> T across all 512 points of Z_512:
-  -- Forward lift pi_{M->T}: (C, S) |-> (X, Y, R) = (C^2 - S^2, 2*C*S, C^2 + S^2) on X^2 + Y^2 = R^2
-  -- Carrier conservation invariant: R(phi) + |Y(phi)| == Q_□^2 = 16,384 for all phi in [0, 511]
-  -- Root-free linear retraction iota_{T->M}: ((16,384 + X(phi))/256, (16,384 - X(phi))/256) == (|C(phi)|, |S(phi)|) for all phi in [0, 511]!
-  allUpTo (nRing d) (fun phi =>
-    let cVal : Int := projC d (phi : Int)
-    let sVal : Int := projS d (phi : Int)
-    let xCircle : Int := cVal * cVal - sVal * sVal
-    let yCircle : Int := (normSqEdge d : Int) * cVal * sVal
-    let rCircle : Int := cVal * cVal + sVal * sVal
-    let qSqInt  : Int := ((quarterPeriod d * quarterPeriod d : Nat) : Int)
-    let twoQInt : Int := ((halfPeriod d : Nat) : Int)
-    let absC    : Int := (Int.natAbs cVal : Int)
-    let absS    : Int := (Int.natAbs sVal : Int)
-    eqIntBool (rCircle + (Int.natAbs yCircle : Int)) qSqInt &&
-    eqIntBool ((qSqInt + xCircle) / twoQInt) absC &&
-    eqIntBool ((qSqInt - xCircle) / twoQInt) absS &&
-    eqIntBool (xCircle % (quarterPeriod d : Int)) 0) &&
-  -- 6. Stereographic Weierstrass Homeomorphism `[0, 512]/512 = [0, 1] ≅ ℝ` (`Y / (R + X) ≡ S / C = φ / (128 - |φ|)`)
-  -- with exact rational inverse `φ(u) = 128 * u / (1 + |u|)` across all interior points `φ ∈ [0, 127]`,
-  -- plus quadrant generation of `2^7 - 5^3 = 3` at `φ = 3`, `2^7 - 11^2 = 7` at `φ = 7` (Quadrant I),
-  -- and `φ * S_3(φ) + 256 * C_3(φ) = 2^15 - φ^2 = 7` at `φ = 181` (`C_3(181) = -53, S_3(181) = 75`, Quadrant II)!
-  allUpTo (quarterPeriod d - unitStep) (fun phi =>
-    let cVal : Int := projC d (phi : Int)
-    let sVal : Int := projS d (phi : Int)
-    let xCircle : Int := cVal * cVal - sVal * sVal
-    let yCircle : Int := (normSqEdge d : Int) * cVal * sVal
-    let rCircle : Int := cVal * cVal + sVal * sVal
-    let qInt    : Int := (quarterPeriod d : Int)
-    -- Cross-multiplied stereographic identity: Y * C == S * (R + X) and inverse reconstruction 128 * S / (C + S) == phi:
-    eqIntBool (yCircle * cVal) (sVal * (rCircle + xCircle)) &&
-    eqIntBool ((qInt * sVal) / (cVal + sVal)) (phi : Int)) &&
-  eqIntBool (projC d (d : Int)) ((dOutEdge d ^ d : Nat) : Int) &&
-  eqIntBool (projC d ((nTriangles d - unitStep : Nat) : Int)) (((nVertices d - unitStep) * (nVertices d - unitStep) : Nat) : Int) &&
-  eqIntBool ((181 : Int) * projS d 181 + (halfPeriod d : Int) * projC d 181) ((nTriangles d - unitStep : Nat) : Int) &&
-  -- 7. Three-channel 3x3 cubic Padé-Thue matrix P_3(A, B, C) for any abc-triple A + B = C (tested on 3 + 5^3 = 2^7 = 128):
-  -- P_3 * [A, B, -C]^T == [0, 0, 0], det(P_3) == 0, and Tr(P_3) = A^2(B+C) + B^2(A+C) + C^2(A-B) == A * C * (A + C) = 3 * 128 * 131 = 50,304
-  -- plus dual Fermat-Catalan locks sharing base 7 = nTriangles(3) - 1:
-  -- `2^5 + 7^2 = 32 + 49 = 81 = 3^4` (Padé P_3 sum) and `13^2 + 7^3 = 169 + 343 = 512 = 2^9 = |Z_512|`!
-  (let pA : Int := (d : Int)
-   let pB : Int := ((dOutEdge d ^ d : Nat) : Int)
-   let pC : Int := (quarterPeriod d : Int)
-   let p00 : Int := (pA * pA) * (pB + pC)
-   let p01 : Int := (pB + (normSqEdge d : Int) * pC) ^ 3
-   let p02 : Int := ((normSqEdge d : Int) * pB + pC) ^ 3
-   let p10 : Int := (pA + (normSqEdge d : Int) * pC) ^ 3
-   let p11 : Int := (pB * pB) * (pA + pC)
-   let p12 : Int := ((normSqEdge d : Int) * pA + pC) ^ 3
-   let p20 : Int := (pA - (normSqEdge d : Int) * pB) ^ 3
-   let p21 : Int := ((normSqEdge d : Int) * pA - pB) ^ 3
-   let p22 : Int := (pC * pC) * (pA - pB)
-   let base7  : Nat := nTriangles d - unitStep
-   let base13 : Nat := nVertices d + unitStep
-   eqIntBool (p00 * pA + p01 * pB - p02 * pC) 0 &&
-   eqIntBool (p10 * pA + p11 * pB - p12 * pC) 0 &&
-   eqIntBool (p20 * pA + p21 * pB - p22 * pC) 0 &&
-   eqIntBool (p00 + p11 + p22) (pA * pC * (pA + pC)) &&
-   eqNatBool ((normSqEdge d ^ dOutEdge d) + (base7 * base7)) (nineFoldDivisor d * nineFoldDivisor d) &&
-   eqNatBool ((base13 * base13) + (base7 ^ d)) (nRing d)) &&
-  -- 8. Planetary Differential 3D Orthogonal Frame F_3 = (r, omega, r x omega), Gear-Slip Brahmagupta Law,
-  -- Checkerboard Hankel-Vandermonde Differential Matrix H_3 (S_1 = S_3 = 0, -det H_3 = 6 * 12^2 = 864),
-  -- and Three Lagrange-Vandermonde Shaft-Gap Projectors on `3 + 5^3 = 2^7 = 128`:
-  (let mBC : Int := m3_b1 * m3_c2 + m3_b2 * m3_c1                                 -- 160 + 100 = 260
-   let mCA : Int := m3_c1 * m3_a2 + m3_c2 * m3_a1                                 -- 12 + 32 = 44 = C_III!
-   let sAB : Int := m3_a1 * m3_b2 - m3_a2 * m3_b1                                 -- 25 - 15 = 10
-   let mAB : Int := m3_a1 * m3_b2 + m3_a2 * m3_b1                                 -- 25 + 15 = 40 = k_IV!
-   let rNormSq : Int := m3_a1 * m3_a1 + m3_b1 * m3_b1 + m3_c1 * m3_c1             -- 1 + 25 + 16 = 42 = S_2(3)!
-   let wNormSq : Int := m3_a2 * m3_a2 + m3_b2 * m3_b2 + m3_c2 * m3_c2             -- 9 + 625 + 1024 = 1658
-   let xShaft : Int := (unitStep : Int)                                            -- X = 1
-   let yShaft : Int := (dOutEdge d : Int)                                          -- Y = 5
-   let zShaft : Int := (dInSquare : Int)                                           -- Z = 4
-   let s0Mom : Int := (abcA3 : Int) + (abcB3 : Int) - (abcC3 : Int)               -- 3 + 1 - 2 = 2
-   let s1Mom : Int := (abcA3 : Int) * xShaft + (abcB3 : Int) * yShaft - (abcC3 : Int) * zShaft -- 3 + 5 - 8 = 0!
-   let s2Mom : Int := (abcA3 : Int) * (xShaft ^ 2) + (abcB3 : Int) * (yShaft ^ 2) - (abcC3 : Int) * (zShaft ^ 2) -- -4
-   let s4Mom : Int := (abcA3 : Int) * (xShaft ^ 4) + (abcB3 : Int) * (yShaft ^ 4) - (abcC3 : Int) * (zShaft ^ 4) -- 116
-   let vand3 : Int := (xShaft - yShaft) * (yShaft - zShaft) * (zShaft - xShaft)   -- -12 = -|V(O_2)|!
-   let detH3Neg : Int := (s2Mom ^ 3) - s4Mom * (s0Mom * s2Mom - s1Mom * s1Mom)    -- 864 = 6 * 12^2
-   eqIntBool (m3_a1 * m3_a2 + m3_b1 * m3_b2 - m3_c1 * m3_c2) 0 &&
-   eqIntBool sAB ((normSqEdge d * dOutEdge d : Nat) : Int) &&
-   eqIntBool mAB ((nTriangles d * dOutEdge d : Nat) : Int) &&
-   eqIntBool mCA ((dInSquare * (nVertices d - unitStep) : Nat) : Int) &&
-   eqIntBool (((quarterPeriod d : Int) ^ 2) + (sAB ^ 2)) (((min3_A - min3_B) ^ 2) + (mAB ^ 2)) &&
-   eqIntBool (((quarterPeriod d : Int) ^ 2) + (sAB ^ 2)) ((m3_a1 * m3_a1 + m3_b1 * m3_b1) * (m3_a2 * m3_a2 + m3_b2 * m3_b2)) &&
-   eqIntBool (mBC * mBC + mCA * mCA + sAB * sAB) (rNormSq * wNormSq) &&
-   eqIntBool s1Mom 0 &&
-   eqIntBool vand3 (-(nVertices d : Int)) &&
-   eqIntBool detH3Neg ((nSquares d * nVertices d * nVertices d : Nat) : Int) &&
-   eqIntBool (s1Mom * yShaft * zShaft - s2Mom * (yShaft + zShaft)) ((abcA3 : Int) * xShaft * (xShaft - yShaft) * (xShaft - zShaft)) &&
-   eqIntBool (s1Mom * zShaft * xShaft - s2Mom * (zShaft + xShaft)) ((abcB3 : Int) * yShaft * (yShaft - xShaft) * (yShaft - zShaft)) &&
-   eqIntBool (s2Mom * (xShaft + yShaft) - s1Mom * xShaft * yShaft) ((abcC3 : Int) * zShaft * (zShaft - xShaft) * (zShaft - yShaft)) &&
-   -- 9. Unimodular 2x3 Conjugate Bézout Partner Matrix B_{2x3} = [[A, B, C], [u, v, w]] (`u + v = w`, all three 2x2 minors = +1):
-   -- On Lock II `(5, 27, 32)`: `(u, v, w) = (2, 11, 13)` (matching Jordan Lock II diagonal `(-13, 11)`);
-   -- On Lock IV top `(3, 125, 128)`: `(u, v, w) = (1, 42, 43)` (`v = 42 = ||r||_2^2 = S_2(3)`), while the shaft-Bézout parent
-   -- `(w_3, v_3) = (3, 4)` of `(Z_3, Y_3) = (4, 5)` (`4*4 - 5*3 = +1`) has cubic gap `A' = 2*3^3 - 1*4^3 = -10 = -S_AB`
-   -- and level-1 Padé collision invariant `I_1 = (C + 2B) - A*Y_3*w_3 = 378 - 45 = 333 = 9 * 37`!
-   (let uBez4 : Int := (unitStep : Int)                                            -- u = 1
-    let vBez4 : Int := rNormSq                                                     -- v = 42 = ||r||_2^2
-    let wBez4 : Int := uBez4 + vBez4                                               -- w = 43
-    let wShaft4 : Int := (d : Int)                                                 -- w_3 = 3
-    let vShaft4 : Int := (dInSquare : Int)                                         -- v_3 = 4
-    let apShaft4 : Int := (abcC3 : Int) * (wShaft4 ^ 3) - (abcB3 : Int) * (vShaft4 ^ 3) -- 54 - 64 = -10 = -sAB
-    let i1Shaft4 : Int := ((quarterPeriod d : Int) + (normSqEdge d : Int) * min3_B) - min3_A * yShaft * wShaft4 -- 378 - 45 = 333 = 9 * 37
-    eqIntBool (min3_A * vBez4 - min3_B * uBez4) (unitStep : Int) &&
-    eqIntBool (min3_A * wBez4 - (quarterPeriod d : Int) * uBez4) (unitStep : Int) &&
-    eqIntBool ((quarterPeriod d : Int) * vBez4 - min3_B * wBez4) (unitStep : Int) &&
-    eqIntBool (zShaft * vShaft4 - yShaft * wShaft4) (unitStep : Int) &&
-    eqIntBool apShaft4 (-sAB) &&
-    eqIntBool i1Shaft4 ((nineFoldDivisor d : Int) * (((dInSquare ^ 3) - (d ^ 3) : Nat) : Int)) &&
-    -- 10. Integer Mason-Stothers-Bézout Derivative Triple (alpha, beta, gamma) = (1, 7, 11) on `3*1^3 + 1*5^3 = 2*4^3 = 128`:
-    -- `A* + B* = C*` (`1 + 175 = 176`), Wronskian `W* = 3*175 - 125*1 = 400 = 1^2 * 5^2 * 4^2`,
-    -- and 3x3 fourth-power determinant `-det(W_MS) = 1^4 + 5^4 + 4^4 = 1 + 625 + 256 = 882 = 2 * 21^2 = 6 * 147`!
-    (let alphaMS : Int := (unitStep : Int)                                          -- 1
-     let betaMS  : Int := ((nTriangles d - unitStep : Nat) : Int)                   -- 7
-     let gammaMS : Int := ((nVertices d - unitStep : Nat) : Int)                    -- 11
-     let aStar4  : Int := (xShaft * xShaft) * alphaMS                               -- 1
-     let bStar4  : Int := (yShaft * yShaft) * betaMS                                -- 175 = 7 * 25
-     let cStar4  : Int := (zShaft * zShaft) * gammaMS                               -- 176 = 11 * 16
-     let wStar4  : Int := min3_A * bStar4 - min3_B * aStar4                         -- 3*175 - 125 = 400 = 20^2
-     let detWMS4 : Int := (xShaft ^ 4) + (yShaft ^ 4) + (zShaft ^ 4)                -- 1 + 625 + 256 = 882 = 2 * 21^2!
-     eqIntBool (aStar4 + bStar4) cStar4 &&
-     eqIntBool wStar4 ((xShaft * xShaft) * (yShaft * yShaft) * (zShaft * zShaft)) &&
-     eqIntBool detWMS4 (((normSqEdge d * ((d * (nTriangles d - unitStep)) ^ 2) : Nat) : Int)) &&
-     -- 11. Universal M-Carrier Z_512 Base-Collapse Hierarchy across all 512 residue classes x in [0, 511]:
-     -- (a) At floor k = 128 = Q_□(3): `(x^128) % 512 == x % 2` in `{0, 1}` (2 phases total, blocking 509/512 Pillai gaps C mod 512 for ALL bases x, y in Z!);
-     -- (b) At floor k = 64 = K_P(3): odd `(x^64) % 256 == 1`, even `(x^64) % 512 == 0` (3 = d phases total in Z_512: {0, 1, 257});
-     -- (c) At floor k = 32: odd `(x^32) % 128 == 1` (5 = d_out(E) phases total in Z_512);
-     -- (d) At floor k = 16: odd `(x^16) % 64 == 1` (9 = d^2 phases total in Z_512);
-     -- (e) At floor k = 8 = |△(3)|: odd `(x^8) % 32 == 1`, even `(x^8) % 256 == 0` (18 = Z(Ar) phases total in Z_512);
-     -- (f) At floor k = 6 = |□(3)| (genus-10 cross-floor lock): even `(x^6) % 64 == 0` ({0, 64 = K_P(3)} in Z_512);
-     -- (g) At floor k = 2: odd `(x^2) % 8 == 1`:
-     allUpTo (nRing d) (fun x =>
-       let r512 : Nat := nRing d
-       let x2   : Nat := (x * x) % r512
-       let x4   : Nat := (x2 * x2) % r512
-       let x6   : Nat := (x4 * x2) % r512
-       let x8   : Nat := (x4 * x4) % r512
-       let x16  : Nat := (x8 * x8) % r512
-       let x32  : Nat := (x16 * x16) % r512
-       let x64  : Nat := (x32 * x32) % r512
-       let x128 : Nat := (x64 * x64) % r512
-       eqNatBool x128 (x % normSqEdge d) &&
-       (if x % normSqEdge d == 0 then
-          eqNatBool x64 0 &&
-          eqNatBool (x8 % halfPeriod d) 0 &&
-          eqNatBool (x6 % (quarterPeriod d / normSqEdge d)) 0
-        else
-          eqNatBool (x64 % halfPeriod d) unitStep &&
-          eqNatBool (x32 % quarterPeriod d) unitStep &&
-          eqNatBool (x16 % (quarterPeriod d / normSqEdge d)) unitStep &&
-          eqNatBool (x8 % (normSqEdge d ^ dOutEdge d)) unitStep &&
-          eqNatBool (x4 % (dInSquare * dInSquare)) unitStep &&
-          eqNatBool (x2 % nTriangles d) unitStep)))))
-
-
-/-- **Theorem 8 (Radical-Bounded Skeletal Floor Embedding of `abc`-Triples, Unified Bordered `3 × 3` Pillai–`abc` Matrix `M₃`, Rank-1 Adjugate Factorization, and Ternary Triangle-Defect Identity)**: -/
-theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding :
-    checkUnified3x3PillaiAbcSkeletalMatrixAndRadicalFloorBool 3 = true :=
-  rfl
-
-set_option linter.unusedSimpArgs false
-set_option maxHeartbeats 6400000
+/-- **Theorem 8 (Universal `∀`-Quantified Bordered `3 × 3` Pillai–`abc` Skeletal Matrix `M₃`,
+Rank-1 Adjugate Factorization, and Ternary Triangle-Defect Identity across All Integers `ℤ`)**:
+For any six shaft parameters `(a1, a2, b1, b2, c1, c2) ∈ ℤ⁶` with `A = a1 * a2`, `B = b1 * b2`,
+`C = c1 * c2`, and bordered `3 × 3` matrix `M₃ = [[c2, a2, b2], [a1, c1, 0], [b1, 0, c1]]`:
+1. The determinant of `M₃` factors as `det M₃ = c1 * (c1 * c2 - a1 * a2 - b1 * b2)`, vanishing
+   identically whenever the planetary differential condition `a1 * a2 + b1 * b2 = c1 * c2` (`A + B = C`) holds;
+2. The three principal `2 × 2` minors are `m11 = c1²`, `m22 = c1 * c2 - b1 * b2` (`= A`), and
+   `m33 = c1 * c2 - a1 * a2` (`= B`), so on the differential shell `A + B = C` the adjugate trace
+   equals `Tr(adj M₃) = m11 + m22 + m33 = c1² + C`;
+3. The ternary triangle-defect identity `(a1 + b1) * (c2 - a2 - b2) + c2 * (c1 - a1 - b1) = (C - A - B) - (a1 * b2 + a2 * b1)`
+   holds across all `ℤ⁶`. -/
+theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
+    (a1 a2 b1 b2 c1 c2 : Int) :
+    let A := a1 * a2
+    let B := b1 * b2
+    let C := c1 * c2
+    let detM3 := c2 * (c1 * c1) - a2 * (a1 * c1) - b2 * (b1 * c1)
+    let m11 := c1 * c1
+    let m22 := c1 * c2 - b1 * b2
+    let m33 := c1 * c2 - a1 * a2
+    (detM3 = c1 * (C - A - B)) ∧
+    (A + B = C → detM3 = 0 ∧ m22 = A ∧ m33 = B ∧ m11 + m22 + m33 = c1 * c1 + C) ∧
+    ((a1 + b1) * (c2 - (a2 + b2)) + c2 * (c1 - (a1 + b1)) = (C - A - B) - (a1 * b2 + a2 * b1)) := by
+  dsimp
+  have hDet : c2 * (c1 * c1) - a2 * (a1 * c1) - b2 * (b1 * c1) =
+              c1 * (c1 * c2 - a1 * a2 - b1 * b2) := by
+    simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hTri : (a1 + b1) * (c2 - (a2 + b2)) + c2 * (c1 - (a1 + b1)) =
+              (c1 * c2 - a1 * a2 - b1 * b2) - (a1 * b2 + a2 * b1) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨hDet, ?_, hTri⟩
+  intro hABC
+  have hZero : c1 * c2 - a1 * a2 - b1 * b2 = 0 := by omega
+  have hDet0 : c2 * (c1 * c1) - a2 * (a1 * c1) - b2 * (b1 * c1) = 0 := by
+    rw [hDet, hZero, Int.mul_zero]
+  exact ⟨hDet0, by omega, by omega, by omega⟩
 
 /-- **Theorem 9 (Universal `∀`-Quantified Algebraic Laws of the Planetary Differential `F₃`,
 Gear-Slip Brahmagupta Law, Three-Level Descent & Hankel–Wronskian Identity, Conjugate Bézout
@@ -834,47 +636,38 @@ theorem thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
 
-/-- **Theorem 16 (Universal `∀`-Quantified Weierstrass–Stereographic Embedding of Any Triple
-`A + B = C` in `ℤ³` into the First Quadrant `[0, 128]` of the `ℤ_{512}` Rotator via `[0, 512]/512 = [0, 1] ≅ ℝ`
-and the Exact Quarter-Ring Bézout–Rotator Invariant `C · Δ_rot - w · I_rot = 128`)**:
-For ANY integer triple `A + B = C` across all `ℤ³` (with no modular slicing by `512`), the stereographic
-Weierstrass map `φ(u) = 128 u / (1 + u) = 128 B / C ∈ [0, 128]` (`u = B / A ∈ ℝ`) embeds the triple
-into a single quadrant cell `[φ₀, φ₀ + 1] ⊂ [0, 128]` of the `ℤ_{512}` rotator (`C₃(φ₀) = 128 - φ₀`,
-`S₃(φ₀) = φ₀`, `I_rot = B C₃(φ₀) - A S₃(φ₀)`), and couples with the Bézout partner `(u, v, w = u + v)`
-(`A v - B u = 1`, `Δ_rot = C₃(φ₀) v - S₃(φ₀) u`) via the universal quarter-ring invariant
-`C · Δ_rot - w · I_rot = 128 = Q_□(3)`. -/
+/-- **Theorem 16 (Universal `∀`-Quantified Weierstrass Stereographic Embedding of Every Integer Triple
+`A + B = C ∈ ℤ³` into an Arbitrary-Modulus Four-Quadrant Rotator `ℤ_{4Q}` for Any `Q ∈ ℤ`
+and Quarter-Ring Bézout–Rotator Invariant `C · Δ_{rot,Q} - w · I_{rot,Q} = Q`)**:
+For ANY integer triple `A + B = C ∈ ℤ³` and ANY quarter-modulus `Q ∈ ℤ` (recovering `ℤ_{512}` at `Q = 128`),
+the rotator cell `(C_{4Q}(φ₀) = Q - φ₀, S_{4Q}(φ₀) = φ₀)` with `I_{rot,Q} = B C_{4Q}(φ₀) - A S_{4Q}(φ₀)`
+and Bézout partner `A v - B u = 1` (`w = u + v`, `Δ_{rot,Q} = C_{4Q}(φ₀) v - S_{4Q}(φ₀) u`) satisfies
+`Q A = C C_{4Q}(φ₀) - I_{rot,Q}`, `Q B = C S_{4Q}(φ₀) + I_{rot,Q}`, and `C · Δ_{rot,Q} - w · I_{rot,Q} = Q`. -/
 theorem thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
-    (A B C u v w phi0 : Int)
+    (Q A B C u v w phi0 : Int)
     (hABC : A + B - C = 0)
     (hBez : A * v - B * u = 1)
     (hw : u + v - w = 0) :
     let XT := A * A - B * B
     let YT := (A + A) * B
     let RT := A * A + B * B
-    let Crot := 128 - phi0
+    let Crot := Q - phi0
     let Srot := phi0
     let Irot := B * Crot - A * Srot
     let Drot := Crot * v - Srot * u
-    -- 1. Weierstrass lift M -> T conservation laws across all (A, B, C) in Z^3:
     (XT * XT + YT * YT = RT * RT) ∧
     (RT + YT = C * C) ∧
     (XT = (A - B) * C) ∧
-    -- 2. Root-free linear retraction T -> M reconstructing (A, B) from (XT, C):
     (C * C + XT = (C + C) * A) ∧
     (C * C - XT = (C + C) * B) ∧
-    -- 3. Stereographic Weierstrass identity Y_T / (R_T + X_T) == B / A in R:
     (YT * A = B * (RT + XT)) ∧
-    -- 4. Exact decomposition of (128 * A, 128 * B) along the Z_512 rotator cell (C_3(phi0), S_3(phi0)):
-    (128 * A = C * Crot - Irot) ∧
-    (128 * B = C * Srot + Irot) ∧
-    -- 5. Single-cell rotator bracket bounds when 0 <= I_rot < C:
-    (0 ≤ Irot → Irot < C → C * Srot ≤ 128 * B ∧ 128 * B < C * (Srot + 1) ∧
-                           C * (Crot - 1) < 128 * A ∧ 128 * A ≤ C * Crot) ∧
-    -- 6. Universal Quarter-Ring Bézout–Rotator Invariant across ALL (A, B, C) in Z^3:
-    --    C * Δ_rot - w * I_rot == 128 = Q_□(3), and direct upper bound C <= 128 + w * I_rot when C * (Δ_rot - 1) >= 0:
-    (C * Drot - w * Irot = 128) ∧
-    (Drot = 1 → C = 128 + w * Irot) ∧
-    (C * (Drot - 1) ≥ 0 → C ≤ 128 + w * Irot) := by
+    (Q * A = C * Crot - Irot) ∧
+    (Q * B = C * Srot + Irot) ∧
+    (0 ≤ Irot → Irot < C → C * Srot ≤ Q * B ∧ Q * B < C * (Srot + 1) ∧
+                           C * (Crot - 1) < Q * A ∧ Q * A ≤ C * Crot) ∧
+    (C * Drot - w * Irot = Q) ∧
+    (Drot = 1 → C = Q + w * Irot) ∧
+    (C * (Drot - 1) ≥ 0 → C ≤ Q + w * Irot) := by
   dsimp
   have h1 : (A * A - B * B) * (A * A - B * B) + ((A + A) * B) * ((A + A) * B) =
             (A * A + B * B) * (A * A + B * B) := by
@@ -901,20 +694,20 @@ theorem thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotato
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
-  have h7 : 128 * A - (C * (128 - phi0) - (B * (128 - phi0) - A * phi0)) =
-            (128 - phi0) * (A + B - C) := by
+  have h7 : Q * A - (C * (Q - phi0) - (B * (Q - phi0) - A * phi0)) =
+            (Q - phi0) * (A + B - C) := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
-  have h8 : 128 * B - (C * phi0 + (B * (128 - phi0) - A * phi0)) =
+  have h8 : Q * B - (C * phi0 + (B * (Q - phi0) - A * phi0)) =
             phi0 * (A + B - C) := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
-  have h9 : (C * ((128 - phi0) * v - phi0 * u) - w * (B * (128 - phi0) - A * phi0)) -
-            128 * (A * v - B * u) =
-            (phi0 * u - (128 - phi0) * v) * (A + B - C) +
-            (B * (128 - phi0) - A * phi0) * (u + v - w) := by
+  have h9 : (C * ((Q - phi0) * v - phi0 * u) - w * (B * (Q - phi0) - A * phi0)) -
+            Q * (A * v - B * u) =
+            (phi0 * u - (Q - phi0) * v) * (A + B - C) +
+            (B * (Q - phi0) - A * phi0) * (u + v - w) := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
@@ -924,18 +717,17 @@ theorem thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotato
   · intro hGe hLt
     have hC1 : C * (phi0 + 1) = C * phi0 + C := by
       simp only [Int.mul_add, Int.mul_one]
-    have hC2 : C * (128 - phi0 - 1) = C * (128 - phi0) - C := by
+    have hC2 : C * (Q - phi0 - 1) = C * (Q - phi0) - C := by
       simp only [Int.mul_sub, Int.mul_one]
     exact ⟨by omega, by omega, by omega, by omega⟩
   · intro hD1
-    have hCD : C * ((128 - phi0) * v - phi0 * u) = C * 1 := by rw [hD1]
+    have hCD : C * ((Q - phi0) * v - phi0 * u) = C * 1 := by rw [hD1]
     omega
   · intro hCDge0
-    have hSub : C * (((128 - phi0) * v - phi0 * u) - 1) =
-                C * ((128 - phi0) * v - phi0 * u) - C := by
+    have hSub : C * (((Q - phi0) * v - phi0 * u) - 1) =
+                C * ((Q - phi0) * v - phi0 * u) - C := by
       simp only [Int.mul_sub, Int.mul_one]
     omega
-
 
 #print axioms thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
 #print axioms thm9_universal_pillai_abc_differential_bezout_and_pade_laws
