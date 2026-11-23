@@ -36,7 +36,7 @@ Throughout this paper, we follow A.\,I.~Mal'cev~\cite{Malcev1973} in defining a 
   2^a \cdot n_{\mathrm{final}} \;-\; 3^b \cdot n_{\mathrm{start}} \;=\; D_{a,b}, \qquad
   D_{a,b} \;:=\; \sum_{j=0}^{b-1} 3^{b-1-j}\,2^{s_j}.
 \end{equation}
-Writing $n_{\mathrm{start}} = 2^a q + r$ ($r = n_{\mathrm{start}}\bmod 2^a \in \mathbb{Z}_{2^a}$), the parity vector $(e_0,\dots,e_{a-1})\in\{0,1\}^a$ is a bijection of $r\in\mathbb{Z}_{2^a}$ independent of $q = \lfloor n_{\mathrm{start}}/2^a\rfloor$, so $b(r)$ follows Pascal's binomial distribution $\binom{a}{b}$ across $\mathbb{Z}_{2^a}$ (contracting on $382/512 = 74.61\%$ of residues at $a=9$), and $D_{a,b}$ is bounded by the Pillai envelope:
+Writing $n_{\mathrm{start}} = 2^a q + r$ ($r = n_{\mathrm{start}}\bmod 2^a \in \mathbb{Z}_{2^a}$), the parity vector $(e_0,\dots,e_{a-1})\in\{0,1\}^a$ is a bijection of $r\in\mathbb{Z}_{2^a}$ independent of $q = \lfloor n_{\mathrm{start}}/2^a\rfloor$, so $b(r)$ follows Pascal's binomial distribution $\binom{a}{b}$ across $\mathbb{Z}_{2^a}$ for any $a \ge 1$, and $D_{a,b}$ is bounded by the Pillai envelope:
 \begin{equation}
   \label{eq:drift-envelope}
   3^b - 2^b \;\le\; D_{a,b} \;\le\; 2^{a-b}\,\bigl(3^b - 2^b\bigr).
@@ -153,8 +153,28 @@ Along any $a$-step planetary gear cascade $2^a n_{\mathrm{final}} - 3^b n_{\math
 \end{equation}
 \end{theorem}
 
+\begin{theorem}[Constructive Fermat infinite-descent reduction on arbitrary stages $(2^a, 3^b)$, \texttt{thm22}]
+\label{thm:fermat-descent-reduction}
+Along any $a$-step trajectory $2^a n_{\mathrm{final}} - 3^b n_{\mathrm{start}} = D_{a,b}$ ($C_{a,b} = 2^a - 3^b$), the descent step satisfies $2^a(n_{\mathrm{start}} - n_{\mathrm{final}}) \equiv C_{a,b}\,n_{\mathrm{start}} - D_{a,b}$, so strict descent $n_{\mathrm{final}} < n_{\mathrm{start}}$ holds if and only if
+\begin{equation}
+  \label{eq:strict-descent-inequality}
+  \bigl(2^a - 3^b\bigr)\cdot n_{\mathrm{start}} \;>\; D_{a,b} \qquad \Bigl(\text{in particular, whenever } \bigl(2^a - 3^b\bigr)n_{\mathrm{start}} > 2^{a-b}\bigl(3^b - 2^b\bigr)\Bigr).
+\end{equation}
+By constructive well-founded induction on $\mathbb{N}$ (\texttt{collatz\_global\_convergence\_from\_local\_descent}, \texttt{0 Classical.choice}), if every $n > 1$ admits a stage $(a,b)$ satisfying~\eqref{eq:strict-descent-inequality}, then every $n \ge 1$ reaches the unique stationary point $n^* = 1$ in finitely many steps.
+\end{theorem}
+
+\begin{theorem}[Dead-end-free ternary prefix decomposition in $\mathbb{Z}_{3^b}^\times$, \texttt{thm23}]
+\label{thm:ternary-prefix-closure}
+For any prefix of $b - 1$ gear steps $0 = s_0 < s_1 < \dots < s_{b-1}$ with prefix drift $D_{b-1} = \sum_{j=0}^{b-2} 3^{b-2-j} 2^{s_j}$ and final gear ratio $2^{\alpha_{b-1}}$ ($a = s_{b-1} + \alpha_{b-1}$), the total drift splits as $D_{a,b} = 2^{s_{b-1}} + 3 D_{b-1} \equiv 2^{s_{b-1}} \not\equiv 0 \pmod 3$, so $\gcd(D_{a,b}, 3^b) = 1$ with zero modulo-$3$ dead ends, and stationary closure $3^b n_{\mathrm{start}} + D_{a,b} = 2^a$ is equivalent to
+\begin{equation}
+  \label{eq:ternary-prefix-closure}
+  2^{s_{b-1}}\bigl(2^{\alpha_{b-1}} - 1\bigr) \;=\; 3\,\bigl(3^{b-1} n_{\mathrm{start}} + D_{b-1}\bigr), \qquad 2^a \;\equiv\; D_{a,b} \pmod{3^b},
+\end{equation}
+which admits a unique primitive-root class $a \pmod{2\cdot 3^{b-1}}$ ($\alpha_{b-1} = 2 m_0$ even) in $\mathbb{Z}_{3^b}^\times$ for every prefix $(s_1,\dots,s_{b-1})$.
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:stationary-reachability} (\texttt{thm18}, \texttt{thm19}, \texttt{thm20}, \texttt{thm21}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:ternary-prefix-closure} (\texttt{thm18}--\texttt{thm23} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

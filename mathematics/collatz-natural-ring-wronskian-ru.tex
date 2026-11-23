@@ -40,7 +40,7 @@
   2^a \cdot n_{\mathrm{final}} \;-\; 3^b \cdot n_{\mathrm{start}} \;=\; D_{a,b}, \qquad
   D_{a,b} \;:=\; \sum_{j=0}^{b-1} 3^{b-1-j}\,2^{s_j}.
 \end{equation}
-При записи $n_{\mathrm{start}} = 2^a q + r$ ($r = n_{\mathrm{start}}\bmod 2^a \in \mathbb{Z}_{2^a}$) вектор чётностей $(e_0,\dots,e_{a-1})\in\{0,1\}^a$ биективно определяется остатком $r\in\mathbb{Z}_{2^a}$ и не зависит от $q = \lfloor n_{\mathrm{start}}/2^a\rfloor$, вследствие чего $b(r)$ подчиняется биномиальному распределению Паскаля $\binom{a}{b}$ (сжимая траекторию на $382/512 = 74{,}61\%$ вычетов при $a=9$), а полином дрейфа $D_{a,b}$ зажат в вилке Пиллаи:
+При записи $n_{\mathrm{start}} = 2^a q + r$ ($r = n_{\mathrm{start}}\bmod 2^a \in \mathbb{Z}_{2^a}$) вектор чётностей $(e_0,\dots,e_{a-1})\in\{0,1\}^a$ биективно определяется остатком $r\in\mathbb{Z}_{2^a}$ и не зависит от $q = \lfloor n_{\mathrm{start}}/2^a\rfloor$, вследствие чего $b(r)$ подчиняется биномиальному распределению Паскаля $\binom{a}{b}$ на кольце $\mathbb{Z}_{2^a}$ при любом $a \ge 1$, а полином дрейфа $D_{a,b}$ зажат в вилке Пиллаи:
 \begin{equation}
   \label{eq:drift-envelope}
   3^b - 2^b \;\le\; D_{a,b} \;\le\; 2^{a-b}\,\bigl(3^b - 2^b\bigr).
@@ -157,8 +157,28 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 \end{equation}
 \end{theorem}
 
+\begin{theorem}[Конструктивная редукция бесконечного спуска Ферма на произвольной ступени $(2^a, 3^b)$, \texttt{thm22}]
+\label{thm:fermat-descent-reduction}
+На любой $a$-шаговой дуге $2^a n_{\mathrm{final}} - 3^b n_{\mathrm{start}} = D_{a,b}$ ($C_{a,b} = 2^a - 3^b$) величина спуска удовлетворяет тождеству $2^a(n_{\mathrm{start}} - n_{\mathrm{final}}) \equiv C_{a,b}\,n_{\mathrm{start}} - D_{a,b}$, так что строгий спуск $n_{\mathrm{final}} < n_{\mathrm{start}}$ равносилен неравенству
+\begin{equation}
+  \label{eq:strict-descent-inequality}
+  \bigl(2^a - 3^b\bigr)\cdot n_{\mathrm{start}} \;>\; D_{a,b} \qquad \Bigl(\text{в частности, при } \bigl(2^a - 3^b\bigr)n_{\mathrm{start}} > 2^{a-b}\bigl(3^b - 2^b\bigr)\Bigr).
+\end{equation}
+По конструктивной полной индукции на $\mathbb{N}$ (\texttt{collatz\_global\_convergence\_from\_local\_descent}, \texttt{0 Classical.choice}), если для каждого $n > 1$ существует ступень $(a,b)$, удовлетворяющая~\eqref{eq:strict-descent-inequality}, то всякое $n \ge 1$ достигает единственной стационарной точки $n^* = 1$ за конечное число шагов.
+\end{theorem}
+
+\begin{theorem}[Беступиковое разложение префикса из $b - 1$ передач в кольце $\mathbb{Z}_{3^b}^\times$, \texttt{thm23}]
+\label{thm:ternary-prefix-closure}
+Для любого префикса из $b - 1$ ступеней $0 = s_0 < s_1 < \dots < s_{b-1}$ с дрейфом префикса $D_{b-1} = \sum_{j=0}^{b-2} 3^{b-2-j} 2^{s_j}$ и последней передачей $2^{\alpha_{b-1}}$ ($a = s_{b-1} + \alpha_{b-1}$) полный дрейф расщепляется в виде $D_{a,b} = 2^{s_{b-1}} + 3 D_{b-1} \equiv 2^{s_{b-1}} \not\equiv 0 \pmod 3$, так что $\gcd(D_{a,b}, 3^b) = 1$ без тупиковых ветвей по модулю $3$, а уравнение замыкания в стационарную точку $3^b n_{\mathrm{start}} + D_{a,b} = 2^a$ равносильно
+\begin{equation}
+  \label{eq:ternary-prefix-closure}
+  2^{s_{b-1}}\bigl(2^{\alpha_{b-1}} - 1\bigr) \;=\; 3\,\bigl(3^{b-1} n_{\mathrm{start}} + D_{b-1}\bigr), \qquad 2^a \;\equiv\; D_{a,b} \pmod{3^b},
+\end{equation}
+что для каждого префикса $(s_1,\dots,s_{b-1})$ однозначно определяет класс первообразного корня $a \pmod{2\cdot 3^{b-1}}$ ($\alpha_{b-1} = 2 m_0$ чётно) в группе $\mathbb{Z}_{3^b}^\times$.
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:stationary-reachability} (\texttt{thm18}, \texttt{thm19}, \texttt{thm20}, \texttt{thm21}) формально верифицированы в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:ternary-prefix-closure} (\texttt{thm18}--\texttt{thm23} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
