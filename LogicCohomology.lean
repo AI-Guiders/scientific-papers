@@ -2,6 +2,9 @@ import RotatorQuadrature
 
 namespace RotatorCalculusPaper
 
+set_option maxHeartbeats 6400000
+set_option maxRecDepth 200000
+
 /-- **Boolean Post Completeness & 3-SAT Operators on the Antipodal Poles `{0, Φ_half(d)} ⊂ ℤ_{N_ring(d)}`:**
 - `clause3SatDefect(d, ψ₁, ψ₂, ψ₃) = Q_□(d) - (C_d(ψ₁) + C_d(ψ₂) + C_d(ψ₃))`,
 - `clause3OrDefectQuotient(d, ψ₁, ψ₂, ψ₃) = tdiv(clause3SatDefect, N_ring(d)) ∈ {0, 1}` (`0` on all `7` satisfying octants, `1` on `(256,256,256)`),

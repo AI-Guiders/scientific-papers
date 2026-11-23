@@ -2,6 +2,9 @@ import RotatorQuadrature
 
 namespace RotatorCalculusPaper
 
+set_option maxHeartbeats 6400000
+set_option maxRecDepth 200000
+
 set_option linter.unusedSimpArgs false
 set_option maxHeartbeats 6400000
 
