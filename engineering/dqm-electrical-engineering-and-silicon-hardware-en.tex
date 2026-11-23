@@ -1,0 +1,98 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Applied Engineering of Discrete Quantum Mechanics (DQM):\\ Phase-Relay Electrical Engineering ($V=\mathcal{C}_3,\ I=\mathcal{S}_3$), Ripple-Free Quadrature Rectifiers, Physical Landauer-Free Computing, and Branchless Silicon Architecture (\texttt{Ring9} / \texttt{Bus36} / \texttt{VerletCell72}) in Lean~4}}
+\author{Dmitry Karataev \and Luch (AI-Guiders)}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+When physics, chemistry, biology, and the physical realization of computation are unified into a single Natural Science under Discrete Quantum Mechanics (DQM) on the two-sorted carrier structure $\langle\mathcal{M},\mathcal{T}\rangle$ ($\mathcal{M} = \mathbb{Z}_{512}$ on the cuboctahedral shell $O_2(3)$ at $1+2^3=3^2$), electrical and computer engineering reduce to exact integer phase-impedance matching. First, we establish that in face-centered cubic (FCC) metallic conductors ($\mathrm{Cu, Ag, Au, Al}$), whose $12$-nearest-neighbor coordination shell coincides with the cuboctahedron $O_2(3)$, electric current is not a mechanical drift of particles ($v_{\mathrm{drift}}\sim 10^{-4}\;\text{m/s}$), but a torsional phase-rotation relay $I(\Delta\varphi) = \mathcal{S}_3(\Delta\varphi)$ coupled to potential tension $V(\Delta\varphi) = \mathcal{C}_3(\Delta\varphi) = 128 - |\Delta\varphi|$. From the cuboctahedral face invariant $|\mathcal{C}_3(\Delta\varphi)| + |\mathcal{S}_3(\Delta\varphi)| \equiv 128$, we derive DC load-line matching ($P(\Delta\varphi) = (128-\Delta\varphi)\Delta\varphi \le 64^2 = 4096$), Kirchhoff's circuit laws ($d_1\circ d_0 \equiv 0$, $d_2\circ d_1 \equiv 0$), reactive power orthogonality ($\sum_{\varphi=0}^{511}\mathcal{C}_3(\varphi)\mathcal{S}_3(\varphi) \equiv 0$), exact anti-phase $LC$ resonance cancellation ($\mathcal{C}_3(\varphi+128) + \mathcal{C}_3(\varphi+384) \equiv 0$), half-wave and full-wave Graetz bridge rectifiers ($\sum|\mathcal{S}_3(\varphi)| = 32\,768$, mean DC current $K_P(3) = 64$), a capacitor-free $0\%$-ripple quadrature bridge rectifier ($|\mathcal{C}_3(\varphi)| + |\mathcal{S}_3(\varphi)| \equiv 128$), and ideal transformer impedance scaling $Z_{\mathrm{in}} = (N_1/N_2)^2 Z_{\mathrm{load}}$ (\texttt{thm5} in \texttt{RotatorCalculusPaper.lean}). Second, we formalize the physical realization of computer science in silicon and acoustic hardware: sub-threshold reversible computing inside the Heisenberg corridor $|\Delta\varphi|\le 40 < 41$ with zero Landauer heat dissipation ($\hat{n}_E = 0$), diagonalization of mutual inductance $M_{jk} = 0$ across the $12$ coils of $O_2(3)$, and the branchless hardware architecture (\texttt{Ring9}, \texttt{Bus36}, \texttt{VerletCell72}, 1-tick closed-loop PLL, and 4-channel nilpotent Neumann tomograph $(2I_4 + N_{\mathrm{nil}})^{-1}$ in Verilog and \texttt{.NET~11}).
+\end{abstract}
+
+\section{Phase-Relay Electrical Engineering on FCC Cuboctahedra (\texttt{thm1}, \texttt{thm5})}
+\label{sec:electrical-engineering}
+
+In classical Drude theory, conduction electrons drift through a copper wire at $v_{\mathrm{drift}} \approx 0.07\;\text{mm/s}$, creating a textbook paradox when contrasted with the speed-of-light propagation of electrical power. In DQM on the discrete carrier $\mathcal{M} = \mathbb{Z}_{512}$ (in the model-theoretic sense of A.\,I.~Mal'cev~\cite{Malcev1973}), the crystal lattice of FCC conductors ($\mathrm{Cu},\ Z=29$; $\mathrm{Ag},\ Z=47$; $\mathrm{Au},\ Z=79$; $\mathrm{Al},\ Z=13$) consists of stationary atomic nodes whose first coordination shell of $12$ nearest neighbors is the cuboctahedron $O_2(3)$.
+
+\begin{theorem}[Complete theoretical electrical engineering on $\mathbb{Z}_{512}$ and $O_2(3)$, \texttt{thm1}, \texttt{thm5}, \texttt{thm18}]
+\label{thm:electrical-engineering}
+On the phase ring $\mathbb{Z}_{512}$ ($Q_\square(3) = 128$, $K_P(3) = 64$, $\Delta\varphi_{\mathrm{disc}}(3) = 41$) and coordination shell $O_2(3)$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{DC Ohm load-line, impedance matching (MPPT), and superconductivity vs.\ Joule heating:}
+  a stationary phase gradient $\Delta\varphi = k \in [0,128]$ between adjacent cuboctahedral nodes partitions the quarter-ring budget between potential voltage $V(k) = \mathcal{C}_3(k) = 128 - k$ and phase-relay current $I(k) = \mathcal{S}_3(k) = k$:
+  \begin{equation}
+    \label{eq:dc-ohm-mppt}
+    V(k) + I(k) \;\equiv\; 128, \qquad
+    P(k) \;=\; V(k)\,I(k) \;=\; 64^2 - (64 - k)^2 \;\le\; 4\,096 \;=\; K_P(3)^2,
+  \end{equation}
+  attaining maximum power transfer at $k^* = K_P(3) = 64$ ($V = I = 64$). For sub-threshold gradients $|k| \le 40 < 41$, phonon emission vanishes identically ($\hat{n}_E(k) = \lfloor|k|/41\rfloor = 0$, ballistic/superconducting phase relay); above threshold ($|k| \ge 41$), lattice defects scatter $\hat{n}_E(k) \in \{1,\dots,6\}$ phonon quanta (Joule heating) while generating surrounding magnetic vortex plaquettes $B_f = 512\,n_f$;
+\item \textbf{Kirchhoff's laws (KVL and KCL) from de~Rham cochain nilpotency:}
+  around any closed loop $\partial f$, $(d_1 d_0\varphi)_f \equiv 0$ yields Kirchhoff's Voltage Law in potential circuits and Faraday's induction law $(d_1 r)_f = -512(d_1 q)_f = 512\,n_f$ under magnetic flux linkage, while $d_2\circ d_1 \equiv 0$ and $\sum_{k=0}^{11}\vec{e}_k = \mathbf{0}$ yield Kirchhoff's Current Law at every node;
+\item \textbf{AC reactive orthogonality, Parseval active energy, and $LC$ resonance cancellation:}
+  capacitive ($+128$ ticks) and inductive ($-128 \equiv +384$ ticks) phase shifts satisfy
+  \begin{equation}
+    \label{eq:ac-rlc-laws}
+    \sum_{\varphi=0}^{511} \mathcal{C}_3(\varphi)\,\mathcal{S}_3(\varphi) = 0, \qquad
+    \sum_{\varphi=0}^{511} \mathcal{C}_3(\varphi)^2 = 2\,796\,288, \qquad
+    \mathcal{C}_3(\varphi + 128) + \mathcal{C}_3(\varphi + 384) \;\equiv\; 0 \quad (\forall\varphi\in\mathbb{Z}_{512}),
+  \end{equation}
+  proving that reactive power performs zero net work over a cycle and that inductive and capacitive reactances annihilate point-by-point at $LC$ resonance;
+\item \textbf{Half-wave diode, full-wave Graetz bridge, and $0\%$-ripple quadrature rectifiers:}
+  the branchless half-wave rectifier $\mathrm{rect}_{1/2}(x) = (|x|+x)/2$ and full-wave $4$-diode Graetz bridge $|x|$ yield exact integer DC averages over $\mathbb{Z}_{512}$ without irrational factors of $\pi$:
+  \begin{equation}
+    \label{eq:rectifiers}
+    \sum_{\varphi=0}^{511}\mathrm{rect}_{1/2}\bigl(\mathcal{S}_3(\varphi)\bigr) = 16\,384 = 128^2 \;\;(\bar{I}_{1/2} = 32), \qquad
+    \sum_{\varphi=0}^{511}\bigl|\mathcal{S}_3(\varphi)\bigr| = 32\,768 = 2\times 128^2 \;\;(\bar{I}_{\mathrm{Graetz}} = 64 = K_P),
+  \end{equation}
+  while a two-phase quadrature bridge rectifier ($\varphi$ and $\varphi - 128$) delivers a \textbf{capacitor-free constant DC output with $0\%$ ripple at every tick}: $|\mathcal{C}_3(\varphi)| + |\mathcal{S}_3(\varphi)| \equiv 128$;
+\item \textbf{Ideal transformer turn-ratio and impedance transformation:}
+  for primary and secondary windings $N_1 : N_2$ sharing a closed magnetic core ($\Phi_{\mathrm{core}} = 512\,n_f$), $V_1 = N_1\varepsilon_1$, $V_2 = N_2\varepsilon_1$, $I_1 = N_2 i_0$, $I_2 = N_1 i_0$, satisfying $N_2 V_1 - N_1 V_2 \equiv 0$, $N_1 I_1 - N_2 I_2 \equiv 0$, exact power conservation $V_1 I_1 \equiv V_2 I_2$, and $Z_{\mathrm{in}} = (N_1/N_2)^2 Z_{\mathrm{load}}$.
+\end{enumerate}
+\end{theorem}
+
+\section{Physical Realization of Computation: Landauer-Free Silicon \& Acoustic Architecture}
+\label{sec:silicon-hardware}
+
+While abstract computer science (Post completeness and 3-SAT phase reduction, \texttt{thm4}) belongs to pure mathematics, its physical realization inside a universe without an external Turing tape is governed by DQM engineering:
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*]
+\item \textbf{Sub-threshold reversible computing without Landauer heat ($|\Delta\varphi|\le 40 < 41$):}
+  because the two-tick symplectic Verlet step $\varphi(t+1) = (2\varphi(t) - \varphi(t-1) + \Phi_{\mathrm{gate}})\bmod 512$ is a bijection on the $72$-bit cell register (\texttt{VerletCell72}), any logic relay operating inside the Heisenberg deadband $|\Phi_{\mathrm{gate}}|\le 40$ dissipates $\hat{n}_E = 0$ thermal quanta, bypassing Landauer's $k_B T\ln 2$ erasure limit.
+\item \textbf{Diagonalization of mutual inductance across the 12 coils of $O_2(3)$:}
+  around any coil axis $\vec{e}_0\in O_2(3)$ ($\|\vec{e}_0\|_2^2 = 2$), the remaining $11$ coils split into $4$ neighbors at $60^\circ$ ($\vec{e}_0\cdot\vec{e}_j = +1$), $2$ orthogonal neighbors at $90^\circ$ ($\vec{e}_0\cdot\vec{e}_j = 0$), $4$ obtuse neighbors at $120^\circ$ ($\vec{e}_0\cdot\vec{e}_j = -1$), and $1$ antipodal partner at $180^\circ$ ($\vec{e}_0\cdot(-\vec{e}_0) = -2$). Off-axis mutual inductance cancels identically: $4(+1) + 2(0) + 4(-1) = 0$.
+\item \textbf{Branchless silicon and \texttt{.NET~11} / Verilog hardware stack (\texttt{Ring9}, \texttt{Bus36}, \texttt{VerletCell72}):}
+  implemented in \texttt{hardware/cuboctahedron\_carrier\_asic.v} (18 synthesizable Verilog modules) and \texttt{CarrierCore.cs} (\url{https://github.com/AI-Guiders/guiders-physics}):
+  \begin{itemize}[noitemsep]
+  \item \texttt{Ring9} ($9$-bit phase arithmetic with Gray-butterfly rotator $\mathcal{C}_3,\mathcal{S}_3$ and Bézout division);
+  \item \texttt{Bus36} ($4\times 9 = 36$-bit four-lane radix-$512$ bus eliminating floating-point rounding);
+  \item \texttt{Module~17 \& 18} (branchless $512/512$ phase recovery from acoustic pressure $P_{\mathrm{sound}} = \mu_0\mu_1(128-\mathcal{C}_3)$ and chiral current $J_{\mathrm{rxn}} = \mu_0\mu_1\mathcal{S}_3$, 1-tick closed-loop PLL cancellation, and 4-channel nilpotent Neumann tomograph $(2I_4 + N_{\mathrm{nil}})^{-1} = \frac{1}{24}(12 I_4 - 6 N_{\mathrm{nil}} + 3 N_{\mathrm{nil}}^2)$ with $N_{\mathrm{nil}}^3 \equiv 0$).
+  \end{itemize}
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{Malcev1973}
+A.\,I.~Mal'cev, \emph{Algebraic Systems}, Springer-Verlag, 1973 (Russian original: Nauka, Moscow, 1970).
+\bibitem{KarataevRotator1}
+D.~Karataev and Luch, ``Cuboctahedral Rotator Calculus: Discrete Euler Exponential on $\mathbb{Z}_{512}$, Universal Constant Wronskian, and Closed-Form Quadrature on the Cuboctahedron $O_2(3)$ in Lean~4,'' \url{https://github.com/AI-Guiders/scientific-papers}, 2026.
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}

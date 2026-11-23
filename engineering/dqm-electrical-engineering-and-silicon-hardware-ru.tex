@@ -1,0 +1,102 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Consolas}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{proposition}[theorem]{Предложение}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Замечание}
+
+\title{\textbf{Прикладная инженерия дискретной квантовой механики (ДКМ):\\ теоретическая электротехника фазовой эстафеты ($V=\mathcal{C}_3,\ I=\mathcal{S}_3$), беспульсационные квадратурные выпрямители, физическая реализация вычислений без тепла Ландауэра и кремниевая архитектура (\texttt{Ring9} / \texttt{Bus36} / \texttt{VerletCell72}) в Lean~4}}
+\author{Дмитрий Каратаев \and Луч (AI-Guiders)}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Когда физика, химия, биология и физическая реализация вычислений объединяются в единое Естествознание на основе дискретной квантовой механики (ДКМ) и двусортной структуры носителей $\langle\mathcal{M},\mathcal{T}\rangle$ ($\mathcal{M} = \mathbb{Z}_{512}$ на оболочке кубооктаэдра $O_2(3)$ при $1+2^3=3^2$), электротехника и вычислительная техника сводятся к точному целочисленному согласованию фазовых импедансов. Во-первых, доказано, что в гранецентрированной кубической (ГЦК) решётке металлических проводников ($\mathrm{Cu, Ag, Au, Al}$), чья первая координационная сфера из $12$ ближайших соседей совпадает с кубооктаэдром $O_2(3)$, электрический ток представляет собой не механический дрейф частиц ($v_{\mathrm{drift}}\sim 10^{-4}\;\text{м/с}$), а торсионную эстафету вращения фазы $I(\Delta\varphi) = \mathcal{S}_3(\Delta\varphi)$, сопряжённую с потенциальным натяжением $V(\Delta\varphi) = \mathcal{C}_3(\Delta\varphi) = 128 - |\Delta\varphi|$. Из инварианта грани $|\mathcal{C}_3(\Delta\varphi)| + |\mathcal{S}_3(\Delta\varphi)| \equiv 128$ выводятся нагрузочная прямая постоянного тока ($P(\Delta\varphi) = (128-\Delta\varphi)\Delta\varphi \le 64^2 = 4096$), законы Кирхгофа ($d_1\circ d_0 \equiv 0$, $d_2\circ d_1 \equiv 0$), ортогональность реактивной мощности ($\sum_{\varphi=0}^{511}\mathcal{C}_3(\varphi)\mathcal{S}_3(\varphi) \equiv 0$), точное противофазное гашение в $LC$-резонансе ($\mathcal{C}_3(\varphi+128) + \mathcal{C}_3(\varphi+384) \equiv 0$), однополупериодный и мостовой выпрямители Гретца ($\sum|\mathcal{S}_3(\varphi)| = 32\,768$, средний ток $K_P(3) = 64$), бесконденсаторный квадратурный выпрямитель с $0\%$ пульсаций ($|\mathcal{C}_3(\varphi)| + |\mathcal{S}_3(\varphi)| \equiv 128$) и трансформаторное преобразование импеданса $Z_{\mathrm{in}} = (N_1/N_2)^2 Z_{\mathrm{load}}$ (\texttt{thm5} в \texttt{RotatorCalculusPaper.lean}). Во-вторых, формализована физическая реализация информатики в кремнии и акусто-оптической аппаратуре: обратимые вычисления в коридоре Гейзенберга $|\Delta\varphi|\le 40 < 41$ с нулевым выделением тепла Ландауэра ($\hat{n}_E = 0$), диагонализация взаимной индукции $M_{jk} = 0$ между $12$ катушками $O_2(3)$ и безветвевая архитектура (\texttt{Ring9}, \texttt{Bus36}, \texttt{VerletCell72}, 1-тактовая замкнутая ФАПЧ и 4-канальный нильпотентный томограф Неймана $(2I_4 + N_{\mathrm{nil}})^{-1}$ на Verilog и \texttt{.NET~11}).
+\end{abstract}
+
+\section{Теоретическая электротехника фазовой эстафеты на ГЦК-кубооктаэдрах (\texttt{thm1}, \texttt{thm5})}
+\label{sec:electrical-engineering}
+
+В классической теории Друде скорость дрейфа электронов в медном проводе составляет $v_{\mathrm{drift}} \approx 0{,}07\;\text{мм/с}$, что вступает в острое противоречие с передачей электрического сигнала и энергии со скоростью света в линии. В ДКМ на дискретном носителе $\mathcal{M} = \mathbb{Z}_{512}$ (в теоретико-модельном смысле А.\,И.~Мальцева~\cite{Malcev1970}) кристаллическая решётка ГЦК-проводников ($\mathrm{Cu},\ Z=29$; $\mathrm{Ag},\ Z=47$; $\mathrm{Au},\ Z=79$; $\mathrm{Al},\ Z=13$) образована неподвижными атомными узлами, чья первая координационная сфера из $12$ ближайших соседей в точности совпадает с кубооктаэдром $O_2(3)$.
+
+\begin{theorem}[Полная система законов теоретической электротехники на $\mathbb{Z}_{512}$ и $O_2(3)$, \texttt{thm1}, \texttt{thm5}, \texttt{thm18}]
+\label{thm:electrical-engineering}
+На фазовом кольце $\mathbb{Z}_{512}$ ($Q_\square(3) = 128$, $K_P(3) = 64$, $\Delta\varphi_{\mathrm{disc}}(3) = 41$) и координационной сфере $O_2(3)$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Нагрузочная прямая постоянного тока, согласование импедансов (MPPT) и сверхпроводимость против джоулева нагрева:}
+  стационарный сдвиг фазы $\Delta\varphi = k \in [0,128]$ между соседними узлами кубооктаэдра делит бюджет четверти кольца между потенциальным напряжением $V(k) = \mathcal{C}_3(k) = 128 - k$ и током фазовой эстафеты $I(k) = \mathcal{S}_3(k) = k$:
+  \begin{equation}
+    \label{eq:dc-ohm-mppt}
+    V(k) + I(k) \;\equiv\; 128, \qquad
+    P(k) \;=\; V(k)\,I(k) \;=\; 64^2 - (64 - k)^2 \;\le\; 4\,096 \;=\; K_P(3)^2,
+  \end{equation}
+  достигая максимума передачи мощности при $k^* = K_P(3) = 64$ ($V = I = 64$). Внутри подпорогового коридора $|k| \le 40 < 41$ излучение фононов тождественно равно нулю ($\hat{n}_E(k) = \lfloor|k|/41\rfloor = 0$, баллистический/сверхпроводящий режим); при $|k| \ge 41$ на неоднородностях решётки излучается $\hat{n}_E(k) \in \{1,\dots,6\}$ фононных квантов (закон Джоуля--Ленца) с рождением окружающих магнитных вихревых плакет $B_f = 512\,n_f$;
+\item \textbf{Законы Кирхгофа (KVL и KCL) из нильпотентности кограницы де~Рама:}
+  вокруг любого замкнутого контура $\partial f$ тождество $(d_1 d_0\varphi)_f \equiv 0$ даёт второй закон Кирхгофа в потенциальных цепях и закон индукции Фарадея $(d_1 r)_f = -512(d_1 q)_f = 512\,n_f$ при сцеплении с вихревым потоком, тогда как $d_2\circ d_1 \equiv 0$ и $\sum_{k=0}^{11}\vec{e}_k = \mathbf{0}$ дают первый закон Кирхгофа в каждом узле;
+\item \textbf{Ортогональность реактивной мощности переменного тока, энергия Парсеваля и резонанс $LC$-контура:}
+  ёмкостный ($+128$ тиков) и индуктивный ($-128 \equiv +384$ тика) сдвиги фазы удовлетворяют
+  \begin{equation}
+    \label{eq:ac-rlc-laws}
+    \sum_{\varphi=0}^{511} \mathcal{C}_3(\varphi)\,\mathcal{S}_3(\varphi) = 0, \qquad
+    \sum_{\varphi=0}^{511} \mathcal{C}_3(\varphi)^2 = 2\,796\,288, \qquad
+    \mathcal{C}_3(\varphi + 128) + \mathcal{C}_3(\varphi + 384) \;\equiv\; 0 \quad (\forall\varphi\in\mathbb{Z}_{512}),
+  \end{equation}
+  доказывая равенство нулю работы реактивной мощности за период и поточечную взаимную аннигиляцию реактивных напряжений $L$ и $C$ в резонансе;
+\item \textbf{Однополупериодный диод, двухполупериодный мост Гретца и квадратурный выпрямитель с $0\%$ пульсаций:}
+  безветвевой однополупериодный выпрямитель $\mathrm{rect}_{1/2}(x) = (|x|+x)/2$ и двухполупериодный $4$-диодный мост Гретца $|x|$ дают точные целочисленные средние токи на $\mathbb{Z}_{512}$ без иррациональных множителей $\pi$:
+  \begin{equation}
+    \label{eq:rectifiers}
+    \sum_{\varphi=0}^{511}\mathrm{rect}_{1/2}\bigl(\mathcal{S}_3(\varphi)\bigr) = 16\,384 = 128^2 \;\;(\bar{I}_{1/2} = 32), \qquad
+    \sum_{\varphi=0}^{511}\bigl|\mathcal{S}_3(\varphi)\bigr| = 32\,768 = 2\times 128^2 \;\;(\bar{I}_{\mathrm{Graetz}} = 64 = K_P),
+  \end{equation}
+  а двухфазный квадратурный мостовой выпрямитель ($\varphi$ и $\varphi - 128$) обеспечивает \textbf{постоянный выход без конденсатора с $0\%$ пульсаций на каждом тике}: $|\mathcal{C}_3(\varphi)| + |\mathcal{S}_3(\varphi)| \equiv 128$;
+\item \textbf{Идеальный трансформатор и преобразование импеданса:}
+  для обмоток $N_1 : N_2$ на общем замкнутом магнитопроводе ($\Phi_{\mathrm{core}} = 512\,n_f$) имеем $V_1 = N_1\varepsilon_1$, $V_2 = N_2\varepsilon_1$, $I_1 = N_2 i_0$, $I_2 = N_1 i_0$, откуда $N_2 V_1 - N_1 V_2 \equiv 0$, $N_1 I_1 - N_2 I_2 \equiv 0$, $V_1 I_1 \equiv V_2 I_2$ и $Z_{\mathrm{in}} = (N_1/N_2)^2 Z_{\mathrm{load}}$.
+\end{enumerate}
+\end{theorem}
+
+\section{Физическая реализация информатики: кремниевая и акусто-оптическая архитектура без тепла Ландауэра}
+\label{sec:silicon-hardware}
+
+В то время как абстрактная информатика (полнота Поста и фазовая редукция 3-SAT, \texttt{thm4}) принадлежит чистой математике, её физическая реализация во Вселенной без внешней ленты Тьюринга определяется инженерными законами ДКМ:
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*]
+\item \textbf{Подпороговые обратимые вычисления без тепла Ландауэра ($|\Delta\varphi|\le 40 < 41$):}
+  поскольку двухтактовый симплектический шаг Верле $\varphi(t+1) = (2\varphi(t) - \varphi(t-1) + \Phi_{\mathrm{gate}})\bmod 512$ биективен на $72$-битном регистре ячейки (\texttt{VerletCell72}), любая логическая передача внутри мёртвой зоны Гейзенберга $|\Phi_{\mathrm{gate}}|\le 40$ излучает $\hat{n}_E = 0$ тепловых квантов, обходя предел стирания Ландауэра $k_B T\ln 2$.
+\item \textbf{Диагонализация взаимной индукции между 12 катушками $O_2(3)$:}
+  вокруг любой выбранной оси катушки $\vec{e}_0\in O_2(3)$ ($\|\vec{e}_0\|_2^2 = 2$) остальные $11$ катушек распадаются на $4$ соседа под углом $60^\circ$ ($\vec{e}_0\cdot\vec{e}_j = +1$), $2$ ортогональных соседа под углом $90^\circ$ ($\vec{e}_0\cdot\vec{e}_j = 0$), $4$ тупоугольных соседа под углом $120^\circ$ ($\vec{e}_0\cdot\vec{e}_j = -1$) и $1$ антиподальный партнёр под углом $180^\circ$ ($\vec{e}_0\cdot(-\vec{e}_0) = -2$). Внеосевая взаимная индукция сокращается тождественно: $4(+1) + 2(0) + 4(-1) = 0$.
+\item \textbf{Безветвевой аппаратный стек на кремнии (\texttt{Verilog} и \texttt{.NET~11}: \texttt{Ring9}, \texttt{Bus36}, \texttt{VerletCell72}):}
+  реализован в \texttt{hardware/cuboctahedron\_carrier\_asic.v} (18 синтезируемых модулей Verilog) и \texttt{CarrierCore.cs} (\url{https://github.com/AI-Guiders/guiders-physics}):
+  \begin{itemize}[noitemsep]
+  \item \texttt{Ring9} ($9$-битная фазовая арифметика с бабочкой ротатора Грея $\mathcal{C}_3,\mathcal{S}_3$ и делением Безу);
+  \item \texttt{Bus36} ($4\times 9 = 36$-битная четырёхполосная шина по основанию $512$ без погрешностей плавающей запятой);
+  \item \texttt{Module~17 \& 18} (безветвевое восстановление всех $512/512$ фаз из акустического давления $P_{\mathrm{sound}} = \mu_0\mu_1(128-\mathcal{C}_3)$ и хирального тока $J_{\mathrm{rxn}} = \mu_0\mu_1\mathcal{S}_3$, 1-тактовая замкнутая ФАПЧ и 4-канальный нильпотентный томограф Неймана $(2I_4 + N_{\mathrm{nil}})^{-1} = \frac{1}{24}(12 I_4 - 6 N_{\mathrm{nil}} + 3 N_{\mathrm{nil}}^2)$ при $N_{\mathrm{nil}}^3 \equiv 0$).
+  \end{itemize}
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{Malcev1970}
+А.\,И.~Мальцев, \emph{Алгебраические системы}, М.: Наука, 1970 (англ.\ пер.: Springer-Verlag, 1973).
+\bibitem{KarataevRotator1}
+Д.~Каратаев, Луч, «Ротаторное исчисление на кубооктаэдре: дискретная экспонента Эйлера на $\mathbb{Z}_{512}$, универсальный константный вронскиан и замкнутые квадратуры на кубооктаэдре $O_2(3)$ в Lean~4», \url{https://github.com/AI-Guiders/scientific-papers}, 2026.
+\bibitem{Moura2021}
+L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
+\end{thebibliography}
+
+\end{document}
