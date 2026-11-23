@@ -1605,7 +1605,7 @@ the following five-link logical chain holds simultaneously via direct implicatio
    `C * I₁ ≤ B̃ C̃ (Y w + Z v)` in the non-negative branch (`C̃ A w³ (2 Z v - Y w) ≥ 0`) and
    `Z³ * (-I₁) ≤ A w³ (2 Z v - Y w)` in the negative branch (`B̃ (Y w + Z v) ≥ 0`). -/
 theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
-    (At Bt Ct X Y Z u0 v0 t w v : Int)
+    (At Bt Ct X Y Z u0 v0 t w v U0 V0 U1 V1 : Int)
     (hABC : At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z = 0)
     (hBezShaft : Y * w - Z * v = 1)
     (hBezMS : At * X * v0 - Bt * Y * u0 = 1) :
@@ -1655,7 +1655,19 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     (Ct * A * (w * w * w) * ((Z * v + Z * v) - Y * w) ≥ 0 →
       C * I1 ≤ Bt * Ct * (Y * w + Z * v)) ∧
     (Bt * (Y * w + Z * v) ≥ 0 →
-      Z * Z * Z * (-I1) ≤ A * (w * w * w) * ((Z * v + Z * v) - Y * w)) := by
+      Z * Z * Z * (-I1) ≤ A * (w * w * w) * ((Z * v + Z * v) - Y * w)) ∧
+    -- 3x3 Cubic Cramer-Bézout Lock with 1 ≤ D_cube ≤ At + Ct and Bilateral Dichotomy on (D_cube - At):
+    (let X3 := X * X * X
+     let Y3 := Y * Y * Y
+     let Z3 := Z * Z * Z
+     let Dcube := At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0
+     U0 * Y3 - V0 * X3 = 1 → V1 * Z3 - U1 * Y3 = 1 →
+      (Dcube * X3 = Ct * (U0 + U1) - Bt * V1) ∧
+      (Dcube * Y3 = At * V1 + Ct * V0) ∧
+      (Dcube * Z3 = At * (U0 + U1) + Bt * V0) ∧
+      (At * (Y3 - V1) + Ct * (Y3 - V0) ≥ 0 → Dcube * Y3 ≤ (At + Ct) * Y3) ∧
+      ((Dcube - At - 1) * Z3 ≥ 0 → At * (Z3 - U0 - U1) ≥ 0 → Z3 ≤ Bt * V0) ∧
+      ((At - Dcube) * Y3 ≥ 0 → At * (Y3 - V1) ≥ 0 → Ct * V0 ≤ At * (Y3 - V1))) := by
   dsimp
   have h13 := thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
                 At Bt Ct X Y Z u0 v0 t w v
@@ -1696,7 +1708,7 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
       (Ct * Z * Z * Z) =
       (Ct * Z * Z * Z) * (((At * Bt * Ct) * (At * Bt * Ct)) * (At * X * X * X) * (Bt * Y * Y * Y) - 1) := by
     simp only [Int.mul_sub, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ⟨?_, by omega, ?_, ?_, ?_, ?_⟩, ?_, ?_⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ⟨?_, by omega, ?_, ?_, ?_, ?_⟩, ?_, ?_, ?_⟩
   · rw [hABC] at hDeriv; omega
   · rw [hBezMS] at hWronsk; simp only [Int.one_mul] at hWronsk; exact hWronsk
   · rw [hBezMS, hABC] at hDet4; omega
@@ -1748,6 +1760,56 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     have hA : Ct * Z * Z * Z - Bt * Y * Y * Y = At * X * X * X := by omega
     rw [hA] at hNeg
     exact hNeg
+  · intro hBez0 hBez1
+    have e0 : At * (X * X * X) + Bt * (Y * Y * Y) - Ct * (Z * Z * Z) = 0 := by
+      simp only [Int.mul_assoc] at hABC ⊢
+      exact hABC
+    have e1 : U0 * (Y * Y * Y) - V0 * (X * X * X) - 1 = 0 := by omega
+    have e2 : V1 * (Z * Z * Z) - U1 * (Y * Y * Y) - 1 = 0 := by omega
+    have h1 : (At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0) * (X * X * X) - (Ct * (U0 + U1) - Bt * V1) =
+              U0 * V1 * (At * (X * X * X) + Bt * (Y * Y * Y) - Ct * (Z * Z * Z)) -
+              (Bt * V1 - Ct * U1) * (U0 * (Y * Y * Y) - V0 * (X * X * X) - 1) +
+              Ct * U0 * (V1 * (Z * Z * Z) - U1 * (Y * Y * Y) - 1) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm, Int.mul_one, Int.one_mul]
+      omega
+    have h2 : (At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0) * (Y * Y * Y) - (At * V1 + Ct * V0) =
+              V0 * V1 * (At * (X * X * X) + Bt * (Y * Y * Y) - Ct * (Z * Z * Z)) +
+              At * V1 * (U0 * (Y * Y * Y) - V0 * (X * X * X) - 1) +
+              Ct * V0 * (V1 * (Z * Z * Z) - U1 * (Y * Y * Y) - 1) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm, Int.mul_one, Int.one_mul]
+      omega
+    have h3 : (At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0) * (Z * Z * Z) - (At * (U0 + U1) + Bt * V0) =
+              U1 * V0 * (At * (X * X * X) + Bt * (Y * Y * Y) - Ct * (Z * Z * Z)) +
+              At * U1 * (U0 * (Y * Y * Y) - V0 * (X * X * X) - 1) +
+              (At * U0 + Bt * V0) * (V1 * (Z * Z * Z) - U1 * (Y * Y * Y) - 1) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm, Int.mul_one, Int.one_mul]
+      omega
+    rw [e0, e1, e2] at h1 h2 h3
+    refine ⟨by omega, by omega, by omega, ?_, ?_, ?_⟩
+    · intro hBound
+      have hSum : (At + Ct) * (Y * Y * Y) - (At * V1 + Ct * V0) =
+                  At * ((Y * Y * Y) - V1) + Ct * ((Y * Y * Y) - V0) := by
+        simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul]
+        omega
+      omega
+    · intro hD hU
+      have hZ : Bt * V0 - (Z * Z * Z) =
+                ((At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0 - At - 1) * (Z * Z * Z)) +
+                At * ((Z * Z * Z) - U0 - U1) -
+                ((At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0) * (Z * Z * Z) - (At * (U0 + U1) + Bt * V0)) := by
+        simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.one_mul]
+        omega
+      omega
+    · intro hD hV
+      have hY : At * ((Y * Y * Y) - V1) - Ct * V0 =
+                ((At - (At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0)) * (Y * Y * Y)) +
+                ((At * U0 * V1 + Bt * V0 * V1 - Ct * U1 * V0) * (Y * Y * Y) - (At * V1 + Ct * V0)) := by
+        simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul]
+        omega
+      omega
 
 /-- **Theorem 15 (Universal `∀`-Quantified Cross-Floor Locking Theorem `k = 2 ↔ k = 3 ⟹ K = 6`
 of Genus `g(6) = (6 - 1)(6 - 2)/2 = 10 ≥ 2`, Euler Characteristic Law `χ(C_k) = 2 - (k-1)(k-2) = k(3-k)`,
