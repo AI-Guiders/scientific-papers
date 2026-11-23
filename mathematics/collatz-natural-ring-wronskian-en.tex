@@ -265,8 +265,19 @@ Across any two consecutive odd-core macro-steps $2^{\beta_0 + r_1 + 1} q_1 - 3^{
 \end{equation}
 \end{theorem}
 
+\begin{theorem}[Pure-binary $F_{a,b}$ constraint, $2^{a+1}$ construction modulus, and finite centered $(2,3)$-radix expansion, \texttt{thm33}]
+\label{thm:finite-centered-radix}
+Setting $F_{a,b} := \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}$ and $\Delta\mathcal{E}_{a,b} := \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}(n_k - n_0)$ yields $2^a(n_0 - n_b) \equiv (F_{a,b} - (4^b - 2^a)) n_0 - F_{a,b} + \Delta\mathcal{E}_{a,b}$, while the oddness of $n_b = 2 m_b + 1$ locks any constructed starting integer $n_0 = 2 m_0 + 1$ modulo $2^{a+1}$ via $3^b n_0 + D_{a,b} = 2^{a+1} m_b + 2^a$. In terms of the centered gear digits $d_k := 2^{\alpha_k - 1} - 2 \in \{-1, 0, +2, +6, \dots\}$ (which vanish identically on the stationary gear $\alpha_k = 2$), every integer $m_0$ satisfies
+\begin{equation}
+  \label{eq:finite-centered-radix}
+  3^b\,m_0 \;-\; 2^a\,m_b \;\equiv\; \sum_{k=0}^{b-1} 3^{b-1-k}\,d_k\,2^{s_k} \quad \Longleftrightarrow \quad
+  m_0 \;-\; \frac{2^a}{3^b}\,m_b \;\equiv\; \sum_{k=0}^{b-1} \frac{2^{\alpha_k - 1} - 2}{3^{k+1}}\,2^{s_k},
+\end{equation}
+which terminates into a finite rational expansion $m_0 = \sum_{k=0}^{b-1} (d_k / 3^{k+1}) 2^{s_k}$ upon reaching $n_b = 1$ ($m_b = 0$) and enforces the upper ceiling $\sum_{k=0}^{b-1} 3^{b-1-k} d_k 2^{s_k} \le (3^b - 2^a) m_0$ along any non-descending arc ($m_b \ge m_0$).
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:two-macro-step-compensation} (\texttt{thm18}--\texttt{thm32} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:finite-centered-radix} (\texttt{thm18}--\texttt{thm33} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

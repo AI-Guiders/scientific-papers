@@ -751,6 +751,72 @@ theorem thm32_collatz_two_macro_step_core_tail_compensation_law
     simp only [Int.sub_mul]
   exact ⟨h1, by omega⟩
 
+/-- **Theorem 33 (Pure-Binary `F_{a,b}` Non-Descending Constraint, `2^{a+1}` 2-Adic Construction Modulus,
+and Finite Centered `(2,3)`-Radix Expansion `3^b m_0 - 2^a m_b = ∑ 3^{b-1-k} d_k 2^{s_k}` with `d_k = 2^{α_k - 1} - 2`)**:
+1. With `E_{a,b} = (n_0 - 1) * F_{a,b} + ΔE_{a,b}` in `F_tot * n_0 - P_tot * n_b = E_{a,b}`,
+   `P_tot * (n_0 - n_b) = (F_{a,b} - (F_tot - P_tot)) * n_0 - F_{a,b} + ΔE_{a,b}`, so any non-descending
+   trajectory (`n_b ≥ n_0`, `ΔE_{a,b} ≥ 0`) satisfies `(F_{a,b} - (F_tot - P_tot)) * n_0 + ΔE_{a,b} ≤ F_{a,b}`.
+2. Any two starting numbers `n_0, n'_0` sharing the same `b`-step gear vector (`Q_tot * n_0 + D_{a,b} = P_tot * (2 k_b + 1)`)
+   satisfy `Q_tot * (n_0 - n'_0) = (2 * P_tot) * (k_b - k'_b)`.
+3. Writing `n_0 = 2 * m_0 + 1`, `n_b = 2 * m_b + 1`, and `P_tot - Q_tot - D_{a,b} = 2 * S_d`
+   (`S_d = ∑_{k=0}^{b-1} 3^{b-1-k} (2^{α_k - 1} - 2) 2^{s_k}`, whose digits vanish at the stationary gear `α_k = 2`),
+   `Q_tot * m_0 - P_tot * m_b = S_d`, yielding a finite representation `Q_tot * m_0 = S_d` when `m_b = 0` (`n_b = 1`)
+   and an upper ceiling `S_d ≤ (Q_tot - P_tot) * m_0` along any non-descending arc (`m_b ≥ m_0`). -/
+theorem thm33_collatz_pure_binary_F_polynomial_and_finite_centered_radix_representation
+    (Ftot Ptot Qtot n0 n0_prime nb Fab DeltaE Dab kb kb_prime m0 mb Sd : Int) :
+    let Eab := (n0 - 1) * Fab + DeltaE
+    (Ftot * n0 - Ptot * nb = Eab →
+      Ptot * (n0 - nb) = (Fab - (Ftot - Ptot)) * n0 - Fab + DeltaE ∧
+      (Ptot * (n0 - nb) ≤ 0 → DeltaE ≥ 0 → (Fab - (Ftot - Ptot)) * n0 + DeltaE ≤ Fab ∧
+        (Fab - (Ftot - Ptot)) * n0 ≤ Fab)) ∧
+    (Qtot * n0 + Dab = Ptot * (2 * kb + 1) →
+     Qtot * n0_prime + Dab = Ptot * (2 * kb_prime + 1) →
+      Qtot * n0 + Dab = (2 * Ptot) * kb + Ptot ∧
+      Qtot * (n0 - n0_prime) = (2 * Ptot) * (kb - kb_prime)) ∧
+    (n0 = 2 * m0 + 1 → nb = 2 * mb + 1 →
+     Ptot * nb - Qtot * n0 = Dab →
+     Ptot - Qtot - Dab = 2 * Sd →
+      Qtot * m0 - Ptot * mb = Sd ∧
+      (mb = 0 → Qtot * m0 = Sd) ∧
+      (Ptot * (mb - m0) ≥ 0 → Sd ≤ (Qtot - Ptot) * m0)) := by
+  dsimp
+  refine ⟨?_, ?_, ?_⟩
+  · intro hE
+    have hId : Ptot * (n0 - nb) - ((Fab - (Ftot - Ptot)) * n0 - Fab + DeltaE) =
+               (Ftot * n0 - Ptot * nb) - ((n0 - 1) * Fab + DeltaE) := by
+      simp only [Int.mul_sub, Int.sub_mul, Int.one_mul, Int.mul_comm, Int.mul_left_comm]
+      omega
+    refine ⟨by omega, ?_⟩
+    intro hNonDesc hDeltaPos
+    exact ⟨by omega, by omega⟩
+  · intro h1 h2
+    have hExpand1 : Ptot * (2 * kb + 1) = (2 * Ptot) * kb + Ptot := by
+      simp only [Int.mul_add, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    have hExpand2 : Ptot * (2 * kb_prime + 1) = (2 * Ptot) * kb_prime + Ptot := by
+      simp only [Int.mul_add, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    have hDiff : Qtot * (n0 - n0_prime) - (2 * Ptot) * (kb - kb_prime) =
+                 (Qtot * n0 - (2 * Ptot) * kb) - (Qtot * n0_prime - (2 * Ptot) * kb_prime) := by
+      simp only [Int.mul_sub]
+      omega
+    exact ⟨by omega, by omega⟩
+  · intro hn0 hnb hTraj hSd
+    have hRadix : 2 * (Qtot * m0 - Ptot * mb - Sd) =
+                  (Ptot - Qtot - Dab - 2 * Sd) + (Dab - (Ptot * (2 * mb + 1) - Qtot * (2 * m0 + 1))) := by
+      simp only [Int.mul_add, Int.mul_sub, Int.sub_mul, Int.mul_one,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    rw [← hn0, ← hnb] at hRadix
+    have hEq : Qtot * m0 - Ptot * mb = Sd := by omega
+    have hCeil : (Qtot - Ptot) * m0 - Sd = Ptot * (mb - m0) + (Sd - (Qtot * m0 - Ptot * mb)) := by
+      simp only [Int.sub_mul, Int.mul_sub]
+      omega
+    refine ⟨hEq, ?_, ?_⟩
+    · intro hmb0
+      have hP0 : Ptot * mb = 0 := by rw [hmb0]; simp
+      omega
+    · intro hGe
+      omega
+
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -767,5 +833,6 @@ theorem thm32_collatz_two_macro_step_core_tail_compensation_law
 #print axioms thm30_collatz_odd_core_transition_law_and_post_burn_potential
 #print axioms thm31_collatz_macro_step_double_sl2_bezout_lock_and_unconditional_r0_core_descent
 #print axioms thm32_collatz_two_macro_step_core_tail_compensation_law
+#print axioms thm33_collatz_pure_binary_F_polynomial_and_finite_centered_radix_representation
 
 end RotatorCalculusPaper
