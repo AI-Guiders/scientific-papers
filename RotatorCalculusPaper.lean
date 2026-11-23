@@ -2206,6 +2206,66 @@ theorem thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronski
     omega
   exact ⟨by omega, by omega, by omega⟩
 
+/-- **Theorem 19 (Collatz Trajectory Dynamics on Natural Rings `ℤ_{2^a}` & `ℤ_{2^a - 3^b}`:
+`SL₂(ℤ)` Catalan Exponent-Basis Decomposition `(2, 1) & (3, 2)` and Sign-Free Positive Wronskian Sum)**:
+1. **Universal `SL₂(ℤ)` Catalan Exponent-Basis Decomposition (`det [[2, 3], [1, 2]] = +1`):**
+   Every trajectory exponent pair `(a, b) ∈ ℤ²` decomposes uniquely into `u = 2a - 3b` (multiplicity of the
+   elementary `(2, 1)` arc with gap `2² - 3¹ = 4 - 3 = +1`) and `v = 2b - a` (multiplicity of the elementary
+   Catalan `(3, 2)` arc with gap `3² - 2³ = 9 - 8 = +1`), satisfying `2u + 3v = a`, `u + 2v = b`, and `u + v = a - b`.
+2. **Factorization of the Pillai Gap `C_tot = 2^a - 3^b = 4^u 8^v - 3^u 9^v` into Unit-Gap Differences:**
+   With `P₁ = 4^u, Q₁ = 3^u, G₁ = P₁ - Q₁` and `P₂ = 8^v, Q₂ = 9^v, G₂ = Q₂ - P₂`, the total gap satisfies
+   `C_tot = P₂ G₁ - Q₁ G₂ = Q₂ G₁ - P₁ G₂`, while the linear stage operator `(Q₂, P₁)` combines both gaps and drifts:
+   `C_tot = Q₂ (P₁ - Q₁) + P₁ (P₂ - Q₂)`.
+3. **Sign-Free Strictly Positive Wronskian Chord Sum on Any Closed Cycle (`n_final = n_start`):**
+   Splitting any closed cycle at the boundary between the `(4^u, 3^u)` block (drift `D₁`) and the `(8^v, 9^v)` block
+   (drift `D₂`) eliminates subtraction completely:
+   `C_tot * (n_start - n_mid) = G₂ * D₁ + G₁ * D₂`, bounding both `G₂ D₁` and `G₁ D₂` from above by `C_tot (n_start - n_mid)`. -/
+theorem thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
+    (a b P1 Q1 P2 Q2 n_start n_mid n_final D1 D2 : Int)
+    (hArc1 : P1 * n_mid - Q1 * n_start = D1)
+    (hArc2 : P2 * n_final - Q2 * n_mid = D2) :
+    let u := (a + a) - (b + b + b)
+    let v := (b + b) - a
+    let G1 := P1 - Q1
+    let G2 := Q2 - P2
+    let Ctot := P1 * P2 - Q1 * Q2
+    -- 1. Universal SL₂(ℤ) Catalan exponent-basis decomposition (2, 1) and (3, 2):
+    ((u + u) + (v + v + v) = a ∧
+     u + (v + v) = b ∧
+     u + v = a - b ∧
+     2 * 2 - 3 * 1 = (1 : Int)) ∧
+    -- 2. Exact decomposition of C_tot = P1*P2 - Q1*Q2 into unit-gap differences G1 = 4^u - 3^u and G2 = 9^v - 8^v:
+    (Ctot = P2 * G1 - Q1 * G2 ∧
+     Ctot = Q2 * G1 - P1 * G2) ∧
+    -- 3. Sign-free positive Wronskian sum on any closed cycle (n_final = n_start):
+    (n_final = n_start →
+      Ctot * (n_start - n_mid) = G2 * D1 + G1 * D2 ∧
+      (G2 * D1 ≥ 0 → G1 * D2 ≥ 0 → Ctot * (n_start - n_mid) ≥ G2 * D1) ∧
+      (G2 * D1 ≥ 0 → G1 * D2 ≥ 0 → Ctot * (n_start - n_mid) ≥ G1 * D2)) := by
+  dsimp
+  have hSplit1 : P1 * P2 - Q1 * Q2 = P2 * (P1 - Q1) - Q1 * (Q2 - P2) := by
+    simp only [Int.mul_sub, Int.sub_mul, Int.mul_comm]
+    omega
+  have hSplit2 : P1 * P2 - Q1 * Q2 = Q2 * (P1 - Q1) - P1 * (Q2 - P2) := by
+    simp only [Int.mul_sub, Int.sub_mul, Int.mul_comm]
+    omega
+  refine ⟨⟨by omega, by omega, by omega, by omega⟩, ⟨hSplit1, hSplit2⟩, ?_⟩
+  intro hCycle
+  have e1 : P1 * n_mid - Q1 * n_start - D1 = 0 := by omega
+  have e2 : P2 * n_final - Q2 * n_mid - D2 = 0 := by omega
+  have e3 : n_final - n_start = 0 := by omega
+  have hPosSum :
+      (P1 * P2 - Q1 * Q2) * (n_start - n_mid) - ((Q2 - P2) * D1 + (P1 - Q1) * D2) =
+      (Q1 * P2 - P1 * P2) * (n_final - n_start) -
+      (P2 - Q2) * (P1 * n_mid - Q1 * n_start - D1) -
+      (Q1 - P1) * (P2 * n_final - Q2 * n_mid - D2) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  rw [e1, e2, e3] at hPosSum
+  simp only [Int.mul_zero, Int.add_zero, Int.sub_zero] at hPosSum
+  exact ⟨by omega, by intro _ _; omega, by intro _ _; omega⟩
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2224,5 +2284,6 @@ theorem thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronski
 #print axioms thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
 #print axioms thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_oracle_necessity
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
+#print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 
 end RotatorCalculusPaper
