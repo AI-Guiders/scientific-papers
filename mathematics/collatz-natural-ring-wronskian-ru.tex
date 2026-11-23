@@ -259,8 +259,18 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 что доказывает безусловный строгий спуск ядра $q_{m+1} < q_m$ на каждом шаге с $r_m = 0$ и $q_m > 1$.
 \end{theorem}
 
+\begin{theorem}[Двухшаговый закон компенсации хвоста единиц для нечётных ядер $q_{m-1} \mapsto q_m \mapsto q_{m+1}$, \texttt{thm32}]
+\label{thm:two-macro-step-compensation}
+Для любых двух последовательных макро-шагов нечётных ядер $2^{\beta_0 + r_1 + 1} q_1 - 3^{r_0 + 1} q_0 = 2^{\beta_0} - 1$ и $2^{\beta_1 + r_2 + 1} q_2 - 3^{r_1 + 1} q_1 = 2^{\beta_1} - 1$ исключение промежуточного ядра $q_1$ спаривает промежуточный троичный рост $3^{r_1 + 1}$ с его собственным предшествующим двоичным делителем $2^{r_1 + 1}$ внутри $P_{\mathrm{comp}} = 2^{\beta_0 + \beta_1 + (r_1 + 1) + (r_2 + 1)}$ и $Q_{\mathrm{comp}} = 3^{(r_0 + 1) + (r_1 + 1)}$:
+\begin{equation}
+  \label{eq:two-macro-step-compensation}
+  P_{\mathrm{comp}}\,q_2 \;-\; Q_{\mathrm{comp}}\,q_0 \;\equiv\; 3^{r_1 + 1}\bigl(2^{\beta_0} - 1\bigr) \;+\; 2^{\beta_0 + r_1 + 1}\bigl(2^{\beta_1} - 1\bigr) \;=:\; D_{\mathrm{comp}}, \qquad
+  P_{\mathrm{comp}}\bigl(q_0 - q_2\bigr) \;\equiv\; \bigl(P_{\mathrm{comp}} - Q_{\mathrm{comp}}\bigr) q_0 \;-\; D_{\mathrm{comp}}.
+\end{equation}
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:double-sl2-bezout-core-descent} (\texttt{thm18}--\texttt{thm31} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:two-macro-step-compensation} (\texttt{thm18}--\texttt{thm32} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}

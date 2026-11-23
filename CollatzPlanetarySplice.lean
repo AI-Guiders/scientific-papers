@@ -710,6 +710,47 @@ theorem thm31_collatz_macro_step_double_sl2_bezout_lock_and_unconditional_r0_cor
     · omega
   exact ⟨hGe, hLt⟩
 
+/-- **Theorem 32 (Two-Macro-Step Odd-Core Tail Compensation Law `q_{m-1} ↦ q_m ↦ q_{m+1}`)**:
+Across any two consecutive macro-steps of the odd cores:
+- Step `m - 1`: `(p_{β,0} * P_{r,1}) * q_1 - Q_{r,0} * q_0 = p_{β,0} - 1`
+  (`P_{r,1} = 2^{r_1 + 1}`, `Q_{r,0} = 3^{r_0 + 1}`, `p_{β,0} = 2^{β_0}`),
+- Step `m`:     `(p_{β,1} * P_{r,2}) * q_2 - Q_{r,1} * q_1 = p_{β,1} - 1`
+  (`P_{r,2} = 2^{r_2 + 1}`, `Q_{r,1} = 3^{r_1 + 1}`, `p_{β,1} = 2^{β_1}`):
+Eliminating `q_1` pairs the intermediate ternary growth `Q_{r,1} = 3^{r_1 + 1}` with its own preceding
+binary division `P_{r,1} = 2^{r_1 + 1}` inside `P_comp = (p_{β,0} * P_{r,1}) * (p_{β,1} * P_{r,2})`:
+`P_comp * q_2 - (Q_{r,0} * Q_{r,1}) * q_0 = Q_{r,1} * (p_{β,0} - 1) + (p_{β,0} * P_{r,1}) * (p_{β,1} - 1)`
+and `P_comp * (q_0 - q_2) = (P_comp - Q_{r,0} * Q_{r,1}) * q_0 - D_comp`. -/
+theorem thm32_collatz_two_macro_step_core_tail_compensation_law
+    (pbeta0 pbeta1 Pr1 Pr2 Qr0 Qr1 q0 q1 q2 : Int)
+    (hStep0 : (pbeta0 * Pr1) * q1 - Qr0 * q0 = pbeta0 - 1)
+    (hStep1 : (pbeta1 * Pr2) * q2 - Qr1 * q1 = pbeta1 - 1) :
+    let Pcomp := (pbeta0 * Pr1) * (pbeta1 * Pr2)
+    let Qcomp := Qr0 * Qr1
+    let Dcomp := Qr1 * (pbeta0 - 1) + (pbeta0 * Pr1) * (pbeta1 - 1)
+    (Pcomp * q2 - Qcomp * q0 = Dcomp) ∧
+    (Pcomp * (q0 - q2) = (Pcomp - Qcomp) * q0 - Dcomp) := by
+  dsimp
+  have hElim : ((pbeta0 * Pr1) * (pbeta1 * Pr2) * q2 - (Qr0 * Qr1) * q0) -
+               (Qr1 * (pbeta0 - 1) + (pbeta0 * Pr1) * (pbeta1 - 1)) =
+               (pbeta0 * Pr1) * ((pbeta1 * Pr2) * q2 - Qr1 * q1 - (pbeta1 - 1)) +
+               Qr1 * ((pbeta0 * Pr1) * q1 - Qr0 * q0 - (pbeta0 - 1)) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have e0 : (pbeta0 * Pr1) * q1 - Qr0 * q0 - (pbeta0 - 1) = 0 := by omega
+  have e1 : (pbeta1 * Pr2) * q2 - Qr1 * q1 - (pbeta1 - 1) = 0 := by omega
+  rw [e0, e1] at hElim
+  simp only [Int.mul_zero, Int.add_zero] at hElim
+  have h1 : (pbeta0 * Pr1) * (pbeta1 * Pr2) * q2 - (Qr0 * Qr1) * q0 =
+            Qr1 * (pbeta0 - 1) + (pbeta0 * Pr1) * (pbeta1 - 1) := by omega
+  have h2 : (pbeta0 * Pr1) * (pbeta1 * Pr2) * (q0 - q2) =
+            (pbeta0 * Pr1) * (pbeta1 * Pr2) * q0 - (pbeta0 * Pr1) * (pbeta1 * Pr2) * q2 := by
+    simp only [Int.mul_sub]
+  have h3 : ((pbeta0 * Pr1) * (pbeta1 * Pr2) - Qr0 * Qr1) * q0 =
+            (pbeta0 * Pr1) * (pbeta1 * Pr2) * q0 - (Qr0 * Qr1) * q0 := by
+    simp only [Int.sub_mul]
+  exact ⟨h1, by omega⟩
+
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -725,5 +766,6 @@ theorem thm31_collatz_macro_step_double_sl2_bezout_lock_and_unconditional_r0_cor
 #print axioms thm29_collatz_trailing_ones_burn_macro_step
 #print axioms thm30_collatz_odd_core_transition_law_and_post_burn_potential
 #print axioms thm31_collatz_macro_step_double_sl2_bezout_lock_and_unconditional_r0_core_descent
+#print axioms thm32_collatz_two_macro_step_core_tail_compensation_law
 
 end RotatorCalculusPaper

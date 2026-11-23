@@ -255,8 +255,18 @@ At every macro-step $m$, the odd core $q_m$ satisfies two simultaneous unit-dete
 proving unconditional strict core descent $q_{m+1} < q_m$ at every $r_m = 0$ step with $q_m > 1$.
 \end{theorem}
 
+\begin{theorem}[Two-macro-step odd-core tail compensation law $q_{m-1} \mapsto q_m \mapsto q_{m+1}$, \texttt{thm32}]
+\label{thm:two-macro-step-compensation}
+Across any two consecutive odd-core macro-steps $2^{\beta_0 + r_1 + 1} q_1 - 3^{r_0 + 1} q_0 = 2^{\beta_0} - 1$ and $2^{\beta_1 + r_2 + 1} q_2 - 3^{r_1 + 1} q_1 = 2^{\beta_1} - 1$, eliminating the intermediate core $q_1$ pairs the intermediate ternary growth $3^{r_1 + 1}$ with its own preceding binary denominator $2^{r_1 + 1}$ inside $P_{\mathrm{comp}} = 2^{\beta_0 + \beta_1 + (r_1 + 1) + (r_2 + 1)}$ and $Q_{\mathrm{comp}} = 3^{(r_0 + 1) + (r_1 + 1)}$:
+\begin{equation}
+  \label{eq:two-macro-step-compensation}
+  P_{\mathrm{comp}}\,q_2 \;-\; Q_{\mathrm{comp}}\,q_0 \;\equiv\; 3^{r_1 + 1}\bigl(2^{\beta_0} - 1\bigr) \;+\; 2^{\beta_0 + r_1 + 1}\bigl(2^{\beta_1} - 1\bigr) \;=:\; D_{\mathrm{comp}}, \qquad
+  P_{\mathrm{comp}}\bigl(q_0 - q_2\bigr) \;\equiv\; \bigl(P_{\mathrm{comp}} - Q_{\mathrm{comp}}\bigr) q_0 \;-\; D_{\mathrm{comp}}.
+\end{equation}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:double-sl2-bezout-core-descent} (\texttt{thm18}--\texttt{thm31} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:two-macro-step-compensation} (\texttt{thm18}--\texttt{thm32} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} (imported by \texttt{RotatorCalculusPaper.lean}) at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}
