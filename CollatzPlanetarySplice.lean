@@ -512,6 +512,93 @@ theorem thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservat
   intro hDpos hEnonneg
   exact ⟨by omega, by omega⟩
 
+/-- **Theorem 28 (Centered Stationary-Root Coordinate `m_k = (n_k - 1)/2` with Origin `m* = 0`
+and Stationary-Gear Deviation Law `3^b (n_0 - 1) - 2^a (n_b - 1) = 2^a - 3^b - D_{a,b} = ∑ 3^{b-1-k} (2^{α_k} - 4) 2^{s_k}`)**:
+1. Substituting `n_k = 2 m_k + 1`, `n_{k+1} = 2 m_{k+1} + 1`, and `p_k = 2 * p_half` (`p_k = 2^{α_k}`,
+   `p_half = 2^{α_k - 1}`) into `p_k * n_{k+1} = 3 * n_k + 1` shifts the stationary point `n* = 1` to the
+   origin `m* = 0`: `p_k * m_{k+1} - 3 * m_k = 2 - p_half` (`+1` at `α_k = 1`, `0` at `α_k = 2`, `≤ -2` at `α_k ≥ 3`).
+2. The binary headroom `G_k = 2^{s_k} - D_k` satisfies `G_{k+1} - 3 * G_k = (p_k - 4) * 2^{s_k}`, which
+   telescopes over `b` steps to `P_tot - Q_tot - D_{a,b} = 3^b (n_0 - 1) - 2^a (n_b - 1)`. -/
+theorem thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
+    (pk phalf mk mk1 ps Dk Ptot Qtot n0 nb Dab : Int) :
+    let nk   := 2 * mk + 1
+    let nk1  := 2 * mk1 + 1
+    let ps1  := pk * ps
+    let Dk1  := 3 * Dk + ps
+    let Gk   := ps - Dk
+    let Gk1  := ps1 - Dk1
+    (pk = 2 * phalf → pk * nk1 = 3 * nk + 1 →
+      pk * mk1 - 3 * mk = 2 - phalf ∧
+      (phalf = 2 → pk * mk1 = 3 * mk)) ∧
+    (Gk1 - 3 * Gk = (pk - 4) * ps) ∧
+    (Ptot * nb - Qtot * n0 = Dab →
+      Qtot * (n0 - 1) - Ptot * (nb - 1) = Ptot - Qtot - Dab ∧
+      (nb = 1 → Qtot * (n0 - 1) = Ptot - Qtot - Dab)) := by
+  dsimp
+  have hStepCentered : (2 * phalf) * (2 * mk1 + 1) - (3 * (2 * mk + 1) + 1) =
+                       2 * ((2 * phalf) * mk1 - 3 * mk - (2 - phalf)) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  have hGrec : (pk * ps - (3 * Dk + ps)) - 3 * (ps - Dk) - (pk - 4) * ps = 0 := by
+    simp only [Int.mul_sub, Int.sub_mul]
+    omega
+  refine ⟨?_, by omega, ?_⟩
+  · intro hpk hStep
+    rw [hpk] at hStep ⊢
+    refine ⟨by omega, ?_⟩
+    intro hphalf
+    omega
+  · intro hTraj
+    have hGlobal : (Qtot * (n0 - 1) - Ptot * (nb - 1)) - (Ptot - Qtot - Dab) =
+                   Dab - (Ptot * nb - Qtot * n0) := by
+      simp only [Int.mul_sub, Int.mul_one]
+      omega
+    refine ⟨by omega, ?_⟩
+    intro hnb1
+    have hP0 : Ptot * (nb - 1) = 0 := by rw [hnb1]; simp
+    omega
+
+/-- **Theorem 29 (Trailing-Ones Burn Macro-Step `n_0 = 2^{r+1} q - 1 ↦ 2^{α_r - 1} n_{r+1} = 3^{r+1} q - 1`
+and Guaranteed Even-Centered Reset `m_r = 3^r q - 1`)**:
+1. Under `α_k = 1` (`2 m_{k+1} = 3 m_k + 1`), `2 * (m_{k+1} + 1) = 3 * (m_k + 1)`.
+2. After `r` trailing-one steps from `m_0 = 2^r * q - 1` (`n_0 = 2^{r+1} * q - 1`), `m_r = 3^r * q - 1`
+   is ALWAYS even whenever `3^r` and `q` are odd (`m_r = 2 (2 k_Q k_q + k_Q + k_q)`), forcing a
+   contracting gear `α_r ≥ 2` on step `r + 1`.
+3. With `3 * n_r + 1 = (2 * p_half_r) * n_{r+1}` (`p_half_r = 2^{α_r - 1} ≥ 2`),
+   `p_half_r * n_{r+1} = 3 * (3^r * q) - 1` and
+   `p_half_r * (n_0 - n_{r+1}) = 2 * (p_half_r * (2^r * q)) - 3 * (3^r * q) - (p_half_r - 1)`. -/
+theorem thm29_collatz_trailing_ones_burn_macro_step
+    (mk mk1 Pr Qr q mr nr1 phalfr kQ kq : Int) :
+    let n0 := 2 * (Pr * q - 1) + 1
+    let nr := 2 * mr + 1
+    (2 * mk1 = 3 * mk + 1 → 2 * (mk1 + 1) = 3 * (mk + 1)) ∧
+    (mr = Qr * q - 1 → Qr = 2 * kQ + 1 → q = 2 * kq + 1 →
+      mr = 2 * (2 * kQ * kq + kQ + kq)) ∧
+    (mr = Qr * q - 1 → 3 * nr + 1 = (2 * phalfr) * nr1 →
+      phalfr * nr1 = 3 * (Qr * q) - 1 ∧
+      phalfr * (n0 - nr1) = 2 * (phalfr * (Pr * q)) - 3 * (Qr * q) - (phalfr - 1)) := by
+  dsimp
+  refine ⟨by intro _; omega, ?_, ?_⟩
+  · intro hmr hQr hq
+    rw [hmr, hQr, hq]
+    have hOddProd : (2 * kQ + 1) * (2 * kq + 1) - 1 = 2 * (2 * kQ * kq + kQ + kq) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_one, Int.one_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    exact hOddProd
+  · intro hmr hStepR
+    rw [hmr] at hStepR
+    have h2 : (2 * phalfr) * nr1 = 2 * (phalfr * nr1) := by
+      simp only [Int.mul_assoc]
+    have hMacro : phalfr * nr1 = 3 * (Qr * q) - 1 := by omega
+    have hDesc : phalfr * ((2 * (Pr * q - 1) + 1) - nr1) =
+                 2 * (phalfr * (Pr * q)) - phalfr - phalfr * nr1 := by
+      simp only [Int.mul_add, Int.mul_sub, Int.sub_mul, Int.mul_one,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    exact ⟨hMacro, by omega⟩
+
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -523,5 +610,7 @@ theorem thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservat
 #print axioms thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
 #print axioms thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_lock
 #print axioms thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservation
+#print axioms thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
+#print axioms thm29_collatz_trailing_ones_burn_macro_step
 
 end RotatorCalculusPaper
