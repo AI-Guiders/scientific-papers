@@ -118,8 +118,35 @@
 \end{tabular}
 \end{table}
 
+\section{Пошаговый лабораторный протокол изготовления и A/B-проверки}
+\label{sec:experimental-protocol}
+
+Для прямой лабораторной проверки в существующих центрах кремниевой фотовольтаики и экситонной спектроскопии Теорема~\ref{thm:solar-cascade} задаёт четырёхшаговый технологический и контрольный A/B-протокол:
+\begin{enumerate}[label=\textbf{Шаг~\arabic*.},leftmargin=*]
+\item \textbf{Базовая подложка (Слой~4):}
+  Пластина кристаллического кремния $n$-типа $\mathrm{Si}(100)$ со встречно-штыревыми тыльными контактами (IBC-$\mathrm{Si}$, $Z(\mathrm{Si})=14$, край поглощения $\lambda_{\mathrm{Si}} = 27\times 41 = 1107\;\text{нм}$, $E_g = 1{,}12\;\text{эВ}$) и свободной от металлизации передней приёмной поверхностью.
+\item \textbf{Седловой пассивирующий мост и контрольный A/B-тест порога Паули (Слой~3):}
+  Формирование ультратонкого ($0{,}8\text{--}1{,}2\;\text{нм}$, $2\text{--}3$ монослоя) туннельного диэлектрического моста на передней поверхности $\mathrm{Si}(100)$ в двух контролируемых режимах:
+  \begin{itemize}[noitemsep]
+  \item \emph{Контрольный образец~A (непассивированный сухой $\mathrm{AlO_4}$, $Z = 13 + 4\times 8 = 45$):} лежит ниже порога затвора Паули ($45^2 = 2025 < 2048 = K_P(3)^2/2$), допуская преждевременный сброс неразделённого синглета $S_1$ и поверхностную рекомбинацию;
+  \item \emph{Целевой образец~B (тетраэдрический силанол/кремнезём $\mathrm{SiO_4}$, $Z = 14 + 4\times 8 = 46$, либо водородно-пассивированный ALD $[\mathrm{AlO_4H}]$, $Z = 13 + 32 + 1 = 46$):} пересекает порог Паули ($46^2 = 2116 > 2048$), запирая неразделённый синглет $S_1$, тогда как терминальные атомы кислорода ($Z(\mathrm{O}) = 8$) выводят граничащую оболочку тетрацена ($Z(\mathrm{C_{18}H_{12}}) = 120$) точно на седло четверти кольца $120 + 8 = 128 = Q_\square(3)$ ($\mathcal{C}_3(128) = 0,\ \mathcal{S}_3(128) = +128$).
+  \end{itemize}
+\item \textbf{Нанесение слоя деления синглетов (Слой~2):}
+  Термическое напыление в вакууме кристаллического слоя тетрацена $\mathrm{C_{18}H_{12}}$ ($Z = 120$, толщина $30\text{--}80\;\text{нм}$) на седловой мост с ориентацией осей упаковки вдоль ортогональных лучей кубооктаэдра $O_2(3)$ ($\Delta\varphi = 128 \implies \mathcal{C}_3(128) = 0$ для подавления биэкситонной Оже-аннигиляции).
+\item \textbf{Входная просветляющая инкапсуляция (Слой~1):}
+  Кварцевое покрытие ($\mathrm{SiO_2}$, $Z = 30$) с 12-лучевым микрорельефом кубооктаэдра $O_2(3)$ и отношением показателей преломления $n_1/n_2 = 9/8$ ($T_{\mathrm{Fresnel}} = 288/289 \approx 99{,}654\%$).
+\end{enumerate}
+
+\noindent\textbf{Четыре количественные фальсифицируемые лабораторные сигнатуры:}
+\begin{enumerate}[label=\textbf{(M\arabic*)},leftmargin=*,noitemsep]
+\item \textbf{Энергетика экситонов (UPS / IPES / ИК-фотолюминесценция):} сдвиг синглет-триплетной щели на границе раздела $\operatorname{Tr}\mathcal{M}_3^{\mathrm{adj}} = 4^2 + 128 = \mathbf{144\;\text{мэВ}}$ и резонанс излучения/переноса триплетного экситона на длине волны $-\det\mathcal{W}_{\mathrm{MS}} = 1^4 + 5^4 + 4^4 = \mathbf{882\;\text{нм}}$ ($1{,}406\;\text{эВ}$, запас $15^2 = 225\;\text{нм}$ относительно края $\mathrm{Si}$ $1107\;\text{нм}$).
+\item \textbf{Внешний квантовый выход $\mathrm{EQE}(\lambda)$ и магнито-фототок (MFE):} при монохроматической накачке на линии синглета $\lambda_{\mathrm{blue}} = 21^2 = \mathbf{441\;\text{нм}}$ ($2{,}81\;\text{эВ}$) Целевой образец~B ($Z=46,\ 120+8=128$) демонстрирует $\mathrm{EQE}(441\;\text{нм}) > 100\%$ (вплоть до предела $200\%$) с характерной магнитной модуляцией триплетного канала, тогда как Контрольный образец~A ($Z=45$) остаётся ниже $100\%$.
+\item \textbf{Подавление Оже-рекомбинации при высокой плотности накачки:} линейный рост инжекции триплетов с ростом интенсивности света благодаря ортогональному разведению каналов ($\mathcal{C}_3(128) = 0$).
+\item \textbf{Синхронная термография под освещением:} снижение более чем на $50\%$ паразитного тепловыделения решётки в полосе $400\text{--}530\;\text{нм}$ по сравнению с референсной ячейкой IBC-$\mathrm{Si}$ без каскада ($\hat{n}_E(21) = 0$).
+\end{enumerate}
+
 \section{Формальная верификация в Lean~4}
-Все теоремы формально верифицированы в \texttt{lean/MtCarrier/UnifiedOperators.lean} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} и \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Все теоремы формально верифицированы в \texttt{lean/MtCarrier/UnifiedOperators.lean} и \texttt{RotatorCalculusPaper.lean} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} и \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
@@ -127,7 +154,7 @@
 \bibitem{Daiber2020}
 B.~Daiber et~al., ``Singlet fission in tetracene/SiO$_x$/Si solar cells,'' \texttt{arXiv:2007.06910}, 2020.
 \bibitem{Klymenko2023}
-Y.~Klymenko et~al., ``Electronic structure and singlet fission of tetracene on Si(100),'' \texttt{arXiv:2310.15736}, 2023.
+M.\,V.~Klymenko et~al., ``Electronic structure and singlet fission of tetracene on Si(100),'' \texttt{arXiv:2310.15736}, 2023.
 \bibitem{Benning2026}
 M.~Benning, D.\,R.~Gamelin, F.\,T.~Rabouw et~al., ``Photon antibunching and Auger recombination in quantum-cutting phosphors,'' \texttt{arXiv:2606.31359}, 2026.
 \bibitem{McNab2026}

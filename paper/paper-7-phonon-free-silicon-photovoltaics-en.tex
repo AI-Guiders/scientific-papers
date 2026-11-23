@@ -112,16 +112,43 @@ For $d=3$ on $\mathbb{Z}_{512}$ and $O_2(3)$ (\texttt{laplace\_demon\_impossibil
 \end{tabular}
 \end{table}
 
+\section{Step-by-Step Cleanroom Fabrication and A/B Falsification Protocol}
+\label{sec:experimental-protocol}
+
+To enable direct laboratory verification in existing silicon photovoltaic and exciton-physics facilities, Theorem~\ref{thm:solar-cascade} translates into a concrete four-step fabrication and A/B control protocol:
+\begin{enumerate}[label=\textbf{Step~\arabic*.},leftmargin=*]
+\item \textbf{Base substrate (Layer~4):}
+  Use an $n$-type crystalline $\mathrm{Si}(100)$ interdigitated back-contact (IBC-$\mathrm{Si}$) wafer ($Z(\mathrm{Si})=14$, fundamental absorption edge $\lambda_{\mathrm{Si}} = 27\times 41 = 1107\;\text{nm}$, $E_g = 1.12\;\text{eV}$) with an unmetallized front receiving surface.
+\item \textbf{Saddle passivation bridge and A/B Pauli-threshold control test (Layer~3):}
+  Grow an ultrathin ($0.8\text{--}1.2\;\text{nm}$, $2\text{--}3$ monolayers) tunnel dielectric bridge on the front $\mathrm{Si}(100)$ surface under two controlled conditions:
+  \begin{itemize}[noitemsep]
+  \item \emph{Control Sample~A (unpassivated dry $\mathrm{AlO_4}$, $Z = 13 + 4\times 8 = 45$):} sits below the Pauli gate threshold ($45^2 = 2025 < 2048 = K_P(3)^2/2$), permitting premature singlet dumping and interfacial recombination;
+  \item \emph{Target Sample~B (tetrahedral silanol/silica $\mathrm{SiO_4}$, $Z = 14 + 4\times 8 = 46$, or hydrogen-passivated ALD $[\mathrm{AlO_4H}]$, $Z = 13 + 32 + 1 = 46$):} crosses the Pauli threshold ($46^2 = 2116 > 2048$) to block unsplit singlets $S_1$, while its terminal oxygen atoms ($Z(\mathrm{O}) = 8$) lock the adjacent tetracene shell ($Z(\mathrm{C_{18}H_{12}}) = 120$) onto the quarter-ring saddle $120 + 8 = 128 = Q_\square(3)$ ($\mathcal{C}_3(128) = 0,\ \mathcal{S}_3(128) = +128$).
+  \end{itemize}
+\item \textbf{Singlet-fission splitter deposition (Layer~2):}
+  Thermally evaporate a $30\text{--}80\;\text{nm}$ crystalline tetracene ($\mathrm{C_{18}H_{12}}$, $Z = 120$) layer onto the saddle bridge, aligning the molecular herringbone axes with the orthogonal rays of the cuboctahedral shell $O_2(3)$ ($\Delta\varphi = 128 \implies \mathcal{C}_3(128) = 0$ to suppress biexciton Auger annihilation).
+\item \textbf{Input anti-reflection encapsulation (Layer~1):}
+  Cap with a quartz ($\mathrm{SiO_2}$, $Z = 30$) layer textured with the $12$-ray cuboctahedral geometry $O_2(3)$ and refractive-index ratio $n_1/n_2 = 9/8$ ($T_{\mathrm{Fresnel}} = 288/289 \approx 99.654\%$).
+\end{enumerate}
+
+\noindent\textbf{Four quantitative falsifiable laboratory signatures:}
+\begin{enumerate}[label=\textbf{(M\arabic*)},leftmargin=*,noitemsep]
+\item \textbf{Exciton energetics (UPS / IPES / NIR photoluminescence):} an interfacial singlet--triplet gap shift of $\operatorname{Tr}\mathcal{M}_3^{\mathrm{adj}} = 4^2 + 128 = \mathbf{144\;\text{meV}}$ and a triplet exciton emission/transfer resonance at $-\det\mathcal{W}_{\mathrm{MS}} = 1^4 + 5^4 + 4^4 = \mathbf{882\;\text{nm}}$ ($1.406\;\text{eV}$, providing a $15^2 = 225\;\text{nm}$ margin above the $1107\;\text{nm}$ silicon edge).
+\item \textbf{External quantum efficiency $\mathrm{EQE}(\lambda)$ and magnetic-field effect (MFE):} under monochromatic excitation at $\lambda_{\mathrm{blue}} = 21^2 = \mathbf{441\;\text{nm}}$ ($2.81\;\text{eV}$), Target Sample~B ($Z=46,\ 120+8=128$) exhibits $\mathrm{EQE}(441\;\text{nm}) > 100\%$ (approaching the $200\%$ quantum-cutting limit) with the characteristic triplet magnetic-field modulation, whereas Control Sample~A ($Z=45$) remains quenched below $100\%$.
+\item \textbf{Auger suppression under high fluence:} linear scaling of triplet injection yield with excitation density due to orthogonal ray separation ($\mathcal{C}_3(128) = 0$).
+\item \textbf{Lock-in illuminated thermography:} $>50\%$ reduction in lattice thermalization heat under $400\text{--}530\;\text{nm}$ illumination compared to a bare IBC-$\mathrm{Si}$ reference cell ($\hat{n}_E(21) = 0$).
+\end{enumerate}
+
 \section{Formal Verification in Lean~4}
-All theorems above are formally verified in \texttt{lean/MtCarrier/UnifiedOperators.lean} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} and \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+All theorems above are formally verified in \texttt{lean/MtCarrier/UnifiedOperators.lean} and \texttt{RotatorCalculusPaper.lean} (\url{https://github.com/AI-Guiders/mt-lattice-fluid} and \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}
 A.\,I.~Mal'cev, \emph{Algebraic Systems}, Springer-Verlag, 1973 (Russian original: Nauka, Moscow, 1970).
 \bibitem{Daiber2020}
-B.~Daiber et~al., ``Singlet fission in tetracene Mental/SiO$_x$/Si solar cells,'' \texttt{arXiv:2007.06910}, 2020.
+B.~Daiber et~al., ``Singlet fission in tetracene/SiO$_x$/Si solar cells,'' \texttt{arXiv:2007.06910}, 2020.
 \bibitem{Klymenko2023}
-Y.~Klymenko et~al., ``Electronic structure and singlet fission of tetracene on Si(100),'' \texttt{arXiv:2310.15736}, 2023.
+M.\,V.~Klymenko et~al., ``Electronic structure and singlet fission of tetracene on Si(100),'' \texttt{arXiv:2310.15736}, 2023.
 \bibitem{Benning2026}
 M.~Benning, D.\,R.~Gamelin, F.\,T.~Rabouw et~al., ``Photon antibunching and Auger recombination in quantum-cutting phosphors,'' \texttt{arXiv:2606.31359}, 2026.
 \bibitem{McNab2026}
