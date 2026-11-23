@@ -817,6 +817,55 @@ theorem thm33_collatz_pure_binary_F_polynomial_and_finite_centered_radix_represe
     · intro hGe
       omega
 
+/-- **Theorem 34 (Two-Rotor Gap Squeeze `Δ_b = m_0 - S_b = (2^a / 3^b) m_b ≥ 0` and Core-Free Macro-Step Gap Jump
+`3^{r+1} m_cur - 2^{r + 1 + β} m_next = 2^r (2^β + 1) - 3^{r+1}`)**:
+1. In `Q_tot * m_0 - P_tot * m_b = S_d` (`Q_tot = 3^b > 0, P_tot = 2^a > 0`), since `m_b ≥ 0`,
+   the scaled gap `Q_tot * m_0 - S_d = P_tot * m_b ≥ 0` traps Rotor 2 (`S_d`) monotonically below Rotor 1
+   (`Q_tot * m_0`) and vanishes (`Q_tot * m_0 = S_d`) if and only if `m_b = 0` (`n_b = 1`, exact convergence
+   at the root `4-2-1`).
+2. Across a complete macro-step (`m_cur = P_r * q - 1`, `p_β * (2 * m_next + 1) + 1 = Q_{r1} * q` with
+   `P_r = 2^r`, `Q_{r1} = 3^{r+1}`, `p_β = 2^β`), the odd core term `Q_{r1} * P_r * q` cancels identically,
+   yielding the core-free macro-step gap jump
+   `Q_{r1} * m_cur - (2 * P_r * p_β) * m_next = P_r * (p_β + 1) - Q_{r1}` (`2^r (2^β + 1) - 3^{r+1}`). -/
+theorem thm34_collatz_two_rotor_gap_squeeze_and_core_free_macro_gap_step
+    (Qtot Ptot m0 mb Sd Pr Qr1 pbeta q mcur mnext : Int) :
+    (Qtot * m0 - Ptot * mb = Sd → Ptot > 0 →
+      (mb ≥ 0 → Qtot * m0 - Sd ≥ 0) ∧
+      (Qtot * m0 - Sd = 0 ↔ mb = 0)) ∧
+    (mcur = Pr * q - 1 →
+     pbeta * (2 * mnext + 1) + 1 = Qr1 * q →
+      Qr1 * mcur - (2 * Pr * pbeta) * mnext = Pr * (pbeta + 1) - Qr1 ∧
+      (Pr = 1 → Qr1 = 3 → 3 * mcur - (2 * pbeta) * mnext = pbeta - 2)) := by
+  refine ⟨?_, ?_⟩
+  · intro hRad hPpos
+    have hGap : Qtot * m0 - Sd = Ptot * mb := by omega
+    refine ⟨?_, ?_⟩
+    · intro hmb
+      have hNonneg : Ptot * mb ≥ 0 := Int.mul_nonneg (by omega) hmb
+      omega
+    · constructor
+      · intro hZero
+        have hMul0 : Ptot * mb = 0 := by omega
+        cases Int.mul_eq_zero.mp hMul0 with
+        | inl hP0 => omega
+        | inr hmb0 => exact hmb0
+      · intro hmb0
+        rw [hmb0, Int.mul_zero] at hGap
+        exact hGap
+  · intro hmcur hMac
+    have hCancel : (Qr1 * (Pr * q - 1) - (2 * Pr * pbeta) * mnext) - (Pr * (pbeta + 1) - Qr1) =
+                   Pr * ((Qr1 * q) - (pbeta * (2 * mnext + 1) + 1)) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    rw [← hmcur, ← hMac, Int.sub_self, Int.mul_zero] at hCancel
+    have hMain : Qr1 * mcur - (2 * Pr * pbeta) * mnext = Pr * (pbeta + 1) - Qr1 := by omega
+    refine ⟨hMain, ?_⟩
+    intro hPr1 hQr3
+    rw [hPr1, hQr3] at hMain
+    simp only [Int.one_mul, Int.mul_one] at hMain
+    omega
+
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -834,5 +883,6 @@ theorem thm33_collatz_pure_binary_F_polynomial_and_finite_centered_radix_represe
 #print axioms thm31_collatz_macro_step_double_sl2_bezout_lock_and_unconditional_r0_core_descent
 #print axioms thm32_collatz_two_macro_step_core_tail_compensation_law
 #print axioms thm33_collatz_pure_binary_F_polynomial_and_finite_centered_radix_representation
+#print axioms thm34_collatz_two_rotor_gap_squeeze_and_core_free_macro_gap_step
 
 end RotatorCalculusPaper

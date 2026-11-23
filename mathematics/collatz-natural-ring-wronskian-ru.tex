@@ -280,8 +280,17 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 которое при достижении стационарной точки $n_b = 1$ ($m_b = 0$) обрывается в конечную рациональную сумму $m_0 = \sum_{k=0}^{b-1} (d_k / 3^{k+1}) 2^{s_k}$, а вдоль любой дуги без спуска ($m_b \ge m_0$) накладывает верхний потолок $\sum_{k=0}^{b-1} 3^{b-1-k} d_k 2^{s_k} \le (3^b - 2^a) m_0$.
 \end{theorem}
 
+\begin{theorem}[Сжатие зазора между двумя винтами $\Delta_b = m_0 - S_b = (2^a/3^b) m_b \ge 0$ и не зависящий от ядра скачок зазора за макро-шаг, \texttt{thm34}]
+\label{thm:two-rotor-gap-squeeze}
+Зазор $\Delta_b := m_0 - \sum_{k=0}^{b-1}(d_k/3^{k+1}) 2^{s_k} = (2^a/3^b) m_b$ между Винтом~1 ($m_0$) и Винтом~2 (частичной суммой $S_b$ от корня $4\text{--}2\text{--}1$) строго неотрицателен при всех $b \ge 0$, запирая $S_b \le m_0$ и обращаясь в нуль ($\Delta_b = 0$) тогда и только тогда, когда $m_b = 0$ ($n_b = 1$). За полный макро-шаг ($m_{\mathrm{cur}} = 2^r q - 1 \mapsto 2^\beta(2 m_{\mathrm{next}} + 1) + 1 = 3^{r+1} q$) нечётное ядро $q$ тождественно сокращается из скачка зазора:
+\begin{equation}
+  \label{eq:core-free-macro-gap-jump}
+  3^{r+1}\,m_{\mathrm{cur}} \;-\; 2^{r + 1 + \beta}\,m_{\mathrm{next}} \;\equiv\; 2^r\,\bigl(2^\beta + 1\bigr) \;-\; 3^{r+1} \qquad \bigl(\text{при } r = 0:\;\; 3\,m_{\mathrm{cur}} - 2^{\beta+1} m_{\mathrm{next}} = 2^\beta - 2 \ge 0\bigr).
+\end{equation}
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:finite-centered-radix} (\texttt{thm18}--\texttt{thm33} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:two-rotor-gap-squeeze} (\texttt{thm18}--\texttt{thm34} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} (импортируемом в \texttt{RotatorCalculusPaper.lean}) в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
