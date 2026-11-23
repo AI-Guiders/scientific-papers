@@ -2478,6 +2478,50 @@ theorem thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
   rw [hBez] at hBezId
   omega
 
+/-- **Theorem 25 (Automatic 2-adic / 3-adic Gear-Tooth Meshing and Inductive Step-Peeling Law
+`3^b n_0 + (3^{b-1} + 2^{α_0} D_rem) = 2^a ⟺ 3^{b-1} (3 n_0 + 1) = 2^{α_0} (2^{a - α_0} - D_rem)`)**:
+Let `Q_prev = 3^{b-1}`, `p_0 = 2^{α_0}`, `P_rem = 2^{a - α_0}` (`P_tot = p_0 * P_rem = 2^a`,
+`Q_tot = 3 * Q_prev = 3^b`), and `D_tot = Q_prev + p_0 * D_rem`. Then:
+1. **Gear-Tooth Meshing Identity:**
+   `(3 * Q_prev) * n_0 + (Q_prev + p_0 * D_rem) = p_0 * P_rem ↔ Q_prev * (3 * n_0 + 1) = p_0 * (P_rem - D_rem)`;
+2. **Exact 2-adic Valuation Parity Lock:**
+   Whenever `P_rem = 2 * k_P` is even (`a > α_0`) and `D_rem = 2 * k_D + 1` is odd, the cofactor
+   `P_rem - D_rem = 2 * (k_P - k_D - 1) + 1` is strictly odd, so `p_0 = 2^{α_0}` absorbs the exact power
+   of two dividing `3 * n_0 + 1`;
+3. **One-Step Forward-Backward Peeling (`n_0 ↦ n_1`):**
+   Under the forward step `3 * n_0 + 1 = p_0 * n_1` (`p_0 ≠ 0`), the `b`-step equation peels off its first
+   link into the `(b - 1)`-step equation `Q_prev * n_1 + D_rem = P_rem` (`3^{b-1} n_1 + D_rem = 2^{a - α_0}`). -/
+theorem thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
+    (Qprev p0 Prem Drem n0 n1 kP kD : Int) :
+    ((3 * Qprev) * n0 + (Qprev + p0 * Drem) = p0 * Prem ↔
+      Qprev * (3 * n0 + 1) = p0 * (Prem - Drem)) ∧
+    (Prem = 2 * kP → Drem = 2 * kD + 1 → (Prem - Drem) - 2 * (kP - kD - 1) = 1) ∧
+    (p0 ≠ 0 → 3 * n0 + 1 = p0 * n1 →
+      ((3 * Qprev) * n0 + (Qprev + p0 * Drem) = p0 * Prem ↔ Qprev * n1 + Drem = Prem)) := by
+  have hId1 : ((3 * Qprev) * n0 + (Qprev + p0 * Drem) - p0 * Prem) =
+              (Qprev * (3 * n0 + 1) - p0 * (Prem - Drem)) := by
+    simp only [Int.mul_add, Int.mul_sub, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨⟨fun h => by omega, fun h => by omega⟩, by intro hP hD; omega, ?_⟩
+  intro hp0 hStep
+  have hId2 : ((3 * Qprev) * n0 + (Qprev + p0 * Drem) - p0 * Prem) =
+              (Qprev * (3 * n0 + 1) - p0 * (Prem - Drem)) := hId1
+  rw [hStep] at hId2
+  have hFactor : Qprev * (p0 * n1) - p0 * (Prem - Drem) =
+                 p0 * (Qprev * n1 + Drem - Prem) := by
+    simp only [Int.mul_add, Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  constructor
+  · intro h
+    have hMul0 : p0 * (Qprev * n1 + Drem - Prem) = 0 := by omega
+    cases Int.mul_eq_zero.mp hMul0 with
+    | inl h0 => exact False.elim (hp0 h0)
+    | inr hRem => omega
+  · intro h
+    have hRem0 : Qprev * n1 + Drem - Prem = 0 := by omega
+    rw [hRem0, Int.mul_zero] at hFactor
+    omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2503,5 +2547,6 @@ theorem thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
 #print axioms thm22_collatz_arbitrary_stage_fermat_descent_reduction
 #print axioms thm23_collatz_dead_end_free_ternary_prefix_closure
 #print axioms thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
+#print axioms thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
 
 end RotatorCalculusPaper

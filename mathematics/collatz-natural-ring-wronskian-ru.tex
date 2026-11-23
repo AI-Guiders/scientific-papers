@@ -192,8 +192,18 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 \end{equation}
 \end{theorem}
 
+\begin{theorem}[Автоматическое $2$-адическое и $3$-адическое зацепление зубьев и пошаговое отщепление звеньев, \texttt{thm25}]
+\label{thm:gear-tooth-meshing}
+При записи полинома дрейфа обратного ротора в виде $D_{\mathrm{tot}} = 3^{b-1} + 2^{\alpha_0} D_{\mathrm{rem}}$ ($a > \alpha_0 \ge 1$) одно $3$-адическое уравнение замыкания $3^b n_0 + D_{\mathrm{tot}} = 2^a$ тождественно равносильно соотношению зацепления зубьев
+\begin{equation}
+  \label{eq:gear-tooth-meshing}
+  3^{b-1}\,\bigl(3\,n_0 + 1\bigr) \;=\; 2^{\alpha_0}\,\bigl(2^{a - \alpha_0} - D_{\mathrm{rem}}\bigr).
+\end{equation}
+Поскольку $2^{a - \alpha_0}$ чётно, а $D_{\mathrm{rem}} \equiv 3^{b-2} \equiv 1 \pmod 2$ нечётно, сомножитель $2^{a - \alpha_0} - D_{\mathrm{rem}}$ строго нечётен, вследствие чего прямой шаг Коллатца автоматически включает точную передачу $\nu_2(3 n_0 + 1) = \alpha_0$ ($3 n_0 + 1 = 2^{\alpha_0} n_1$) и отщепляет первое звено в $(b-1)$-шаговое уравнение $3^{b-1} n_1 + D_{\mathrm{rem}} = 2^{a - \alpha_0}$.
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:counter-rotating-splice} (\texttt{thm18}--\texttt{thm24} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:gear-tooth-meshing} (\texttt{thm18}--\texttt{thm25} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}

@@ -188,8 +188,18 @@ Splitting a path from $n_{\mathrm{start}}$ to the root $n^* = 1$ ($2^2\cdot 1 - 
 \end{equation}
 \end{theorem}
 
+\begin{theorem}[Automatic $2$-adic / $3$-adic gear-tooth meshing and inductive step-peeling law, \texttt{thm25}]
+\label{thm:gear-tooth-meshing}
+Writing the backward-rotor drift as $D_{\mathrm{tot}} = 3^{b-1} + 2^{\alpha_0} D_{\mathrm{rem}}$ ($a > \alpha_0 \ge 1$), the single $3$-adic closure equation $3^b n_0 + D_{\mathrm{tot}} = 2^a$ is identically equivalent to the gear-tooth meshing relation
+\begin{equation}
+  \label{eq:gear-tooth-meshing}
+  3^{b-1}\,\bigl(3\,n_0 + 1\bigr) \;=\; 2^{\alpha_0}\,\bigl(2^{a - \alpha_0} - D_{\mathrm{rem}}\bigr).
+\end{equation}
+Since $2^{a - \alpha_0}$ is even and $D_{\mathrm{rem}} \equiv 3^{b-2} \equiv 1 \pmod 2$ is odd, the cofactor $2^{a - \alpha_0} - D_{\mathrm{rem}}$ is strictly odd, so the forward Collatz step automatically engages the exact gear ratio $\nu_2(3 n_0 + 1) = \alpha_0$ ($3 n_0 + 1 = 2^{\alpha_0} n_1$) and peels off the first link into the $(b-1)$-step equation $3^{b-1} n_1 + D_{\mathrm{rem}} = 2^{a - \alpha_0}$.
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:counter-rotating-splice} (\texttt{thm18}--\texttt{thm24} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:gear-tooth-meshing} (\texttt{thm18}--\texttt{thm25} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in \texttt{RotatorCalculusPaper.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}
