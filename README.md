@@ -23,7 +23,7 @@
 
 ### Series II: Discrete Quantum Mechanics (DQM), Continuum Convergence to CQM, and Applied Silicon Photovoltaics (Satellite Papers to the Monograph)
 
-| Part | Topic & Verified Lean 4 Modules (`AI-Guiders/mt-lattice-fluid`) | English PDF & TeX | Russian PDF & TeX |
+| Part | Topic & Verified Lean 4 Modules (`AI-Guiders/discrete-quantum-mechanics`) | English PDF & TeX | Russian PDF & TeX |
 | :--- | :--- | :--- | :--- |
 | **Physics Part I** | **Dimensional Uniqueness `1 + 2^d = d²` (`d = 3`), Symplectic Verlet Dynamics on `ℤ_{512}`, Born's Rule, Heisenberg Deadband `41`, and the Fine-Structure Constant `α_fs⁻¹`** (`Core.lean`, `Dynamics.lean`, `Topology.lean`, `Physics.lean`) | [PDF](paper/paper-5-carrier-maxwell-fine-structure-en.pdf) · [TeX](paper/paper-5-carrier-maxwell-fine-structure-en.tex) | [PDF](paper/paper-5-carrier-maxwell-fine-structure-ru.pdf) · [TeX](paper/paper-5-carrier-maxwell-fine-structure-ru.tex) |
 | **Physics Part II** | **Non-Singular Gate-Impedance Gravity (`≥ 8,192`), the `16/3` Vacuum Holonomy Halo Without Dark Matter, and Coherent `587×` Coulomb Barrier Collapse to the `N = 184` Island of Stability** (`Dynamics.lean`, `Physics.lean`, `UnifiedOperators.lean`) | [PDF](paper/paper-6-gravity-halo-nuclear-collapse-en.pdf) · [TeX](paper/paper-6-gravity-halo-nuclear-collapse-en.tex) | [PDF](paper/paper-6-gravity-halo-nuclear-collapse-ru.pdf) · [TeX](paper/paper-6-gravity-halo-nuclear-collapse-ru.tex) |
@@ -37,7 +37,7 @@
 | Repository | Role & Contents |
 | :--- | :--- |
 | [`AI-Guiders/scientific-papers`](https://github.com/AI-Guiders/scientific-papers) | Series I (`paper-1`..`paper-4`) & Series II (`paper-5`..`paper-8`) LaTeX/PDF papers and standalone [`RotatorCalculusPaper.lean`](RotatorCalculusPaper.lean) (`thm1`–`thm17`). |
-| [`AI-Guiders/mt-lattice-fluid`](https://github.com/AI-Guiders/mt-lattice-fluid) | Full 8-chapter academic monograph, natural sciences course, `lean/MtCarrier/` formalization (`26/26` modules), and Python/Verilog verification suites. |
+| [`AI-Guiders/discrete-quantum-mechanics`](https://github.com/AI-Guiders/discrete-quantum-mechanics) | Full 8-chapter academic monograph, natural sciences course, `lean/MtCarrier/` formalization (`26/26` modules), and Python/Verilog verification suites. |
 | [`AI-Guiders/guiders-physics`](https://github.com/AI-Guiders/guiders-physics) | `.NET` digital twin, interactive impedance simulator, and hardware telemetry engine. |
 | [`AI-Guiders/ai-welcome-atlas`](https://github.com/AI-Guiders/ai-welcome-atlas) & [`AI-Guiders/ai-atlas-mcp`](https://github.com/AI-Guiders/ai-atlas-mcp) | Open Knowledge Format (OKF) knowledge base (`ai-welcome-atlas`) and anti-confabulation `.NET 11` MCP server (`ai-atlas-mcp`) enforcing tool-first verification (`0 sorryAx`, `0 Classical.choice`) and preventing LLM hallucination during scientific research and experimental troubleshooting. |
 
