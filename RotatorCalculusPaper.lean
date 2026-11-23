@@ -2266,6 +2266,39 @@ theorem thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
   simp only [Int.mul_zero, Int.add_zero, Int.sub_zero] at hPosSum
   exact ⟨by omega, by intro _ _; omega, by intro _ _; omega⟩
 
+/-- **Theorem 20 (Collatz Cyclic Drift Shift Law `2^{α_k} D_tot^{(k+1)} - 3 D_tot^{(k)} = (2^a - 3^b)`
+and Dual Residual-Drift Tower `2^{α_{k+1}} D_2^{(k+1)} - 3 D_2^{(k)} = 2^{a - α_k} - 3^{b-1}`)**:
+For any step `k` with step power `p_k = 2^{α_k}`, remaining binary power `P_rem_k = 2^{a - α_k}`
+(`P_tot = p_k * P_rem_k = 2^a`), and ternary powers `Q_prev = 3^{b-1}`, `Q_tot = 3 * Q_prev = 3^b`
+(`C_tot = P_tot - Q_tot = 2^a - 3^b`), where the cyclic total drifts satisfy
+`D_tot_k = Q_prev + p_k * D2_k` and `D_tot_k1 = P_rem_k + 3 * D2_k = Q_prev + p_{k+1} * D2_{k+1}`:
+1. The cyclic total drifts satisfy the universal shift identity
+   `p_k * D_tot_k1 - 3 * D_tot_k = C_tot` (so `p_k * D_tot_k1 ≡ 3 * D_tot_k (mod C_tot)`);
+2. The residual drifts satisfy the vertex-free dual transition law
+   `p_{k+1} * D2_{k+1} - 3 * D2_k = P_rem_k - Q_prev`;
+3. On any closed cycle (`C_tot * n_k = D_tot_k`), the Pillai envelope `D2_k ≥ Q_prev - B_prev`
+   (`3^{b-1} - 2^{b-1}`) enforces the lower bound `C_tot * n_k ≥ Q_prev + p_k * (Q_prev - B_prev)`. -/
+theorem thm20_collatz_dual_drift_tower_and_cyclic_shift_law
+    (pk pk1 Premk Qprev Bprev D2k D2k1 nk : Int) :
+    let Ptot := pk * Premk
+    let Qtot := 3 * Qprev
+    let Ctot := Ptot - Qtot
+    let Dtot_k  := Qprev + pk * D2k
+    let Dtot_k1 := Premk + 3 * D2k
+    (pk * Dtot_k1 - 3 * Dtot_k = Ctot) ∧
+    (Dtot_k1 = Qprev + pk1 * D2k1 → pk1 * D2k1 - 3 * D2k = Premk - Qprev) ∧
+    (Ctot * nk = Dtot_k → pk * (D2k - (Qprev - Bprev)) ≥ 0 →
+      Ctot * nk ≥ Qprev + pk * (Qprev - Bprev)) := by
+  dsimp
+  have hShift : pk * (Premk + 3 * D2k) - 3 * (Qprev + pk * D2k) = pk * Premk - 3 * Qprev := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+  refine ⟨hShift, by omega, ?_⟩
+  intro hCycle hEnv
+  have hSub : pk * (D2k - (Qprev - Bprev)) = pk * D2k - pk * (Qprev - Bprev) := by
+    simp only [Int.mul_sub]
+  omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
@@ -2285,5 +2318,6 @@ theorem thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_oracle_necessity
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
+#print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
 
 end RotatorCalculusPaper

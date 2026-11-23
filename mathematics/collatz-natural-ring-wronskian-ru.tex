@@ -20,7 +20,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Замечание}
 
-\title{\textbf{Динамика траекторий Коллатца на естественных модулярных кольцах $\mathbb{Z}_{2^a}$ и $\mathbb{Z}_{2^a - 3^b}$:\\ разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана, двусторонние границы дрейфа и знакоположительные суммы Вронскиана в Lean~4}}
+\title{\textbf{Динамика траекторий Коллатца на естественных модулярных кольцах $\mathbb{Z}_{2^a}$ и $\mathbb{Z}_{2^a - 3^b}$:\\ разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана, знакоположительные суммы Вронскиана и башня остаточных дрейфов в Lean~4}}
 \author{Дмитрий Каратаев \and Луч (AI-Guiders)}
 \date{2026}
 
@@ -28,111 +28,95 @@
 \maketitle
 
 \begin{abstract}
-Задача Коллатца $3n+1$ переформулирована как задача о дискретном движении на двусортной алгебраической системе носителей $\langle\mathcal{M},\mathcal{T}\rangle$ (в смысле А.\,И.~Мальцева) над естественными модулярными кольцами $\mathbb{Z}_{2^a} = \mathbb{Z}_{4Q}$ ($Q = 2^{a-2}$) и кольцом зазора Пиллаи $\mathbb{Z}_{C_{a,b}}$ ($C_{a,b} = 2^a - 3^b$). Во-первых, обобщая кусочно-линейный ротатор и стереографическое исчисление Вейерштрасса на произвольное четырёхквадрантное кольцо $\mathbb{Z}_{4Q}$ (\texttt{thm18} в \texttt{RotatorCalculusPaper.lean}), мы доказываем, что каждая $a$-шаговая бинарно-троичная траектория $2^a n_{\mathrm{final}} - 3^b n_{\mathrm{start}} = D_{a,b}$ раскладывается в точный баланс частного и остатка $2^a(n_{\mathrm{final}} - n_{\mathrm{start}}) + (2^a - 3^b)n_{\mathrm{start}} \equiv D_{a,b}$, где полином дрейфа $D_{a,b} = \sum_{j=0}^{b-1} 3^{b-1-j} 2^{s_j}$ безусловно зажат в геометрической вилке Пиллаи $3^b - 2^b \le D_{a,b} \le 2^{a-b}(3^b - 2^b)$, а $a$-битный вычет $r = n_{\mathrm{start}}\bmod 2^a\in\mathbb{Z}_{2^a}$ биективно определяет вектор чётностей (сжимая траекторию на $382/512 = 74{,}61\%$ вычетов при $a=9$). Во-вторых, для любых двух последовательных дуг траектории $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$ и суммарный дрейф $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$, и суммарный зазор Пиллаи $C_{\mathrm{tot}} = Q_2 C_1 + P_1 C_2$ порождаются одним и тем же линейным оператором $(Q_2, P_1)$, связывая хордовое смещение на любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$) с определителем Вронскиана $2\times 2$: $C_{\mathrm{tot}}(n_{\mathrm{mid}} - n_{\mathrm{start}}) \equiv C_2 D_1 - C_1 D_2$. В-третьих, доказано, что унимодулярная матрица $\mathcal{B}_{2,3} = \begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix} \in \mathrm{SL}_2(\mathbb{Z})$ единственным образом раскладывает любую пару показателей $(a,b)\in\mathbb{Z}^2$ по базису Каталана $u = 2a - 3b$ (дуга $(2,1)$ с зазором $2^2 - 3^1 = +1$) и $v = 2b - a$ (дуга Каталана $(3,2)$ с зазором $3^2 - 2^3 = +1$), так что $2^a = 4^u 8^v$ и $3^b = 3^u 9^v$ при $u \ge 1, v \ge 1$ на каждом сжимающем цикле ($\frac{3}{2} < \frac{a}{b} < 2$). Разрезание любого замкнутого цикла на границе между блоком $(4^u,3^u)$ ($G_1 = 4^u - 3^u > 0$) и блоком $(8^v,9^v)$ ($G_2 = 9^v - 8^v > 0$) превращает хордовое уравнение Вронскиана в строго положительную сумму без вычитания: $(2^a - 3^b)(n_{\mathrm{start}} - n_{\mathrm{mid}}) \equiv (9^v - 8^v)D_1 + (4^u - 3^u)D_2 > 0$ (\texttt{thm19}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Задача Коллатца $3n+1$ сформулирована как задача о дискретном движении на двусортной алгебраической системе носителей $\langle\mathcal{M},\mathcal{T}\rangle$ (в смысле А.\,И.~Мальцева) над естественными модулярными кольцами $\mathbb{Z}_{2^a} = \mathbb{Z}_{4Q}$ ($Q = 2^{a-2}$) и кольцом зазора Пиллаи $\mathbb{Z}_{C_{a,b}}$ ($C_{a,b} = 2^a - 3^b$). Во-первых, доказано, что кусочно-линейный ротатор $(\mathcal{C}_{4Q},\mathcal{S}_{4Q})$, его постоянный разностный вронскиан $\mathcal{W}_{4Q} \equiv Q$ и стереографический инвариант Вейерштрасса $C\Delta_{\mathrm{rot},Q} - w I_{\mathrm{rot},Q} \equiv Q$ выполняются на любом четырёхквадрантном кольце $\mathbb{Z}_{4Q}$ (\texttt{thm18}). Во-вторых, для любых двух последовательных дуг траектории и суммарный дрейф $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$, и суммарный зазор Пиллаи $C_{\mathrm{tot}} = Q_2 C_1 + P_1 C_2$ порождаются одним и тем же линейным оператором $(Q_2,P_1)$, связывая хордовое смещение на любом замкнутом цикле с определителем Вронскиана $2\times 2$: $C_{\mathrm{tot}}(n_{\mathrm{mid}} - n_{\mathrm{start}}) \equiv C_2 D_1 - C_1 D_2$. В-третьих, унимодулярная матрица $\mathcal{B}_{2,3} = \begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix} \in \mathrm{SL}_2(\mathbb{Z})$ раскладывает всякую пару показателей $(a,b)\in\mathbb{Z}^2$ по базису Каталана $u = 2a - 3b \ge 1$ и $v = 2b - a \ge 1$ ($2^a = 4^u 8^v,\ 3^b = 3^u 9^v$), превращая хордовое уравнение Вронскиана на цикле в сумму двух строго положительных слагаемых без вычитания: $(2^a - 3^b)(n_{\mathrm{start}} - n_{\mathrm{mid}}) \equiv (9^v - 8^v)D_1 + (4^u - 3^u)D_2 > 0$ (\texttt{thm19}). Наконец, установлены закон циклического сдвига полных дрейфов $2^{\alpha_k} D_{\mathrm{tot}}^{(k+1)} - 3 D_{\mathrm{tot}}^{(k)} \equiv 2^a - 3^b$ и не зависящий от вершин закон перехода двойственных остаточных дрейфов $2^{\alpha_{k+1}} D_2^{(k+1)} - 3 D_2^{(k)} \equiv 2^{a-\alpha_k} - 3^{b-1}$ (\texttt{thm20}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 \end{abstract}
 
-\section{Введение и постановка задачи на естественных кольцах $\mathbb{Z}_{2^a}$ и $\mathbb{Z}_{2^a - 3^b}$}
+\section{Введение и уравнение движения на кольцах $\mathbb{Z}_{2^a}$ и $\mathbb{Z}_{2^a - 3^b}$}
 \label{sec:intro}
 
-Всюду в статье термин \emph{носитель} (\emph{carrier}) употребляется строго в смысле классической теории моделей А.\,И.~Мальцева~\cite{Malcev1970} как основное множество сорта в двусортной алгебраической системе $\langle\mathcal{M},\mathcal{T}\rangle$. В базовой работе по ротаторному исчислению~\cite{KarataevRotator1} дискретный сорт $\mathcal{M}$ был задан на самозамкнутом регистре $\mathbb{Z}_{512}$ ($2^9 = 512$). Фундаментальное свойство построенного аппарата состоит в том, что кусочно-линейный ротатор $(\mathcal{C}_{4Q},\mathcal{S}_{4Q})$, его постоянный разностный вронскиан $\mathcal{W}_{4Q} \equiv Q$ и стереографическое погружение Вейерштрасса переносятся без изменений на \textbf{произвольное} четырёхквадрантное кольцо $\mathbb{Z}_{4Q}$ ($Q\in\mathbb{Z}$, Теорема~\ref{thm:arbitrary-modulus-wronskian}).
-
-Рассмотрим сжатый шаг оператора Коллатца на натуральных числах:
-\begin{equation}
-  \label{eq:collatz-step}
-  T(x) \;=\;
-  \begin{cases}
-    x / 2, & x \equiv 0 \pmod 2, \\
-    (3x + 1) / 2, & x \equiv 1 \pmod 2.
-  \end{cases}
-\end{equation}
-За $a \ge 1$ двоичных делений, содержащих $b \in \{0,\dots,a\}$ нечётных шагов на позициях $0 \le s_0 < s_1 < \dots < s_{b-1} \le a - 1$, траектория из точки $n_{\mathrm{start}}$ в точку $n_{\mathrm{final}} = T^{(a)}(n_{\mathrm{start}})$ удовлетворяет точному линейному диофантову уравнению движения:
+Всюду далее термин \emph{носитель} (\emph{carrier}) употребляется строго в смысле классической теории моделей А.\,И.~Мальцева~\cite{Malcev1970} как основное множество сорта в двусортной алгебраической системе $\langle\mathcal{M},\mathcal{T}\rangle$. За $a \ge 1$ двоичных шагов сжатого оператора Коллатца $T(x) = x/2$ ($x$ чётно), $T(x) = (3x+1)/2$ ($x$ нечётно), содержащих $b \in \{0,\dots,a\}$ нечётных шагов на позициях $0 \le s_0 < s_1 < \dots < s_{b-1} \le a - 1$, траектория из $n_{\mathrm{start}}$ в $n_{\mathrm{final}} = T^{(a)}(n_{\mathrm{start}})$ удовлетворяет уравнению
 \begin{equation}
   \label{eq:collatz-equation-of-motion}
   2^a \cdot n_{\mathrm{final}} \;-\; 3^b \cdot n_{\mathrm{start}} \;=\; D_{a,b}, \qquad
   D_{a,b} \;:=\; \sum_{j=0}^{b-1} 3^{b-1-j}\,2^{s_j}.
 \end{equation}
-Представляя $n_{\mathrm{start}} = 2^a q + r$ через частное $q = \lfloor n_{\mathrm{start}}/2^a\rfloor \ge 0$ и фазовый остаток $r = n_{\mathrm{start}}\bmod 2^a \in \mathbb{Z}_{2^a}$, замечаем, что вектор чётностей $(e_0,\dots,e_{a-1})\in\{0,1\}^a$ биективно определяется остатком $r\in\mathbb{Z}_{2^a}$ и не зависит от $q$. Вследствие этого число нечётных шагов $b = b(r)$ подчиняется на $\mathbb{Z}_{2^a}$ биномиальному распределению Паскаля $\binom{a}{b}$ (при $a=9$ на $\mathbb{Z}_{512}$ ровно $382/512 = 74{,}61\%$ вычетов имеют $b(r)\le 5$ и $3^{b(r)}\le 243 < 512$), причём
-\begin{equation}
-  \label{eq:block-affine-transition}
-  T^{(a)}(2^a q + r) \;=\; 3^{b(r)}\,q \;+\; x_a(r), \qquad
-  2^a\,x_a(r) \;=\; 3^{b(r)}\,r \;+\; D_{a,b}(r),
-\end{equation}
-а по всем $\binom{a}{b}$ наборам позиций $0 \le s_0 < \dots < s_{b-1} \le a-1$ полином дрейфа $D_{a,b}$ зажат в геометрической вилке Пиллаи:
+При записи $n_{\mathrm{start}} = 2^a q + r$ ($r = n_{\mathrm{start}}\bmod 2^a \in \mathbb{Z}_{2^a}$) вектор чётностей $(e_0,\dots,e_{a-1})\in\{0,1\}^a$ биективно определяется остатком $r\in\mathbb{Z}_{2^a}$ и не зависит от $q = \lfloor n_{\mathrm{start}}/2^a\rfloor$, вследствие чего $b(r)$ подчиняется биномиальному распределению Паскаля $\binom{a}{b}$ (сжимая траекторию на $382/512 = 74{,}61\%$ вычетов при $a=9$), а полином дрейфа $D_{a,b}$ зажат в вилке Пиллаи:
 \begin{equation}
   \label{eq:drift-envelope}
-  3^b - 2^b \;=\; \sum_{j=0}^{b-1} 3^{b-1-j}\,2^j \;\le\; D_{a,b} \;\le\; 2^{a-b}\sum_{j=0}^{b-1} 3^{b-1-j}\,2^j \;=\; 2^{a-b}\,\bigl(3^b - 2^b\bigr).
+  3^b - 2^b \;\le\; D_{a,b} \;\le\; 2^{a-b}\,\bigl(3^b - 2^b\bigr).
 \end{equation}
 
-\section{Ротаторное исчисление на произвольном модуле $\mathbb{Z}_{4Q}$ и закон Вронскиана двух дуг}
+\section{Ротаторное исчисление на произвольном модуле $\mathbb{Z}_{4Q}$ и Вронскиан двух дуг}
 \label{sec:two-arc-wronskian}
 
-\begin{theorem}[Погружение ротатора на произвольном модуле $\mathbb{Z}_{4Q}$ и закон Вронскиана двухдуговых траекторий, \texttt{thm18} в \texttt{RotatorCalculusPaper.lean}]
-\label{thm:arbitrary-modulus-wronskian}
-Для любых целых чисел $Q, A, B, C, u, v, w, \varphi_0, P_1, Q_1, P_2, Q_2, n_{\mathrm{start}}, n_{\mathrm{mid}}, n_{\mathrm{final}}, D_1, D_2 \in \mathbb{Z}$:
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Ротатор и стереографический инвариант на произвольном кольце $\mathbb{Z}_{4Q}$:}
-  для $\mathcal{C}_{4Q}(\varphi_0) = Q - \varphi_0$ и $\mathcal{S}_{4Q}(\varphi_0) = \varphi_0$ выполнены $L^1$-норма $\mathcal{C}_{4Q}(\varphi_0) + \mathcal{S}_{4Q}(\varphi_0) \equiv Q$ и постоянство разностного вронскиана $\mathcal{W}_{4Q}(\varphi_0) = \mathcal{C}_{4Q}(\varphi_0)\mathcal{S}_{4Q}(\varphi_0+1) - \mathcal{S}_{4Q}(\varphi_0)\mathcal{C}_{4Q}(\varphi_0+1) \equiv Q$. Для любой тройки $A + B = C$ с парой Безу $A v - B u = 1$ ($u + v = w$) при $I_{\mathrm{rot},Q} = B\mathcal{C}_{4Q}(\varphi_0) - A\mathcal{S}_{4Q}(\varphi_0)$ и $\Delta_{\mathrm{rot},Q} = \mathcal{C}_{4Q}(\varphi_0)v - \mathcal{S}_{4Q}(\varphi_0)u$ тождественно выполняются
-  \begin{equation}
-    \label{eq:arbitrary-q-invariant}
-    Q\,A \;=\; C\,\mathcal{C}_{4Q}(\varphi_0) - I_{\mathrm{rot},Q}, \qquad
-    Q\,B \;=\; C\,\mathcal{S}_{4Q}(\varphi_0) + I_{\mathrm{rot},Q}, \qquad
-    C\cdot\Delta_{\mathrm{rot},Q} \;-\; w\cdot I_{\mathrm{rot},Q} \;\equiv\; Q;
-  \end{equation}
-\item \textbf{Композиция двух дуг и разложение смещения в кольце $\mathbb{Z}_{C_{\mathrm{tot}}}$:}
-  для двух последовательных дуг траектории $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$ ($P_i = 2^{a_i},\ Q_i = 3^{b_i},\ C_i = P_i - Q_i,\ C_{\mathrm{tot}} = P_1 P_2 - Q_1 Q_2,\ D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$) суммарная траектория удовлетворяет
-  \begin{equation}
-    \label{eq:composite-displacement}
-    (P_1 P_2)\,n_{\mathrm{final}} \;-\; (Q_1 Q_2)\,n_{\mathrm{start}} \;=\; D_{\mathrm{tot}}, \qquad
-    (P_1 P_2)\,\bigl(n_{\mathrm{final}} - n_{\mathrm{start}}\bigr) \;+\; C_{\mathrm{tot}}\,n_{\mathrm{start}} \;\equiv\; D_{\mathrm{tot}};
-  \end{equation}
-\item \textbf{Замок Крамера на цикле и хордовое тождество Вронскиана $2\times 2$:}
-  на любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$) обе вершины $n_{\mathrm{start}}$ и $n_{\mathrm{mid}}$ выражаются через знаменатель Пиллаи $C_{\mathrm{tot}}$, а их хордовое смещение равно определителю Вронскиана $2\times 2$ между зазорами Пиллаи и дрейфами дуг:
-  \begin{equation}
-    \label{eq:cycle-wronskian-chord}
-    C_{\mathrm{tot}}\,n_{\mathrm{start}} = Q_2 D_1 + P_1 D_2, \qquad
-    C_{\mathrm{tot}}\,n_{\mathrm{mid}} = P_2 D_1 + Q_1 D_2, \qquad
-    C_{\mathrm{tot}}\,\bigl(n_{\mathrm{mid}} - n_{\mathrm{start}}\bigr) \;\equiv\; C_2 D_1 - C_1 D_2.
-  \end{equation}
-\end{enumerate}
+\begin{theorem}[Ротатор и стереографический инвариант на произвольном кольце $\mathbb{Z}_{4Q}$, \texttt{thm18}]
+\label{thm:arbitrary-modulus-rotator}
+Для любого четверть-модуля $Q\in\mathbb{Z}$ и любой фазы $\varphi_0\in\mathbb{Z}$ на четырёхквадрантном кольце $\mathbb{Z}_{4Q}$ проекции $\mathcal{C}_{4Q}(\varphi_0) = Q - \varphi_0$ и $\mathcal{S}_{4Q}(\varphi_0) = \varphi_0$ удовлетворяют $\mathcal{C}_{4Q}(\varphi_0) + \mathcal{S}_{4Q}(\varphi_0) \equiv Q$ и $\mathcal{W}_{4Q}(\varphi_0) = \mathcal{C}_{4Q}(\varphi_0)\mathcal{S}_{4Q}(\varphi_0+1) - \mathcal{S}_{4Q}(\varphi_0)\mathcal{C}_{4Q}(\varphi_0+1) \equiv Q$. Для любой тройки $A + B = C \in \mathbb{Z}^3$ с парой Безу $A v - B u = 1$ ($u + v = w$) при $I_{\mathrm{rot},Q} = B\mathcal{C}_{4Q}(\varphi_0) - A\mathcal{S}_{4Q}(\varphi_0)$ и $\Delta_{\mathrm{rot},Q} = \mathcal{C}_{4Q}(\varphi_0)v - \mathcal{S}_{4Q}(\varphi_0)u$ выполняются
+\begin{equation}
+  \label{eq:arbitrary-q-invariant}
+  Q\,A \;=\; C\,\mathcal{C}_{4Q}(\varphi_0) - I_{\mathrm{rot},Q}, \qquad
+  Q\,B \;=\; C\,\mathcal{S}_{4Q}(\varphi_0) + I_{\mathrm{rot},Q}, \qquad
+  C\cdot\Delta_{\mathrm{rot},Q} \;-\; w\cdot I_{\mathrm{rot},Q} \;\equiv\; Q.
+\end{equation}
 \end{theorem}
 
-\section{Разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана и знакоположительная сумма Вронскиана}
+\begin{theorem}[Композиция двух дуг траектории и хордовый закон Вронскиана $2\times 2$, \texttt{thm18}]
+\label{thm:two-arc-wronskian}
+Для двух последовательных дуг траектории $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$ ($C_i = P_i - Q_i$, $C_{\mathrm{tot}} = P_1 P_2 - Q_1 Q_2$, $D_{\mathrm{tot}} = Q_2 D_1 + P_1 D_2$) суммарное смещение раскладывается в $\mathbb{Z}_{C_{\mathrm{tot}}}$ как
+\begin{equation}
+  \label{eq:composite-displacement}
+  (P_1 P_2)\,n_{\mathrm{final}} \;-\; (Q_1 Q_2)\,n_{\mathrm{start}} \;=\; D_{\mathrm{tot}}, \qquad
+  (P_1 P_2)\,\bigl(n_{\mathrm{final}} - n_{\mathrm{start}}\bigr) \;+\; C_{\mathrm{tot}}\,n_{\mathrm{start}} \;\equiv\; D_{\mathrm{tot}}.
+\end{equation}
+На любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$) обе вершины $n_{\mathrm{start}}$ и $n_{\mathrm{mid}}$ выражаются через $C_{\mathrm{tot}}$, а их хордовое смещение равно определителю Вронскиана $2\times 2$:
+\begin{equation}
+  \label{eq:cycle-wronskian-chord}
+  C_{\mathrm{tot}}\,n_{\mathrm{start}} = Q_2 D_1 + P_1 D_2, \qquad
+  C_{\mathrm{tot}}\,n_{\mathrm{mid}} = P_2 D_1 + Q_1 D_2, \qquad
+  C_{\mathrm{tot}}\,\bigl(n_{\mathrm{mid}} - n_{\mathrm{start}}\bigr) \;\equiv\; C_2 D_1 - C_1 D_2.
+\end{equation}
+\end{theorem}
+
+\section{Базис показателей $\mathrm{SL}_2(\mathbb{Z})$ Каталана и знакоположительная сумма Вронскиана}
 \label{sec:catalan-basis}
 
-При произвольном разбиении цикла на две дуги в~\eqref{eq:cycle-wronskian-chord}, если $C_1$ и $C_2$ имеют одинаковый знак, правая часть $C_2 D_1 - C_1 D_2$ содержит вычитание. Покажем, что разложение вектора показателей $(a,b)$ в каноническом базисе $\mathrm{SL}_2(\mathbb{Z})$, порождённом двумя единичными замками Каталана $E_0 = (2,1)$ ($2^2 - 3^1 = +1$) и $E_1 = (3,2)$ ($3^2 - 2^3 = +1$), полностью устраняет вычитание.
+\begin{theorem}[Унимодулярное разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана, \texttt{thm19}]
+\label{thm:catalan-sl2-basis}
+Матрица базисных показателей $\mathcal{B}_{2,3} = \begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix}$, порождённая единичными замками $E_0 = (2,1)$ ($2^2 - 3^1 = +1$) и $E_1 = (3,2)$ ($3^2 - 2^3 = +1$), имеет определитель $\det\mathcal{B}_{2,3} = +1$ и единственным образом раскладывает всякую пару показателей $(a,b)\in\mathbb{Z}^2$ по координатам
+\begin{equation}
+  \label{eq:catalan-uv-coords}
+  u \;:=\; 2a - 3b, \qquad v \;:=\; 2b - a, \qquad
+  2u + 3v \;=\; a, \qquad u + 2v \;=\; b, \qquad u + v \;=\; a - b.
+\end{equation}
+Для каждого сжимающего цикла ($\frac{3}{2} < \frac{a}{b} < 2$) обе координаты строго положительны ($u \ge 1,\ v \ge 1$), раскладывая $2^a = 4^u\cdot 8^v$ и $3^b = 3^u\cdot 9^v$ и представляя полный зазор Пиллаи $C_{\mathrm{tot}} = 2^a - 3^b$ через единичные замки $G_1 = 4^u - 3^u > 0$ и $G_2 = 9^v - 8^v > 0$:
+\begin{equation}
+  \label{eq:gap-split-g1-g2}
+  C_{\mathrm{tot}} \;\equiv\; 8^v\,\bigl(4^u - 3^u\bigr) \;-\; 3^u\,\bigl(9^v - 8^v\bigr) \;\equiv\; 9^v\,\bigl(4^u - 3^u\bigr) \;-\; 4^u\,\bigl(9^v - 8^v\bigr).
+\end{equation}
+\end{theorem}
 
-\begin{theorem}[Разложение показателей в базисе $\mathrm{SL}_2(\mathbb{Z})$ Каталана и знакоположительная сумма Вронскиана на замкнутых циклах, \texttt{thm19} в \texttt{RotatorCalculusPaper.lean}]
-\label{thm:catalan-basis-positive-wronskian}
-Для любой пары показателей $(a,b)\in\mathbb{Z}^2$ и любых двух последовательных дуг траектории $P_1 n_{\mathrm{mid}} - Q_1 n_{\mathrm{start}} = D_1$ и $P_2 n_{\mathrm{final}} - Q_2 n_{\mathrm{mid}} = D_2$:
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Унимодулярный базис Каталана $(2,1)$ и $(3,2)$ в $\mathrm{SL}_2(\mathbb{Z})$:}
-  матрица базисных показателей $\mathcal{B}_{2,3} = \begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix}$ имеет определитель $\det\mathcal{B}_{2,3} = 2\times 2 - 3\times 1 = +1$ и единственным образом раскладывает всякую пару $(a,b)\in\mathbb{Z}^2$ по координатам
-  \begin{equation}
-    \label{eq:catalan-uv-coords}
-    u \;:=\; 2a - 3b, \qquad v \;:=\; 2b - a, \qquad
-    \begin{pmatrix} a \\ b \end{pmatrix} \;=\; u\begin{pmatrix} 2 \\ 1 \end{pmatrix} + v\begin{pmatrix} 3 \\ 2 \end{pmatrix}, \qquad
-    u + v \;=\; a - b.
-  \end{equation}
-  Для каждого сжимающего цикла Коллатца ($2^a > 3^b \implies \frac{a}{b} > \log_2 3 > \frac{3}{2}$ и $a < 2b \implies \frac{a}{b} < 2$) обе координаты строго положительны ($u \ge 1,\ v \ge 1$), раскладывая полные степени без дробей в
-  \begin{equation}
-    \label{eq:power-factorization-4-3-8-9}
-    2^a \;=\; (2^2)^u\cdot(2^3)^v \;=\; 4^u\cdot 8^v, \qquad
-    3^b \;=\; (3^1)^u\cdot(3^2)^v \;=\; 3^u\cdot 9^v;
-  \end{equation}
-\item \textbf{Разложение зазора Пиллаи $C_{\mathrm{tot}} = 2^a - 3^b$ по единичным замкам $G_1 = 4^u - 3^u > 0$ и $G_2 = 9^v - 8^v > 0$:}
-  при $(P_1,Q_1) = (4^u,3^u)$ ($G_1 := P_1 - Q_1 = 4^u - 3^u > 0$, кратно $4 - 3 = 1$) и $(P_2,Q_2) = (8^v,9^v)$ ($G_2 := Q_2 - P_2 = 9^v - 8^v > 0$, кратно $9 - 8 = 1$) полный зазор Пиллаи $C_{\mathrm{tot}} = P_1 P_2 - Q_1 Q_2$ удовлетворяет тождествам
-  \begin{equation}
-    \label{eq:gap-split-g1-g2}
-    C_{\mathrm{tot}} \;\equiv\; 8^v\,\bigl(4^u - 3^u\bigr) \;-\; 3^u\,\bigl(9^v - 8^v\bigr) \;\equiv\; 9^v\,\bigl(4^u - 3^u\bigr) \;-\; 4^u\,\bigl(9^v - 8^v\bigr);
-  \end{equation}
-\item \textbf{Строго положительная сумма Вронскиана на любом замкнутом цикле ($n_{\mathrm{final}} = n_{\mathrm{start}}$):}
-  разрезание любого замкнутого цикла в промежуточной вершине $n_{\mathrm{mid}}$ после первых $2u$ двоичных шагов ($b_1 = u$ нечётных шагов, $P_1 = 4^u,\ Q_1 = 3^u$, дрейф $D_1 \ge 1$; вторая дуга $a_2 = 3v,\ b_2 = 2v$, $P_2 = 8^v,\ Q_2 = 9^v$, дрейф $D_2 \ge 1$) придаёт зазорам противоположные знаки $C_1 = +G_1 > 0$ и $C_2 = -G_2 < 0$, превращая тождество Вронскиана~\eqref{eq:cycle-wronskian-chord} в \textbf{сумму двух строго положительных слагаемых}:
-  \begin{equation}
-    \label{eq:positive-wronskian-sum}
-    \bigl(2^a - 3^b\bigr)\cdot\bigl(n_{\mathrm{start}} - n_{\mathrm{mid}}\bigr) \;\equiv\; \underbrace{\bigl(9^v - 8^v\bigr)\,D_1}_{> 0} \;+\; \underbrace{\bigl(4^u - 3^u\bigr)\,D_2}_{> 0} \;>\; 0,
-  \end{equation}
-  что безусловно влечёт $n_{\mathrm{start}} > n_{\mathrm{mid}}$ и ограничивает сверху как $(9^v - 8^v)D_1$, так и $(4^u - 3^u)D_2$ величиной $(2^a - 3^b)(n_{\mathrm{start}} - n_{\mathrm{mid}})$.
-\end{enumerate}
+\begin{theorem}[Знакоположительная сумма Вронскиана на замкнутых циклах, \texttt{thm19}]
+\label{thm:positive-wronskian-sum}
+Разрезание любого замкнутого цикла ($n_{\mathrm{final}} = n_{\mathrm{start}}$) в промежуточной вершине $n_{\mathrm{mid}}$ между блоком $(P_1,Q_1) = (4^u,3^u)$ ($G_1 = P_1 - Q_1 > 0$, дрейф $D_1 \ge 1$) и блоком $(P_2,Q_2) = (8^v,9^v)$ ($G_2 = Q_2 - P_2 > 0$, дрейф $D_2 \ge 1$) устраняет вычитание из~\eqref{eq:cycle-wronskian-chord} и даёт сумму двух строго положительных слагаемых:
+\begin{equation}
+  \label{eq:positive-wronskian-sum}
+  \bigl(2^a - 3^b\bigr)\cdot\bigl(n_{\mathrm{start}} - n_{\mathrm{mid}}\bigr) \;\equiv\; \underbrace{\bigl(9^v - 8^v\bigr)\,D_1}_{> 0} \;+\; \underbrace{\bigl(4^u - 3^u\bigr)\,D_2}_{> 0} \;>\; 0,
+\end{equation}
+откуда безусловно $n_{\mathrm{start}} > n_{\mathrm{mid}}$ и как $G_2 D_1$, так и $G_1 D_2$ ограничены сверху величиной $C_{\mathrm{tot}}(n_{\mathrm{start}} - n_{\mathrm{mid}})$.
+\end{theorem}
+
+\section{Закон циклического сдвига в $\mathbb{Z}_{2^a - 3^b}$ и башня остаточных дрейфов}
+\label{sec:dual-drift-tower}
+
+\begin{theorem}[Закон циклического сдвига дрейфов и переход двойственных остаточных дрейфов, \texttt{thm20}]
+\label{thm:dual-drift-tower}
+На каждом шаге $k$ траектории с полными степенями $(P_{\mathrm{tot}}, Q_{\mathrm{tot}}) = (2^a, 3^b)$ ($C_{\mathrm{tot}} = 2^a - 3^b$, $Q_{\mathrm{prev}} = 3^{b-1}$, $p_k = 2^{\alpha_k}$, $P_{\mathrm{rem},k} = 2^{a - \alpha_k}$) полные полиномы дрейфа соседних циклических сдвигов $D_{\mathrm{tot}}^{(k)} = Q_{\mathrm{prev}} + p_k D_2^{(k)}$ и $D_{\mathrm{tot}}^{(k+1)} = P_{\mathrm{rem},k} + 3 D_2^{(k)} = Q_{\mathrm{prev}} + p_{k+1} D_2^{(k+1)}$ удовлетворяют:
+\begin{equation}
+  \label{eq:cyclic-drift-shift}
+  2^{\alpha_k}\,D_{\mathrm{tot}}^{(k+1)} \;-\; 3\,D_{\mathrm{tot}}^{(k)} \;\equiv\; 2^a - 3^b \;=\; C_{\mathrm{tot}}, \qquad
+  2^{\alpha_{k+1}}\,D_2^{(k+1)} \;-\; 3\,D_2^{(k)} \;\equiv\; 2^{a - \alpha_k} \;-\; 3^{b-1}.
+\end{equation}
+Поскольку $\gcd(6, C_{\mathrm{tot}}) = 1$, сравнение $2^{\alpha_k} D_{\mathrm{tot}}^{(k+1)} \equiv 3 D_{\mathrm{tot}}^{(k)} \pmod{C_{\mathrm{tot}}}$ переносит делимость $C_{\mathrm{tot}} \mid D_{\mathrm{tot}}^{(k)}$ инвариантно по всем $b$ циклическим сдвигам, а нижняя граница вилки $D_2^{(k)} \ge 3^{b-1} - 2^{b-1}$ задаёт оценку $(2^a - 3^b)n_k \ge 3^{b-1} + 2^{\alpha_k}(3^{b-1} - 2^{b-1})$ в каждой вершине цикла $n_k$.
 \end{theorem}
 
 \begin{table}[htbp]
@@ -155,7 +139,7 @@ $E_5$ & $(19, 12)$ & $(2, 5)$ & $(524288, 531441)$ & $-7153$ & $3^7(+13) + 2^8(-
 \end{table}
 
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:arbitrary-modulus-wronskian} и~\ref{thm:catalan-basis-positive-wronskian} (\texttt{thm18} и \texttt{thm19}) формально верифицированы в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:arbitrary-modulus-rotator}--\ref{thm:dual-drift-tower} (\texttt{thm18}, \texttt{thm19}, \texttt{thm20}) формально верифицированы в модуле \texttt{RotatorCalculusPaper.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
