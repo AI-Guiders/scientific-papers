@@ -148,19 +148,19 @@
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Проективная полевая структура ротаторного носителя: отсутствие делителей нуля на $L^1$-алмазе и аксиомы обратимости коммутативных полей $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$, \texttt{thm34}]
+\begin{theorem}[Проективная полевая структура ротаторного носителя: отсутствие делителей нуля на $L^1$-алмазе и аксиомы полей $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$, \texttt{thm34}]
 \label{thm:main-34-field}
-В отличие от наивного умножения вычетов по составному модулю $4Q$ (имеющего делители нуля), ротаторная пара $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ на $L^1$-алмазе $|C|+|S|=Q\ge 1$ и её подъём Вейерштрасса $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ действуют в однородных проективных координатах над коммутативными полями $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
+В отличие от наивного умножения вычетов по составному модулю $4Q$ (имеющего делители нуля), ротаторная пара $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ на $L^1$-алмазе $|C|+|S|=Q\ge 1$ и её подъём Вейерштрасса $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ действуют в однородных проективных координатах над полями $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
 \item \textbf{Строгая положительность нормы и отсутствие делителей нуля:}
   $2(C^2+S^2) = (C+S)^2 + (C-S)^2 \ge Q^2 \ge 1$, откуда $R_T(\varphi) = C^2+S^2 \ge 1 > 0$ при любой фазе $\varphi\in\mathbb{Z}_{4Q}$; в силу мультипликативности нормы Брахмагупты--Фибоначчи $(C_1 C_2 - S_1 S_2)^2 + (C_1 S_2 + S_1 C_2)^2 = (C_1^2+S_1^2)(C_2^2+S_2^2) \ge 1$ произведение двух состояний ротатора никогда не обращается в нуль;
-\item \textbf{Аксиомы коммутативного поля и мультипликативный обратный элемент в $\mathbb{Q}(i)$:}
+\item \textbf{Абелева группа по сложению, абелева мультипликативная группа ненулевых элементов с обратными и дистрибутивность в $\mathbb{Q}(i)$:}
   в однородных тройках $(X,Y,R)\in\mathbb{Z}^3$, представляющих $(X+iY)/R$, операции \texttt{gaussFieldAdd} и \texttt{gaussFieldMul} коммутативны, ассоциативны и дистрибутивны, $(X,Y,R)\oplus(-X,-Y,R) = (0,0,R^2)$, а мультипликативный обратный $\texttt{gaussFieldInv}(X,Y,R) = (RX,-RY,X^2+Y^2)$ даёт
   \begin{equation}
     \label{eq:gauss-field-inverse}
     (X,Y,R)\otimes (RX,\,-RY,\,X^2+Y^2) \;=\; \bigl(R(X^2+Y^2),\,0,\,R(X^2+Y^2)\bigr) \;\sim\; (1,0,1);
   \end{equation}
-\item \textbf{Аксиомы коммутативного поля, мультипликативность нормы Пелля и обратный элемент в $\mathbb{Q}(\sqrt{2})$:}
+\item \textbf{Аксиомы поля, мультипликативность нормы Пелля и обратный элемент в $\mathbb{Q}(\sqrt{2})$:}
   в однородных тройках $(a,b,D)\in\mathbb{Z}^3$, представляющих $(a+b\sqrt{2})/D$, операции \texttt{sqrt2FieldAdd} и \texttt{sqrt2FieldMul} коммутативны и ассоциативны, $(a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 = (a_1^2-2b_1^2)(a_2^2-2b_2^2)$, а $\texttt{sqrt2FieldInv}(a,b,D) = (Da,-Db,a^2-2b^2)$ даёт $(a,b,D)\otimes_{\sqrt{2}}(Da,-Db,a^2-2b^2) = \bigl(D(a^2-2b^2),\,0,\,D(a^2-2b^2)\bigr)\sim(1,0,1)$.
 \end{enumerate}
 \end{theorem}

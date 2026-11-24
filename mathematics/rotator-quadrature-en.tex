@@ -276,19 +276,19 @@ For all $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Projective Field Structure of the Rotator Carrier: Absence of Zero Divisors on the $L^1$-Diamond and Commutative Field Invertibility in $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, \texttt{thm34}]
+\begin{theorem}[Projective Field Structure of the Rotator Carrier: Absence of Zero Divisors on the $L^1$-Diamond and Field Invertibility in $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, \texttt{thm34}]
 \label{thm:main-34-field}
-Unlike naive residue multiplication modulo composite $4Q$ (which possesses zero divisors), the rotator pair $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ on the $L^1$-diamond $|C|+|S|=Q\ge 1$ and its Weierstrass lift $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ operate in homogeneous projective coordinates over the commutative fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
+Unlike naive residue multiplication modulo composite $4Q$ (which possesses zero divisors), the rotator pair $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ on the $L^1$-diamond $|C|+|S|=Q\ge 1$ and its Weierstrass lift $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ operate in homogeneous projective coordinates over the fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
 \item \textbf{Strict norm positivity and absence of zero divisors:}
   $2(C^2+S^2) = (C+S)^2 + (C-S)^2 \ge Q^2 \ge 1$, so $R_T(\varphi) = C^2+S^2 \ge 1 > 0$ at every phase $\varphi\in\mathbb{Z}_{4Q}$; by Brahmagupta--Fibonacci norm multiplicativity $(C_1 C_2 - S_1 S_2)^2 + (C_1 S_2 + S_1 C_2)^2 = (C_1^2+S_1^2)(C_2^2+S_2^2) \ge 1$, the product of any two rotator states is never zero;
-\item \textbf{Exact commutative field axioms and multiplicative inverse in $\mathbb{Q}(i)$:}
+\item \textbf{Abelian additive group, Abelian multiplicative group of non-zero elements, and distributivity in $\mathbb{Q}(i)$:}
   in homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ representing $(X+iY)/R$, \texttt{gaussFieldAdd} and \texttt{gaussFieldMul} satisfy commutativity, associativity, and distributivity, $(X,Y,R)\oplus(-X,-Y,R) = (0,0,R^2)$, and the multiplicative inverse $\texttt{gaussFieldInv}(X,Y,R) = (RX,-RY,X^2+Y^2)$ satisfies
   \begin{equation}
     \label{eq:gauss-field-inverse}
     (X,Y,R)\otimes (RX,\,-RY,\,X^2+Y^2) \;=\; \bigl(R(X^2+Y^2),\,0,\,R(X^2+Y^2)\bigr) \;\sim\; (1,0,1);
   \end{equation}
-\item \textbf{Commutative field axioms, Pell norm multiplicativity, and inverse in $\mathbb{Q}(\sqrt{2})$:}
+\item \textbf{Field axioms, Pell norm multiplicativity, and multiplicative inverse in $\mathbb{Q}(\sqrt{2})$:}
   in homogeneous triples $(a,b,D)\in\mathbb{Z}^3$ representing $(a+b\sqrt{2})/D$, \texttt{sqrt2FieldAdd} and \texttt{sqrt2FieldMul} satisfy commutativity and associativity, $(a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 = (a_1^2-2b_1^2)(a_2^2-2b_2^2)$, and $\texttt{sqrt2FieldInv}(a,b,D) = (Da,-Db,a^2-2b^2)$ satisfies $(a,b,D)\otimes_{\sqrt{2}}(Da,-Db,a^2-2b^2) = \bigl(D(a^2-2b^2),\,0,\,D(a^2-2b^2)\bigr)\sim(1,0,1)$.
 \end{enumerate}
 \end{theorem}

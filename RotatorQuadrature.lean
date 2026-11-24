@@ -377,7 +377,7 @@ def sqrt2FieldInv (w : Int × Int × Int) : Int × Int × Int :=
   (d * a, -(d * b), a * a - 2 * b * b)
 
 /-- **Theorem 34 (Projective Field Structure of the Rotator Carrier: Absence of Zero Divisors
-on the `L¹`-Diamond `|C| + |S| = Q ≥ 1` and Exact Commutative Field Axioms and Invertibility
+on the `L¹`-Diamond `|C| + |S| = Q ≥ 1` and Exact Field Axioms and Invertibility
 in `ℚ(i)` and `ℚ(√2)`)**:
 Unlike naive modulo-`4Q` multiplication on `ℤ_{4Q}` (which has zero divisors when `4Q` is composite),
 the rotator representation `(C, S) = (𝒞_{4Q}(φ), 𝒮_{4Q}(φ))` on the `L¹`-diamond `|C| + |S| = Q ≥ 1`
@@ -390,7 +390,7 @@ projective coordinates over the fields `ℚ(i)` and `ℚ(√2)`:
    - Brahmagupta–Fibonacci norm multiplicativity:
      `(C₁ * C₂ - S₁ * S₂)² + (C₁ * S₂ + S₁ * C₂)² = (C₁² + S₁²) * (C₂² + S₂²)`,
      so `1 ≤ C₁² + S₁² → 1 ≤ C₂² + S₂² → 1 ≤ (C₁ * C₂ - S₁ * S₂)² + (C₁ * S₂ + S₁ * C₂)²` (no zero divisors).
-2. **Commutative Field Axioms and Exact Multiplicative Inverse in the Gaussian Rotator Field `ℚ(i)`:**
+2. **Field Axioms and Exact Multiplicative Inverse in the Gaussian Rotator Field `ℚ(i)`:**
    - Commutativity and associativity of `gaussFieldAdd` and `gaussFieldMul`,
    - Distributivity in projective coordinates,
    - Additive inverse: `gaussFieldAdd (X, Y, R) (-X, -Y, R) = (0, 0, R * R)`,
@@ -398,7 +398,7 @@ projective coordinates over the fields `ℚ(i)` and `ℚ(√2)`:
      `gaussFieldMul (X, Y, R) (gaussFieldInv (X, Y, R)) = (R * (X * X + Y * Y), 0, R * (X * X + Y * Y))`,
      whose real numerator and denominator are identically equal (`R * (X² + Y²) ≥ 1` for `1 ≤ R`, `1 ≤ X² + Y²`)
      and whose imaginary numerator is identically `0` (the projective identity `(1 : 0 : 1)`).
-3. **Commutative Field Axioms, Pell Norm Multiplicativity, and Multiplicative Inverse in `ℚ(√2)`:**
+3. **Field Axioms, Pell Norm Multiplicativity, and Multiplicative Inverse in `ℚ(√2)`:**
    - Commutativity and associativity of `sqrt2FieldAdd` and `sqrt2FieldMul`,
    - Pell norm multiplicativity:
      `(a₁ * a₂ + 2 * b₁ * b₂)² - 2 * (a₁ * b₂ + b₁ * a₂)² = (a₁² - 2 * b₁²) * (a₂² - 2 * b₂²)`,
@@ -421,7 +421,7 @@ theorem thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_
        (C1 * C1 + S1 * S1) * (C2 * C2 + S2 * S2)) ∧
      (1 ≤ C1 * C1 + S1 * S1 → 1 ≤ C2 * C2 + S2 * S2 →
        1 ≤ (C1 * C2 - S1 * S2) * (C1 * C2 - S1 * S2) + (C1 * S2 + S1 * C2) * (C1 * S2 + S1 * C2))) ∧
-    -- 2. Gaussian rotator field Q(i) commutative field axioms and exact multiplicative inverse:
+    -- 2. Gaussian rotator field Q(i) field axioms and exact multiplicative inverse:
     (gaussFieldAdd z1 z2 = gaussFieldAdd z2 z1 ∧
      gaussFieldMul z1 z2 = gaussFieldMul z2 z1 ∧
      gaussFieldAdd (gaussFieldAdd z1 z2) z3 = gaussFieldAdd z1 (gaussFieldAdd z2 z3) ∧
@@ -435,7 +435,7 @@ theorem thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_
        1 ≤ (gaussFieldMul z1 (gaussFieldInv z1)).1 ∧
        (gaussFieldMul z1 (gaussFieldInv z1)).1 = (gaussFieldMul z1 (gaussFieldInv z1)).2.2 ∧
        (gaussFieldMul z1 (gaussFieldInv z1)).2.1 = 0)) ∧
-    -- 3. Cuboctahedral quadratic field Q(sqrt 2) commutative field axioms and exact multiplicative inverse:
+    -- 3. Cuboctahedral quadratic field Q(sqrt 2) field axioms and exact multiplicative inverse:
     (sqrt2FieldAdd w1 w2 = sqrt2FieldAdd w2 w1 ∧
      sqrt2FieldMul w1 w2 = sqrt2FieldMul w2 w1 ∧
      sqrt2FieldAdd (sqrt2FieldAdd w1 w2) w3 = sqrt2FieldAdd w1 (sqrt2FieldAdd w2 w3) ∧
