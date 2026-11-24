@@ -58,8 +58,25 @@ def padeTowerQ : List Int → Int → Int → Int
     let qNext := (r - 1) * U + V
     padeTowerQ rest pNext qNext
 
+theorem padeTowerP_append (R1 R2 : List Int) (U V : Int) :
+    padeTowerP (R1 ++ R2) U V = padeTowerP R2 (padeTowerP R1 U V) (padeTowerQ R1 U V) := by
+  induction R1 generalizing U V with
+  | nil => rfl
+  | cons r tl ih =>
+    dsimp [padeTowerP, padeTowerQ]
+    exact ih (U + (r - 1) * V) ((r - 1) * U + V)
+
+theorem padeTowerQ_append (R1 R2 : List Int) (U V : Int) :
+    padeTowerQ (R1 ++ R2) U V = padeTowerQ R2 (padeTowerP R1 U V) (padeTowerQ R1 U V) := by
+  induction R1 generalizing U V with
+  | nil => rfl
+  | cons r tl ih =>
+    dsimp [padeTowerP, padeTowerQ]
+    exact ih (U + (r - 1) * V) ((r - 1) * U + V)
+
 /-- **Theorem 7 (Three-Level Recursive Descent Invariant, Hankel–Wronskian Square Law,
-and `M`-Floor Padé–Thue Gear-Cascade Monoid & Cramer Law)**: -/
+and `M`-Floor Padé–Thue Gear-Cascade Monoid, Adjacent-Floor Non-Degeneracy `|I_w| + |I_{w++[r]}| ≥ 1`,
+and Bilateral Padé Bracket)**: -/
 theorem thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
     (R1 R2 : List Int) (kShift At Bt X Y A B u v : Int) :
     let C0 := At * X * X - Bt * Y * Y
@@ -73,15 +90,31 @@ theorem thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thu
     let PR  := padeTowerP R1 C B
     let QR  := padeTowerQ R1 C B
     let IR  := u * PR - v * QR
+    let rNext := kShift + 1
+    let PNext := padeTowerP (R1 ++ [rNext]) C B
+    let QNext := padeTowerQ (R1 ++ [rNext]) C B
+    let INext := u * PNext - v * QNext
     (C0 - (X + Y) * C1 + X * Y * C2 = 0) ∧
     (C1 * C1 - C0 * C2 = At * Bt * (X - Y) * (X - Y)) ∧
     (Q1k - P1k = (kShift - 1) * A) ∧
     (Q1k * I0 - I1k = (kShift - 1) * u * A) ∧
     (padeTowerProdPlus (R1 ++ R2) = padeTowerProdPlus R1 * padeTowerProdPlus R2 ∧
      padeTowerProdMinus (R1 ++ R2) = padeTowerProdMinus R1 * padeTowerProdMinus R2 ∧
+     padeTowerP (R1 ++ R2) C B = padeTowerP R2 PR QR ∧
+     padeTowerQ (R1 ++ R2) C B = padeTowerQ R2 PR QR ∧
+     PNext = PR + kShift * QR ∧
+     QNext = kShift * PR + QR ∧
      PR + QR = padeTowerProdPlus R1 * (C + B) ∧
      PR - QR = padeTowerProdMinus R1 * A ∧
-     QR * I0 - IR = -u * padeTowerProdMinus R1 * A) := by
+     QR * I0 - IR = -u * padeTowerProdMinus R1 * A ∧
+     INext - (kShift + 1) * IR = -kShift * (u + v) * padeTowerProdMinus R1 * A ∧
+     INext + (kShift - 1) * IR = kShift * (u - v) * padeTowerProdPlus R1 * (C + B) ∧
+     QNext * IR - QR * INext = kShift * u * padeTowerProdMinus R1 * padeTowerProdPlus R1 * A * (C + B) ∧
+     PNext * QR - QNext * PR = -kShift * padeTowerProdMinus R1 * padeTowerProdPlus R1 * A * (C + B) ∧
+     (kShift * (u + v) * padeTowerProdMinus R1 * A ≠ 0 →
+       ¬ (IR = 0 ∧ INext = 0) ∧ 1 ≤ IR.natAbs + INext.natAbs) ∧
+     (IR ≤ 0 → 0 ≤ INext → u * PR ≤ v * QR ∧ v * QNext ≤ u * PNext) ∧
+     (INext ≤ 0 → 0 ≤ IR → u * PNext ≤ v * QNext ∧ v * QR ≤ u * PR)) := by
   have hPlus : ∀ (L1 L2 : List Int), padeTowerProdPlus (L1 ++ L2) = padeTowerProdPlus L1 * padeTowerProdPlus L2 := by
     intro L1 L2; induction L1 with
     | nil => dsimp [padeTowerProdPlus]; omega
@@ -111,6 +144,20 @@ theorem thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thu
         simp only [Int.mul_sub, Int.sub_mul, Int.one_mul]; omega
       rw [hStep]; simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   dsimp
+  have hPapp := padeTowerP_append R1 R2 (A + B) B
+  have hQapp := padeTowerQ_append R1 R2 (A + B) B
+  have hPnext : padeTowerP (R1 ++ [kShift + 1]) (A + B) B =
+                padeTowerP R1 (A + B) B + kShift * padeTowerQ R1 (A + B) B := by
+    rw [padeTowerP_append R1 [kShift + 1] (A + B) B]
+    dsimp [padeTowerP]
+    have hSub : kShift + 1 - 1 = kShift := by omega
+    rw [hSub]
+  have hQnext : padeTowerQ (R1 ++ [kShift + 1]) (A + B) B =
+                kShift * padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B := by
+    rw [padeTowerQ_append R1 [kShift + 1] (A + B) B]
+    dsimp [padeTowerQ]
+    have hSub : kShift + 1 - 1 = kShift := by omega
+    rw [hSub]
   have hS := hSum R1 (A + B) B
   have hD := hDiff R1 (A + B) B
   have hSubAB : (A + B) - B = A := by omega
@@ -120,7 +167,91 @@ theorem thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thu
     simp only [Int.mul_sub, Int.sub_mul, Int.neg_mul, Int.mul_comm]; omega
   have hCram2 : -u * (padeTowerProdMinus R1 * A) = -u * padeTowerProdMinus R1 * A := by
     simp only [Int.mul_assoc]
-  refine ⟨?_, ?_, ?_, ?_, ⟨hPlus R1 R2, hMinus R1 R2, hS, hD, by rw [hCram, hD, hCram2]⟩⟩ <;>
+  have hAdjDiff : (u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B) -
+                  (kShift + 1) * (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B) =
+                  -kShift * (u + v) * padeTowerProdMinus R1 * A := by
+    rw [hPnext, hQnext]
+    have hStep : (u * (padeTowerP R1 (A + B) B + kShift * padeTowerQ R1 (A + B) B) -
+                  v * (kShift * padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B)) -
+                 (kShift + 1) * (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B) =
+                 -(kShift * (u + v) * (padeTowerP R1 (A + B) B - padeTowerQ R1 (A + B) B)) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.neg_mul, Int.mul_neg,
+                 Int.one_mul, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    rw [hStep, hD]
+    simp only [Int.neg_mul, Int.mul_neg, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hAdjSum : (u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B) +
+                 (kShift - 1) * (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B) =
+                 kShift * (u - v) * padeTowerProdPlus R1 * (A + B + B) := by
+    rw [hPnext, hQnext]
+    have hStep : (u * (padeTowerP R1 (A + B) B + kShift * padeTowerQ R1 (A + B) B) -
+                  v * (kShift * padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B)) +
+                 (kShift - 1) * (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B) =
+                 kShift * (u - v) * (padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.one_mul, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    rw [hStep, hS]
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hAdjWronsk : padeTowerQ (R1 ++ [kShift + 1]) (A + B) B *
+                      (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B) -
+                    padeTowerQ R1 (A + B) B *
+                      (u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B) =
+                    kShift * u * padeTowerProdMinus R1 * padeTowerProdPlus R1 * A * (A + B + B) := by
+    rw [hPnext, hQnext]
+    have hStep : (kShift * padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B) *
+                   (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B) -
+                 padeTowerQ R1 (A + B) B *
+                   (u * (padeTowerP R1 (A + B) B + kShift * padeTowerQ R1 (A + B) B) -
+                    v * (kShift * padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B)) =
+                 kShift * u * (padeTowerP R1 (A + B) B - padeTowerQ R1 (A + B) B) *
+                   (padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    rw [hStep, hD, hS]
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hPQWronsk : padeTowerP (R1 ++ [kShift + 1]) (A + B) B * padeTowerQ R1 (A + B) B -
+                   padeTowerQ (R1 ++ [kShift + 1]) (A + B) B * padeTowerP R1 (A + B) B =
+                   -kShift * padeTowerProdMinus R1 * padeTowerProdPlus R1 * A * (A + B + B) := by
+    rw [hPnext, hQnext]
+    have hStep : (padeTowerP R1 (A + B) B + kShift * padeTowerQ R1 (A + B) B) * padeTowerQ R1 (A + B) B -
+                 (kShift * padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B) * padeTowerP R1 (A + B) B =
+                 -(kShift * (padeTowerP R1 (A + B) B - padeTowerQ R1 (A + B) B) *
+                   (padeTowerP R1 (A + B) B + padeTowerQ R1 (A + B) B)) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.neg_mul, Int.mul_neg,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    rw [hStep, hD, hS]
+    simp only [Int.neg_mul, Int.mul_neg, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hNonDeg : kShift * (u + v) * padeTowerProdMinus R1 * A ≠ 0 →
+      ¬ (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B = 0 ∧
+         u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B = 0) ∧
+      1 ≤ (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B).natAbs +
+          (u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B).natAbs := by
+    intro hNe0
+    have hNotBoth : ¬ (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B = 0 ∧
+                       u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B = 0) := by
+      rintro ⟨hI0, hIN0⟩
+      rw [hI0, hIN0, Int.mul_zero, Int.sub_zero] at hAdjDiff
+      have hNegZero : kShift * (u + v) * padeTowerProdMinus R1 * A = 0 := by
+        have h1 : - (kShift * (u + v) * padeTowerProdMinus R1 * A) =
+                  -kShift * (u + v) * padeTowerProdMinus R1 * A := by
+          simp only [Int.neg_mul]
+        omega
+      exact hNe0 hNegZero
+    have hAbsPos : 1 ≤ (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B).natAbs +
+                       (u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B).natAbs := by
+      rcases Int.lt_trichotomy (u * padeTowerP R1 (A + B) B - v * padeTowerQ R1 (A + B) B) 0 with hLt1 | hEq1 | hGt1
+      · omega
+      · rcases Int.lt_trichotomy (u * padeTowerP (R1 ++ [kShift + 1]) (A + B) B - v * padeTowerQ (R1 ++ [kShift + 1]) (A + B) B) 0 with hLt2 | hEq2 | hGt2
+        · omega
+        · exact False.elim (hNotBoth ⟨hEq1, hEq2⟩)
+        · omega
+      · omega
+    exact ⟨hNotBoth, hAbsPos⟩
+  refine ⟨?_, ?_, ?_, ?_,
+          ⟨hPlus R1 R2, hMinus R1 R2, hPapp, hQapp, hPnext, hQnext, hS, hD,
+           by rw [hCram, hD, hCram2],
+           hAdjDiff, hAdjSum, hAdjWronsk, hPQWronsk, hNonDeg,
+           by intro h1 h2; refine ⟨by omega, by omega⟩,
+           by intro h1 h2; refine ⟨by omega, by omega⟩⟩⟩ <;>
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                 Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 
