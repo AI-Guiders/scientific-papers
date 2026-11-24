@@ -472,7 +472,12 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
      128 * macroSumA steps - 203 * macroSumB r0 steps =
        53 * macroCatalanDrift r0 steps +
        22 * (macroSumBeta steps - macroSumB r0 steps) +
-       128 * (macroFinalR r0 steps - r0)) ∧
+       128 * (macroFinalR r0 steps - r0) ∧
+     (multiScrewD L1 = multiScrewQ L1 - multiScrewP L1 →
+       multiScrewD ((2, 3, 1) :: L1) = multiScrewQ ((2, 3, 1) :: L1) - multiScrewP ((2, 3, 1) :: L1)) ∧
+     multiScrewP (L1 ++ [(pbeta, 1, 0)]) = multiScrewP L1 * pbeta ∧
+     multiScrewQ (L1 ++ [(pbeta, 1, 0)]) = multiScrewQ L1 ∧
+     multiScrewD (L1 ++ [(pbeta, 1, 0)]) = multiScrewD L1) ∧
     -- 2. Double SL₂(ℤ) Bézout lock, exclusion of the non-natural 2-adic boundary fixed point n_∞ = -1 ∉ ℕ_{≥ 1},
     --    and macro-screw capture (PR * pbeta) * (n0 - n1) = PR * ((PR * pbeta - QR) * q0 - (pbeta - 1)):
     ((PR ≠ QR → ((PR - QR) * nInf = QR - PR ↔ nInf = -1)) ∧
@@ -548,7 +553,11 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
       simp only [Int.add_mul, Int.sub_mul, Int.mul_sub, Int.one_mul, Int.mul_one]; omega
     omega
   refine ⟨⟨hP, hQ, hD, hC, hTel1 steps r0, hTel2 steps r0, by omega,
-            by have h1 := hTel1 steps r0; have h2 := hTel2 steps r0; omega⟩,
+            by have h1 := hTel1 steps r0; have h2 := hTel2 steps r0; omega,
+            by intro hUp; dsimp [multiScrewD, multiScrewQ, multiScrewP]; omega,
+            by rw [multiScrewP_append]; dsimp [multiScrewP]; simp only [Int.mul_one],
+            by rw [multiScrewQ_append]; dsimp [multiScrewQ]; omega,
+            by rw [multiScrewD_append]; dsimp [multiScrewQ, multiScrewD]; omega⟩,
           ⟨?_, ⟨by omega, by omega⟩, hScrewEq, hCoreFerm, ?_⟩,
           ⟨hCoreLaw, hStepDual, by simp only [Int.sub_mul, Int.one_mul]; omega, ?_⟩, ?_⟩
   · intro hNe
