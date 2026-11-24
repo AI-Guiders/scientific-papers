@@ -128,9 +128,14 @@ To each $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ we associate the rational 
 \begin{theorem}[Discrete Euler's Identity, Multi-Turn Periodicity, and Constant Difference Wronskian]
 \label{thm:main-1}
 For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, and integration horizon $L\in\mathbb{N}$, the piecewise-linear rotator $(\mathcal{C}_Q,\mathcal{S}_Q)$ on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
-\item \textbf{Multi-turn periodicity and Euler's identity $e^{i\pi}+1=0$:}
-  $\mathcal{E}_d(\varphi + 4Qk_{\mathrm{turns}}) = \mathcal{E}_d(\varphi)$, the $L^1$ norm is identically constant $|\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| \equiv Q$, the quarter-turn shift $+Q$ acts as exact multiplication by the imaginary unit~$i$: $\mathcal{E}_Q(\varphi + Q) = (-\mathcal{S}_Q(\varphi),\,+\mathcal{C}_Q(\varphi))$, and the half-turn shift $+2Q$ satisfies $\mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) = (0,0)$ for all $\varphi\in\mathbb{Z}$.
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Multi-turn periodicity, constant $L^1$ norm, and Euler's identity $e^{i\pi}+1=0$:}
+  \begin{align}
+    \mathcal{E}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) &= \mathcal{E}_Q(\varphi), &
+    |\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| &\equiv Q, \label{eq:rotator-period-l1} \\
+    \mathcal{E}_Q(\varphi + Q) &= \bigl(-\mathcal{S}_Q(\varphi),\,+\mathcal{C}_Q(\varphi)\bigr), &
+    \mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) &= (0,\,0). \label{eq:rotator-euler-identity}
+  \end{align}
 \item \textbf{Constant difference Wronskian and pointwise-constant integral extraction:}
   across all four quadrants and all four corner vertices of the $L^1$ diamond, the one-step difference Wronskian is identically equal to the constant $Q$:
   \begin{equation}
@@ -139,17 +144,33 @@ For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, 
     \qquad (\forall Q,m\in\mathbb{Z}).
   \end{equation}
   Consequently, for any pointwise-constant invariant $g(\varphi)\equiv c_{\mathrm{inv}}$ (including $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q$ and $\mathcal{W}_Q(\varphi)\equiv Q$), the constant factors directly out of the discrete integral over any horizon $L\in\mathbb{N}$:
-  \[
+  \begin{equation}
+    \label{eq:constant-extraction}
     \sum_{\varphi=0}^{L-1} g(\varphi) \;=\; c_{\mathrm{inv}}\sum_{\varphi=0}^{L-1} 1 \;=\; L\cdot c_{\mathrm{inv}},
     \qquad
     \sum_{\varphi=0}^{L-1} c_{\mathrm{sq}}\,f(\varphi) \;=\; c_{\mathrm{sq}}\sum_{\varphi=0}^{L-1} f(\varphi).
-  \]
+  \end{equation}
 \end{enumerate}
 \end{theorem}
 
+\begin{proof}
+(i)~By definition~\eqref{eq:wrap-ring}, shifting $x$ by any integer multiple $4Q\,k_{\mathrm{turns}} = N_{\mathrm{ring}}\,k_{\mathrm{turns}}$ leaves $(2Q - x)\bmod 4Q$ invariant, so $\mathrm{wrap}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) = \mathrm{wrap}_Q(\varphi)$ and $\mathcal{E}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) = \mathcal{E}_Q(\varphi)$. Within any quadrant parameterized by $m\in[0,Q]$, the projections take the signed values $(\pm(Q-m),\,\pm m)$, whence $|\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| = (Q-m) + m \equiv Q$. By~\eqref{eq:proj-cs}, $\mathcal{S}_Q(\varphi+Q) = \mathcal{C}_Q(\varphi+Q-Q) = \mathcal{C}_Q(\varphi)$, while shifting by $+2Q$ reflects $|\mathrm{wrap}_Q(\varphi+2Q)| = 2Q - |\mathrm{wrap}_Q(\varphi)|$, giving $\mathcal{C}_Q(\varphi+2Q) = Q - (2Q - |\mathrm{wrap}_Q(\varphi)|) = -(Q - |\mathrm{wrap}_Q(\varphi)|) = -\mathcal{C}_Q(\varphi)$ and likewise $\mathcal{S}_Q(\varphi+2Q) = -\mathcal{S}_Q(\varphi)$. Combining both gives $\mathcal{E}_Q(\varphi+Q) = (-\mathcal{S}_Q(\varphi),+\mathcal{C}_Q(\varphi))$ and $\mathcal{E}_Q(\varphi+2Q) + \mathcal{E}_Q(\varphi) = (0,0)$.
+
+(ii)~In Quadrant~I ($0\le m < Q$), $\mathcal{E}_Q(m) = (Q-m, m)$ and $\mathcal{E}_Q(m+1) = (Q-m-1, m+1)$. Substituting into~\eqref{eq:rotator-wronskian} and expanding over $\mathbb{Z}$ gives
+\[
+  \mathcal{W}_Q(m) \;=\; (Q-m)(m+1) - m(Q-m-1) \;=\; (Qm + Q - m^2 - m) - (Qm - m^2 - m) \;\equiv\; Q.
+\]
+At the diamond corner $m = Q$ where the slope $\Delta\mathcal{C}_Q$ changes sign from $-1$ to $+1$, we have $\mathcal{E}_Q(Q) = (0, Q)$ and $\mathcal{E}_Q(Q+1) = (-1, Q-1)$; because the slope jump occurs at the vanishing coordinate $\mathcal{C}_Q(Q) = 0$, the Wronskian evaluates to $\mathcal{W}_Q(Q) = 0\cdot(Q-1) - Q\cdot(-1) = Q$. The same cancellation holds at all four corners $(Q,0), (0,Q), (-Q,0), (0,-Q)$ by quarter-turn symmetry~\eqref{eq:rotator-euler-identity}. Finally, if $g(\varphi) = c_{\mathrm{inv}}$ for all $\varphi$, induction on $L\in\mathbb{N}$ gives $\sum_{\varphi=0}^{L-1} g(\varphi) = L\cdot c_{\mathrm{inv}}$.
+\end{proof}
+
 \begin{theorem}[Root-Free Euclidean Weierstrass Lift and Brahmagupta Step Identities]
 \label{thm:main-1b}
-For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the rational Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the exact Euclidean circle identity $X^2 + Y^2 = (\mathcal{C}_0^2-\mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R^2$ and the Brahmagupta--Weierstrass step decomposition with inner product $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ and Wronskian $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
+For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the Euclidean circle identity
+\begin{equation}
+  \label{eq:weierstrass-circle-id}
+  X_0^2 + Y_0^2 \;=\; (\mathcal{C}_0^2 - \mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 \;=\; (\mathcal{C}_0^2 + \mathcal{S}_0^2)^2 \;=\; R_0^2,
+\end{equation}
+and the Brahmagupta--Weierstrass step decomposition with inner product $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ and Wronskian $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
 \begin{equation}
   \label{eq:brahmagupta-step}
   R_0 R_1 - \mathcal{I}^2 \;=\; \mathcal{W}^2,\qquad
@@ -157,6 +178,20 @@ For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\
   X_0 X_1 + Y_0 Y_1 \;=\; \mathcal{I}^2 - \mathcal{W}^2.
 \end{equation}
 \end{theorem}
+
+\begin{proof}
+Expanding the left-hand side of~\eqref{eq:weierstrass-circle-id} gives $(\mathcal{C}_0^4 - 2\mathcal{C}_0^2\mathcal{S}_0^2 + \mathcal{S}_0^4) + 4\mathcal{C}_0^2\mathcal{S}_0^2 = \mathcal{C}_0^4 + 2\mathcal{C}_0^2\mathcal{S}_0^2 + \mathcal{S}_0^4 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R_0^2$. For the first identity in~\eqref{eq:brahmagupta-step}, Brahmagupta's identity for the product of two sums of two squares yields
+\[
+  R_0 R_1 \;=\; (\mathcal{C}_0^2 + \mathcal{S}_0^2)(\mathcal{C}_1^2 + \mathcal{S}_1^2)
+  \;=\; (\mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1)^2 + (\mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1)^2
+  \;=\; \mathcal{I}^2 + \mathcal{W}^2.
+\]
+For the second and third identities in~\eqref{eq:brahmagupta-step}, in the Gaussian ring $\mathbb{Z}[i]$ let $z_0 = \mathcal{C}_0 + i\mathcal{S}_0$ and $z_1 = \mathcal{C}_1 + i\mathcal{S}_1$; then $\bar{z}_0 z_1 = \mathcal{I} + i\mathcal{W}$, while $z_0^2 = X_0 + iY_0$ and $z_1^2 = X_1 + iY_1$, so
+\[
+  (X_0 X_1 + Y_0 Y_1) + i(X_0 Y_1 - Y_0 X_1) \;=\; \bar{z}_0^2 z_1^2 \;=\; (\bar{z}_0 z_1)^2 \;=\; (\mathcal{I} + i\mathcal{W})^2 \;=\; (\mathcal{I}^2 - \mathcal{W}^2) + i(2\mathcal{W}\mathcal{I}).
+\]
+Equating real and imaginary parts gives both identities in~\eqref{eq:brahmagupta-step}.
+\end{proof}
 
 \begin{theorem}[Fundamental Theorem of Discrete Calculus and Multiplierless Arithmetic]
 \label{thm:main-1c}
@@ -167,31 +202,97 @@ For every dimension $d\in\mathbb{N}$, upper limit $L\in\mathbb{N}$, turn count $
   \Delta\widehat{\Phi}_{\mathcal{C}}(d,L) \;=\; \mathcal{C}_d(L),\qquad
   \Delta\widehat{\Phi}_{\mathcal{S}}(d,L) \;=\; \mathcal{S}_d(L),
 \end{equation}
-with full-turn vanishing $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{C}}(3,512) = k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,512) = 0$, multi-turn half-wave area $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,256) = k_{\mathrm{turns}}Q_\square(3)^2 = 16,384\,k_{\mathrm{turns}}$, and quarter-square multiplierless multiplication $(x+y)^2 - (x-y)^2 = 4xy$.
+and the full-turn, half-wave, and quarter-square identities hold:
+\begin{equation}
+  \label{eq:half-wave-quarter-square}
+  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{C}}(3,512) \;=\; k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3,512) \;=\; 0, \qquad
+  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3,256) \;=\; 16,384\,k_{\mathrm{turns}}, \qquad
+  (x+y)^2 - (x-y)^2 \;=\; 4xy.
+\end{equation}
 \end{theorem}
 
-\begin{proof}[Proof of Theorems~\ref{thm:main-1}--\ref{thm:main-1c}]
-In~\eqref{eq:constant-wronskian-all-512}, expanding $(Q-m)(m+1) - m(Q-m-1) = (Qm + Q - m^2 - m) - (Qm - m^2 - m) = Q$ cancels all quadratic and linear terms in $m$ for arbitrary $Q,m\in\mathbb{Z}$; at the diamond corner $m=Q$, $0\cdot(Q-1) - Q\cdot(-1) = Q$. Inducting on $L\in\mathbb{N}$ gives $\sum_{\varphi=0}^{L-1} g(\varphi) = L\,c_{\mathrm{inv}}$ whenever $g(\varphi)\equiv c_{\mathrm{inv}}$. The polynomial identities of Theorems~\ref{thm:main-1b}--\ref{thm:main-1c} hold over $\mathbb{Z}$ (\texttt{omega} in Lean~4).
+\begin{proof}
+By recursive definition of the cumulative sum $\widehat{\Phi}_f(L) = \sum_{\varphi=0}^{L-1} f(\varphi)$, its forward difference is $\Delta\widehat{\Phi}_f(L) = \widehat{\Phi}_f(L+1) - \widehat{\Phi}_f(L) = f(L)$, proving~\eqref{eq:newton-leibniz-universal}. Over a full period $N_{\mathrm{ring}}(3) = 512 = 4Q$, pairing each $\varphi\in[0,255]$ with $\varphi+256$ cancels all terms identically via Euler's identity $\mathcal{E}_3(\varphi+256) + \mathcal{E}_3(\varphi) = (0,0)$ from Theorem~\ref{thm:main-1}(i). Over the positive half-wave $\varphi\in[0,255]$ ($2Q = 256$), pairing $\varphi=m$ with $\varphi=Q+m$ for $m\in[0,Q-1]$ gives $\mathcal{S}_Q(m) + \mathcal{S}_Q(Q+m) = m + (Q-m) = Q$, so $\sum_{\varphi=0}^{2Q-1}\mathcal{S}_Q(\varphi) = Q\cdot Q = Q^2 = 128^2 = 16,384$. Finally, $(x+y)^2 - (x-y)^2 = (x^2+2xy+y^2)-(x^2-2xy+y^2) = 4xy$.
 \end{proof}
 
 \begin{theorem}[Projective Field Structure of the Rotator Carrier: Absence of Zero Divisors on the $L^1$-Diamond, Field Invertibility in $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, and the $C^\infty$ Derivative and Variational Tower, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}]
 \label{thm:main-34-field}
 Unlike naive residue multiplication modulo composite $4Q$ (which possesses zero divisors), the rotator pair $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ on the $L^1$-diamond $|C|+|S|=Q\ge 1$ and its Weierstrass lift $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ operate in homogeneous projective coordinates over the fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Strict norm positivity and absence of zero divisors:}
-  $2(C^2+S^2) = (C+S)^2 + (C-S)^2 \ge Q^2 \ge 1$, so $R_T(\varphi) = C^2+S^2 \ge 1 > 0$ at every phase $\varphi\in\mathbb{Z}_{4Q}$; by Brahmagupta--Fibonacci norm multiplicativity $(C_1 C_2 - S_1 S_2)^2 + (C_1 S_2 + S_1 C_2)^2 = (C_1^2+S_1^2)(C_2^2+S_2^2) \ge 1$, the product of any two rotator states is never zero;
+  \begin{equation}
+    \label{eq:diamond-norm-positivity}
+    2\bigl(C^2 + S^2\bigr) \;=\; (C + S)^2 + (C - S)^2 \;\ge\; Q^2 \;\ge\; 1, \qquad
+    R_T(\varphi) \;=\; C^2 + S^2 \;\ge\; 1 \;>\; 0,
+  \end{equation}
+  and by Brahmagupta--Fibonacci norm multiplicativity
+  \begin{equation}
+    \label{eq:brahmagupta-no-zero-divisors}
+    (C_1 C_2 - S_1 S_2)^2 + (C_1 S_2 + S_1 C_2)^2 \;=\; (C_1^2 + S_1^2)(C_2^2 + S_2^2) \;\ge\; 1,
+  \end{equation}
+  the product of any two rotator states is never zero.
 \item \textbf{Abelian additive group, Abelian multiplicative group of non-zero elements, and distributivity in $\mathbb{Q}(i)$:}
-  in homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ representing $(X+iY)/R$, \texttt{gaussFieldAdd} and \texttt{gaussFieldMul} satisfy commutativity, associativity, and distributivity, $(X,Y,R)\oplus(-X,-Y,R) = (0,0,R^2)$, and the multiplicative inverse $\texttt{gaussFieldInv}(X,Y,R) = (RX,-RY,X^2+Y^2)$ satisfies
+  in homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ representing $(X+iY)/R$, the operations
+  \begin{equation}
+    \label{eq:gauss-field-ops}
+    (X_1,Y_1,R_1)\oplus(X_2,Y_2,R_2) := (X_1 R_2 + X_2 R_1,\,Y_1 R_2 + Y_2 R_1,\,R_1 R_2), \quad
+    (X_1,Y_1,R_1)\otimes(X_2,Y_2,R_2) := (X_1 X_2 - Y_1 Y_2,\,X_1 Y_2 + Y_1 X_2,\,R_1 R_2)
+  \end{equation}
+  satisfy commutativity, associativity, and distributivity, $(X,Y,R)\oplus(-X,-Y,R) = (0,0,R^2)$, and the multiplicative inverse $\texttt{gaussFieldInv}(X,Y,R) = (RX,-RY,X^2+Y^2)$ satisfies
   \begin{equation}
     \label{eq:gauss-field-inverse}
-    (X,Y,R)\otimes (RX,\,-RY,\,X^2+Y^2) \;=\; \bigl(R(X^2+Y^2),\,0,\,R(X^2+Y^2)\bigr) \;\sim\; (1,0,1);
+    (X,Y,R)\otimes (RX,\,-RY,\,X^2+Y^2) \;=\; \bigl(R(X^2+Y^2),\,0,\,R(X^2+Y^2)\bigr) \;\sim\; (1,0,1).
   \end{equation}
 \item \textbf{Field axioms, Pell norm multiplicativity, and multiplicative inverse in $\mathbb{Q}(\sqrt{2})$:}
-  in homogeneous triples $(a,b,D)\in\mathbb{Z}^3$ representing $(a+b\sqrt{2})/D$, \texttt{sqrt2FieldAdd} and \texttt{sqrt2FieldMul} satisfy commutativity and associativity, $(a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 = (a_1^2-2b_1^2)(a_2^2-2b_2^2)$, and $\texttt{sqrt2FieldInv}(a,b,D) = (Da,-Db,a^2-2b^2)$ satisfies $(a,b,D)\otimes_{\sqrt{2}}(Da,-Db,a^2-2b^2) = \bigl(D(a^2-2b^2),\,0,\,D(a^2-2b^2)\bigr)\sim(1,0,1)$;
+  in homogeneous triples $(a,b,D)\in\mathbb{Z}^3$ representing $(a+b\sqrt{2})/D$, the operations \texttt{sqrt2FieldAdd} and \texttt{sqrt2FieldMul} satisfy commutativity and associativity, the Pell norm is multiplicative:
+  \begin{equation}
+    \label{eq:pell-norm-mult}
+    (a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 \;=\; (a_1^2 - 2b_1^2)(a_2^2 - 2b_2^2),
+  \end{equation}
+  and $\texttt{sqrt2FieldInv}(a,b,D) = (Da,-Db,a^2-2b^2)$ satisfies
+  \begin{equation}
+    \label{eq:sqrt2-field-inverse}
+    (a,b,D)\otimes_{\sqrt{2}}(Da,\,-Db,\,a^2-2b^2) \;=\; \bigl(D(a^2-2b^2),\,0,\,D(a^2-2b^2)\bigr) \;\sim\; (1,0,1).
+  \end{equation}
 \item \textbf{General field derivative operator $Df$, quotient-derivative Wronskian law, variational derivative $\delta\mathcal{S}/\delta D_w = P_1 Q_2$, and $C^\infty$ Taylor--Newton tower (\texttt{thm35}, \texttt{thm38}):}
-  for any $f,g\colon\mathbb{Z}\to\mathbb{Z}$, the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies $D(af+bg)=a\,Df+b\,Dg$, the Leibniz rule $D(f\cdot g)(x)=f(x+1)Dg(x)+Df(x)g(x)$, $D(Df)(x)=f(x+2)-2f(x+1)+f(x)$, and the projective quotient-derivative law $f(x+1)g(x)-f(x)g(x+1) = g(x)Df(x)-f(x)Dg(x) = -\mathcal{W}(f,g)(x)$ (so $f/g$ is stationary at $x \iff \mathcal{W}(f,g)(x)=0$ and strictly increases $\iff \mathcal{W}(f,g)(x)<0$), while on any composite trajectory $(L_1,w,L_2)$ with action $\mathcal{S} = Q_2(Q_w D_1 + P_1 D_w) + P_1 P_w D_2$, varying $D_w\mapsto D_w'$ at fixed boundary multipliers $(P_w,Q_w)$ yields $\delta\mathcal{S} = P_1(D_w'-D_w)Q_2$ with Euler--Lagrange stationarity $\delta\mathcal{S}=0 \iff D_w'=D_w$ for $P_1,Q_2\ge 1$. Moreover, the inductive $n$-th derivative tower $D^n f$ (\texttt{fieldDerivN}) obeys $D^m(D^n f)=D^{m+n}f$, annihilates quadratic polynomials at all orders $n\ge 3$ and cubic polynomials at all orders $n\ge 4$ with exact remainder-free Taylor--Newton series $6f_3(x+h)=6f_3(x)+6h\,Df_3(x)+3h(h-1)D^2f_3(x)+h(h-1)(h-2)D^3f_3(x)$, and preserves strictly positive denominators $\prod_{j=0}^n g(x+j)\ge 1$ across all orders $n\in\mathbb{N}$ whenever $g\ge 1$ ($C^\infty$ pole-free smoothness).
+  for any $f,g\colon\mathbb{Z}\to\mathbb{Z}$, the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies
+  \begin{align}
+    D(af + bg)(x) &= a\,Df(x) + b\,Dg(x), &
+    D(f\cdot g)(x) &= f(x+1)\,Dg(x) + Df(x)\,g(x), \label{eq:deriv-leibniz} \\
+    D(Df)(x) &= f(x+2) - 2f(x+1) + f(x), &
+    f(x+1)g(x) - f(x)g(x+1) &= g(x)Df(x) - f(x)Dg(x) = -\mathcal{W}(f,g)(x), \label{eq:deriv-quotient-wronskian}
+  \end{align}
+  so $f/g$ is stationary at $x \iff \mathcal{W}(f,g)(x)=0$ and strictly increases $\iff \mathcal{W}(f,g)(x)<0$. On any composite trajectory $(L_1,w,L_2)$ with action $\mathcal{S} = Q_2(Q_w D_1 + P_1 D_w) + P_1 P_w D_2$, varying $D_w\mapsto D_w'$ at fixed boundary multipliers $(P_w,Q_w)$ yields
+  \begin{equation}
+    \label{eq:variational-euler-lagrange}
+    \delta\mathcal{S} \;=\; \mathcal{S}(D_w') - \mathcal{S}(D_w) \;=\; P_1\,(D_w' - D_w)\,Q_2, \qquad
+    \delta\mathcal{S} = 0 \;\Longleftrightarrow\; D_w' = D_w \quad (P_1,Q_2\ge 1).
+  \end{equation}
+  Moreover, the inductive $n$-th derivative tower $D^n f$ (\texttt{fieldDerivN}) obeys $D^m(D^n f)=D^{m+n}f$, annihilates quadratic polynomials $f_2$ at all orders $n\ge 3$ and cubic polynomials $f_3$ at all orders $n\ge 4$ with exact remainder-free Taylor--Newton series
+  \begin{align}
+    2\,f_2(x+h) &= 2\,f_2(x) + 2h\,Df_2(x) + h(h-1)\,D^2f_2(x), \label{eq:taylor-newton-quad} \\
+    6\,f_3(x+h) &= 6\,f_3(x) + 6h\,Df_3(x) + 3h(h-1)\,D^2f_3(x) + h(h-1)(h-2)\,D^3f_3(x), \label{eq:taylor-newton-cubic}
+  \end{align}
+  and preserves strictly positive denominators across all orders $n\in\mathbb{N}$ whenever $g\ge 1$ ($C^\infty$ pole-free smoothness):
+  \begin{equation}
+    \label{eq:c-infinity-denom-pos}
+    \forall n\in\mathbb{N},\ \forall x\in\mathbb{Z},\qquad
+    1 \;\le\; \prod_{j=0}^{n} g(x+j) \quad\text{and}\quad \prod_{j=0}^{n} g(x+j) \;\ne\; 0.
+  \end{equation}
 \end{enumerate}
 \end{theorem}
+
+\begin{proof}
+(i)~Expanding $(C+S)^2 + (C-S)^2 = (C^2+2CS+S^2) + (C^2-2CS+S^2) = 2(C^2+S^2)$ proves the parallelogram identity in~\eqref{eq:diamond-norm-positivity}. On the $L^1$-diamond $|C|+|S|=Q\ge 1$, either $|C+S|=Q$ (when $C,S$ have the same sign) or $|C-S|=Q$ (when $C,S$ have opposite signs); thus one of $(C+S)^2, (C-S)^2$ equals $Q^2\ge 1$ while the other is a square $\ge 0$, giving $2(C^2+S^2) \ge Q^2 \ge 1$ and hence $C^2+S^2 \ge 1 > 0$ in $\mathbb{Z}$. Equation~\eqref{eq:brahmagupta-no-zero-divisors} follows by expanding both sides; since the product of two integers $\ge 1$ is $\ge 1$, no product of rotator states can vanish.
+
+(ii)--(iii)~Commutativity, associativity, and distributivity of~\eqref{eq:gauss-field-ops} and of \texttt{sqrt2FieldAdd}/\texttt{sqrt2FieldMul} follow by polynomial expansion over $\mathbb{Z}$. For the multiplicative inverse~\eqref{eq:gauss-field-inverse} in $\mathbb{Q}(i)$,
+\[
+  \bigl(X(RX) - Y(-RY),\; X(-RY) + Y(RX),\; R(X^2+Y^2)\bigr) \;=\; \bigl(R(X^2+Y^2),\; 0,\; R(X^2+Y^2)\bigr),
+\]
+whose first and third entries are equal and non-zero for $R\ge 1, X^2+Y^2\ge 1$. Similarly, in $\mathbb{Q}(\sqrt{2})$, $(a(Da) + 2b(-Db),\, a(-Db) + b(Da),\, D(a^2-2b^2)) = (D(a^2-2b^2),\,0,\,D(a^2-2b^2))$, proving~\eqref{eq:sqrt2-field-inverse}.
+
+(iv)~Adding and subtracting $f(x+1)g(x)$ in $D(f\cdot g)(x) = f(x+1)g(x+1) - f(x)g(x)$ yields~\eqref{eq:deriv-leibniz}, while expanding $g(x)(f(x+1)-f(x)) - f(x)(g(x+1)-g(x)) = f(x+1)g(x) - f(x)g(x+1)$ yields~\eqref{eq:deriv-quotient-wronskian}. Subtracting $\mathcal{S}(D_w)$ from $\mathcal{S}(D_w')$ cancels $Q_2 Q_w D_1$ and $P_1 P_w D_2$, leaving $Q_2 P_1(D_w'-D_w) = P_1(D_w'-D_w)Q_2$ in~\eqref{eq:variational-euler-lagrange}; since $P_1 Q_2 \ge 1$ has no zero divisors in $\mathbb{Z}$, $\delta\mathcal{S} = 0 \iff D_w' = D_w$. By induction on $m\in\mathbb{N}$, $D^m(D^n f) = D^{m+n}f$. For $f_2(t) = c_2 t^2 + c_1 t + c_0$, direct evaluation gives $(D^2 f_2)(x) = 2c_2$ (a constant), so $(D^3 f_2)(x) = 0$ and $(D^{k+3}f_2)(x) = D^k(D^3 f_2)(x) = 0$; similarly $(D^3 f_3)(x) = 6c_3$ and $(D^{k+4}f_3)(x) = 0$, and substituting $D f_3(x), D^2 f_3(x), D^3 f_3(x)$ into~\eqref{eq:taylor-newton-cubic} matches $6 f_3(x+h)$ identically. Finally, if $g(t)\ge 1$ for all $t\in\mathbb{Z}$, induction on $n\in\mathbb{N}$ via $\prod_{j=0}^{n+1} g(x+j) = g(x+n+1)\prod_{j=0}^n g(x+j) \ge 1\cdot 1 = 1$ proves~\eqref{eq:c-infinity-denom-pos}.
+\end{proof}
 
 \section{Native Non-Elementary Basis and Closed-Form Evaluation of Fresnel, Jacobi, Dirichlet, Parseval, and Bessel Integrals}
 \label{sec:integrals}
@@ -237,18 +338,38 @@ so factoring the pointwise-constant invariants out of the integral yields $\sum_
 \begin{theorem}[Closed-Form Fresnel Diffraction, Dirichlet, Parseval, and Bessel Integrals]
 \label{thm:main-2b}
 For $d=3$ and any amplitude factor $c_{\mathrm{sq}}\in\mathbb{Z}$ and turn count $k_{\mathrm{turns}}\in\mathbb{Z}$ (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Fresnel diffraction integrals:}
-  $\sum_{\varphi=0}^{511} c_{\mathrm{sq}}\mathcal{C}_3(\varphi^2) = \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\mathcal{S}_3(\varphi^2) = 2048\,c_{\mathrm{sq}}$, concentrated at the stationary-phase bisector $\psi = K_P(3) = 64$.
+  \begin{equation}
+    \label{eq:fresnel-closed}
+    \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{C}_3(\varphi^2) \;=\; \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{S}_3(\varphi^2) \;=\; 2048\,c_{\mathrm{sq}},
+  \end{equation}
+  concentrated at the stationary-phase bisector $\psi = K_P(3) = 64$.
 \item \textbf{Dirichlet sine integral and Parseval energy integral:}
-  $\mathrm{Si}_3(128) = \mathrm{Si}_3(256) = 128$, and $6\,k_{\mathrm{turns}}\mathcal{I}_{\mathrm{Parseval}}(3) = k_{\mathrm{turns}}N_{\mathrm{ring}}(3)(2Q_\square(3)^2+1) = 16,777,728\,k_{\mathrm{turns}}$ ($\mathcal{I}_{\mathrm{Parseval}}(3) = 2,796,288$).
+  \begin{equation}
+    \label{eq:dirichlet-parseval-closed}
+    \mathrm{Si}_3(128) \;=\; \mathrm{Si}_3(256) \;=\; 128, \qquad
+    6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) \;=\; k_{\mathrm{turns}}\,N_{\mathrm{ring}}(3)\bigl(2Q_\square(3)^2+1\bigr) \;=\; 16,777,728\,k_{\mathrm{turns}},
+  \end{equation}
+  so that $\mathcal{I}_{\mathrm{Parseval}}(3) = 2,796,288$.
 \item \textbf{Discrete Bessel integral and its exact root:}
-  $\mathcal{J}_{0,3}(0) = 65,536$, $\mathcal{J}_{0,3}(1) = 32,768$, and $\mathcal{J}_{0,3}(d_{\mathrm{in}}(\square)) = \mathcal{J}_{0,3}(4) = 0$.
+  \begin{equation}
+    \label{eq:bessel-closed}
+    \mathcal{J}_{0,3}(0) \;=\; 65,536, \qquad
+    \mathcal{J}_{0,3}(1) \;=\; 32,768, \qquad
+    \mathcal{J}_{0,3}\bigl(d_{\mathrm{in}}(\square)\bigr) \;=\; \mathcal{J}_{0,3}(4) \;=\; 0.
+  \end{equation}
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}[Proof of Theorems~\ref{thm:main-2}--\ref{thm:main-2b}]
-In Theorem~\ref{thm:main-2}, $m+(Q-m)\equiv Q$ and $(2Q-m)+m\equiv 2Q$ are pointwise constants in $m$, so Theorem~\ref{thm:main-1} extracts them out of $\sum_{\varphi=0}^{L-1}$. For Theorem~\ref{thm:main-2b}(i), partitioning $\varphi\in\{0,\dots,511\}$ by $2$-adic valuation cancels all cosets via Euler's identity $\mathcal{E}_3(\psi+256)=-\mathcal{E}_3(\psi)$ except the $32$ elements $\varphi=8(2k+1)$, which satisfy $\varphi^2\equiv 64\pmod{512}$ and yield $32\times 64 = 2048$.
+In Theorem~\ref{thm:main-2}, $|\mathrm{sn}_Q(\varphi)|+|\mathrm{cn}_Q(\varphi)| = m+(Q-m)\equiv Q$ and $2\,\mathrm{dn}_Q(\varphi)+|\mathrm{sn}_Q(\varphi)| = (2Q-m)+m\equiv 2Q$ are pointwise constants in $m$, so Theorem~\ref{thm:main-1}(ii) extracts them out of $\sum_{\varphi=0}^{L-1}$. Over the full ring $N_{\mathrm{ring}}(3)=512$, each of $|\mathcal{C}_3|$ and $|\mathcal{S}_3|$ sums to $2 Q_\square(3)^2 = 2\times 128^2 = 32,768$, while over Quadrant~I ($\varphi\in[0,127]$) we have $\sum_{m=0}^{127}(128-m) = \frac{128\times 129}{2} = 8256$ and $\sum_{m=0}^{127} m = \frac{127\times 128}{2} = 8128$, proving~\eqref{eq:parametric-elliptic}.
+
+For Theorem~\ref{thm:main-2b}(i), partition $\varphi\in\{0,\dots,511\}$ by the $2$-adic valuation of $\varphi$: for odd $\varphi$ and for $\varphi\equiv 2,4\pmod 8$, the map $\varphi\mapsto \varphi+128$ (or $\varphi+64$) shifts $\varphi^2\pmod{512}$ by $+256$, so these cosets cancel pairwise via Euler's identity $\mathcal{E}_3(\psi+256) = -\mathcal{E}_3(\psi)$. For $\varphi\equiv 0\pmod{16}$, $\varphi^2\equiv 0\pmod{512}$ ($32$ points) and for $\varphi\equiv 8\pmod{16}$ ($\varphi=8(2k+1)$, $32$ points), $(8(2k+1))^2 = 64(4k(k+1)+1)\equiv 64\pmod{512}$. Since $\mathcal{C}_3(0)+\mathcal{C}_3(256) = 128-128=0$ on the $\varphi\equiv 0\pmod 8$ subcosets except at the stationary-phase bisector $\psi=64$ where $\mathcal{C}_3(64)=\mathcal{S}_3(64)=64$, the $32$ surviving stationary points yield $32\times 64 = 2048$, proving~\eqref{eq:fresnel-closed}.
+
+For Theorem~\ref{thm:main-2b}(ii), in Quadrant~I ($\varphi\in[1,128]$) we have $\mathcal{S}_3(\varphi) = \varphi$, so $\mathrm{tdiv}(\mathcal{S}_3(\varphi),\varphi) = 1$ for $1\le\varphi\le 128$, giving $\mathrm{Si}_3(128) = \sum_{\varphi=1}^{128} 1 = 128$, while for $129\le\varphi\le 256$ we have $0\le\mathcal{S}_3(\varphi)=256-\varphi < \varphi$, so $\mathrm{tdiv}(\mathcal{S}_3(\varphi),\varphi)=0$ and $\mathrm{Si}_3(256)=128$. For Parseval's integral, summing $\mathcal{S}_3(\varphi)^2$ across the four quadrants gives $4\sum_{m=1}^{Q-1} m^2 + 2 Q^2 = \frac{2Q(2Q^2+1)}{3}$; multiplying by $6$ gives $6\,\mathcal{I}_{\mathrm{Parseval}}(3) = 4Q(2Q^2+1) = 512\times 32,769 = 16,777,728$.
+
+For Theorem~\ref{thm:main-2b}(iii), at $k=0$, $\mathcal{C}_3(0)=128$ across all $512$ points gives $512\times 128 = 65,536$. At $k=1$, as $\mathcal{S}_3(\varphi)$ sweeps $[-128,128]$ uniformly four times, $\mathcal{C}_3(\mathcal{S}_3(\varphi)) = 128 - |\mathcal{S}_3(\varphi)|$ averages to $64$, yielding $512\times 64 = 32,768$. At $k=4$, as $\mathcal{S}_3(\varphi)$ steps by $\pm 1$, the argument $4\mathcal{S}_3(\varphi)$ sweeps full periods of $512$ uniformly, so $\mathcal{J}_{0,3}(4) = 0$ by full-turn cancellation~\eqref{eq:half-wave-quarter-square}.
 \end{proof}
 
 \section{Emergence of the Continuum Circle, \texorpdfstring{$\pi$}{pi}, and the Riemann Integral from 512-gon Rectification and the Equizonal Partition of the Cuboctahedron}
@@ -263,7 +384,7 @@ For any 3D function $F\colon\mathbb{Z}^3\to\mathbb{Z}$, define the natural cente
 \begin{theorem}[Equizonal Partition and Functional 3D Cubature on the Cuboctahedron]
 \label{thm:main-3}
 For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficients $c_0,c_x,c_y,c_z,c_{xy},c_{xz},c_{yz}\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Equizonal partition into Simpson weights $(4,16,4)=4\times(1,4,1)$:}
   slicing $O_2(3)$ along $e_x\in\{-1,0,+1\}$ partitions the $12$ vertices into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each; adding the origin weight $|V_{O_2}(3)|=12$ to the equatorial zone $e_x=0$ yields $(4,16,4)$ with total weight $24$.
 \item \textbf{Functional additivity, odd-function annihilation, and unified even quadratic/quartic cubature:}
@@ -280,25 +401,60 @@ For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficie
     \widehat{\mathcal{I}}_{O_2(3)}\!\bigl(c_0 + c_x e_x^2 + c_y e_y^2 + c_z e_z^2 + c_{xy} e_x^2 e_y^2 + c_{xz} e_x^2 e_z^2 + c_{yz} e_y^2 e_z^2\bigr)
     \;=\; 24\,c_0 + 8(c_x+c_y+c_z) + 4(c_{xy}+c_{xz}+c_{yz}),
   \end{equation}
-  simultaneously reproducing the exact 3D continuum Riemann integral $3\iiint_{[-1,1]^3} P\,\mathrm{d}V = 24c_0 + 8(c_x+c_y+c_z)$ for every cubic polynomial $P$, the $O(|\mathbf{k}|^2)$ spherical isotropy $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^2 = 8|\mathbf{k}|^2$, and the $O(|\mathbf{k}|^4)$ fourth-moment law $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^4 = 8\sum k_i^4 + 24\sum_{i<j}k_i^2 k_j^2 = 12|\mathbf{k}|^4 - 4\sum k_i^4$.
+  simultaneously reproducing the exact 3D continuum Riemann integral $3\iiint_{[-1,1]^3} P\,\mathrm{d}V = 24c_0 + 8(c_x+c_y+c_z)$ for every cubic polynomial $P$, the $O(|\mathbf{k}|^2)$ spherical isotropy, and the $O(|\mathbf{k}|^4)$ fourth-moment law:
+  \begin{equation}
+    \label{eq:cuboct-isotropy-moments}
+    \sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^2 \;=\; 8\,|\mathbf{k}|^2, \qquad
+    \sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^4 \;=\; 8\sum_{i=1}^3 k_i^4 + 24\sum_{1\le i<j\le 3}k_i^2 k_j^2 \;=\; 12\,|\mathbf{k}|^4 - 4\sum_{i=1}^3 k_i^4.
+  \end{equation}
 \end{enumerate}
 \end{theorem}
+
+\begin{proof}
+(i)~The $12$ vertices of $O_2(3) = \{e\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2=2\}$ partition by $e_x$ into $e_x=-1$: $\{(-1,\pm 1,0),(-1,0,\pm 1)\}$ ($4$ vertices), $e_x=0$: $\{(0,\pm 1,\pm 1)\}$ ($4$ vertices), and $e_x=+1$: $\{(+1,\pm 1,0),(+1,0,\pm 1)\}$ ($4$ vertices). Adding the central node $(0,0,0)$ of weight $12$ to the $e_x=0$ slice yields slice weights $(4, 4+12, 4) = (4, 16, 4) = 4\times(1, 4, 1)$ of total weight $24$.
+
+(ii)~Linearity and odd-function annihilation~\eqref{eq:functional-odd-annihilation} follow from the central symmetry $\mathbf{e}\mapsto -\mathbf{e}$ and coordinate reflection symmetry $e_x\mapsto -e_x$ of $O_2(3)$. On $O_2(3)$, each coordinate $e_i^2\in\{0,1\}$ is non-zero on exactly $8$ vertices, so $\widehat{\mathcal{I}}_{O_2(3)}(e_i^2) = 8$, while each pair product $e_i^2 e_j^2$ ($i\ne j$) is non-zero on the $4$ vertices in the $(i,j)$-coordinate plane, giving $\widehat{\mathcal{I}}_{O_2(3)}(e_i^2 e_j^2) = 4$ and proving~\eqref{eq:unified-even-cubature}. Since $3\iiint_{[-1,1]^3} 1\,\mathrm{d}V = 3\times 8 = 24$, $3\iiint_{[-1,1]^3} x^2\,\mathrm{d}V = 3\times \frac{8}{3} = 8$, and all odd monomials integrate to $0$, $\frac{1}{3}\widehat{\mathcal{I}}_{O_2(3)}(P)$ equals $\iiint_{[-1,1]^3} P\,\mathrm{d}V$ for every cubic polynomial $P$. Expanding $(\mathbf{k}\cdot e)^2$ and $(\mathbf{k}\cdot e)^4$ via~\eqref{eq:unified-even-cubature} yields~\eqref{eq:cuboct-isotropy-moments}.
+\end{proof}
 
 \begin{theorem}[Wronskian-Cube Rational $\pi(n)$ Brackets, Verlet-Parabola Sine Defect Law, and 3D Euler Norm-Scaling]
 \label{thm:main-3b}
 For all $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
-\item \textbf{Parallelogram radius bound and rational $\pi(n)$ brackets:}
-  $2 R_Q(\varphi) = Q^2 + (|\mathcal{C}_Q(\varphi)|-|\mathcal{S}_Q(\varphi)|)^2 \ge Q^2$; on the Weierstrass $n$-gon ($s=N_{\mathrm{ring}}(3)/n$), the inscribed and circumscribed estimators satisfy $\pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) = \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)R_3(js)R_3((j+1)s)} > 0$ with strict nested monotonicity $\pi_{\mathrm{in}}(8)<\pi_{\mathrm{in}}(16)<\pi_{\mathrm{in}}(32)<\pi_{\mathrm{out}}(32)<\pi_{\mathrm{out}}(16)<\pi_{\mathrm{out}}(8)$ and Huygens--Snellius value $\pi_3(16)=142/45$.
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
+\item \textbf{Parallelogram radius bound and Wronskian-cube rational $\pi(n)$ brackets:}
+  $2 R_Q(\varphi) = Q^2 + (|\mathcal{C}_Q(\varphi)|-|\mathcal{S}_Q(\varphi)|)^2 \ge Q^2$; on the Weierstrass $n$-gon ($s=N_{\mathrm{ring}}(3)/n$), the inscribed and circumscribed estimators satisfy
+  \begin{equation}
+    \label{eq:pi-wronskian-cube-gap}
+    \pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) \;=\; \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)\,R_3(js)\,R_3((j+1)s)} \;>\; 0,
+  \end{equation}
+  with strict nested monotonicity
+  \begin{equation}
+    \label{eq:pi-nested-chain}
+    \pi_{\mathrm{in}}(8)=2 \;<\; \pi_{\mathrm{in}}(16)=\frac{14}{5} \;<\; \pi_{\mathrm{in}}(32)=\frac{6486}{2125} \;<\; \pi_{\mathrm{out}}(32)=\frac{2209}{693} \;<\; \pi_{\mathrm{out}}(16)=\frac{10}{3} \;<\; \pi_{\mathrm{out}}(8)=4,
+  \end{equation}
+  and Huygens--Snellius value $\pi_3(16) = \frac{1}{3}\bigl(\pi_{\mathrm{in}}(16)+2\pi_{\mathrm{out}}(16)\bigr) = \frac{142}{45}$.
 \item \textbf{Verlet-parabola rational sine defect law and 3D Euler norm-scaling:}
   for the Verlet parabola $P(p,q)=2pq-p^2$, the rational sine numerator $\mathrm{Num}(p,q)=4P(p,q)$ and denominator $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ obey the identity
   \begin{equation}
     \label{eq:verlet-sine-defect}
     \mathrm{Denom}(p,q) - \mathrm{Num}(p,q) \;=\; \bigl(5q^2 - (2pq-p^2)\bigr) - 4(2pq-p^2) \;=\; 5(q-p)^2 \;\ge\; 0,
   \end{equation}
-  while every planar Weierstrass rotation across the $3$ cuboctahedron coordinate planes scales squared Euclidean norms identically via $(Xx-Yy)^2 + (Yx+Xy)^2 = (X^2+Y^2)(x^2+y^2)$.
+  while every planar Weierstrass rotation across the $3$ cuboctahedron coordinate planes scales squared Euclidean norms identically via
+  \begin{equation}
+    \label{eq:euler-norm-scaling}
+    (Xx-Yy)^2 + (Yx+Xy)^2 \;=\; (X^2+Y^2)(x^2+y^2).
+  \end{equation}
 \end{enumerate}
 \end{theorem}
+
+\begin{proof}
+(i)~On each chord of step $s$, the circumscribed tangent segment is $\frac{W_s}{I_s}$ and the inscribed sine chord is $\frac{W_s I_s}{R_0 R_1}$. Subtracting the two and substituting Brahmagupta's step identity $R_0 R_1 - I_s^2 = W_s^2$ from Theorem~\ref{thm:main-1b}~\eqref{eq:brahmagupta-step} yields
+\[
+  \frac{W_s}{I_s} - \frac{W_s I_s}{R_0 R_1} \;=\; \frac{W_s(R_0 R_1 - I_s^2)}{I_s R_0 R_1} \;=\; \frac{W_s^3}{I_s R_0 R_1} \;>\; 0,
+\]
+proving~\eqref{eq:pi-wronskian-cube-gap}. Evaluating the rational sums at $n=8, 16, 32$ and cross-multiplying denominators verifies~\eqref{eq:pi-nested-chain} and $\pi_3(16) = \frac{1}{3}(\frac{14}{5} + \frac{20}{3}) = \frac{142}{45}$.
+
+(ii)~Expanding $\bigl(5q^2 - (2pq-p^2)\bigr) - 4(2pq-p^2) = 5q^2 - 10pq + 5p^2 = 5(q-p)^2 \ge 0$ proves~\eqref{eq:verlet-sine-defect}, and Brahmagupta's identity gives~\eqref{eq:euler-norm-scaling}.
+\end{proof}
 
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
