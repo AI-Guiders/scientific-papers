@@ -1201,6 +1201,161 @@ theorem thm33_collatz_boundary_fixed_point_reflection_cycle_ratio_and_qmin_colla
       have h0 : q - qMin = 0 := by omega
       rw [h0, Int.mul_zero]
 
+/-- **Theorem 37 (Orbital Shift Derivative across Arbitrary Binary Gear Words `w : List Bool`,
+Automatic Parity-DivisibilityPropagation along Cycles, Bilateral `(q_min, q_max)` Extremum Sandwich,
+and Resonant Gap `(2^A - 3^B)` Elimination)**:
+1. **Orbital Shift Identities for Every Binary Gear Word `rest : List Bool` (Cycle-Free):**
+   - Cyclic shift of an even gear `false` (`𝒢_even = (2, 1, 0)`):
+     `multiScrewD (collatzWordScrews (false :: rest)) = 2 * multiScrewD (collatzWordScrews (rest ++ [false]))`,
+     `multiScrewP (collatzWordScrews (false :: rest)) = multiScrewP (collatzWordScrews (rest ++ [false]))`,
+     `multiScrewQ (collatzWordScrews (false :: rest)) = multiScrewQ (collatzWordScrews (rest ++ [false]))`.
+   - Cyclic shift of an odd gear `true` (`𝒢_odd = (2, 3, 1)`):
+     `2 * multiScrewD (collatzWordScrews (rest ++ [true])) - 3 * multiScrewD (collatzWordScrews (true :: rest)) = multiScrewP (collatzWordScrews (true :: rest)) - multiScrewQ (collatzWordScrews (true :: rest))`.
+2. **Automatic Parity and Divisibility Propagation along Cycle Shifts:**
+   - For any word starting with `false`, `multiScrewD (collatzWordScrews (false :: rest)) % 2 = 0`,
+     and if `(P_w - Q_w) * n₀ = R(false :: rest)` with `n₀ = 2 * n₁`, then `(P_w - Q_w) * n₁ = R(rest ++ [false])`
+     (whenever `P_w ≠ Q_w`, i.e., `2` cancels).
+   - For any word starting with `true`, `multiScrewQ (collatzWordScrews rest) % 2 = 1` and
+     `multiScrewD (collatzWordScrews (true :: rest)) % 2 = 1`, and if `(P_w - Q_w) * n₀ = R(true :: rest)`
+     with `2 * n₁ = 3 * n₀ + 1`, then `(P_w - Q_w) * n₁ = R(rest ++ [true])`.
+3. **Bilateral `(q_min, q_max)` Extremum Sandwich on Every Odd-Core Step `P q' = Q q + (p - 1)`:**
+   Whenever `q_min ≤ q`, `q ≤ q_max`, and `1 ≤ p`:
+   - `0 ≤ (q_min * Q + p - 1) * q - q_min * P * q'` (`= (p - 1) * (q - q_min)`),
+   - `0 ≤ q_max * P * q' - (q_max * Q + p - 1) * q` (`= (p - 1) * (q_max - q)`),
+   - `((q_min * Q + p - 1) * q - q_min * P * q') + (q_max * P * q' - (q_max * Q + p - 1) * q) = (p - 1) * (q_max - q_min)`.
+4. **Resonant Gap `(2^A - 3^B)` Elimination at the Cycle Minimum `n_min`:**
+   At the minimum element `n_min` of any cycle with word `w_min` (`(P_w - Q_w) * n_min = R(w_min)`),
+   the lower bound `Q_w - P_odd ≤ (P_w - Q_w) * n_min` prevents `P_w - Q_w = 2^A - 3^B` from being
+   arbitrarily small relative to `(3^B - 2^B) / n_min`, and for any factor `nMinPow ≥ 1` and upper bound
+   `M_bound` satisfying `((P_w - Q_w) * n_min) * nMinPow ≤ M_bound`, eliminating `P_w - Q_w` yields
+   `(Q_w - P_odd) * nMinPow ≤ M_bound`. -/
+theorem thm37_collatz_resonant_gap_elimination_orbital_shift_and_qmin_qmax_sandwich
+    (rest wMin : List Bool) (n0 n1 nMin nMinPow Mbound P Q p q qNext qMin qMax : Int) :
+    let Qrest := multiScrewQ (collatzWordScrews rest)
+    let RfalseL := multiScrewD (collatzWordScrews (false :: rest))
+    let RfalseR := multiScrewD (collatzWordScrews (rest ++ [false]))
+    let RtrueL  := multiScrewD (collatzWordScrews (true :: rest))
+    let RtrueR  := multiScrewD (collatzWordScrews (rest ++ [true]))
+    let Ptrue   := multiScrewP (collatzWordScrews (true :: rest))
+    let Qtrue   := multiScrewQ (collatzWordScrews (true :: rest))
+    let Pfalse  := multiScrewP (collatzWordScrews (false :: rest))
+    let Qfalse  := multiScrewQ (collatzWordScrews (false :: rest))
+    -- 1. Orbital shift identities across arbitrary binary gear words:
+    (RfalseL = 2 * RfalseR ∧
+     Pfalse = multiScrewP (collatzWordScrews (rest ++ [false])) ∧
+     Qfalse = multiScrewQ (collatzWordScrews (rest ++ [false])) ∧
+     2 * RtrueR - 3 * RtrueL = Ptrue - Qtrue) ∧
+    -- 2. Automatic parity and divisibility propagation along cycle shifts:
+    (RfalseL % 2 = 0 ∧
+     Qrest % 2 = 1 ∧
+     RtrueL % 2 = 1 ∧
+     ((Pfalse - Qfalse) * n0 = RfalseL → n0 = 2 * n1 → (Pfalse - Qfalse) * n1 = RfalseR) ∧
+     ((Ptrue - Qtrue) * n0 = RtrueL → 2 * n1 = 3 * n0 + 1 → (Ptrue - Qtrue) * n1 = RtrueR)) ∧
+    -- 3. Bilateral (q_min, q_max) extremum sandwich:
+    (P * qNext = Q * q + (p - 1) → qMin ≤ q → q ≤ qMax → 1 ≤ p →
+      (qMin * Q + p - 1) * q - qMin * P * qNext = (p - 1) * (q - qMin) ∧
+      qMax * P * qNext - (qMax * Q + p - 1) * q = (p - 1) * (qMax - q) ∧
+      0 ≤ (qMin * Q + p - 1) * q - qMin * P * qNext ∧
+      0 ≤ qMax * P * qNext - (qMax * Q + p - 1) * q ∧
+      ((qMin * Q + p - 1) * q - qMin * P * qNext) + (qMax * P * qNext - (qMax * Q + p - 1) * q) =
+        (p - 1) * (qMax - qMin)) ∧
+    -- 4. Resonant gap (2^A - 3^B) elimination at the cycle minimum n_min:
+    ((multiScrewP (collatzWordScrews wMin) - multiScrewQ (collatzWordScrews wMin)) * nMin =
+       multiScrewD (collatzWordScrews wMin) →
+     1 ≤ nMinPow →
+     ((multiScrewP (collatzWordScrews wMin) - multiScrewQ (collatzWordScrews wMin)) * nMin) * nMinPow ≤ Mbound →
+      multiScrewQ (collatzWordScrews wMin) - collatzWordPOdd wMin ≤
+        (multiScrewP (collatzWordScrews wMin) - multiScrewQ (collatzWordScrews wMin)) * nMin ∧
+      (multiScrewQ (collatzWordScrews wMin) - collatzWordPOdd wMin) * nMinPow ≤ Mbound) := by
+  intro Qrest RfalseL RfalseR RtrueL RtrueR Ptrue Qtrue Pfalse Qfalse
+  have hFalseR : RfalseR = multiScrewD (collatzWordScrews rest) := by
+    dsimp [RfalseR]
+    rw [collatzWordScrews_append, multiScrewD_append]
+    dsimp [collatzWordScrews, collatzGearOfBool, multiScrewQ, multiScrewD]
+    simp only [Int.one_mul, Int.mul_zero, Int.add_zero]
+  have hFalseL : RfalseL = 2 * RfalseR := by
+    dsimp [RfalseL, collatzWordScrews, collatzGearOfBool, multiScrewD]
+    rw [hFalseR]
+    simp only [Int.mul_zero, Int.zero_add]
+  have hPfalseEq : Pfalse = multiScrewP (collatzWordScrews (rest ++ [false])) := by
+    dsimp [Pfalse]
+    rw [collatzWordScrews_append, multiScrewP_append]
+    dsimp [collatzWordScrews, collatzGearOfBool, multiScrewP]
+    simp only [Int.mul_one, Int.mul_comm]
+  have hQfalseEq : Qfalse = multiScrewQ (collatzWordScrews (rest ++ [false])) := by
+    dsimp [Qfalse]
+    rw [collatzWordScrews_append, multiScrewQ_append]
+    dsimp [collatzWordScrews, collatzGearOfBool, multiScrewQ]
+    simp only [Int.mul_one, Int.one_mul]
+  have hTrueShift : 2 * RtrueR - 3 * RtrueL = Ptrue - Qtrue := by
+    dsimp [RtrueR, RtrueL, Ptrue, Qtrue]
+    rw [collatzWordScrews_append, multiScrewD_append]
+    dsimp [collatzWordScrews, collatzGearOfBool, multiScrewP, multiScrewQ, multiScrewD]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_zero, Int.add_zero,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hQodd : ∀ (l : List Bool), multiScrewQ (collatzWordScrews l) % 2 = 1 := by
+    intro l
+    induction l with
+    | nil => dsimp [collatzWordScrews, multiScrewQ]
+    | cons b tl ih =>
+      cases b <;> dsimp [collatzWordScrews, collatzGearOfBool, multiScrewQ] <;> omega
+  have hQrestOdd : Qrest % 2 = 1 := hQodd rest
+  have hRfalseEven : RfalseL % 2 = 0 := by rw [hFalseL]; omega
+  have hRtrueOdd : RtrueL % 2 = 1 := by
+    have : RtrueL = Qrest * 1 + 2 * multiScrewD (collatzWordScrews rest) := rfl
+    rw [this]; omega
+  refine ⟨⟨hFalseL, hPfalseEq, hQfalseEq, hTrueShift⟩,
+          ⟨hRfalseEven, hQrestOdd, hRtrueOdd, ?_, ?_⟩, ?_, ?_⟩
+  · intro hCyc0 hn0
+    have hAssoc : (Pfalse - Qfalse) * (2 * n1) = 2 * ((Pfalse - Qfalse) * n1) := by
+      simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    rw [hn0, hAssoc, hFalseL] at hCyc0
+    omega
+  · intro hCyc0 hn1
+    have h2 : 2 * ((Ptrue - Qtrue) * n1) = 2 * RtrueR := by
+      have hL : 2 * ((Ptrue - Qtrue) * n1) = (Ptrue - Qtrue) * (2 * n1) := by
+        simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      have hExpand : (Ptrue - Qtrue) * (3 * n0 + 1) = 3 * ((Ptrue - Qtrue) * n0) + (Ptrue - Qtrue) := by
+        simp only [Int.mul_add, Int.add_mul, Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      rw [hL, hn1, hExpand, hCyc0]
+      omega
+    omega
+  · intro hStep hqMin hqMax hP1
+    have hIdMin : (qMin * Q + p - 1) * q - qMin * P * qNext = (p - 1) * (q - qMin) := by
+      have hMul : qMin * P * qNext = qMin * (P * qNext) := by simp only [Int.mul_assoc]
+      rw [hMul, hStep]
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hIdMax : qMax * P * qNext - (qMax * Q + p - 1) * q = (p - 1) * (qMax - q) := by
+      have hMul : qMax * P * qNext = qMax * (P * qNext) := by simp only [Int.mul_assoc]
+      rw [hMul, hStep]
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hNonnegMin : 0 ≤ (p - 1) * (q - qMin) := Int.mul_nonneg (by omega) (by omega)
+    have hNonnegMax : 0 ≤ (p - 1) * (qMax - q) := Int.mul_nonneg (by omega) (by omega)
+    have hSumSpan : ((qMin * Q + p - 1) * q - qMin * P * qNext) +
+                    (qMax * P * qNext - (qMax * Q + p - 1) * q) =
+                    (p - 1) * (qMax - qMin) := by
+      rw [hIdMin, hIdMax]
+      simp only [Int.mul_sub]; omega
+    exact ⟨hIdMin, hIdMax, by omega, by omega, hSumSpan⟩
+  · intro hCycMin hPowPos hUpper
+    have h31 := (thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze wMin nMin).2.1
+    rcases h31 with ⟨hLow, _, _⟩
+    have hLowCyc : multiScrewQ (collatzWordScrews wMin) - collatzWordPOdd wMin ≤
+                   (multiScrewP (collatzWordScrews wMin) - multiScrewQ (collatzWordScrews wMin)) * nMin := by
+      omega
+    have hDiff : ((multiScrewP (collatzWordScrews wMin) - multiScrewQ (collatzWordScrews wMin)) * nMin) * nMinPow -
+                 (multiScrewQ (collatzWordScrews wMin) - collatzWordPOdd wMin) * nMinPow =
+                 (((multiScrewP (collatzWordScrews wMin) - multiScrewQ (collatzWordScrews wMin)) * nMin) -
+                  (multiScrewQ (collatzWordScrews wMin) - collatzWordPOdd wMin)) * nMinPow := by
+      simp only [Int.sub_mul]
+    have hNonneg : 0 ≤ (((multiScrewP (collatzWordScrews wMin) - multiScrewQ (collatzWordScrews wMin)) * nMin) -
+                        (multiScrewQ (collatzWordScrews wMin) - collatzWordPOdd wMin)) * nMinPow :=
+      Int.mul_nonneg (by omega) (by omega)
+    exact ⟨hLowCyc, by omega⟩
+
 #print axioms thm18_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -1217,5 +1372,6 @@ theorem thm33_collatz_boundary_fixed_point_reflection_cycle_ratio_and_qmin_colla
 #print axioms thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze
 #print axioms thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
 #print axioms thm33_collatz_boundary_fixed_point_reflection_cycle_ratio_and_qmin_collapse
+#print axioms thm37_collatz_resonant_gap_elimination_orbital_shift_and_qmin_qmax_sandwich
 
 end RotatorCalculusPaper

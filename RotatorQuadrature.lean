@@ -611,10 +611,160 @@ theorem thm35_general_field_derivative_operator_quotient_wronskian_and_variation
       have : (P1 * Q2) * (Dw' - Dw) > 0 := Int.mul_pos hP1Q2pos (by omega)
       omega
 
+/-- Inductive `n`-th order difference derivative `(D^n f)(x)` for any `n : Nat` (`C^∞` tower). -/
+def fieldDerivN : Nat → (Int → Int) → (Int → Int)
+  | 0, f => f
+  | n + 1, f => fieldDeriv (fieldDerivN n f)
+
+/-- Denominator `∏_{j=0}^n g(x + j)` of the `n`-th projective quotient derivative `D^n (f / g)(x)`. -/
+def quotientDerivDenomN : Nat → (Int → Int) → Int → Int
+  | 0, g, x => g x
+  | n + 1, g, x => g (x + (n + 1)) * quotientDerivDenomN n g x
+
+/-- **Theorem 38 (`C^∞` Higher-Derivative Tower `D^n f`, Remainder-Free Taylor–Newton Series,
+and Pole-Free `C^∞` Quotient Smoothness across All Orders `n : Nat`)**:
+1. **Linearity and Semigroup Composition across All Orders `n, m : Nat`:**
+   - `fieldDerivN n (fun t => a * f t + b * g t) x = a * fieldDerivN n f x + b * fieldDerivN n g x`,
+   - `fieldDerivN m (fieldDerivN n f) x = fieldDerivN (m + n) f x`,
+   - `fieldDerivN n (fun _ => 0) x = 0`.
+2. **Exact Higher-Derivative Annihilation and Remainder-Free Taylor–Newton Series:**
+   For any quadratic polynomial `f₂(t) = c₂ t² + c₁ t + c₀` and cubic polynomial `f₃(t) = c₃ t³ + c₂ t² + c₁ t + c₀`:
+   - `(D² f₂)(x) = 2 * c₂`, `(D³ f₂)(x) = 0`, and `∀ k : Nat, (D^(k + 3) f₂)(x) = 0`,
+   - `(D³ f₃)(x) = 6 * c₃`, `(D⁴ f₃)(x) = 0`, and `∀ k : Nat, (D^(k + 4) f₃)(x) = 0`,
+   - **Exact Taylor–Newton Expansion without Remainder for Any Step `h : Int`:**
+     - `2 * f₂(x + h) = 2 * f₂(x) + 2 * h * (D f₂)(x) + h * (h - 1) * (D² f₂)(x)`,
+     - `6 * f₃(x + h) = 6 * f₃(x) + 6 * h * (D f₃)(x) + 3 * h * (h - 1) * (D² f₃)(x) + h * (h - 1) * (h - 2) * (D³ f₃)(x)`.
+3. **`C^∞` Pole-Free Smoothness of Rotator Rational Functions (`∀ t, 1 ≤ g(t)`):**
+   Whenever the denominator is strictly positive everywhere (`∀ t : Int, 1 ≤ g t`, as holds for the
+   Weierstrass rotator norm `R_T(φ) = C² + S² ≥ 1` by `thm34`), the `n`-th derivative denominator
+   is strictly positive and non-zero for every differentiation order `n : Nat`:
+   `1 ≤ quotientDerivDenomN n g x ∧ quotientDerivDenomN n g x ≠ 0`. -/
+theorem thm38_c_infinity_higher_derivatives_taylor_newton_expansion_and_pole_free_quotients
+    (n m k : Nat) (f g : Int → Int) (a b x h c0 c1 c2 c3 : Int) :
+    let f2 := fun t => c2 * (t * t) + c1 * t + c0
+    let f3 := fun t => c3 * (t * t * t) + c2 * (t * t) + c1 * t + c0
+    -- 1. All-order linearity, composition, and zero preservation:
+    (fieldDerivN n (fun t => a * f t + b * g t) x = a * fieldDerivN n f x + b * fieldDerivN n g x ∧
+     fieldDerivN m (fieldDerivN n f) x = fieldDerivN (m + n) f x ∧
+     fieldDerivN n (fun _ => 0) x = 0) ∧
+    -- 2. Higher-derivative annihilation and exact Taylor-Newton expansion:
+    (fieldDerivN 2 f2 x = 2 * c2 ∧
+     fieldDerivN 3 f2 x = 0 ∧
+     fieldDerivN (k + 3) f2 x = 0 ∧
+     fieldDerivN 3 f3 x = 6 * c3 ∧
+     fieldDerivN 4 f3 x = 0 ∧
+     fieldDerivN (k + 4) f3 x = 0 ∧
+     2 * f2 (x + h) =
+       2 * f2 x + 2 * h * fieldDerivN 1 f2 x + h * (h - 1) * fieldDerivN 2 f2 x ∧
+     6 * f3 (x + h) =
+       6 * f3 x + 6 * h * fieldDerivN 1 f3 x + 3 * h * (h - 1) * fieldDerivN 2 f3 x +
+       h * (h - 1) * (h - 2) * fieldDerivN 3 f3 x) ∧
+    -- 3. All-order C^∞ pole-free denominator positivity:
+    ((∀ t : Int, 1 ≤ g t) →
+      1 ≤ quotientDerivDenomN n g x ∧ quotientDerivDenomN n g x ≠ 0) := by
+  intro f2 f3
+  have hZeroN : ∀ (r : Nat) (y : Int), fieldDerivN r (fun _ => 0) y = 0 := by
+    intro r
+    induction r with
+    | zero => intro y; rfl
+    | succ r ih =>
+      intro y
+      dsimp [fieldDerivN, fieldDeriv]
+      rw [ih (y + 1), ih y]
+      omega
+  have hLinN : ∀ (r : Nat) (y : Int),
+      fieldDerivN r (fun t => a * f t + b * g t) y = a * fieldDerivN r f y + b * fieldDerivN r g y := by
+    intro r
+    induction r with
+    | zero => intro y; rfl
+    | succ r ih =>
+      intro y
+      dsimp [fieldDerivN, fieldDeriv]
+      rw [ih (y + 1), ih y]
+      simp only [Int.mul_sub]; omega
+  have hCompN : ∀ (r s : Nat) (hfn : Int → Int) (y : Int),
+      fieldDerivN r (fieldDerivN s hfn) y = fieldDerivN (r + s) hfn y := by
+    intro r s
+    induction r with
+    | zero => intro hfn y; rw [Nat.zero_add]; rfl
+    | succ r ih =>
+      intro hfn y
+      rw [Nat.succ_add]
+      dsimp [fieldDerivN, fieldDeriv]
+      rw [ih hfn (y + 1), ih hfn y]
+  have hD2_f2 : ∀ (y : Int), fieldDerivN 2 f2 y = 2 * c2 := by
+    intro y
+    dsimp [fieldDerivN, fieldDeriv, f2]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h2, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hD3_f2_fn : fieldDerivN 3 f2 = (fun _ => 0) := by
+    funext y
+    change fieldDeriv (fieldDerivN 2 f2) y = 0
+    dsimp [fieldDeriv]
+    rw [hD2_f2 (y + 1), hD2_f2 y]
+    omega
+  have hDk3_f2 : fieldDerivN (k + 3) f2 x = 0 := by
+    rw [← hCompN k 3 f2 x, hD3_f2_fn]
+    exact hZeroN k x
+  have hD3_f3 : ∀ (y : Int), fieldDerivN 3 f3 y = 6 * c3 := by
+    intro y
+    dsimp [fieldDerivN, fieldDeriv, f3]
+    have h6 : 6 * c3 = c3 + c3 + c3 + c3 + c3 + c3 := by omega
+    rw [h6]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hD4_f3_fn : fieldDerivN 4 f3 = (fun _ => 0) := by
+    funext y
+    change fieldDeriv (fieldDerivN 3 f3) y = 0
+    dsimp [fieldDeriv]
+    rw [hD3_f3 (y + 1), hD3_f3 y]
+    omega
+  have hDk4_f3 : fieldDerivN (k + 4) f3 x = 0 := by
+    rw [← hCompN k 4 f3 x, hD4_f3_fn]
+    exact hZeroN k x
+  have hTaylor2 : 2 * f2 (x + h) =
+      2 * f2 x + 2 * h * fieldDerivN 1 f2 x + h * (h - 1) * fieldDerivN 2 f2 x := by
+    rw [hD2_f2 x]
+    dsimp [fieldDerivN, fieldDeriv, f2]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h2, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hTaylor3 : 6 * f3 (x + h) =
+      6 * f3 x + 6 * h * fieldDerivN 1 f3 x + 3 * h * (h - 1) * fieldDerivN 2 f3 x +
+      h * (h - 1) * (h - 2) * fieldDerivN 3 f3 x := by
+    rw [hD3_f3 x]
+    have hSub2 : h - 2 = h - (1 + 1) := by omega
+    rw [hSub2]
+    dsimp [fieldDerivN, fieldDeriv, f3]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    have h2r : ∀ (u : Int), u * 2 = u + u := by intro u; omega
+    have h3 : ∀ (u : Int), 3 * u = u + u + u := by intro u; omega
+    have h6 : ∀ (u : Int), 6 * u = u + u + u + u + u + u := by intro u; omega
+    simp only [h6, h3, h2, h2r, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  refine ⟨⟨hLinN n x, hCompN m n f x, hZeroN n x⟩,
+          ⟨hD2_f2 x, by rw [hD3_f2_fn], hDk3_f2,
+           hD3_f3 x, by rw [hD4_f3_fn], hDk4_f3,
+           hTaylor2, hTaylor3⟩, ?_⟩
+  intro hgPos
+  have hDenomPos : ∀ (r : Nat), 1 ≤ quotientDerivDenomN r g x := by
+    intro r
+    induction r with
+    | zero => dsimp [quotientDerivDenomN]; exact hgPos x
+    | succ r ih =>
+      dsimp [quotientDerivDenomN]
+      have h1 := hgPos (x + (r + 1))
+      have := Int.mul_le_mul h1 ih (by omega) (by omega)
+      omega
+  have hPosN := hDenomPos n
+  exact ⟨hPosN, by omega⟩
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
 #print axioms thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_i_sqrt2_fields
 #print axioms thm35_general_field_derivative_operator_quotient_wronskian_and_variational_euler_lagrange
+#print axioms thm38_c_infinity_higher_derivatives_taylor_newton_expansion_and_pole_free_quotients
 
 end RotatorCalculusPaper
