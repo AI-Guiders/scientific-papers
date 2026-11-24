@@ -6,12 +6,248 @@ import ModelTheoreticLimit
 import CollatzPlanetarySplice
 
 /-!
-# RotatorCalculusPaper (Umbrella Module)
+# RotatorCalculusPaper (Umbrella Module & Unified Diophantine Planetary-Differential Bridge)
 Imports all 6 standalone paper-specific Lean 4 modules:
 1. `RotatorQuadrature` (`thm1`..`thm3`)
 2. `LogicCohomology` (`thm4`..`thm5`)
 3. `PillaiDiophantine` (`thm6`, `thm7`, `thm10`, `thm11`)
 4. `AbcPlanetaryWronskian` (`thm8`, `thm9`, `thm12`..`thm16`)
 5. `ModelTheoreticLimit` (`thm17`)
-6. `CollatzPlanetarySplice` (`thm18`..`thm26`, `collatz_global_convergence_from_local_descent`)
+6. `CollatzPlanetarySplice` (`thm18`..`thm29`, `collatz_global_convergence_from_local_descent`)
+and proves `thm30_unified_pillai_abc_collatz_planetary_differential_bridge`, uniting Pillai,
+`A + B = C`, and the `3n + 1` gear cascade as specializations of one three-shaft planetary
+differential `𝒜 + ℬ = 𝒞` embedded into the four-quadrant rotator `ℤ_{4Q}` with bilateral integer
+bracket bounds (`0 sorryAx`, `0 Classical.choice`).
 -/
+
+namespace RotatorCalculusPaper
+
+set_option linter.unusedSimpArgs false
+
+/-- **Theorem 30 (Unified Three-Shaft Planetary-Differential Bridge for Pillai, `A + B = C`,
+and the `3n + 1` Gear Cascade on `ℤ_{4Q}`)**:
+1. **Common Three-Shaft Rotator Law on `ℤ_{4Q}` and Mal'cev Cell-Capture Bracket:**
+   For any three-shaft balance `𝒜 + ℬ = 𝒞` and Bézout pair `𝒜 v - ℬ u = g` (`u + v = w`),
+   at every quarter-period `Q ∈ ℤ` and phase `φ₀ ∈ ℤ` (`C_rot = Q - φ₀`, `S_rot = φ₀`,
+   `I_rot = ℬ C_rot - 𝒜 S_rot`, `Δ_rot = C_rot v - S_rot u`):
+   - `Q 𝒜 = 𝒞 C_rot - I_rot`, `Q ℬ = 𝒞 S_rot + I_rot`, and `𝒞 Δ_rot - w I_rot = g Q`;
+   - at the intrinsic scale `Q = 𝒞` and phase `φ₀ = ℬ`, the rotator residual vanishes identically
+     (`I_rot = 0`) and `Δ_rot = g`;
+   - whenever `0 ≤ I_rot < 𝒞` (coarse-floor cell capture `𝒞 φ₀ ≤ Q ℬ < 𝒞 (φ₀ + 1)`), `Q 𝒜` and `Q ℬ`
+     are trapped in the bilateral integer bracket
+     `𝒞 C_rot - 𝒞 < Q 𝒜 ≤ 𝒞 C_rot` and `𝒞 S_rot ≤ Q ℬ < 𝒞 S_rot + 𝒞`.
+2. **`A + B = C` Branch (Bilateral Circular Bracket on the Full Radical Skeleton `R_full`):**
+   For `A = At X³`, `B = Bt Y³`, `C = Ct Z³` with `A + B = C`, `R_full = At Bt Ct X Y Z`,
+   and `(Bt Y) C + (Bt² Ct)(Y² Z) α = R_full β`, whenever `0 ≤ α ≤ At X - 1` and `(Bt² Ct)(Y² Z) > 0`,
+   `(Bt Y) C` is trapped in the bilateral integer bracket
+   `R_full β - (Bt² Ct)(Y² Z)(At X - 1) ≤ (Bt Y) C ≤ R_full β`
+   (with strict upper bound `(Bt Y) C < R_full β` whenever `α ≥ 1`).
+3. **Pillai Branch (`C + V = U`, `C = U - V`): Non-Vanishing of the Padé Residual `I₁ ≠ 0` and Lower Gap Bound:**
+   For `P̂₁ = U + 2 V`, `Q̂₁ = 2 U + V`, `I₁ = a P̂₁ - b Q̂₁`, and `Φ₃(u, v) = u² + u v + v²`,
+   root-free cubic Padé compression `U I₁ Φ₃(a P̂₁, b Q̂₁) = a³ C³ (U + V) - (U b³ - V a³) Q̂₁³`
+   implies that whenever `U ≥ 1`, `a P̂₁ ≥ 1`, `b Q̂₁ ≥ 1`, `U b³ - V a³ ≥ 1`, and
+   `(U b³ - V a³) Q̂₁³ > a³ C³ (U + V)`:
+   - `Φ₃(a P̂₁, b Q̂₁) ≥ 3`,
+   - `I₁ ≤ -1` (in particular `I₁ ≠ 0`), and
+   - `(U b³ - V a³) Q̂₁³ - a³ C³ (U + V) = U (-I₁) Φ₃(a P̂₁, b Q̂₁) ≥ 3 U`.
+4. **`3n + 1` Gear-Cascade Branch as a Pillai–`ABC` Planetary Differential in `u(n) = 2n + 1`:**
+   For any gear word `G : List (Int × Int × Int)` transforming `n₀` to `n_G` with `D_G n₀ = N_G n_G + R_G`,
+   the centered odd coordinate `u(n) = 2n + 1` satisfies the three-shaft Pillai–`ABC` balance
+   `((D_G - N_G) - 2 R_G) + N_G u(n_G) = D_G u(n₀)`;
+   and on any closed cycle (`n_G = n₀`) with `n₀ ≥ n_min ≥ 1` and `R_G > 0`,
+   `(D_G - N_G) n₀ = R_G`, `(D_G - N_G)(u(n₀) - 1) = 2 R_G`, and `D_G > N_G → R_G ≥ n_min (D_G - N_G)`. -/
+theorem thm30_unified_pillai_abc_collatz_planetary_differential_bridge
+    (Q Acal Bcal Ccal u v w g phi0
+     At Bt Ct X Y Z alpha beta
+     U V a b
+     n0 nG nMin : Int)
+    (G : List (Int × Int × Int))
+    (hBalance : Acal + Bcal - Ccal = 0)
+    (hBezG : Acal * v - Bcal * u = g)
+    (hw : u + v - w = 0)
+    (hGear : multiScrewP G * n0 = multiScrewQ G * nG + multiScrewD G) :
+    let Crot := Q - phi0
+    let Srot := phi0
+    let Irot := Bcal * Crot - Acal * Srot
+    let Drot := Crot * v - Srot * u
+    let Rfull := (At * Bt * Ct) * (X * Y * Z)
+    let Kcoeff := (Bt * Bt * Ct) * (Y * Y * Z)
+    let Gap := U - V
+    let P1 := U + (V + V)
+    let Q1 := (U + U) + V
+    let I1 := a * P1 - b * Q1
+    let uP := a * P1
+    let vQ := b * Q1
+    let phi3 := uP * uP + uP * vQ + vQ * vQ
+    let DG := multiScrewP G
+    let NG := multiScrewQ G
+    let RG := multiScrewD G
+    -- 1. Common three-shaft rotator law on Z_{4Q} and Mal'cev cell-capture bracket:
+    ((Q * Acal = Ccal * Crot - Irot) ∧
+     (Q * Bcal = Ccal * Srot + Irot) ∧
+     (Ccal * Drot - w * Irot = g * Q) ∧
+     (Bcal * (Ccal - Bcal) - Acal * Bcal = 0) ∧
+     ((Ccal - Bcal) * v - Bcal * u = g) ∧
+     (0 ≤ Irot → Irot < Ccal →
+       Ccal * Crot - Ccal < Q * Acal ∧ Q * Acal ≤ Ccal * Crot ∧
+       Ccal * Srot ≤ Q * Bcal ∧ Q * Bcal < Ccal * Srot + Ccal)) ∧
+    -- 2. A + B = C branch: bilateral circular bracket on R_full:
+    (((Bt * Y) * (Ct * Z * Z * Z) + Kcoeff * alpha = Rfull * beta) →
+     0 ≤ alpha → alpha ≤ At * X - 1 → 0 < Kcoeff →
+     (Rfull * beta - Kcoeff * (At * X - 1) ≤ (Bt * Y) * (Ct * Z * Z * Z) ∧
+      (Bt * Y) * (Ct * Z * Z * Z) ≤ Rfull * beta ∧
+      (1 ≤ alpha → (Bt * Y) * (Ct * Z * Z * Z) < Rfull * beta))) ∧
+    -- 3. Pillai branch: root-free cubic Pade compression, I_1 <= -1, and lower gap bound >= 3 U:
+    ((U * I1 * phi3 = (a * a * a) * (Gap * Gap * Gap) * (U + V) -
+                      (U * (b * b * b) - V * (a * a * a)) * (Q1 * Q1 * Q1)) ∧
+     (1 ≤ U → 1 ≤ uP → 1 ≤ vQ →
+      (a * a * a) * (Gap * Gap * Gap) * (U + V) < (U * (b * b * b) - V * (a * a * a)) * (Q1 * Q1 * Q1) →
+      3 ≤ phi3 ∧ I1 ≤ -1 ∧ I1 ≠ 0 ∧
+      3 * U ≤ (U * (b * b * b) - V * (a * a * a)) * (Q1 * Q1 * Q1) -
+              (a * a * a) * (Gap * Gap * Gap) * (U + V))) ∧
+    -- 4. Collatz 3n + 1 branch as a Pillai-ABC balance in u(n) = 2n + 1 and cycle lower bound:
+    ((((DG - NG) + 2 * RG) + NG * (2 * nG + 1) = DG * (2 * n0 + 1)) ∧
+     (nG = n0 →
+       (DG - NG) * n0 = RG ∧
+       (DG - NG) * ((2 * n0 + 1) - 1) = 2 * RG ∧
+       (1 ≤ nMin → nMin ≤ n0 → NG < DG →
+         nMin * (DG - NG) ≤ RG))) := by
+  dsimp
+  have hRotA : Q * Acal - (Ccal * (Q - phi0) - (Bcal * (Q - phi0) - Acal * phi0)) =
+               (Q - phi0) * (Acal + Bcal - Ccal) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hRotB : Q * Bcal - (Ccal * phi0 + (Bcal * (Q - phi0) - Acal * phi0)) =
+               phi0 * (Acal + Bcal - Ccal) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hRotDet : (Ccal * ((Q - phi0) * v - phi0 * u) - w * (Bcal * (Q - phi0) - Acal * phi0)) -
+                 g * Q =
+                 (phi0 * u - (Q - phi0) * v) * (Acal + Bcal - Ccal) +
+                 (Bcal * (Q - phi0) - Acal * phi0) * (u + v - w) +
+                 Q * ((Acal * v - Bcal * u) - g) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hSelfI : Bcal * (Ccal - Bcal) - Acal * Bcal = 0 := by
+    have hEqA : Ccal - Bcal = Acal := by omega
+    rw [hEqA, Int.mul_comm Bcal Acal, Int.sub_self]
+  have hSelfD : (Ccal - Bcal) * v - Bcal * u = g := by
+    have hEqA : Ccal - Bcal = Acal := by omega
+    rw [hEqA, hBezG]
+  have hBezDiff : (Acal * v - Bcal * u) - g = 0 := by omega
+  rw [hBalance, Int.mul_zero] at hRotA hRotB hRotDet
+  rw [hw, hBezDiff, Int.mul_zero] at hRotDet
+  have hGear2 : 2 * (multiScrewP G * n0) = 2 * (multiScrewQ G * nG) + 2 * multiScrewD G := by omega
+  have hMulQ : multiScrewQ G * (2 * nG + 1) = 2 * (multiScrewQ G * nG) + multiScrewQ G := by
+    simp only [Int.mul_add, Int.mul_one, Int.mul_left_comm]
+  have hMulP : multiScrewP G * (2 * n0 + 1) = 2 * (multiScrewP G * n0) + multiScrewP G := by
+    simp only [Int.mul_add, Int.mul_one, Int.mul_left_comm]
+  have hPade := thm10_root_free_cubic_pade_compression U V a b
+  dsimp at hPade
+  refine ⟨⟨by omega, by omega, by omega, hSelfI, hSelfD,
+           by intro hGe hLt; refine ⟨by omega, by omega, by omega, by omega⟩⟩,
+          ?_, ⟨hPade, ?_⟩, ⟨by omega, ?_⟩⟩
+  · intro hCirc hAlpha0 hAlphaMax hKpos
+    have hKnonneg : 0 ≤ (Bt * Bt * Ct) * (Y * Y * Z) * alpha :=
+      Int.mul_nonneg (by omega) hAlpha0
+    have hKdiff : 0 ≤ (Bt * Bt * Ct) * (Y * Y * Z) * ((At * X - 1) - alpha) :=
+      Int.mul_nonneg (by omega) (by omega)
+    have hKexpand : (Bt * Bt * Ct) * (Y * Y * Z) * ((At * X - 1) - alpha) =
+                    (Bt * Bt * Ct) * (Y * Y * Z) * (At * X - 1) -
+                    (Bt * Bt * Ct) * (Y * Y * Z) * alpha := by
+      simp only [Int.mul_sub]
+    refine ⟨by omega, by omega, ?_⟩
+    intro hAlpha1
+    have hKstrict : 0 < (Bt * Bt * Ct) * (Y * Y * Z) * alpha :=
+      Int.mul_pos hKpos (by omega)
+    omega
+  · intro hU1 huP1 hvQ1 hRhsGt
+    have huPsq : 1 ≤ (a * (U + (V + V))) * (a * (U + (V + V))) :=
+      Int.mul_pos (by omega : 0 < a * (U + (V + V))) (by omega : 0 < a * (U + (V + V)))
+    have hvQsq : 1 ≤ (b * ((U + U) + V)) * (b * ((U + U) + V)) :=
+      Int.mul_pos (by omega : 0 < b * ((U + U) + V)) (by omega : 0 < b * ((U + U) + V))
+    have huvProd : 1 ≤ (a * (U + (V + V))) * (b * ((U + U) + V)) :=
+      Int.mul_pos (by omega : 0 < a * (U + (V + V))) (by omega : 0 < b * ((U + U) + V))
+    have hPhi3 : 3 ≤ (a * (U + (V + V))) * (a * (U + (V + V))) +
+                     (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                     (b * ((U + U) + V)) * (b * ((U + U) + V)) := by omega
+    have hProdNeg : U * (a * (U + (V + V)) - b * ((U + U) + V)) *
+                    ((a * (U + (V + V))) * (a * (U + (V + V))) +
+                     (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                     (b * ((U + U) + V)) * (b * ((U + U) + V))) < 0 := by omega
+    have hI1lt0 : a * (U + (V + V)) - b * ((U + U) + V) < 0 := by
+      rcases Int.lt_trichotomy (a * (U + (V + V)) - b * ((U + U) + V)) 0 with hLt | hEq | hGt
+      · exact hLt
+      · rw [hEq, Int.mul_zero, Int.zero_mul] at hProdNeg
+        exact False.elim (Int.lt_irrefl 0 hProdNeg)
+      · have hGe0 : 0 ≤ a * (U + (V + V)) - b * ((U + U) + V) := Int.le_of_lt hGt
+        have h1 : 0 ≤ U * (a * (U + (V + V)) - b * ((U + U) + V)) := Int.mul_nonneg (by omega) hGe0
+        have h2 : 0 ≤ U * (a * (U + (V + V)) - b * ((U + U) + V)) *
+                      ((a * (U + (V + V))) * (a * (U + (V + V))) +
+                       (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                       (b * ((U + U) + V)) * (b * ((U + U) + V))) := Int.mul_nonneg h1 (by omega)
+        exact False.elim (Int.lt_irrefl 0 (Int.lt_of_le_of_lt h2 hProdNeg))
+    have hI1neg : a * (U + (V + V)) - b * ((U + U) + V) ≤ -1 :=
+      Int.le_of_lt_add_one hI1lt0
+    have hNegProd : 3 * U ≤ -(U * (a * (U + (V + V)) - b * ((U + U) + V)) *
+                    ((a * (U + (V + V))) * (a * (U + (V + V))) +
+                     (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                     (b * ((U + U) + V)) * (b * ((U + U) + V)))) := by
+      have hStep1 : U ≤ U * (-(a * (U + (V + V)) - b * ((U + U) + V))) := by
+        have : U * (-(a * (U + (V + V)) - b * ((U + U) + V))) - U =
+               U * (-(a * (U + (V + V)) - b * ((U + U) + V)) - 1) := by simp only [Int.mul_sub, Int.mul_one]
+        have : 0 ≤ U * (-(a * (U + (V + V)) - b * ((U + U) + V)) - 1) := Int.mul_nonneg (by omega) (by omega)
+        omega
+      have hStep2 : 3 * (U * (-(a * (U + (V + V)) - b * ((U + U) + V)))) ≤
+                    (U * (-(a * (U + (V + V)) - b * ((U + U) + V)))) *
+                    ((a * (U + (V + V))) * (a * (U + (V + V))) +
+                     (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                     (b * ((U + U) + V)) * (b * ((U + U) + V))) := by
+        have hId : (U * (-(a * (U + (V + V)) - b * ((U + U) + V)))) *
+                   ((a * (U + (V + V))) * (a * (U + (V + V))) +
+                    (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                    (b * ((U + U) + V)) * (b * ((U + U) + V))) -
+                   3 * (U * (-(a * (U + (V + V)) - b * ((U + U) + V)))) =
+                   (U * (-(a * (U + (V + V)) - b * ((U + U) + V)))) *
+                   (((a * (U + (V + V))) * (a * (U + (V + V))) +
+                     (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                     (b * ((U + U) + V)) * (b * ((U + U) + V))) - 3) := by
+          simp only [Int.mul_sub, Int.mul_comm 3 (U * (-(a * (U + (V + V)) - b * ((U + U) + V))))]
+        have : 0 ≤ (U * (-(a * (U + (V + V)) - b * ((U + U) + V)))) *
+                   (((a * (U + (V + V))) * (a * (U + (V + V))) +
+                     (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                     (b * ((U + U) + V)) * (b * ((U + U) + V))) - 3) := Int.mul_nonneg (by omega) (by omega)
+        omega
+      have hEqNeg : (U * (-(a * (U + (V + V)) - b * ((U + U) + V)))) *
+                    ((a * (U + (V + V))) * (a * (U + (V + V))) +
+                     (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                     (b * ((U + U) + V)) * (b * ((U + U) + V))) =
+                    -(U * (a * (U + (V + V)) - b * ((U + U) + V)) *
+                     ((a * (U + (V + V))) * (a * (U + (V + V))) +
+                      (a * (U + (V + V))) * (b * ((U + U) + V)) +
+                      (b * ((U + U) + V)) * (b * ((U + U) + V)))) := by
+        simp only [Int.mul_neg, Int.neg_mul]
+      omega
+    have hFourth : 3 * U ≤ (U * (b * b * b) - V * (a * a * a)) * (((U + U) + V) * ((U + U) + V) * ((U + U) + V)) -
+                           (a * a * a) * ((U - V) * (U - V) * (U - V)) * (U + V) := by omega
+    exact ⟨hPhi3, hI1neg, Int.ne_of_lt hI1lt0, hFourth⟩
+  · intro hCyc
+    have hCyc1 : (multiScrewP G - multiScrewQ G) * n0 = multiScrewD G := by
+      rw [hCyc] at hGear
+      have : (multiScrewP G - multiScrewQ G) * n0 = multiScrewP G * n0 - multiScrewQ G * n0 := by
+        simp only [Int.sub_mul]
+      omega
+    have hCyc2 : (multiScrewP G - multiScrewQ G) * ((2 * n0 + 1) - 1) = 2 * multiScrewD G := by
+      have hSub1 : (2 * n0 + 1) - 1 = 2 * n0 := by omega
+      rw [hSub1, ← Int.mul_assoc, Int.mul_comm (multiScrewP G - multiScrewQ G) 2, Int.mul_assoc, hCyc1]
+    refine ⟨hCyc1, hCyc2, ?_⟩
+    intro hnMin1 hn0Min hGt
+    have : (multiScrewP G - multiScrewQ G) * n0 - nMin * (multiScrewP G - multiScrewQ G) =
+           (multiScrewP G - multiScrewQ G) * (n0 - nMin) := by
+      simp only [Int.mul_sub, Int.mul_comm nMin (multiScrewP G - multiScrewQ G)]
+    have : 0 ≤ (multiScrewP G - multiScrewQ G) * (n0 - nMin) := Int.mul_nonneg (by omega) (by omega)
+    omega
+
+#print axioms thm30_unified_pillai_abc_collatz_planetary_differential_bridge
+
+end RotatorCalculusPaper
