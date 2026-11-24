@@ -92,19 +92,19 @@ Consequently, whenever $k(u+v)\,\Pi_-(\mathcal{R})A \ne 0$, two adjacent-floor c
 and opposite signs between adjacent floors ($I_{\mathcal{R}} \le 0 \le I_{\mathcal{R}'}$ or $I_{\mathcal{R}'} \le 0 \le I_{\mathcal{R}}$) trap $(u,v)$ in the bilateral integer bracket $u P_{\mathcal{R}} \le v Q_{\mathcal{R}} \land v Q_{\mathcal{R}'} \le u P_{\mathcal{R}'}$ (respectively $u P_{\mathcal{R}'} \le v Q_{\mathcal{R}'} \land v Q_{\mathcal{R}} \le u P_{\mathcal{R}}$).
 \end{theorem}
 
-\begin{theorem}[Root-free $9$-cell cubic Pad\'e compression identity and two-solution collision gap principle, \texttt{thm10}, \texttt{thm10b}]
+\begin{theorem}[Arbitrary-floor $9$-cell cubic Pad\'e compression identity, two-solution collision law across the countable tower $\mathcal{R}\in\mathbb{Z}^{<\infty}$, and adjacent-floor escape, \texttt{thm10}, \texttt{thm10b}]
 \label{thm:main-10}
-For all $(U,V,a,b)\in\mathbb{Z}^4$, the collision invariant $I_1 = a\widehat{P}_1 - b\widehat{Q}_1$ ($\widehat{P}_1 = U+2V,\ \widehat{Q}_1 = 2U+V$) and the cubic norm factor $\Phi_3(x,y) = x^2 + xy + y^2$ satisfy
+For every floor word $\mathcal{R}\in\mathbb{Z}^{<\infty}$ of the countable Pad\'e tower ($P_{\mathcal{R}} = \texttt{padeTowerP}\;\mathcal{R}\;U\;V$, $Q_{\mathcal{R}} = \texttt{padeTowerQ}\;\mathcal{R}\;U\;V$) and all $(U,V,a,b)\in\mathbb{Z}^4$, the floor collision invariant $I_{\mathcal{R}} = a P_{\mathcal{R}} - b Q_{\mathcal{R}}$ and cubic factor $\Phi_3(x,y) = x^2 + xy + y^2$ satisfy
 \begin{equation}
   \label{eq:root-free-cubic-compression}
-  U\,I_1\,\Phi_3\bigl(a\widehat{P}_1,\,b\widehat{Q}_1\bigr) \;\equiv\; a^3(U-V)^3(U+V) \;-\; \bigl(U b^3 - V a^3\bigr)\,\widehat{Q}_1^3.
+  U\,I_{\mathcal{R}}\,\Phi_3\bigl(a P_{\mathcal{R}},\,b Q_{\mathcal{R}}\bigr) \;\equiv\; a^3\bigl(U P_{\mathcal{R}}^3 - V Q_{\mathcal{R}}^3\bigr) \;-\; \bigl(U b^3 - V a^3\bigr)\,Q_{\mathcal{R}}^3,
 \end{equation}
-In particular, for any two solutions $(X,Y)$ and $(X',Y')$ in the same modulo-$3$ residue cell ($U = \widetilde{A}X^3,\ V = \widetilde{B}Y^3,\ C = U-V,\ C' = \widetilde{A}(X')^3 - \widetilde{B}(Y')^3$), setting $a = Y'X,\ b = X'Y$ ($\mathcal{X}_1 = X\widehat{P}_1,\ \mathcal{Y}_1 = Y\widehat{Q}_1,\ I_{\mathrm{cell}} = Y'\mathcal{X}_1 - X'\mathcal{Y}_1$) yields $U b^3 - V a^3 = X^3 Y^3 C'$ and cancels $X^3 \ge 1$ identically (\texttt{thm10b\_pillai\_same\_cell\_two\_solution\_collision\_and\_gap\_law}):
+reducing on the base floor $\mathcal{R}=[3]$ ($P_{[3]}=U+2V,\ Q_{[3]}=2U+V,\ U P_{[3]}^3 - V Q_{[3]}^3 \equiv (U-V)^3(U+V)$) to $U I_1\Phi_3(a\widehat{P}_1,b\widehat{Q}_1) \equiv a^3(U-V)^3(U+V) - (U b^3 - V a^3)\widehat{Q}_1^3$. For any two solutions $(X,Y)$ and $(X',Y')$ in the same modulo-$3$ residue cell ($U = \widetilde{A}X^3,\ V = \widetilde{B}Y^3,\ C = U-V,\ C' = \widetilde{A}(X')^3 - \widetilde{B}(Y')^3$), setting $a = Y'X,\ b = X'Y$ yields $U b^3 - V a^3 = X^3 Y^3 C'$ and cancels $X^3 \ge 1$ identically on every floor $\mathcal{R}\in\mathbb{Z}^{<\infty}$ (\texttt{thm10b\_pillai\_same\_cell\_two\_solution\_collision\_and\_gap\_law}):
 \[
-  \widetilde{A}\,I_{\mathrm{cell}}\,\Phi_3\bigl(Y'\mathcal{X}_1,\ X'\mathcal{Y}_1\bigr)
-  \;=\; (Y')^3\,C^3(U+V) \;-\; C'\,Y^3\,\widehat{Q}_1^3,
+  \widetilde{A}\,I_{\mathcal{R}}\,\Phi_3\bigl(Y'X P_{\mathcal{R}},\ X'Y Q_{\mathcal{R}}\bigr)
+  \;=\; (Y')^3\,\bigl(U P_{\mathcal{R}}^3 - V Q_{\mathcal{R}}^3\bigr) \;-\; C'\,Y^3\,Q_{\mathcal{R}}^3.
 \]
-so for $C' = C \ge 1$ ($\widetilde{A}\ge 1,\ Y'\mathcal{X}_1\ge 1,\ X'\mathcal{Y}_1\ge 1$), any second solution below the first-floor gap threshold $(Y')^3 C^2(U+V) < Y^3\widehat{Q}_1^3$ satisfies $I_{\mathrm{cell}} \le -1 < 0$ ($I_{\mathrm{cell}}\ne 0$) and $3\widetilde{A} \le C\bigl(Y^3\widehat{Q}_1^3 - (Y')^3 C^2(U+V)\bigr)$.
+Consequently, on every floor $\mathcal{R}\in\mathbb{Z}^{<\infty}$ where $(Y')^3(U P_{\mathcal{R}}^3 - V Q_{\mathcal{R}}^3) < C' Y^3 Q_{\mathcal{R}}^3$ ($\widetilde{A}\ge 1,\ a P_{\mathcal{R}}\ge 1,\ b Q_{\mathcal{R}}\ge 1$), one has $I_{\mathcal{R}} \le -1 < 0$ ($I_{\mathcal{R}}\ne 0$) and $3\widetilde{A} \le C' Y^3 Q_{\mathcal{R}}^3 - (Y')^3(U P_{\mathcal{R}}^3 - V Q_{\mathcal{R}}^3)$; whereas if $I_{\mathcal{R}} = 0$ on floor $\mathcal{R}$, the next floor $\mathcal{R}' = \mathcal{R}\mathbin{+\!+}[k+1]$ ($k(a+b)\Pi_-(\mathcal{R})C \ne 0$) satisfies $I_{\mathcal{R}'} = -k(Y'X + X'Y)\Pi_-(\mathcal{R})C \ne 0$ ($|I_{\mathcal{R}'}|\ge 1$).
 \end{theorem}
 
 \begin{theorem}[Cross-floor Wronskian identity between floors $k=2$ and $k=3$, \texttt{thm11}]
