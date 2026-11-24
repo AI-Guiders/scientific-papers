@@ -513,9 +513,108 @@ theorem thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_
                   Int.neg_mul, Int.mul_neg, Int.neg_neg,
                   Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; try omega)
 
+/-- General first difference derivative operator `(D f)(x) = f(x + 1) - f(x)`. -/
+def fieldDeriv (f : Int → Int) (x : Int) : Int :=
+  f (x + 1) - f x
+
+/-- General two-function Wronskian `W(f, g)(x) = f(x) (D g)(x) - g(x) (D f)(x)`. -/
+def fieldWronskian (f g : Int → Int) (x : Int) : Int :=
+  f x * fieldDeriv g x - g x * fieldDeriv f x
+
+/-- General cascade action functional `S(L₁ ++ w ++ L₂)` on a trajectory monoid with prefix `(P₁, Q₁, D₁)`,
+active segment `(P_w, Q_w, D_w)`, and suffix `(P₂, Q₂, D₂)`. -/
+def cascadeAction (P1 _Q1 D1 Pw Qw Dw _P2 Q2 D2 : Int) : Int :=
+  Q2 * (Qw * D1 + P1 * Dw) + P1 * Pw * D2
+
+/-- **Theorem 35 (General Field Derivative Operator `D f`, Quotient-Derivative Wronskian Law,
+and Variational Derivative / Euler–Lagrange Stationarity on Trajectory Monoids)**:
+1. **Algebra of the General Derivative Operator `D f` (`fieldDeriv`):**
+   For all functions `f, g : Int → Int`, scalars `a, b : Int`, and point `x : Int`:
+   - **Linearity:** `D (a f + b g)(x) = a * D f(x) + b * D g(x)`,
+   - **Leibniz Product Rule:** `D (f · g)(x) = f(x + 1) * D g(x) + D f(x) * g(x)`,
+   - **Second Derivative:** `D (D f)(x) = f(x + 2) - 2 * f(x + 1) + f(x)`,
+   - **Quotient Derivative Numerator = Negative Wronskian in the Projective Field:**
+     `f(x + 1) * g(x) - f(x) * g(x + 1) = g(x) * D f(x) - f(x) * D g(x) = -W(f, g)(x)`,
+     so the projective quotient `f / g` is stationary at `x` (`f(x + 1) * g(x) = f(x) * g(x + 1)`)
+     if and only if `W(f, g)(x) = 0`, and strictly increases (`f(x) * g(x + 1) < f(x + 1) * g(x)`)
+     if and only if `W(f, g)(x) < 0` (respectively decreases iff `0 < W(f, g)(x)`).
+2. **Variational Derivative `δS / δD_w = P₁ Q₂` and Euler–Lagrange Stationarity with Fixed Endpoints:**
+   For any variation of the active segment `(P_w, Q_w, D_w) ↦ (P_w, Q_w, D_w')` preserving the boundary
+   multipliers `(P_w, Q_w)` inside a composite trajectory `(L₁, w, L₂)`:
+   - **Exact First Variation Factorization:**
+     `cascadeAction P₁ Q₁ D₁ P_w Q_w D_w' P₂ Q₂ D₂ - cascadeAction P₁ Q₁ D₁ P_w Q_w D_w P₂ Q₂ D₂ = P₁ * (D_w' - D_w) * Q₂`,
+   - **Euler–Lagrange Stationarity and Monotonicity in the Field (`1 ≤ P₁`, `1 ≤ Q₂`):**
+     - `cascadeAction P₁ Q₁ D₁ P_w Q_w D_w' P₂ Q₂ D₂ = cascadeAction P₁ Q₁ D₁ P_w Q_w D_w P₂ Q₂ D₂ ↔ D_w' = D_w`,
+     - `cascadeAction P₁ Q₁ D₁ P_w Q_w D_w < cascadeAction P₁ Q₁ D₁ P_w Q_w D_w' P₂ Q₂ D₂ ↔ D_w < D_w'`. -/
+theorem thm35_general_field_derivative_operator_quotient_wronskian_and_variational_euler_lagrange
+    (f g : Int → Int) (a b x P1 Q1 D1 Pw Qw Dw Dw' P2 Q2 D2 : Int) :
+    -- 1. General derivative operator D f and quotient Wronskian law:
+    (fieldDeriv (fun t => a * f t + b * g t) x = a * fieldDeriv f x + b * fieldDeriv g x ∧
+     fieldDeriv (fun t => f t * g t) x = f (x + 1) * fieldDeriv g x + fieldDeriv f x * g x ∧
+     fieldDeriv (fieldDeriv f) x = f (x + 1 + 1) - 2 * f (x + 1) + f x ∧
+     f (x + 1) * g x - f x * g (x + 1) = -fieldWronskian f g x ∧
+     (f (x + 1) * g x = f x * g (x + 1) ↔ fieldWronskian f g x = 0) ∧
+     (f x * g (x + 1) < f (x + 1) * g x ↔ fieldWronskian f g x < 0)) ∧
+    -- 2. Variational derivative δS / δD_w = P₁ Q₂ and Euler-Lagrange stationarity:
+    (cascadeAction P1 Q1 D1 Pw Qw Dw' P2 Q2 D2 - cascadeAction P1 Q1 D1 Pw Qw Dw P2 Q2 D2 =
+       P1 * (Dw' - Dw) * Q2 ∧
+     (1 ≤ P1 → 1 ≤ Q2 →
+       (cascadeAction P1 Q1 D1 Pw Qw Dw' P2 Q2 D2 = cascadeAction P1 Q1 D1 Pw Qw Dw P2 Q2 D2 ↔ Dw' = Dw) ∧
+       (cascadeAction P1 Q1 D1 Pw Qw Dw P2 Q2 D2 < cascadeAction P1 Q1 D1 Pw Qw Dw' P2 Q2 D2 ↔ Dw < Dw'))) := by
+  dsimp [fieldDeriv, fieldWronskian, cascadeAction]
+  have hLin : (a * f (x + 1) + b * g (x + 1)) - (a * f x + b * g x) =
+              a * (f (x + 1) - f x) + b * (g (x + 1) - g x) := by
+    simp only [Int.mul_sub]; omega
+  have hLeib : f (x + 1) * g (x + 1) - f x * g x =
+               f (x + 1) * (g (x + 1) - g x) + (f (x + 1) - f x) * g x := by
+    simp only [Int.mul_sub, Int.sub_mul]; omega
+  have hQuot : f (x + 1) * g x - f x * g (x + 1) =
+               -(f x * (g (x + 1) - g x) - g x * (f (x + 1) - f x)) := by
+    simp only [Int.mul_sub, Int.mul_comm]; omega
+  have hVar : (Q2 * (Qw * D1 + P1 * Dw') + P1 * Pw * D2) -
+              (Q2 * (Qw * D1 + P1 * Dw) + P1 * Pw * D2) =
+              P1 * (Dw' - Dw) * Q2 := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  refine ⟨⟨hLin, hLeib, by omega, hQuot,
+           ⟨by intro _; omega, by intro _; omega⟩,
+           ⟨by intro _; omega, by intro _; omega⟩⟩, ⟨hVar, ?_⟩⟩
+  intro hP1 hQ2
+  have hP1Q2pos : 0 < P1 * Q2 := Int.mul_pos (by omega) (by omega)
+  have hVarAssoc : (Q2 * (Qw * D1 + P1 * Dw') + P1 * Pw * D2) -
+                   (Q2 * (Qw * D1 + P1 * Dw) + P1 * Pw * D2) =
+                   (P1 * Q2) * (Dw' - Dw) := by
+    rw [hVar]; simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  constructor
+  · constructor
+    · intro hEq
+      rcases Int.lt_trichotomy Dw' Dw with hLt | hEqD | hGt
+      · have : (P1 * Q2) * (Dw' - Dw) < 0 := Int.mul_neg_of_pos_of_neg hP1Q2pos (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+      · exact hEqD
+      · have : (P1 * Q2) * (Dw' - Dw) > 0 := Int.mul_pos hP1Q2pos (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+    · intro hEqD
+      have h0 : Dw' - Dw = 0 := by omega
+      rw [h0, Int.mul_zero] at hVarAssoc
+      omega
+  · constructor
+    · intro hLtS
+      rcases Int.lt_trichotomy Dw Dw' with hLt | hEqD | hGt
+      · exact hLt
+      · have h0 : Dw' - Dw = 0 := by omega
+        rw [h0, Int.mul_zero] at hVarAssoc
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+      · have : (P1 * Q2) * (Dw' - Dw) < 0 := Int.mul_neg_of_pos_of_neg hP1Q2pos (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+    · intro hLtD
+      have : (P1 * Q2) * (Dw' - Dw) > 0 := Int.mul_pos hP1Q2pos (by omega)
+      omega
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
 #print axioms thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_i_sqrt2_fields
+#print axioms thm35_general_field_derivative_operator_quotient_wronskian_and_variational_euler_lagrange
 
 end RotatorCalculusPaper

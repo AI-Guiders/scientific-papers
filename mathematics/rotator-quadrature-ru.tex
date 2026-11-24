@@ -161,12 +161,14 @@
     (X,Y,R)\otimes (RX,\,-RY,\,X^2+Y^2) \;=\; \bigl(R(X^2+Y^2),\,0,\,R(X^2+Y^2)\bigr) \;\sim\; (1,0,1);
   \end{equation}
 \item \textbf{Аксиомы поля, мультипликативность нормы Пелля и обратный элемент в $\mathbb{Q}(\sqrt{2})$:}
-  в однородных тройках $(a,b,D)\in\mathbb{Z}^3$, представляющих $(a+b\sqrt{2})/D$, операции \texttt{sqrt2FieldAdd} и \texttt{sqrt2FieldMul} коммутативны и ассоциативны, $(a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 = (a_1^2-2b_1^2)(a_2^2-2b_2^2)$, а $\texttt{sqrt2FieldInv}(a,b,D) = (Da,-Db,a^2-2b^2)$ даёт $(a,b,D)\otimes_{\sqrt{2}}(Da,-Db,a^2-2b^2) = \bigl(D(a^2-2b^2),\,0,\,D(a^2-2b^2)\bigr)\sim(1,0,1)$.
+  в однородных тройках $(a,b,D)\in\mathbb{Z}^3$, представляющих $(a+b\sqrt{2})/D$, операции \texttt{sqrt2FieldAdd} и \texttt{sqrt2FieldMul} коммутативны и ассоциативны, $(a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 = (a_1^2-2b_1^2)(a_2^2-2b_2^2)$, а $\texttt{sqrt2FieldInv}(a,b,D) = (Da,-Db,a^2-2b^2)$ даёт $(a,b,D)\otimes_{\sqrt{2}}(Da,-Db,a^2-2b^2) = \bigl(D(a^2-2b^2),\,0,\,D(a^2-2b^2)\bigr)\sim(1,0,1)$;
+\item \textbf{Общий оператор производной $Df$, закон вронскиана для производной частного и вариационная производная $\delta\mathcal{S}/\delta D_w = P_1 Q_2$ (\texttt{thm35}):}
+  для любых $f,g\colon\mathbb{Z}\to\mathbb{Z}$ оператор производной $(Df)(x)=f(x+1)-f(x)$ удовлетворяет линейности $D(af+bg)=a\,Df+b\,Dg$, правилу Лейбница $D(f\cdot g)(x)=f(x+1)Dg(x)+Df(x)g(x)$, $D(Df)(x)=f(x+2)-2f(x+1)+f(x)$ и закону числителя производной частного в поле $f(x+1)g(x)-f(x)g(x+1) = g(x)Df(x)-f(x)Dg(x) = -\mathcal{W}(f,g)(x)$ ($f/g$ стационарно в точке $x \iff \mathcal{W}(f,g)(x)=0$ и строго возрастает $\iff \mathcal{W}(f,g)(x)<0$), а для функционала действия составной траектории $(L_1,w,L_2)$ вида $\mathcal{S} = Q_2(Q_w D_1 + P_1 D_w) + P_1 P_w D_2$ вариация активного участка $D_w\mapsto D_w'$ при закреплённых краевых множителях $(P_w,Q_w)$ даёт $\delta\mathcal{S} = P_1(D_w'-D_w)Q_2$ со стационарностью Эйлера--Лагранжа $\delta\mathcal{S}=0 \iff D_w'=D_w$ при $P_1,Q_2\ge 1$.
 \end{enumerate}
 \end{theorem}
 
 \section{Формальная верификация в Lean~4}
-Формальное доказательство Теорем~\ref{thm:main-1}--\ref{thm:main-34-field} (\texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}) содержится в модуле \texttt{RotatorQuadrature.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Формальное доказательство Теорем~\ref{thm:main-1}--\ref{thm:main-34-field} (\texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}, \texttt{thm35\_general\_field\_derivative\_operator\_quotient\_wronskian\_and\_variational\_euler\_lagrange}) содержится в модуле \texttt{RotatorQuadrature.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
