@@ -16,7 +16,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{\textbf{Collatz Trajectory Dynamics on Natural Modular Rings $\mathbb{Z}_{2^a}$, $\mathbb{Z}_{3^b}$, and $\mathbb{Z}_{2^a - 3^b}$:\\ $\mathrm{SL}_2(\mathbb{Z})$ Catalan Basis, Counter-Rotating Planetary Gear Splice, Pure-Binary Dual-Drift Conservation, and Odd-Core Dynamics in Lean~4}}
+\title{\textbf{Integer Kinematics of Two-Screw Planetary Gear Cascades on $\mathbb{Z}_{P}$, $\mathbb{Z}_{Q}$, and $\mathbb{Z}_{P - Q}$:\\ Counter-Rotating Gear Splice, Willis Differential Balance, and Symmetric Group $S_b$ Stage-Permutation Squeeze in Lean~4}}
 \author{Dmitrii A.~Karataev\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Formal Lean~4 verification and analytical development were conducted in partnership with \emph{Luch} (AI research partner, AI-Guiders).}}
 \date{2026}
 
@@ -147,19 +147,19 @@ In the Theory of Machines and Mechanisms, Willis's kinematic equation for a plan
 trapping the backward radix sum $S_d/3^b \le m_0$ with $\Delta_b = 0 \iff m_b = 0$ ($n_b = 1$), and factoring out the initial trailing-ones power $m_0 + 1 = 2^{r_0} q_0$ ($S_+ = 2^{r_0} S_{+,\mathrm{red}}$) into $2^{a - r_0}(m_0 - m_b) \equiv (2^a - 3^b) q_0 - S_{+,\mathrm{red}}$.
 \end{theorem}
 
-\begin{theorem}[Macro-step double $\mathrm{SL}_2(\mathbb{Z})$ Bézout lock, core-free gap jump, unconditional $r_0 = 0$ odd-core descent, and two-step tail compensation, \texttt{thm29}]
+\begin{theorem}[Macro-stage double $\mathrm{SL}_2(\mathbb{Z})$ Bézout lock, core-free gap jump, Plus/Minus-Screw cascade engagement, and arbitrary-horizon stage-exponent telescoping, \texttt{thm29}]
 \label{thm:odd-core-dynamics}
-Across any macro-step burning $r_0 \ge 0$ trailing ones from $n_0 + 1 = 2^{r_0 + 1} q_0$ ($m_0 = 2^{r_0} q_0 - 1$) and resetting via $2^{\beta_0} n_1 + 1 = 3^{r_0 + 1} q_0$ ($\beta_0 \ge 1$) to $n_1 + 1 = 2^{r_1 + 1} q_1$:
+Across any multi-stage planetary cascade engaging $r_0 \ge 0$ step ratios from $n_0 + 1 = 2^{r_0 + 1} q_0$ ($m_0 = 2^{r_0} q_0 - 1$) and shifting via $2^{\beta_0} n_1 + 1 = 3^{r_0 + 1} q_0$ ($\beta_0 \ge 1$) to $n_1 + 1 = 2^{r_1 + 1} q_1$:
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
-\item \textbf{Double $\mathrm{SL}_2(\mathbb{Z})$ Bézout lock and minimal Pillai drift:} $2^{r_0 + 1} q_0 - n_0 = 1 = 3^{r_0 + 1} q_0 - 2^{\beta_0} n_1$, $2^{\beta_0} n_1 - n_0 = (3^{r_0 + 1} - 2^{r_0 + 1}) q_0$, and $2^{r_0 + 1 + \beta_0} n_1 - 3^{r_0 + 1} n_0 = 3^{r_0 + 1} - 2^{r_0 + 1}$;
-\item \textbf{Core-free macro-step gap jump:} $q_0$ cancels identically from $3^{r_0 + 1} m_0 - 2^{r_0 + 1 + \beta_0} m_1 \equiv 2^{r_0}(2^{\beta_0} + 1) - 3^{r_0 + 1}$;
-\item \textbf{Odd-core transition and unconditional $r_0 = 0$ descent:} $2^{\beta_0 + r_1 + 1} q_1 - 3^{r_0 + 1} q_0 = 2^{\beta_0} - 1$, and at $r_0 = 0$ ($n_0 \equiv 1 \pmod 4$), $2^{\beta_0 + r_1 + 1}(q_0 - q_1) \equiv 2^{\beta_0}(2^{r_1 + 1} - 2) q_0 + (2^{\beta_0} - 2)(2 q_0 - 1) + (q_0 - 1) \ge q_0 - 1 > 0$, forcing $q_1 < q_0$ for all $q_0 > 1$;
-\item \textbf{Arbitrary-horizon $M$-macro-step telescoping tail cancellation ($q_0 \mapsto q_1 \mapsto \dots \mapsto q_M$):} across any chain of $M$ macro-steps with cumulative binary exponent $A_M = \sum_{m=0}^{M-1}(\beta_m + r_{m+1} + 1)$ and cumulative ternary exponent $B_M = \sum_{m=0}^{M-1}(r_m + 1)$, all intermediate trailing-ones counts $r_1,\dots,r_{M-1}$ cancel identically by telescoping:
+\item \textbf{Double $\mathrm{SL}_2(\mathbb{Z})$ Bézout lock and Plus/Minus-Screw cascade laws:} $2^{r_0 + 1} q_0 - n_0 = 1 = 3^{r_0 + 1} q_0 - 2^{\beta_0} n_1$, $2^{\beta_0} n_1 - n_0 = (3^{r_0 + 1} - 2^{r_0 + 1}) q_0$, and $2^{r_0 + 1 + \beta_0} n_1 - 3^{r_0 + 1} n_0 = 3^{r_0 + 1} - 2^{r_0 + 1}$, while on the Minus-Screw ($F_k(n_k - 1) = Q_k(n_0 - 1)$ with $F_k > Q_k > 0$) $F_k n_k - Q_k n_0 = F_k - Q_k$ yields strict contraction $n_k < n_0$;
+\item \textbf{Core-free macro-stage gap jump:} $q_0$ cancels identically from $3^{r_0 + 1} m_0 - 2^{r_0 + 1 + \beta_0} m_1 \equiv 2^{r_0}(2^{\beta_0} + 1) - 3^{r_0 + 1}$;
+\item \textbf{Shaft-core transition and single-stage contraction criterion:} $2^{\beta_0 + r_1 + 1} q_1 - 3^{r_0 + 1} q_0 = 2^{\beta_0} - 1$, so $(2^{\beta_0 + r_1 + 1} - 3^{r_0 + 1}) q_0 > 2^{\beta_0} - 1 \iff q_1 < q_0$ (always satisfied for $r_0 = 0,\ q_0 > 1$);
+\item \textbf{Arbitrary-horizon $M$-stage exponent telescoping ($q_0 \mapsto q_1 \mapsto \dots \mapsto q_M$):} across any chain of $M$ macro-stages with cumulative binary exponent $A_M = \sum_{m=0}^{M-1}(\beta_m + r_{m+1} + 1)$ and cumulative ternary exponent $B_M = \sum_{m=0}^{M-1}(r_m + 1)$, all intermediate stage exponents $r_1,\dots,r_{M-1}$ cancel identically by telescoping:
   \[
     A_M - B_M \;\equiv\; \Bigl(\sum_{m=0}^{M-1}\beta_m\Bigr) + r_M - r_0, \qquad
     2 A_M - 3 B_M \;\equiv\; \sum_{m=0}^{M-1}\bigl(2\beta_m - 1 - r_m\bigr) + 2 r_M - 2 r_0,
   \]
-  where the Catalan step increment $\Delta u_m = 2\beta_m - 1 - r_m$ is strictly positive ($\ge +1$) at $r_m = 0$ and non-negative ($\ge 0$) at $r_m = 1$ for all $\beta_m \ge 1$.
+  where the step increment $\Delta u_m = 2\beta_m - 1 - r_m$ satisfies $\Delta u_m \ge +1$ at $r_m = 0$ and $\Delta u_m \ge 0$ at $r_m = 1$ for all $\beta_m \ge 1$.
 \end{enumerate}
 \end{theorem}
 
