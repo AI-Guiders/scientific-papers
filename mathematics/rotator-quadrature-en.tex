@@ -54,40 +54,29 @@ The components of the calculus developed in this paper have deep roots in four c
   the difference derivative $(Df)(x)=f(x+1)-f(x)$, the quotient rule $D(f/g) = -\mathcal{W}(f,g)/(g\,g_{+1})$, Pochhammer falling factorials $x^{\underline{n}}$, and exact finite Taylor--Newton expansions were fully established by Newton, Taylor (\emph{Methodus Incrementorum}, 1715), and Boole (\emph{A Treatise on the Calculus of Finite Differences}, 1860~\cite{Boole1860}). In the 20th century, however, scientific computing abandoned exact projective difference algebra in favor of IEEE~754 floating-point approximations (`Float64`) with truncation and rounding drift;
 \item \textbf{Piecewise-linear $L^1$ ``taxicab trigonometry'' (Minkowski, Krause 1986~\cite{Krause1986}, Thompson 2011--2012~\cite{Thompson2011,Thompson2012}):}
   parameterizing the $L^1$-diamond $|C|+|S|=Q$ by arc length provided a natural cyclic phase register $\varphi\in\mathbb{Z}_{4Q}$, but in~\cite{Thompson2012} (\texttt{arXiv:1205.3814}) three obstacles remained unresolved: (a)~piecewise derivatives broke down at the four diamond corners and lost Euclidean coupling; (b)~quadrant transitions required branched powers $i^{k-2}$; and (c)~integral calculus, the lift to the Euclidean circle, and classical non-elementary integrals (Fresnel, Jacobi elliptic, Bessel, Dirichlet) were left open;
-\item \textbf{Invariant 3D cubature on the cuboctahedron $O_2(3)$ (Stroud 1971~\cite{Stroud1971}, Sobolev 1974~\cite{Sobolev1974}) and Mal'cev's algebraic systems (1970~\cite{Malcev1973}):}
-  spherical and polyhedral cubature theory~\cite{Sobolev1974,Stroud1971} established isotropic 3D integration on the $12$ vertices of the cuboctahedron plus the origin, but treated the weights in continuum floating-point arithmetic rather than linking $O_2(3)$ to the quadratic field $\mathbb{Q}(\sqrt{2})$ and the $\mathbb{Z}_{4Q}$ rotator carrier in the model-theoretic sense of Mal'cev~\cite{Malcev1973}.
+\item \textbf{Invariant 3D cubature on the cuboctahedron $O_2(3)$ (Stroud 1971~\cite{Stroud1971}, Sobolev 1974~\cite{Sobolev1974}):}
+  spherical and polyhedral cubature theory~\cite{Sobolev1974,Stroud1971} established isotropic 3D integration on the $12$ vertices of the cuboctahedron plus the origin, but treated the weights in continuum floating-point arithmetic rather than linking $O_2(3)$ to the quadratic field $\mathbb{Q}(\sqrt{2})$ and the $\mathbb{Z}_{4Q}$ rotator.
 \end{enumerate}
 
-In this paper (Part~I of the mathematical series), we unite these four traditions by choosing the closed $L^1$-diamond $|C(\varphi)|+|S(\varphi)|=Q\ge 1$ on $\mathbb{Z}_{4Q}$ as the canonical global gauge section of the projective line $\mathbb{P}^1(\mathbb{Q})$ over the three-dimensional cuboctahedral shell $O_2(d) = \{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2 = d-1\}$ ($d=3$) and phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$:
+In this paper (Part~I of the mathematical series), we unite these four traditions by choosing the closed $L^1$-diamond $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|=Q\ge 1$ on $\mathbb{Z}_{4Q}$ as the canonical global gauge section of the projective line $\mathbb{P}^1(\mathbb{Q})$ over the three-dimensional cuboctahedral shell
 \[
-  |{\triangle}(d)| = 2^d = 8,\qquad
-  |\square(d)| = 2d = 6,\qquad
-  |V_{O_2}(d)| = 2d(d-1) = 12,
+  O_2(d) \;=\; \bigl\{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \;\big|\; e_x^2+e_y^2+e_z^2 = d-1\bigr\} \qquad (d=3)
 \]
-\[
-  d_{\mathrm{in}}(\square) = 4,\qquad
-  d_{\mathrm{out}}(E)(d) = 2^d - d = 5,\qquad
-  \|e\|_2^2 = d - 1 = 2,
-\]
-\[
-  Q_\square(d) = 2^{|{\triangle}(d)|-1} = 128,\qquad
-  \Phi_{\mathrm{half}}(d) = 2\,Q_\square(d) = 256,\qquad
-  N_{\mathrm{ring}}(d) = 4\,Q_\square(d) = 512,\qquad
-  K_P(d) = \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64.
-\]
-All definitions and theorems below correspond to \texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, and \texttt{thm38} in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorQuadrature.lean}.
+and its associated integer phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ with structural constants:
+\begin{align}
+  |{\triangle}(d)| &= 2^d = 8, &
+  |\square(d)| &= 2d = 6, &
+  |V_{O_2}(d)| &= 2d(d-1) = 12, \label{eq:cuboct-counts-1} \\
+  d_{\mathrm{in}}(\square) &= 4, &
+  d_{\mathrm{out}}(E)(d) &= 2^d - d = 5, &
+  \|e\|_2^2 &= d - 1 = 2, \label{eq:cuboct-counts-2} \\
+  Q_\square(d) &= 2^{|{\triangle}(d)|-1} = 128, &
+  \Phi_{\mathrm{half}}(d) &= 2\,Q_\square(d) = 256, &
+  N_{\mathrm{ring}}(d) &= 4\,Q_\square(d) = 512, \label{eq:cuboct-counts-3}
+\end{align}
+and bisector step $K_P(d) = N_{\mathrm{ring}}(d)/|{\triangle}(d)| = 64$. All definitions and theorems below correspond to \texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, and \texttt{thm38} in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorQuadrature.lean}.
 
-\begin{definition}[Model-Theoretic Two-Sorted Algebraic System $\langle\mathcal{M},\mathcal{T}\rangle$ in the Sense of Mal'cev~\cite{Malcev1973}]
-\label{def:malcev-carriers}
-Throughout this series, the term \emph{carrier} (\emph{носитель} in the Russian model-theoretic tradition of A.\,I.~Mal'cev, \emph{Algebraic Systems}~\cite{Malcev1973}) is used strictly in its standard model-theoretic meaning: the underlying domain set of an algebraic structure $\mathfrak{A} = \langle A;\,\Sigma\rangle$. We formulate the calculus as a two-sorted algebraic structure $\mathfrak{S} = \langle \mathcal{M},\,\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ with two carriers:
-\begin{enumerate}[leftmargin=*,noitemsep]
-\item the \textbf{discrete $M$-carrier} $\mathcal{M} = \mathbb{Z}_{512}$ (equipped with $L^1$ diamond projections $\mathcal{C}_3,\mathcal{S}_3$ and modular arithmetic over the cuboctahedral lattice $\mathbb{Z}^3$);
-\item the \textbf{continuous (Euclidean) $T$-carrier} $\mathcal{T}$ (the continuum sort of $L^2$ Euclidean circle invariants $X^2+Y^2=R^2$, rational/real projective coordinates $\mathbb{Q}\subset\mathbb{R}$, and continuum Riemann integrals);
-\item connected by the root-free Weierstrass lift $\pi_{M\to T}(C,S) = (C^2-S^2,2CS,C^2+S^2)$, linear retraction $\iota_{T\to M}$, and stereographic homeomorphism $[0,512]/512 = [0,1] \cong \mathbb{R}$.
-\end{enumerate}
-\end{definition}
-
-\section{Discrete Euler Exponential, Euler's Identity \texorpdfstring{$e^{i\pi}+1=0$}{e\^{}(i pi)+1=0}, Constant Wronskian, and the Weierstrass 512-gon Lift}
+\section{Discrete Euler Exponential, Euler's Identity \texorpdfstring{$e^{i\pi}+1=0$}{e\^{}(i pi)+1=0}, Constant Wronskian, and Homogeneous Arithmetic in the Fields \texorpdfstring{$\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$}{Q(i) and Q(sqrt 2)}}
 \label{sec:wronskian-euler}
 
 For any $x\in\mathbb{Z}$, define the principal symmetric branch wrapper into $(-\Phi_{\mathrm{half}}(d),\Phi_{\mathrm{half}}(d)]$:
@@ -215,11 +204,11 @@ and the full-turn, half-wave, and quarter-square identities hold:
 By recursive definition of the cumulative sum $\widehat{\Phi}_f(L) = \sum_{\varphi=0}^{L-1} f(\varphi)$, its forward difference is $\Delta\widehat{\Phi}_f(L) = \widehat{\Phi}_f(L+1) - \widehat{\Phi}_f(L) = f(L)$, proving~\eqref{eq:newton-leibniz-universal}. Over a full period $N_{\mathrm{ring}}(3) = 512 = 4Q$, pairing each $\varphi\in[0,255]$ with $\varphi+256$ cancels all terms identically via Euler's identity $\mathcal{E}_3(\varphi+256) + \mathcal{E}_3(\varphi) = (0,0)$ from Theorem~\ref{thm:main-1}(i). Over the positive half-wave $\varphi\in[0,255]$ ($2Q = 256$), pairing $\varphi=m$ with $\varphi=Q+m$ for $m\in[0,Q-1]$ gives $\mathcal{S}_Q(m) + \mathcal{S}_Q(Q+m) = m + (Q-m) = Q$, so $\sum_{\varphi=0}^{2Q-1}\mathcal{S}_Q(\varphi) = Q\cdot Q = Q^2 = 128^2 = 16,384$. Finally, $(x+y)^2 - (x-y)^2 = (x^2+2xy+y^2)-(x^2-2xy+y^2) = 4xy$.
 \end{proof}
 
-\begin{theorem}[Projective Field Structure of the Rotator Carrier: Absence of Zero Divisors on the $L^1$-Diamond, Field Invertibility in $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, and the $C^\infty$ Derivative and Variational Tower, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}]
+\begin{theorem}[Homogeneous Projective Arithmetic of the Fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, Embedding of the $L^1$-Diamond into $\mathbb{Q}(i)^\times$, and the $C^\infty$ Derivative and Variational Tower, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}]
 \label{thm:main-34-field}
-Unlike naive residue multiplication modulo composite $4Q$ (which possesses zero divisors), the rotator pair $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ on the $L^1$-diamond $|C|+|S|=Q\ge 1$ and its Weierstrass lift $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ operate in homogeneous projective coordinates over the fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
+Unlike the residue ring $\mathbb{Z}_{4Q}$ modulo composite $4Q$ (which possesses zero divisors), homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ ($R\ge 1$) and $(a,b,D)\in\mathbb{Z}^3$ ($D\ge 1$) define exact projective arithmetic in the number fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, while every pair $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ on the $L^1$-diamond $|C|+|S|=Q\ge 1$ and its Weierstrass lift $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ embed into the multiplicative group $\mathbb{Q}(i)^\times$ of non-zero invertible elements of the field $\mathbb{Q}(i)$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Strict norm positivity and absence of zero divisors:}
+\item \textbf{Strict norm positivity on the $L^1$-diamond and closure in $\mathbb{Q}(i)^\times$:}
   \begin{equation}
     \label{eq:diamond-norm-positivity}
     2\bigl(C^2 + S^2\bigr) \;=\; (C + S)^2 + (C - S)^2 \;\ge\; Q^2 \;\ge\; 1, \qquad
@@ -230,21 +219,20 @@ Unlike naive residue multiplication modulo composite $4Q$ (which possesses zero 
     \label{eq:brahmagupta-no-zero-divisors}
     (C_1 C_2 - S_1 S_2)^2 + (C_1 S_2 + S_1 C_2)^2 \;=\; (C_1^2 + S_1^2)(C_2^2 + S_2^2) \;\ge\; 1,
   \end{equation}
-  the product of any two rotator states is never zero.
+  the Gaussian product of any two diamond states is non-zero and invertible in $\mathbb{Q}(i)$.
 \item \textbf{Abelian additive group, Abelian multiplicative group of non-zero elements, and distributivity in $\mathbb{Q}(i)$:}
-  in homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ representing $(X+iY)/R$, the operations
-  \begin{equation}
-    \label{eq:gauss-field-ops}
-    (X_1,Y_1,R_1)\oplus(X_2,Y_2,R_2) := (X_1 R_2 + X_2 R_1,\,Y_1 R_2 + Y_2 R_1,\,R_1 R_2), \quad
-    (X_1,Y_1,R_1)\otimes(X_2,Y_2,R_2) := (X_1 X_2 - Y_1 Y_2,\,X_1 Y_2 + Y_1 X_2,\,R_1 R_2)
-  \end{equation}
+  in homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ representing $(X+iY)/R\in\mathbb{Q}(i)$, the operations
+  \begin{align}
+    (X_1,Y_1,R_1)\oplus(X_2,Y_2,R_2) &:= \bigl(X_1 R_2 + X_2 R_1,\; Y_1 R_2 + Y_2 R_1,\; R_1 R_2\bigr), \label{eq:gauss-field-add} \\
+    (X_1,Y_1,R_1)\otimes(X_2,Y_2,R_2) &:= \bigl(X_1 X_2 - Y_1 Y_2,\; X_1 Y_2 + Y_1 X_2,\; R_1 R_2\bigr) \label{eq:gauss-field-mul}
+  \end{align}
   satisfy commutativity, associativity, and distributivity, $(X,Y,R)\oplus(-X,-Y,R) = (0,0,R^2)$, and the multiplicative inverse $\texttt{gaussFieldInv}(X,Y,R) = (RX,-RY,X^2+Y^2)$ satisfies
   \begin{equation}
     \label{eq:gauss-field-inverse}
     (X,Y,R)\otimes (RX,\,-RY,\,X^2+Y^2) \;=\; \bigl(R(X^2+Y^2),\,0,\,R(X^2+Y^2)\bigr) \;\sim\; (1,0,1).
   \end{equation}
 \item \textbf{Field axioms, Pell norm multiplicativity, and multiplicative inverse in $\mathbb{Q}(\sqrt{2})$:}
-  in homogeneous triples $(a,b,D)\in\mathbb{Z}^3$ representing $(a+b\sqrt{2})/D$, the operations \texttt{sqrt2FieldAdd} and \texttt{sqrt2FieldMul} satisfy commutativity and associativity, the Pell norm is multiplicative:
+  in homogeneous triples $(a,b,D)\in\mathbb{Z}^3$ representing $(a+b\sqrt{2})/D\in\mathbb{Q}(\sqrt{2})$, the operations \texttt{sqrt2FieldAdd} and \texttt{sqrt2FieldMul} satisfy commutativity and associativity, the Pell norm is multiplicative:
   \begin{equation}
     \label{eq:pell-norm-mult}
     (a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 \;=\; (a_1^2 - 2b_1^2)(a_2^2 - 2b_2^2),
@@ -257,10 +245,10 @@ Unlike naive residue multiplication modulo composite $4Q$ (which possesses zero 
 \item \textbf{General field derivative operator $Df$, quotient-derivative Wronskian law, variational derivative $\delta\mathcal{S}/\delta D_w = P_1 Q_2$, and $C^\infty$ Taylor--Newton tower (\texttt{thm35}, \texttt{thm38}):}
   for any $f,g\colon\mathbb{Z}\to\mathbb{Z}$, the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies
   \begin{align}
-    D(af + bg)(x) &= a\,Df(x) + b\,Dg(x), &
+    D(af + bg)(x) &= a\,Df(x) + b\,Dg(x), \label{eq:deriv-lin} \\
     D(f\cdot g)(x) &= f(x+1)\,Dg(x) + Df(x)\,g(x), \label{eq:deriv-leibniz} \\
-    D(Df)(x) &= f(x+2) - 2f(x+1) + f(x), &
-    f(x+1)g(x) - f(x)g(x+1) &= g(x)Df(x) - f(x)Dg(x) = -\mathcal{W}(f,g)(x), \label{eq:deriv-quotient-wronskian}
+    D(Df)(x) &= f(x+2) - 2f(x+1) + f(x), \label{eq:deriv-second} \\
+    f(x+1)g(x) - f(x)g(x+1) &= g(x)Df(x) - f(x)Dg(x) \;=\; -\mathcal{W}(f,g)(x), \label{eq:deriv-quotient-wronskian}
   \end{align}
   so $f/g$ is stationary at $x \iff \mathcal{W}(f,g)(x)=0$ and strictly increases $\iff \mathcal{W}(f,g)(x)<0$. On any composite trajectory $(L_1,w,L_2)$ with action $\mathcal{S} = Q_2(Q_w D_1 + P_1 D_w) + P_1 P_w D_2$, varying $D_w\mapsto D_w'$ at fixed boundary multipliers $(P_w,Q_w)$ yields
   \begin{equation}
@@ -285,7 +273,7 @@ Unlike naive residue multiplication modulo composite $4Q$ (which possesses zero 
 \begin{proof}
 (i)~Expanding $(C+S)^2 + (C-S)^2 = (C^2+2CS+S^2) + (C^2-2CS+S^2) = 2(C^2+S^2)$ proves the parallelogram identity in~\eqref{eq:diamond-norm-positivity}. On the $L^1$-diamond $|C|+|S|=Q\ge 1$, either $|C+S|=Q$ (when $C,S$ have the same sign) or $|C-S|=Q$ (when $C,S$ have opposite signs); thus one of $(C+S)^2, (C-S)^2$ equals $Q^2\ge 1$ while the other is a square $\ge 0$, giving $2(C^2+S^2) \ge Q^2 \ge 1$ and hence $C^2+S^2 \ge 1 > 0$ in $\mathbb{Z}$. Equation~\eqref{eq:brahmagupta-no-zero-divisors} follows by expanding both sides; since the product of two integers $\ge 1$ is $\ge 1$, no product of rotator states can vanish.
 
-(ii)--(iii)~Commutativity, associativity, and distributivity of~\eqref{eq:gauss-field-ops} and of \texttt{sqrt2FieldAdd}/\texttt{sqrt2FieldMul} follow by polynomial expansion over $\mathbb{Z}$. For the multiplicative inverse~\eqref{eq:gauss-field-inverse} in $\mathbb{Q}(i)$,
+(ii)--(iii)~Commutativity, associativity, and distributivity of~\eqref{eq:gauss-field-add}--\eqref{eq:gauss-field-mul} and of \texttt{sqrt2FieldAdd}/\texttt{sqrt2FieldMul} follow by polynomial expansion over $\mathbb{Z}$. For the multiplicative inverse~\eqref{eq:gauss-field-inverse} in $\mathbb{Q}(i)$,
 \[
   \bigl(X(RX) - Y(-RY),\; X(-RY) + Y(RX),\; R(X^2+Y^2)\bigr) \;=\; \bigl(R(X^2+Y^2),\; 0,\; R(X^2+Y^2)\bigr),
 \]
@@ -389,12 +377,11 @@ For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficie
   slicing $O_2(3)$ along $e_x\in\{-1,0,+1\}$ partitions the $12$ vertices into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each; adding the origin weight $|V_{O_2}(3)|=12$ to the equatorial zone $e_x=0$ yields $(4,16,4)$ with total weight $24$.
 \item \textbf{Functional additivity, odd-function annihilation, and unified even quadratic/quartic cubature:}
   for all functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$ of arbitrary degree,
-  \begin{equation}
-    \label{eq:functional-odd-annihilation}
-    \widehat{\mathcal{I}}_{O_2(3)}(F+G) = \widehat{\mathcal{I}}_{O_2(3)}(F) + \widehat{\mathcal{I}}_{O_2(3)}(G),\quad
-    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(\mathbf{e}) - F(-\mathbf{e})\bigr) = 0,\quad
-    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(e_x,e_y,e_z) - F(-e_x,e_y,e_z)\bigr) = 0,
-  \end{equation}
+  \begin{align}
+    \widehat{\mathcal{I}}_{O_2(3)}(F+G) &= \widehat{\mathcal{I}}_{O_2(3)}(F) + \widehat{\mathcal{I}}_{O_2(3)}(G), \label{eq:functional-additivity} \\
+    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(\mathbf{e}) - F(-\mathbf{e})\bigr) &= 0, \qquad
+    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(e_x,e_y,e_z) - F(-e_x,e_y,e_z)\bigr) = 0, \label{eq:functional-odd-annihilation}
+  \end{align}
   and on every even quadratic/quartic polynomial ($e_i^4 = e_i^2$ on $O_2(3)$):
   \begin{equation}
     \label{eq:unified-even-cubature}
@@ -464,8 +451,6 @@ The formalization of Theorems~\ref{thm:main-1}--\ref{thm:main-3b} (\texttt{thm1\
 \begin{thebibliography}{9}
 \bibitem{Boole1860}
 G.~Boole, \emph{A Treatise on the Calculus of Finite Differences}, Macmillan and Co., Cambridge--London, 1860.
-\bibitem{Malcev1973}
-A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, Berlin--Heidelberg--New York, 1973 (Russian original: \emph{Алгебраические системы}, Nauka, Moscow, 1970).
 \bibitem{Sobolev1974}
 S.\,L.~Sobolev, \emph{Introduction to the Theory of Cubature Formulae}, Nauka, Moscow, 1974 (English transl.: \emph{Cubature Formulas and Modern Analysis}, Gordon and Breach, 1992).
 \bibitem{Krause1986}
