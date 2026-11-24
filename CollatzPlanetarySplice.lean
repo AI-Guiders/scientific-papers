@@ -862,13 +862,31 @@ theorem thm30_countable_multi_screw_cascade_composition_and_2adic_boundary_exclu
        (PR * pbeta) * (n0 - n1) = (PR * pbeta - QR) * n0 - (QR - PR) ∧
        (PR * pbeta) * (n0 - n1) = PR * ((PR * pbeta - QR) * q0 - (pbeta - 1)) ∧
        (PR > 0 → pbeta > 0 → ((PR * pbeta - QR) * q0 > pbeta - 1 ↔ n1 < n0)))) ∧
-    -- 4. Odd-Core Seesaw Law on (pbeta * PR_next) * q1 = QR * q0 + (pbeta - 1):
-    -- Whenever 2^(beta_m + R_{m+1}) >= 3^(R_m), the odd core cannot grow by >= 2 (q1 < q0 + 2, so for odd cores q1 <= q0);
-    -- conversely, any odd-core growth q1 >= q0 + 2 forces 2^(beta_m + R_{m+1}) < 3^(R_m) (consuming the trailing-ones reservoir):
-    ((pbeta * PR) * n1 = QR * q0 + (pbeta - 1) →
-      pbeta ≥ 2 → PR ≥ 2 → q0 ≥ 1 →
-      (pbeta * PR ≥ QR → n1 < q0 + 2) ∧
-      (n1 ≥ q0 + 2 → pbeta * PR < QR)) ∧
+    -- 4. Odd-Core Seesaw Law and Exact Closed-Form Solution of the M-Step Odd-Core Recurrence:
+    -- (a) Single-step dual identity: `(QR + pbeta - 1) * q0 - (pbeta * PR) * n1 = (pbeta - 1) * (q0 - 1) >= 0`,
+    --     and step factor comparison: `PR * pbeta - (QR + pbeta - 1) = (PR - 1) * pbeta - (QR - 1)`;
+    -- (b) Odd-core seesaw: whenever `pbeta * PR >= QR`, `n1 < q0 + 2` (so `n1 <= q0` for odd cores);
+    --     conversely, `n1 >= q0 + 2 -> pbeta * PR < QR`;
+    -- (c) Closed-form M-step recurrence solution & Dual-Core Drift Conservation (`D_core + E_core = (U_M - Q_core) * q0`):
+    --     with `n0 + 1 = PR * q0`, `nFinal + 1 = PR_M * qM`, `P_tot = P_red * PR`, `P_core = P_red * PR_M`,
+    --     `P_core * qM - Q_core * q0 = D_core`, and `U_M * q0 - P_core * qM = E_core`:
+    --     `P_red * (n0 - nFinal) = (P_tot - Q_core) * q0 - D_core = (P_tot - U_M) * q0 + E_core`,
+    --     so `P_tot > U_M` (with `E_core >= 0, q0 >= 1, P_red > 0`) unconditionally forces `(P_tot - Q_core) * q0 > D_core` and `nFinal < n0`:
+    (((pbeta * PR) * n1 = QR * q0 + (pbeta - 1) →
+       (QR + pbeta - 1) * q0 - (pbeta * PR) * n1 = (pbeta - 1) * (q0 - 1) ∧
+       PR * pbeta - (QR + pbeta - 1) = (PR - 1) * pbeta - (QR - 1) ∧
+       (pbeta ≥ 2 → PR ≥ 2 → q0 ≥ 1 →
+         (pbeta * PR ≥ QR → n1 < q0 + 2) ∧
+         (n1 ≥ q0 + 2 → pbeta * PR < QR))) ∧
+     (n0 + 1 = PR * q0 → nFinal + 1 = pbeta * n1 →
+       multiScrewP L1 * n1 - multiScrewQ L1 * q0 = multiScrewD L1 →
+       multiScrewP L2 * q0 - multiScrewP L1 * n1 = nMid →
+       (multiScrewD L1 + nMid = (multiScrewP L2 - multiScrewQ L1) * q0 ∧
+        (multiScrewP L1 = nInf * pbeta →
+          nInf * (n0 - nFinal) = (nInf * PR - multiScrewQ L1) * q0 - multiScrewD L1 ∧
+          nInf * (n0 - nFinal) = (nInf * PR - multiScrewP L2) * q0 + nMid ∧
+          (nInf > 0 → q0 ≥ 1 → nMid ≥ 0 → nInf * PR > multiScrewP L2 →
+            (nInf * PR - multiScrewQ L1) * q0 > multiScrewD L1 ∧ nFinal < n0))))) ∧
     -- 5. Constructive global convergence to 1 whenever the countable contracting screw family covers all n > 1:
     ((∀ n : Nat, n > 1 → ∃ k : Nat, iter k n ≥ 1 ∧ iter k n < n) →
       ∀ n : Nat, n ≥ 1 → ∃ K : Nat, iter K n = 1) := by
@@ -995,36 +1013,91 @@ theorem thm30_countable_multi_screw_cascade_composition_and_2adic_boundary_exclu
           Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
         omega
       · omega
-  · intro hCoreEq hpbeta2 hPR2 hq01
-    have hTwoProd : (pbeta * PR) * 2 ≥ 4 * pbeta := by
-      have : (pbeta * PR) * 2 - 4 * pbeta = (2 * pbeta) * (PR - 2) := by
-        simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  · refine ⟨?_, ?_⟩
+    · intro hCoreEq
+      have hStepDual : (QR + pbeta - 1) * q0 - (pbeta * PR) * n1 = (pbeta - 1) * (q0 - 1) := by
+        have : (QR + pbeta - 1) * q0 - (QR * q0 + (pbeta - 1)) - (pbeta - 1) * (q0 - 1) = 0 := by
+          simp only [Int.add_mul, Int.sub_mul, Int.mul_sub, Int.one_mul, Int.mul_one]
+          omega
         omega
-      have hNonneg : (2 * pbeta) * (PR - 2) ≥ 0 := Int.mul_nonneg (by omega) (by omega)
-      omega
-    have hExpand : (pbeta * PR) * (q0 + 2) = (pbeta * PR) * q0 + (pbeta * PR) * 2 := by
-      simp only [Int.mul_add]
-    have hSeesaw : pbeta * PR ≥ QR → n1 < q0 + 2 := by
-      intro hGe
-      have hDiffNonneg : (pbeta * PR - QR) * q0 ≥ 0 := Int.mul_nonneg (by omega) (by omega)
-      have hDiffId : (pbeta * PR) * q0 - QR * q0 = (pbeta * PR - QR) * q0 := by
-        simp only [Int.sub_mul]
-      have hStrict : (pbeta * PR) * (q0 + 2 - n1) > 0 := by
-        have : (pbeta * PR) * (q0 + 2 - n1) = (pbeta * PR) * (q0 + 2) - (pbeta * PR) * n1 := by
-          simp only [Int.mul_sub]
+      have hFactorCmp : PR * pbeta - (QR + pbeta - 1) = (PR - 1) * pbeta - (QR - 1) := by
+        simp only [Int.sub_mul, Int.one_mul]
         omega
-      have hPosProd : pbeta * PR > 0 := Int.mul_pos (by omega) (by omega)
-      by_cases hLe : q0 + 2 - n1 ≤ 0
-      · have hNonpos : (pbeta * PR) * (q0 + 2 - n1) ≤ 0 :=
-          Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+      refine ⟨hStepDual, hFactorCmp, ?_⟩
+      intro hpbeta2 hPR2 hq01
+      have hTwoProd : (pbeta * PR) * 2 ≥ 4 * pbeta := by
+        have : (pbeta * PR) * 2 - 4 * pbeta = (2 * pbeta) * (PR - 2) := by
+          simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+          omega
+        have hNonneg : (2 * pbeta) * (PR - 2) ≥ 0 := Int.mul_nonneg (by omega) (by omega)
+        omega
+      have hExpand : (pbeta * PR) * (q0 + 2) = (pbeta * PR) * q0 + (pbeta * PR) * 2 := by
+        simp only [Int.mul_add]
+      have hSeesaw : pbeta * PR ≥ QR → n1 < q0 + 2 := by
+        intro hGe
+        have hDiffNonneg : (pbeta * PR - QR) * q0 ≥ 0 := Int.mul_nonneg (by omega) (by omega)
+        have hDiffId : (pbeta * PR) * q0 - QR * q0 = (pbeta * PR - QR) * q0 := by
+          simp only [Int.sub_mul]
+        have hStrict : (pbeta * PR) * (q0 + 2 - n1) > 0 := by
+          have : (pbeta * PR) * (q0 + 2 - n1) = (pbeta * PR) * (q0 + 2) - (pbeta * PR) * n1 := by
+            simp only [Int.mul_sub]
+          omega
+        have hPosProd : pbeta * PR > 0 := Int.mul_pos (by omega) (by omega)
+        by_cases hLe : q0 + 2 - n1 ≤ 0
+        · have hNonpos : (pbeta * PR) * (q0 + 2 - n1) ≤ 0 :=
+            Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+          omega
+        · omega
+      refine ⟨hSeesaw, ?_⟩
+      intro hGrow
+      by_cases hGe : pbeta * PR ≥ QR
+      · have hLt := hSeesaw hGe
         omega
       · omega
-    refine ⟨hSeesaw, ?_⟩
-    intro hGrow
-    by_cases hGe : pbeta * PR ≥ QR
-    · have hLt := hSeesaw hGe
-      omega
-    · omega
+    · intro hn0 hnFinal hFwdCore hDualEnv
+      have hDualSum : multiScrewD L1 + nMid = (multiScrewP L2 - multiScrewQ L1) * q0 := by
+        have : (multiScrewP L2 - multiScrewQ L1) * q0 =
+               multiScrewP L2 * q0 - multiScrewQ L1 * q0 := by
+          simp only [Int.sub_mul]
+        omega
+      refine ⟨hDualSum, ?_⟩
+      intro hPcoreSplit
+      have hLhsId : nInf * (n0 - nFinal) = (nInf * PR) * q0 - multiScrewP L1 * n1 := by
+        have h1 : nInf * (n0 - nFinal) = nInf * (n0 + 1) - nInf * (nFinal + 1) := by
+          simp only [Int.mul_sub, Int.mul_add, Int.mul_one]
+          omega
+        have h2 : nInf * (PR * q0) = (nInf * PR) * q0 := by
+          simp only [Int.mul_assoc]
+        have h3 : nInf * (pbeta * n1) = (nInf * pbeta) * n1 := by
+          simp only [Int.mul_assoc]
+        rw [hn0, hnFinal, h2, h3, ← hPcoreSplit] at h1
+        exact h1
+      have hFerm1 : nInf * (n0 - nFinal) = (nInf * PR - multiScrewQ L1) * q0 - multiScrewD L1 := by
+        have : (nInf * PR - multiScrewQ L1) * q0 = (nInf * PR) * q0 - multiScrewQ L1 * q0 := by
+          simp only [Int.sub_mul]
+        omega
+      have hFerm2 : nInf * (n0 - nFinal) = (nInf * PR - multiScrewP L2) * q0 + nMid := by
+        have : (nInf * PR - multiScrewP L2) * q0 = (nInf * PR) * q0 - multiScrewP L2 * q0 := by
+          simp only [Int.sub_mul]
+        omega
+      refine ⟨hFerm1, hFerm2, ?_⟩
+      intro hnInfPos hq0Ge1 hnMidGe0 hPtotGtU
+      have hProdPos : (nInf * PR - multiScrewP L2) * q0 ≥ 1 := by
+        have : ((nInf * PR - multiScrewP L2) - 1) * (q0 - 1) ≥ 0 :=
+          Int.mul_nonneg (by omega) (by omega)
+        have hExp : ((nInf * PR - multiScrewP L2) - 1) * (q0 - 1) =
+                    (nInf * PR - multiScrewP L2) * q0 - (nInf * PR - multiScrewP L2) - q0 + 1 := by
+          simp only [Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul]
+          omega
+        omega
+      have hLhsPos : nInf * (n0 - nFinal) > 0 := by omega
+      have hDesc : nFinal < n0 := by
+        by_cases hLe : n0 - nFinal ≤ 0
+        · have hNonpos : nInf * (n0 - nFinal) ≤ 0 :=
+            Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+          omega
+        · omega
+      exact ⟨by omega, hDesc⟩
   · intro hCover
     exact collatz_global_convergence_from_local_descent iter hZero hAdd hCover
 
