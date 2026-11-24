@@ -30,6 +30,27 @@ def bracketFoldU : (Int → Int → Int → Int) → (Int → Int → Int → In
   | _, _, _, u, [] => u
   | stepL, stepU, l, u, s :: rest => bracketFoldU stepL stepU (stepL l u s) (stepU l u s) rest
 
+/-- Algebraic system `𝔄 = ⟨Carrier; op, rel⟩` in the sense of A. I. Mal'cev (*Algebraic Systems*). -/
+structure MalcevSystem (Carrier : Type) where
+  op  : Carrier → Carrier → Carrier
+  rel : Carrier → Prop
+
+/-- Homomorphism `π : 𝔄 → 𝔅` of Mal'cev algebraic systems preserving operations and predicates. -/
+structure MalcevHom {A B : Type} (sysA : MalcevSystem A) (sysB : MalcevSystem B) where
+  toFun   : A → B
+  map_op  : ∀ x y : A, toFun (sysA.op x y) = sysB.op (toFun x) (toFun y)
+  map_rel : ∀ x : A, sysA.rel x ↔ sysB.rel (toFun x)
+
+/-- Kernel equivalence relation `x ≡_{ker π} x' ↔ π(x) = π(x')` of a Mal'cev homomorphism. -/
+def malcevKernel {A B : Type} {sysA : MalcevSystem A} {sysB : MalcevSystem B}
+    (hom : MalcevHom sysA sysB) (x x' : A) : Prop :=
+  hom.toFun x = hom.toFun x'
+
+/-- Tarski-Mal'cev satisfaction relation `(𝔄, x) ⊨ φ` pulled back along a carrier projection `π : A → T`. -/
+def pullBackSatisfaction {A T Formula : Type} (pi : A → T) (modelsT : T → Formula → Prop)
+    (x : A) (phi : Formula) : Prop :=
+  modelsT (pi x) phi
+
 /-- **Theorem 17 (Projective Tower Stabilization `Π_{n → 0}`, Homomorphism Kernel Congruence `ker π`,
 Bilateral Bracket Limit over Stage Monoids `List Int`, Cochain Coboundary Invariance,
 Modular Translation Bijection on `ℤ_{512}`, and Lawvere's Diagonal Theorem)**:
@@ -89,11 +110,33 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
      ((∀ b : Bool, b ≠ !b) ∧
       (((phi + 256) % 512 + 256) % 512 = phi % 512) ∧
       ((phi + 256) % 512 ≠ phi % 512))) ∧
-    -- 4. Constructive Lawvere diagonal lemma:
+    -- 4. Constructive Lawvere diagonal lemma and Model-Theoretic Tarski-Godel-Mal'cev theorems:
     (∀ (α β : Type) (eval : α → α → β) (sigma : β → β),
       (∀ b : β, sigma b ≠ b) →
       let diag : α → β := fun x => sigma (eval x x)
       ∀ p : α, eval p p ≠ diag p) ∧
+    -- 4b. Model-Theoretic Mal'cev Congruence, Elementary Indistinguishability of `ker π`,
+    --     Approximation-Chain Termination (no extension `M_ext ↠ M` can alter `Th(M)`),
+    --     and Tarski-Godel Semantic Oracle Undefinability (`0 Classical.choice`):
+    ((∀ (A B : Type) (sysA : MalcevSystem A) (sysB : MalcevSystem B) (hom : MalcevHom sysA sysB)
+        (x x' y y' : A),
+        malcevKernel hom x x' → malcevKernel hom y y' →
+        malcevKernel hom (sysA.op x y) (sysA.op x' y') ∧ (sysA.rel x ↔ sysA.rel x')) ∧
+     (∀ (M_ext M_base T_obs Formula : Type)
+        (piExt : M_ext → M_base) (sect : M_base → M_ext)
+        (piObs : M_base → T_obs) (modelsT : T_obs → Formula → Prop),
+        (∀ m : M_base, piExt (sect m) = m) →
+        let modelsBase := pullBackSatisfaction piObs modelsT
+        let modelsExt  := pullBackSatisfaction (fun y => piObs (piExt y)) modelsT
+        (∀ (y y' : M_ext), piExt y = piExt y' → ∀ (phi : Formula), modelsExt y phi ↔ modelsExt y' phi) ∧
+        (∀ (y : M_ext) (phi : Formula), modelsExt y phi ↔ modelsBase (piExt y) phi) ∧
+        (∀ (phi : Formula), (∀ y : M_ext, modelsExt y phi) ↔ (∀ m : M_base, modelsBase m phi))) ∧
+     (∀ (Code Formula : Type) (neg : Formula → Formula) (sub : Code → Code → Formula)
+        (oracleModels : Formula → Prop) (internalEval : Code → Formula → Prop),
+        (∀ phi : Formula, oracleModels (neg phi) ↔ ¬ oracleModels phi) →
+        ∀ (c : Code),
+          (∀ x : Code, internalEval c (sub x x) ↔ oracleModels (neg (sub x x))) →
+          ¬ (internalEval c (sub c c) ↔ oracleModels (sub c c)))) ∧
     -- 5. General limit construction over countable stage monoids (stageFold, boundarySum, bracketFold)
     --    and Weierstrass stereographic carrier equivalence across all scales Q ∈ ℤ:
     ((∀ (C S X Y R : Int),
@@ -123,7 +166,7 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
   dsimp [plaquetteCoboundaryRaw, cubeClosedSurfaceFluxSum]
   refine ⟨⟨?_, ?_⟩, ⟨by omega, by omega, by omega, by omega⟩,
           ⟨⟨by omega, by omega, by omega, by omega⟩, ⟨?_, by omega, by omega⟩⟩,
-          ?_, ⟨?_, ?_, ?_, ?_, ?_⟩⟩
+          ?_, ⟨?_, ?_, ?_⟩, ⟨?_, ?_, ?_, ?_, ?_⟩⟩
   · intro M_sort T_sort opM opT pi hHom x x' y y' hx hy
     rw [hHom x y, hHom x' y', hx, hy]
   · intro M β pi obs hCompat n
@@ -137,6 +180,33 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
     cases b <;> decide
   · intro α β eval sigma hNoFix p hEq
     exact hNoFix (eval p p) hEq.symm
+  · intro A B sysA sysB hom x x' y y' hx hy
+    unfold malcevKernel at *
+    constructor
+    · rw [hom.map_op x y, hom.map_op x' y', hx, hy]
+    · rw [hom.map_rel x, hom.map_rel x', hx]
+  · intro M_ext M_base T_obs Formula piExt sect piObs modelsT hSect
+    dsimp [pullBackSatisfaction]
+    refine ⟨?_, ?_, ?_⟩
+    · intro y y' hEq phi
+      rw [hEq]
+    · intro y phi
+      rfl
+    · intro phi
+      constructor
+      · intro hAll m
+        have h := hAll (sect m)
+        rw [hSect m] at h
+        exact h
+      · intro hAll y
+        exact hAll (piExt y)
+  · intro Code Formula neg sub oracleModels internalEval hNeg c hDiag hEquiv
+    have h1 : internalEval c (sub c c) ↔ ¬ oracleModels (sub c c) :=
+      Iff.trans (hDiag c) (hNeg (sub c c))
+    have h2 : oracleModels (sub c c) ↔ ¬ oracleModels (sub c c) :=
+      Iff.trans hEquiv.symm h1
+    have hNot : ¬ oracleModels (sub c c) := fun hp => (h2.mp hp) hp
+    exact hNot (h2.mpr hNot)
   · intro C S X Y R hX hY hR
     subst hX; subst hY; subst hR
     refine ⟨?_, ?_, ?_, ?_⟩ <;>
