@@ -85,13 +85,19 @@
 а противоположные знаки соседних этажей ($I_{\mathcal{R}} \le 0 \le I_{\mathcal{R}'}$ или $I_{\mathcal{R}'} \le 0 \le I_{\mathcal{R}}$) зажимают пару $(u,v)$ в двустороннюю целочисленную вилку $u P_{\mathcal{R}} \le v Q_{\mathcal{R}} \land v Q_{\mathcal{R}'} \le u P_{\mathcal{R}'}$ (соответственно $u P_{\mathcal{R}'} \le v Q_{\mathcal{R}'} \land v Q_{\mathcal{R}} \le u P_{\mathcal{R}}$).
 \end{theorem}
 
-\begin{theorem}[Бескорневое тождество кубического сжатия Паде в $9$ клетках вычетов, \texttt{thm10}]
+\begin{theorem}[Бескорневое тождество кубического сжатия Паде и принцип лакуны столкновения двух решений в одной клетке вычетов, \texttt{thm10}, \texttt{thm10b}]
 \label{thm:main-10}
 Для любых $(U,V,a,b)\in\mathbb{Z}^4$ инвариант $I_1 = a\widehat{P}_1 - b\widehat{Q}_1$ ($\widehat{P}_1 = U+2V,\ \widehat{Q}_1 = 2U+V$) и кубический фактор $\Phi_3(x,y) = x^2 + xy + y^2$ удовлетворяют тождеству
 \begin{equation}
   \label{eq:root-free-cubic-compression}
   U\,I_1\,\Phi_3\bigl(a\widehat{P}_1,\,b\widehat{Q}_1\bigr) \;\equiv\; a^3(U-V)^3(U+V) \;-\; \bigl(U b^3 - V a^3\bigr)\,\widehat{Q}_1^3.
 \end{equation}
+В частности, для любых двух решений $(X,Y)$ и $(X',Y')$ в одной клетке вычетов по модулю~$3$ ($U = \widetilde{A}X^3,\ V = \widetilde{B}Y^3,\ C = U-V,\ C' = \widetilde{A}(X')^3 - \widetilde{B}(Y')^3$) подстановка $a = Y'X,\ b = X'Y$ ($\mathcal{X}_1 = X\widehat{P}_1,\ \mathcal{Y}_1 = Y\widehat{Q}_1,\ I_{\mathrm{cell}} = Y'\mathcal{X}_1 - X'\mathcal{Y}_1$) даёт $U b^3 - V a^3 = X^3 Y^3 C'$ и тождественно сокращает $X^3 \ge 1$ (\texttt{thm10b\_pillai\_same\_cell\_two\_solution\_collision\_and\_gap\_law}):
+\[
+  \widetilde{A}\,I_{\mathrm{cell}}\,\Phi_3\bigl(Y'\mathcal{X}_1,\ X'\mathcal{Y}_1\bigr)
+  \;=\; (Y')^3\,C^3(U+V) \;-\; C'\,Y^3\,\widehat{Q}_1^3,
+\]
+откуда при $C' = C \ge 1$ ($\widetilde{A}\ge 1,\ Y'\mathcal{X}_1\ge 1,\ X'\mathcal{Y}_1\ge 1$) любое второе решение ниже порога лакуны первого этажа $(Y')^3 C^2(U+V) < Y^3\widehat{Q}_1^3$ удовлетворяет $I_{\mathrm{cell}} \le -1 < 0$ ($I_{\mathrm{cell}}\ne 0$) и $3\widetilde{A} \le C\bigl(Y^3\widehat{Q}_1^3 - (Y')^3 C^2(U+V)\bigr)$.
 \end{theorem}
 
 \begin{theorem}[Тождество межэтажного Вронскиана между этажами $k=2$ и $k=3$, \texttt{thm11}]

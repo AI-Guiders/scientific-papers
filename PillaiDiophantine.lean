@@ -273,6 +273,123 @@ theorem thm10_root_free_cubic_pade_compression (U V a b : Int) :
              Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   omega
 
+/-- **Theorem 10b (Two-Solution Collision Law in One Modulo-`3` Residue Cell
+`At * I_cell * Φ₃(Y' 𝒳₁, X' 𝒴₁) = (Y')³ C³ (U + V) - C' 𝒴₁³` and Gap Principle)**:
+For any two solutions `(X, Y)` and `(X', Y')` in the same modulo-`3` residue cell
+(`U = At X³`, `V = Bt Y³`, `C = U - V`, `C' = At (X')³ - Bt (Y')³`,
+`𝒳₁ = X (U + 2V)`, `𝒴₁ = Y (2U + V)`, `I_cell = Y' 𝒳₁ - X' 𝒴₁`), the common factor `X³` cancels
+identically, yielding the root-free two-solution collision equation and gap bound (`0 Classical.choice`). -/
+theorem thm10b_pillai_same_cell_two_solution_collision_and_gap_law
+    (At Bt X3 Y3 Xp3 Yp3 X Y Xp Yp : Int)
+    (hX3 : X * X * X = X3) (hY3 : Y * Y * Y = Y3)
+    (hXp3 : Xp * Xp * Xp = Xp3) (hYp3 : Yp * Yp * Yp = Yp3) :
+    let U := At * X3
+    let V := Bt * Y3
+    let C := U - V
+    let Cp := At * Xp3 - Bt * Yp3
+    let P1 := U + (V + V)
+    let Q1 := (U + U) + V
+    let a := Yp * X
+    let b := Xp * Y
+    let Icell := a * P1 - b * Q1
+    let uX := a * P1
+    let vY := b * Q1
+    let phi3 := uX * uX + uX * vY + vY * vY
+    (U * (b * b * b) - V * (a * a * a) = X3 * Y3 * Cp) ∧
+    (X3 * (At * Icell * phi3) = X3 * (Yp3 * (C * C * C) * (U + V) - Cp * Y3 * (Q1 * Q1 * Q1))) ∧
+    (1 ≤ X3 →
+      At * Icell * phi3 = Yp3 * (C * C * C) * (U + V) - Cp * Y3 * (Q1 * Q1 * Q1)) ∧
+    (Cp = C →
+      (1 ≤ At → 1 ≤ X3 → 1 ≤ C → 1 ≤ uX → 1 ≤ vY →
+       Yp3 * (C * C) * (U + V) < Y3 * (Q1 * Q1 * Q1) →
+       At * Icell * phi3 = C * (Yp3 * (C * C) * (U + V) - Y3 * (Q1 * Q1 * Q1)) ∧
+       3 ≤ phi3 ∧ Icell ≤ -1 ∧ Icell ≠ 0 ∧
+       3 * At ≤ C * (Y3 * (Q1 * Q1 * Q1) - Yp3 * (C * C) * (U + V)))) := by
+  intro U V C Cp P1 Q1 a b Icell uX vY phi3
+  have hBase := thm10_root_free_cubic_pade_compression U V a b
+  dsimp at hBase
+  have ha3 : a * a * a = Yp3 * X3 := by
+    dsimp [a]
+    calc (Yp * X) * (Yp * X) * (Yp * X)
+      _ = (Yp * Yp * Yp) * (X * X * X) := by simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      _ = Yp3 * X3 := by rw [hYp3, hX3]
+  have hb3 : b * b * b = Xp3 * Y3 := by
+    dsimp [b]
+    calc (Xp * Y) * (Xp * Y) * (Xp * Y)
+      _ = (Xp * Xp * Xp) * (Y * Y * Y) := by simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      _ = Xp3 * Y3 := by rw [hXp3, hY3]
+  have hCross : U * (b * b * b) - V * (a * a * a) = X3 * Y3 * Cp := by
+    rw [ha3, hb3]
+    dsimp [U, V, Cp]
+    simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hId : X3 * (At * Icell * phi3) =
+             X3 * (Yp3 * (C * C * C) * (U + V) - Cp * Y3 * (Q1 * Q1 * Q1)) := by
+    rw [hCross, ha3] at hBase
+    have hL : X3 * (At * Icell * phi3) = U * (a * P1 - b * Q1) * ((a * P1) * (a * P1) + (a * P1) * (b * Q1) + (b * Q1) * (b * Q1)) := by
+      dsimp [U, Icell, phi3, uX, vY]
+      simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    have hR : (Yp3 * X3) * ((U - V) * (U - V) * (U - V)) * (U + V) - (X3 * Y3 * Cp) * (Q1 * Q1 * Q1) =
+              X3 * (Yp3 * (C * C * C) * (U + V) - Cp * Y3 * (Q1 * Q1 * Q1)) := by
+      dsimp [C]
+      simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    rw [hL, hBase, hR]
+  have hCancelX3 : 1 ≤ X3 →
+      At * Icell * phi3 = Yp3 * (C * C * C) * (U + V) - Cp * Y3 * (Q1 * Q1 * Q1) := by
+    intro hX3pos
+    let Lval := At * Icell * phi3
+    let Rval := Yp3 * (C * C * C) * (U + V) - Cp * Y3 * (Q1 * Q1 * Q1)
+    have hSub0 : X3 * (Lval - Rval) = 0 := by
+      dsimp [Lval, Rval]
+      rw [Int.mul_sub, hId, Int.sub_self]
+    rcases Int.lt_trichotomy Lval Rval with hLt | hEq | hGt
+    · have hPos : 0 < X3 * (Rval - Lval) := Int.mul_pos (by omega) (by omega)
+      have : X3 * (Rval - Lval) = -(X3 * (Lval - Rval)) := by simp only [Int.mul_sub, Int.neg_sub]
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+    · exact hEq
+    · have hPos : 0 < X3 * (Lval - Rval) := Int.mul_pos (by omega) (by omega)
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+  refine ⟨hCross, hId, hCancelX3, ?_⟩
+  intro hCpEq hAt1 hX31 hC1 huX1 hvY1 hGapLt
+  have hPure := hCancelX3 hX31
+  have hSamePure : At * Icell * phi3 = C * (Yp3 * (C * C) * (U + V) - Y3 * (Q1 * Q1 * Q1)) := by
+    rw [hPure, hCpEq]
+    simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have huXsq : 1 ≤ uX * uX := Int.mul_pos (by omega : 0 < uX) (by omega : 0 < uX)
+  have hvYsq : 1 ≤ vY * vY := Int.mul_pos (by omega : 0 < vY) (by omega : 0 < vY)
+  have huvProd : 1 ≤ uX * vY := Int.mul_pos (by omega : 0 < uX) (by omega : 0 < vY)
+  have hPhi3 : 3 ≤ phi3 := by dsimp [phi3]; omega
+  have hDiffPos : 0 < Y3 * (Q1 * Q1 * Q1) - Yp3 * (C * C) * (U + V) := by omega
+  have hProdPos : 0 < C * (Y3 * (Q1 * Q1 * Q1) - Yp3 * (C * C) * (U + V)) :=
+    Int.mul_pos (by omega) hDiffPos
+  have hRhsNeg : C * (Yp3 * (C * C) * (U + V) - Y3 * (Q1 * Q1 * Q1)) =
+                 -(C * (Y3 * (Q1 * Q1 * Q1) - Yp3 * (C * C) * (U + V))) := by
+    simp only [Int.mul_sub, Int.neg_sub]
+  have hProdNeg : At * Icell * phi3 < 0 := by omega
+  have hIclt0 : Icell < 0 := by
+    rcases Int.lt_trichotomy Icell 0 with hLt | hEq | hGt
+    · exact hLt
+    · have hZero : At * Icell * phi3 = 0 := by
+        rw [hEq, Int.mul_zero, Int.zero_mul]
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+    · have hGe0 : 0 ≤ Icell := Int.le_of_lt hGt
+      have h1 : 0 ≤ At * Icell := Int.mul_nonneg (by omega) hGe0
+      have h2 : 0 ≤ At * Icell * phi3 := Int.mul_nonneg h1 (by omega)
+      exact False.elim (Int.lt_irrefl 0 (Int.lt_of_le_of_lt h2 hProdNeg))
+  have hIcneg : Icell ≤ -1 := Int.le_of_lt_add_one hIclt0
+  have hStep1 : At ≤ At * (-Icell) := by
+    have : At * (-Icell) - At = At * (-Icell - 1) := by simp only [Int.mul_sub, Int.mul_one]
+    have : 0 ≤ At * (-Icell - 1) := Int.mul_nonneg (by omega) (by omega)
+    omega
+  have hStep2 : 3 * (At * (-Icell)) ≤ (At * (-Icell)) * phi3 := by
+    have : (At * (-Icell)) * phi3 - 3 * (At * (-Icell)) = (At * (-Icell)) * (phi3 - 3) := by
+      simp only [Int.mul_sub, Int.mul_comm 3 (At * (-Icell))]
+    have : 0 ≤ (At * (-Icell)) * (phi3 - 3) := Int.mul_nonneg (by omega) (by omega)
+    omega
+  have hEqNeg : (At * (-Icell)) * phi3 = -(At * Icell * phi3) := by
+    simp only [Int.mul_neg, Int.neg_mul]
+  have hFourth : 3 * At ≤ C * (Y3 * (Q1 * Q1 * Q1) - Yp3 * (C * C) * (U + V)) := by omega
+  exact ⟨hSamePure, hPhi3, hIcneg, Int.ne_of_lt hIclt0, hFourth⟩
+
 /-- **Theorem 11 (Cross-Floor Padé Wronskian `W_{2,3}` Identity
 `Q̂_{1,2}² P̂_{1,3}³ - P̂_{1,2}² Q̂_{1,3}³ = (U - V)³ (U² + 3UV + V²)` and Right Kernel & Trace
 of `P₃(A, B, A+B)`)**: -/
@@ -309,6 +426,7 @@ theorem thm11_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
 #print axioms thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych
 #print axioms thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
 #print axioms thm10_root_free_cubic_pade_compression
+#print axioms thm10b_pillai_same_cell_two_solution_collision_and_gap_law
 #print axioms thm11_cross_floor_wronskian_and_p3_kernel
 
 end RotatorCalculusPaper
