@@ -25,136 +25,299 @@
 \newtheorem{remark}[theorem]{Remark}
 
 \title{\textbf{Foundations of Discrete Quantum Mechanics (DQM):\\ Dimensional Uniqueness $1 + 2^d = d^2$ ($d = 3$), Symplectic Verlet Dynamics on $\mathbb{Z}_{512}$, Born's Rule, and the Fine-Structure Constant $\alpha_{\mathrm{fs}}^{-1}$ in Lean~4}}
-\author{Dmitrii A.~Karataev\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Formal Lean~4 verification and analytical development were conducted in partnership with \emph{Luch} (AI research partner, AI-Guiders).}}
-\date{}
+\author{Dmitrii A.~Karataev\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Formal Lean~4 verification and analytical development were conducted in partnership with \emph{Luch} (AI research partner, AI-Guiders). Licensed under strong reciprocal Copyleft: text and tables under Creative Commons Attribution-ShareAlike 4.0 International (\texttt{CC-BY-SA-4.0}); Lean~4 proof code under GNU General Public License v3.0 or later (\texttt{GPL-3.0-or-later}).}}
+\date{2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-In this foundational paper of Discrete Quantum Mechanics (DQM), we formulate a local reversible cellular automaton over the two-sorted model-theoretic structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ in the sense of A.\,I.~Mal'cev (\emph{Algebraic Systems}), where the \textbf{discrete $M$-carrier} is the countable inductive family of integer phase rings $\mathbb{Z}_{4Q}$ over $\mathbb{Z}^d$ (with finite single-turn cell residue ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ at scale $K=1$) and the \textbf{continuous $T$-carrier} is the continuum sort of observable fields, trajectories, and Riemann integrals. Indivisible elementary volume occupancy (a particle occupies an entire elementary cell volume and cannot occupy it partially, giving $1$ indivisible central self-occupancy state) and gapless space-filling packing of all cells along $d$ orthogonal axes ($2^d$ contiguous signed octants $\{-1,+1\}^d$) yield $1 + 2^d$ indivisible cell branching states, whose bijective closure against the $d\times d = d^2$ ordered axial transition pairs yields the Catalan--Mih\u{a}ilescu Diophantine lock $1 + 2^d = d^2$. This uniquely selects spatial dimension $d = 3$, register width $\mathrm{mod\_bits}(3) = 9$, single-turn phase ring modulus $N_{\mathrm{ring}}(3) = 2^9 = 512$, vacuum amplitude quantum $\mu_{\mathrm{vac}}(3) = d^2 - 2^d = 1$, quarter-period $Q_\square(3) = 128$, Pauli ceiling $\Phi_{\mathrm{Pauli}}(3) = 256$, and Weyl--Schwinger mantissa $K_P(3) = 64$.
+In this foundational paper of Discrete Quantum Mechanics (DQM), we construct a local reversible cellular automaton over a two-sorted model-theoretic structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ in the sense of A.\,I.~Mal'cev (\emph{Algebraic Systems}), where the \textbf{discrete $M$-carrier} is the countable inductive family of integer phase rings $\mathbb{Z}_{4Q}$ over $\mathbb{Z}^d$ and the \textbf{continuous $T$-carrier} is the continuum sort of observable fields, trajectories, and Riemann integrals. Indivisible elementary volume occupancy (a particle occupies an entire elementary cell volume and cannot occupy it partially, yielding $1$ indivisible central self-occupancy state) and gapless space-filling packing of all cells along the axis count $d$ ($2^d$ contiguous signed octants) yield $1 + 2^d$ indivisible cell branching states. Their bijective closure against the $d^2$ ordered axial transition pairs yields the Catalan--Mih\u{a}ilescu Diophantine equation $1 + 2^d = d^2$, uniquely selecting spatial dimension $d = 3$, register width $9$ bits, phase ring modulus $N_{\mathrm{ring}}(3) = 512$, vacuum amplitude quantum $\mu_{\mathrm{vac}}(3) = 1$, quarter-period $Q_\square(3) = 128$, Pauli ceiling $\Phi_{\mathrm{Pauli}}(3) = 256$, and bisector step $K_P(3) = 64$.
 
-We prove that unit symplectic Jacobian ($\det J = +1$), time-reversal symmetry, and global $U(1)$ clock-shift invariance uniquely fix the two-step Verlet evolution law $\varphi(t+1)\equiv (2\varphi(t)-\varphi(t-1)+\Phi_{\mathrm{gate}})\bmod 512$ on the $72$-bit cell register $B_2(3) = 72$, while second-moment isotropy ($M_{\alpha\beta} = 8\delta_{\alpha\beta}$) and planar $4$-cycle closure in $\{-1,0,+1\}^3$ uniquely select the $12$-vertex Archimedean cuboctahedron $O_2(3)$ ($13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$, shell law $S_k(3) = 10k^2 + 2$). Euclidean division of phase differences $\delta = 512 q(\delta) + r(\delta)$ decomposes dynamics into a wave remainder $r\in(-256,256]$ and a corpuscular carry $q\in\{-1,0,+1\}$, deriving Born's rule $P(\mu) = \mu^2/512$ deterministically, discrete Maxwell--Faraday--Gauss electrodynamics ($d_1\circ d_0 = 0$, $d_2\circ d_1 = 0$), the Heisenberg deadband $\Delta\varphi_{\mathrm{disc}}(3) = (512+21)/13 = 41$ (sub-threshold zero-Landauer-heat corridor $|\Phi|\le 40$, UV cutoff $\hat{n}_E\le 6$, and $T$-measurement blindness $64\times 81 = 72^2 = 5\,184$), the Standard Model gauge dimension $\dim(\mathrm{U}(1)\times\mathrm{SU}(2)\times\mathrm{SU}(3)) = 1+3+8 = 12$ on the clique complex $\mathcal{C}_{13}$ ($\chi(\mathcal{C}_{13}) = 13-36+32-8 = 1$), and the closed-form $\mathbb{Z}[\sqrt{2}]$ inverse fine-structure operator $\alpha_{\mathrm{fs}}^{-1}(3) = \frac{A_{\mathrm{den}}(3) + B_{\mathrm{den}}(3)\sqrt{2}}{A_{\mathrm{num}}(3) + B_{\mathrm{num}}(3)\sqrt{2}} = \frac{17\,351\,739\,044 - 679\sqrt{2}}{131\,726 + 89\,441\,954\sqrt{2}} = 137.035\,999\,187\dots$ ($0.47\sigma$ from CODATA-2022, completely free of transcendental $\pi$). All theorems are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
-
-\medskip\noindent
-\textbf{Keywords:} Discrete Quantum Mechanics (DQM), model-theoretic algebraic systems, Catalan equation $1+2^d=d^2$, cuboctahedron $O_2(3)$, symplectic Verlet automaton, Born's rule, fine-structure constant, Lean~4.
+We prove that unit symplectic Jacobian, time-reversal symmetry, and global clock-shift invariance uniquely fix the two-step Verlet evolution law on the $72$-bit cell register $B_2(3) = 72$, while second-moment isotropy and planar $4$-cycle closure in the Moore cube uniquely select the $12$-vertex cuboctahedron $O_2(3)$ ($13$-node causal core $B_1(3)$). Euclidean division of phase differences modulo $512$ splits the dynamics into a wave remainder and a corpuscular carry, deriving Born's rule $P(\mu) = \mu^2/512$ deterministically, discrete Maxwell--Faraday--Gauss electrodynamics, the Heisenberg deadband $\Delta\varphi_{\mathrm{disc}}(3) = 41$ (sub-threshold zero-Landauer-heat corridor and $T$-measurement projection blindness $64\times 81 = 72^2 = 5,184$), the explicit Lie commutator structure constants of the Standard Model gauge algebra $\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)$ of dimension $1 + 3 + 8 = 12$ on the clique complex $\mathcal{C}_{13}$, and the four-loop derivation of the inverse fine-structure constant in the field $\mathbb{Q}(\sqrt{2})$ free of transcendental $\pi$: $\alpha_{\mathrm{fs}}^{-1}(3) = 137.035\,999\,187\dots$ ($0.47\,\text{std.\ dev.}$ from CODATA-2022). All theorems are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 \end{abstract}
 
 \section{Physical Problem Statement: Why a Medium Without External Memory Must Be Discrete, Three-Dimensional, and Governed by the Cuboctahedron \texorpdfstring{$O_2(3)$}{O2(3)} and Verlet Dynamics}
 \label{sec:axioms-uniqueness}
 
-In classical theoretical physics, spacetime is traditionally introduced as a pre-existing smooth continuum $\mathbb{R}^{d,1}$ over which differential field equations and empirical coupling constants are postulated. That construction implicitly relies on an \emph{external-observer idealization}: it assumes that the state of an arbitrarily small volume element can be recorded with infinite real-number precision on an external storage medium located outside the physical system itself.
+In classical theoretical physics, spacetime is traditionally introduced as a pre-existing smooth continuum $\mathbb{R}^{d,1}$ over which differential field equations and empirical coupling constants are specified. That construction implicitly relies on an \emph{external-observer idealization}: it assumes that the state of an arbitrarily small volume element can be recorded with infinite real-number precision on an external storage medium located outside the physical system itself.
 
-Dropping this idealization leads to one foundational physical question: \emph{how must a medium be structured if it computes its own evolution step by step without accessing any external memory outside its own boundaries?}
+Dropping this idealization leads to a foundational physical question: \emph{how must a medium be structured if it computes its own evolution step by step without accessing any external memory outside its own boundaries?}
 
 Because every measuring instrument and every observer is a physical subsystem embedded inside the same medium, the absence of external memory entails a direct four-step chain of physical deductions:
 \begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=*]
-\item \textbf{Why the medium must be discrete at the elementary-cell level and modeled as a two-sorted structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ (in the sense of A.\,I.~Mal'cev~\cite{Malcev1973}):}
-  a particle (excitation) occupies an entire elementary cell volume and cannot occupy it partially. If specifying the single-turn state of an elementary cell required a real number with an actually infinite binary expansion ($\Delta x,\Delta t\to 0$), every local node would require infinite information capacity. In a medium without external memory, the single-turn residue state of each node $\mathbf{x}\in\mathbb{Z}^d$ at tick $t\in\mathbb{Z}$ (in natural Planckian units $\ell_{\mathrm{P}}, t_{\mathrm{P}}$) must be encoded in a finite binary word of fixed width $\mathrm{mod\_bits}(d)$ on a cyclic residue ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ ($N_{\mathrm{ring}}(d) = 2^{\mathrm{mod\_bits}(d)}$). To connect this discrete arithmetic with macroscopic continuum physics, we use the model-theoretic notion of a \textbf{carrier} (\emph{nositel'} --- the underlying domain set of an algebraic sort after A.\,I.~Mal'cev, \emph{Algebraic Systems}~\cite{Malcev1973}) in a two-sorted structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$:
-  \begin{itemize}[noitemsep]
-  \item the \textbf{discrete $M$-carrier} $\mathcal{M}$ is the infinite countable inductive family of integer phase rings $\mathbb{Z}_{4Q}$ across all quarter-period scales $Q$, all winding quotients $q\in\mathbb{Z}$, and all lattice nodes $\mathbb{Z}^d$ (within which the single-turn residue register of one elementary cell at scale $K=1$, $Q_\square(3)=128$ is the finite $9$-bit ring $\mathbb{Z}_{512}$);
-  \item the \textbf{continuous $T$-carrier} $\mathcal{T}$ is the continuum sort of macroscopic fields, trajectories, and Riemann integrals, linked to $\mathcal{M}$ by the bilateral rational Weierstrass stereographic homomorphism $\pi_{M\to T} \leftrightarrow \iota_{T\to M}$.
+\item \textbf{Discreteness at the elementary-cell level and the two-sorted structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ in the sense of A.\,I.~Mal'cev~\cite{Malcev1973}.}
+  A particle (excitation) occupies an entire elementary cell volume and cannot occupy it partially. In a medium without external memory, the single-turn residue state of each node $\mathbf{x}\in\mathbb{Z}^d$ at tick $t\in\mathbb{Z}$ is encoded in a finite binary word of fixed width $\mathrm{mod\_bits}(d)$ on a cyclic residue ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, where
+  \begin{equation}
+    \label{eq:nring-power-of-two}
+    N_{\mathrm{ring}}(d) \;=\; 2^{\mathrm{mod\_bits}(d)}.
+  \end{equation}
+  Following A.\,I.~Mal'cev's theory of algebraic systems~\cite{Malcev1973}, the structure is specified by two sorts (\textbf{carriers}):
+  \begin{itemize}[leftmargin=*]
+  \item the \textbf{discrete $M$-carrier} $\mathcal{M}$ is the infinite countable inductive family of integer phase rings $\mathbb{Z}_{4Q}$ across all quarter-period scales $Q$, all winding quotients $q\in\mathbb{Z}$, and all lattice nodes $\mathbb{Z}^d$ (with single-turn cell residue register $\mathbb{Z}_{512}$ at scale $K=1$, $Q_\square(3)=128$);
+  \item the \textbf{continuous $T$-carrier} $\mathcal{T}$ is the continuum sort of macroscopic fields, trajectories, and Riemann integrals, linked to $\mathcal{M}$ by the projective Weierstrass lift $\pi_{M\to T}$ and linear retraction $\iota_{T\to M}$.
   \end{itemize}
 
-\item \textbf{Why space is three-dimensional ($d = 3$) and how $\mathbb{Z}_{512}$ and the unit quantum $\mu_{\mathrm{vac}} = 1$ emerge (from indivisible elementary volume occupancy and gapless packing to Catalan register self-closure $1 + 2^d = d^2$):}
-  consider an elementary cell at $\mathbf{x}\in\mathbb{Z}^d$:
-  \begin{itemize}[noitemsep]
-  \item \emph{Indivisible elementary volume occupancy (origin of the $+1$ bit):} because a particle occupies the entire elementary volume of a cell and cannot occupy it partially, the cell center has a single indivisible self-occupancy state $\mathbf{0} = (0,\dots,0)$ (\texttt{centralOccupancyState d} in \texttt{lean/MtCarrier/Spec.lean});
-  \item \emph{Gapless space-filling packing of all cells (origin of $2^d$ octants and $1 + 2^d$ branching states):} because all elementary cells must fill space tightly without voids, each of the $d$ orthogonal axes has two contiguous opposite directions $\{-1,+1\}$ (\texttt{elementaryAxisSigns}), whose $d$-fold product forms $|\texttt{signedOctants}(d)| = 2^d$ contiguous signed octants $\{-1,+1\}^d$ around the cell. Together with the indivisible central self-occupancy state $(0,\dots,0)$, an elementary cell has $|\texttt{cellBranchingStates}(d)| = \mathbf{1 + 2^d}$ indivisible branching states;
-  \item \emph{Internal axis-transition matrix (origin of $d\times d = d^2$):} transferring state across the $d$ orthogonal axes inside the cell without external memory is governed by the ordered axis-transition pairs $(i,j)\in\{0,\dots,d-1\}^2$ (\texttt{axisTransitionPairs d}), whose cardinality is $|\texttt{axisTransitionPairs}(d)| = \mathbf{d\times d = d^2}$ ($\mathrm{mod\_bits}(d) = d^2$).
+\item \textbf{Uniqueness of three spatial dimensions ($d = 3$), the ring $\mathbb{Z}_{512}$, and the vacuum quantum $\mu_{\mathrm{vac}} = 1$.}
+  Consider an elementary cell at $\mathbf{x}\in\mathbb{Z}^d$:
+  \begin{itemize}[leftmargin=*]
+  \item \emph{Indivisible elementary volume occupancy ($+1$ central state):} because a particle occupies the entire elementary volume of a cell, the cell center has a single indivisible self-occupancy state $\mathbf{0} = (0,\dots,0)$ (\texttt{centralOccupancyState d} in \texttt{lean/MtCarrier/Spec.lean});
+  \item \emph{Gapless space-filling packing of all cells ($2^d$ contiguous octants):} each of the $d$ orthogonal axes has two contiguous opposite directions $\{-1,+1\}$, whose $d$-fold product forms $|\texttt{signedOctants}(d)| = 2^d$ signed octants $\{-1,+1\}^d$. Together with the central state, an elementary cell has
+    \begin{equation}
+      \label{eq:cell-branching-states}
+      |\texttt{cellBranchingStates}(d)| \;=\; 1 + 2^d
+    \end{equation}
+    indivisible branching states;
+  \item \emph{Internal axis-transition matrix ($d^2$ pairs):} transferring state across the $d$ orthogonal axes inside the cell is governed by ordered axis pairs $(i,j)\in\{0,\dots,d-1\}^2$, whose cardinality is
+    \begin{equation}
+      \label{eq:axis-transition-pairs}
+      |\texttt{axisTransitionPairs}(d)| \;=\; \mathrm{mod\_bits}(d) \;=\; d^2.
+    \end{equation}
   \end{itemize}
-  Bijective closure between the cell's indivisible branching states and its ordered axis-transition pairs without information deficit or dangling states (\texttt{catalan\_lock\_eq\_branching\_axis\_cardinalities}) requires $|\texttt{cellBranchingStates}(d)| = |\texttt{axisTransitionPairs}(d)| \iff 1 + 2^d = d^2$. Explicit evaluation for $d\in\{0,1,2,3,4\}$ gives $1+2^0=2\ne 0$, $1+2^1=3>1$, $1+2^2=5>4$, $\mathbf{1+2^3=9=3^2}$, and $1+2^4=17>16$. For all $d\ge 4$, induction on $d$ proves $2^d\ge d^2$ (base $d=4$: $2^4=16=4^2$; step for $d\ge 4$: $2^{d+1} = 2\cdot 2^d \ge 2d^2 = d^2 + d\cdot d \ge d^2 + 4d > d^2 + 2d + 1 = (d+1)^2$), so $1 + 2^d > d^2$ for all $d\ge 4$. This uniquely fixes $d = 3$, register width $\mathrm{mod\_bits}(3) = 9\text{ bits}$, single-turn phase ring modulus $N_{\mathrm{ring}}(3) = 2^9 = 8^3 = 512$, and the vacuum amplitude unit as the indivisible central self-occupancy state $\mu_{\mathrm{vac}}(3) = d^2 - 2^d = 9 - 8 = 1$.
+  Bijective closure between the cell's branching states~\eqref{eq:cell-branching-states} and its ordered axis-transition pairs~\eqref{eq:axis-transition-pairs} (\texttt{catalan\_lock\_eq\_branching\_axis\_cardinalities}) yields the Catalan--Mih\u{a}ilescu Diophantine equation:
+  \begin{equation}
+    \label{eq:catalan-lock}
+    1 + 2^d \;=\; d^2.
+  \end{equation}
 
-\item \textbf{Why the coordination shell is the $12$-vertex Archimedean cuboctahedron $O_2(3)$:}
-  in dimension $d = 3$, the elementary Moore cube $\{-1,0,+1\}^3$ around $(0,0,0)\in\mathbb{Z}^3$ contains $3^3 - 1 = 26$ non-zero neighbors partitioned by squared Euclidean distance $|\mathbf{e}|^2 = e_x^2 + e_y^2 + e_z^2$ into three $O_h$-orbits:
-  \begin{itemize}[noitemsep]
-  \item $O_1(3)$ ($|\mathbf{e}|^2 = 1$, $6$ face centers $\square$: $(\pm 1,0,0),(0,\pm 1,0),(0,0,\pm 1)$): has second moment $\sum_{\mathbf{e}\in O_1} e_\alpha e_\beta = 2\delta_{\alpha\beta}$, but all mixed fourth moments vanish ($\sum_{\mathbf{e}\in O_1} e_x^2 e_y^2 = 0$), leaving the three coordinate axes uncoupled;
-  \item $O_3(3)$ ($|\mathbf{e}|^2 = 3$, $8$ corner vertices $\triangle$: $(\pm 1,\pm 1,\pm 1)$): has $e_x^2 = e_y^2 = e_z^2 = 1$ at all $8$ vertices ($\sum_{\mathbf{e}\in O_3} e_x^4 = \sum_{\mathbf{e}\in O_3} e_x^2 e_y^2 = 8$), contains no vector with a zero coordinate ($e_\alpha = 0$), and therefore forms no planar $4$-cycles in $(xy,yz,zx)$;
-  \item $\mathbf{O_2(3)}$ ($|\mathbf{e}|^2 = d - 1 = 2$, $\mathbf{12}$ \textbf{edge-diagonal neighbors} $(\pm 1,\pm 1,0)$, $(\pm 1,0,\pm 1)$, $(0,\pm 1,\pm 1)$ --- the \textbf{cuboctahedron}): contains $4$ equatorial square vertices in each coordinate plane $(xy,yz,zx)$ and $8$ vertices with $e_\alpha = \pm 1$ along each axis, yielding the isotropic second-moment tensor $\sum_{\mathbf{e}\in O_2(3)} e_\alpha e_\beta = (4+4)\delta_{\alpha\beta} = 8\delta_{\alpha\beta}$ and mixed fourth moment $\sum_{\mathbf{e}\in O_2(3)} e_x^2 e_y^2 = 4 = \frac{1}{2}\sum_{\mathbf{e}\in O_2(3)} e_x^4$, so that $\frac{1}{4}\sum_{\mathbf{e}\in O_2(3)}(f(\mathbf{e})-f(\mathbf{0})) = \Delta f(\mathbf{0})$ holds on all quadratic polynomials.
-  \end{itemize}
+\item \textbf{Selection of the $12$-vertex cuboctahedron $O_2(3)$ among Moore cube orbits.}
+  In dimension $d = 3$, the Moore cube $\{-1,0,+1\}^3$ around $(0,0,0)\in\mathbb{Z}^3$ contains $3^3 - 1 = 26$ non-zero neighbors partitioned by squared bond length $|e|_2^2 = e_x^2 + e_y^2 + e_z^2$ into three $O_h$-orbits: $O_1(3)$ ($|e|_2^2 = 1$, $6$ face centers where the mixed fourth moment vanishes and axes are uncoupled), $O_3(3)$ ($|e|_2^2 = 3$, $8$ corner vertices with no planar $4$-cycles in the coordinate planes), and $O_2(3)$ ($|e|_2^2 = 2$, $12$ edge-diagonal neighbors --- the cuboctahedron).
 
-\item \textbf{Why the time-evolution law is the two-step symplectic Verlet recurrence with coefficients $(2,-1)$:}
-  because there is no external reservoir outside the carrier to absorb erased state information, time evolution on the finite phase ring $\mathbb{Z}_{512}$ must be a time-reversible bijection preserving symplectic area ($\det J = +1$). Encoding velocity ($\varphi(t)-\varphi(t-1)$) without external memory requires a two-tick recurrence $\varphi(t+1)\equiv \alpha\varphi(t)+\beta\varphi(t-1)+\Phi_{\mathrm{gate}}\pmod{512}$. Area preservation $\det J = -\beta = +1$ forces $\mathbf{\beta = -1}$, while the absence of an external absolute zero of phase on the cyclic ring $\mathbb{Z}_{512}$ requires invariance of free motion under a global shift $\varphi\mapsto\varphi + c\pmod{512}$ ($\alpha+\beta = 1$), uniquely fixing $\mathbf{\alpha = 2}$.
+\item \textbf{Selection of the two-step symplectic Verlet recurrence with coefficients $(2,-1)$.}
+  A time-reversible two-tick recurrence on $\mathbb{Z}_{512}$ takes the form
+  \begin{equation}
+    \label{eq:general-two-step}
+    \varphi(t+1) \;\equiv\; \alpha\,\varphi(t) + \beta\,\varphi(t-1) + \Phi_{\mathrm{gate}} \pmod{512}.
+  \end{equation}
+  Symplectic area preservation $\det J = -\beta = +1$ fixes $\beta = -1$, while invariance under global phase shift $\varphi \mapsto \varphi + c$ requires $\alpha + \beta = 1$, fixing $\alpha = 2$.
 \end{enumerate}
 
 \begin{theorem}[Dimensional Uniqueness $1 + 2^d = d^2$ ($d = 3$) and the $\mathbb{Z}_{512}$ Ring Constants]
 \label{thm:d3-uniqueness}
-For $d\in\mathbb{N}$, the register self-closure equation $1 + 2^d = d^2$ holds if and only if $d = 3$ (\texttt{catalan\_lock\_iff\_d3}, \texttt{canonical\_d3\_constants}), fixing with zero free parameters:
-\[
-  d = 3,\quad |\square(3)| = 6,\quad |{\triangle}(3)| = 8,\quad \mathrm{mod\_bits}(3) = d^2 = 9,\quad N_{\mathrm{ring}}(3) = 2^9 = 512,
-\]
-\[
-  \mu_{\mathrm{vac}}(3) = d^2 - 2^d = 1,\quad Q_\square(3) = 128,\quad \Phi_{\mathrm{Pauli}}(3) = 256,\quad K_P(3) = 64.
-\]
+For $d\in\mathbb{N}$, the register self-closure equation~\eqref{eq:catalan-lock} holds if and only if $d = 3$ (\texttt{catalan\_lock\_iff\_d3}, \texttt{canonical\_d3\_constants}), fixing with zero free parameters:
+\begin{align}
+  d &= 3, \qquad N_{\mathrm{sq}}(3) = 2d = 6, \qquad N_{\mathrm{tri}}(3) = 2^d = 8, \label{eq:d3-consts-1} \\
+  \mathrm{mod\_bits}(3) &= d^2 = 9, \qquad N_{\mathrm{ring}}(3) = 2^9 = 512, \qquad \mu_{\mathrm{vac}}(3) = d^2 - 2^d = 1, \label{eq:d3-consts-2} \\
+  Q_\square(3) &= 128, \qquad \Phi_{\mathrm{Pauli}}(3) = 256, \qquad K_P(3) = 64. \label{eq:d3-consts-3}
+\end{align}
 \end{theorem}
+
+\begin{proof}
+Direct inspection of $1 + 2^d = d^2$ for $d \in \{0, 1, 2, 3, 4\}$ yields:
+\begin{align*}
+  d = 0 &: \quad 1 + 2^0 = 2 \ne 0^2, \\
+  d = 1 &: \quad 1 + 2^1 = 3 \ne 1^2, \\
+  d = 2 &: \quad 1 + 2^2 = 5 \ne 2^2, \\
+  d = 3 &: \quad 1 + 2^3 = 9 = 3^2, \\
+  d = 4 &: \quad 1 + 2^4 = 17 \ne 4^2.
+\end{align*}
+For all $d \ge 4$, we prove $2^d \ge d^2$ by induction. At $d = 4$, $2^4 = 16 = 4^2$. Assuming $2^d \ge d^2$ for some $d \ge 4$, we have
+\begin{equation*}
+  2^{d+1} \;=\; 2\cdot 2^d \;\ge\; 2d^2 \;=\; d^2 + d\cdot d \;\ge\; d^2 + 4d \;>\; d^2 + 2d + 1 \;=\; (d + 1)^2,
+\end{equation*}
+whence $1 + 2^d > d^2$ for all $d \ge 4$. Thus $d = 3$ is the unique solution in $\mathbb{N}$. Substituting $d = 3$ gives constants~\eqref{eq:d3-consts-1}--\eqref{eq:d3-consts-3}.
+\end{proof}
 
 \begin{theorem}[Uniqueness of the Symplectic Verlet Law and the Cuboctahedral Coordination Shell $O_2(3)$]
 \label{thm:d3-verlet-cuboct}
-With zero ad-hoc physical postulates (\texttt{verlet\_coefficients\_uniqueness\_from\_a13}, \texttt{polar\_step\_reverse\_exact}, \texttt{cuboctahedron\_unique\_isotropic\_shell\_d3}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
-\item among linear two-step recurrences $\varphi(t+1)\equiv \alpha\varphi(t)+\beta\varphi(t-1)+\Phi_{\mathrm{gate}}\pmod{512}$, unit Jacobian $\det J = -\beta = 1$ and $U(1)$ shift commutation $\alpha+\beta = 1$ uniquely fix $(\alpha,\beta) = (2,-1)$:
+The following uniqueness results hold (\texttt{verlet\_coefficients\_uniqueness\_from\_a13}, \texttt{polar\_step\_reverse\_exact}, \texttt{cuboctahedron\_unique\_isotropic\_shell\_d3}):
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
+\item Among linear two-step recurrences~\eqref{eq:general-two-step}, unit Jacobian $\det J = -\beta = 1$ and phase-shift invariance $\alpha + \beta = 1$ uniquely fix $(\alpha, \beta) = (2, -1)$:
   \begin{equation}
     \label{eq:verlet-law}
     \Delta^2\varphi(t) \;:=\; \varphi(t+1) - 2\varphi(t) + \varphi(t-1) \;\equiv\; \Phi_{\mathrm{gate}} \pmod{512},
   \end{equation}
-  forming an exact time-reversible involution on the $72$-bit two-tick cell space $B_2(3) = 2\times 36 = 72\text{ bits}$;
-\item in the $3\mathrm{D}$ Moore cube $\{-1,0,+1\}^3$, the unique minimal shell satisfying $\sum_{\mathbf{e}} e_\alpha e_\beta = 8\delta_{\alpha\beta}$, planar $4$-cycle closure in $(xy,yz,zx)$, and exact reproduction of the continuum Laplacian on quadratic polynomials is the $12$-vertex cuboctahedron $O_2(3) = \{\mathbf{e}\in\{-1,0,+1\}^3\mid |\mathbf{e}|^2 = 2\}$ ($13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$, shell growth $S_k(3) = 10k^2 + 2 = 12,42,92,162$).
+  forming a time-reversible involution on the $72$-bit two-tick cell space $B_2(3) = 2\times 36 = 72\text{ bits}$.
+\item In the three-dimensional Moore cube $\{-1,0,+1\}^3$, the unique minimal shell satisfying second-moment isotropy
+  \begin{equation}
+    \label{eq:o2-second-moment}
+    \sum_{e\in O_2(3)} e_\alpha e_\beta \;=\; 8\,\delta_{\alpha\beta},
+  \end{equation}
+  planar $4$-cycle closure in $(xy,yz,zx)$, and exact reproduction of the Laplacian on quadratic polynomials is the $12$-vertex cuboctahedron
+  \begin{equation}
+    \label{eq:o2-def}
+    O_2(3) \;=\; \bigl\{\,e\in\{-1,0,+1\}^3 \;\big|\; e_x^2 + e_y^2 + e_z^2 = 2\,\bigr\}
+  \end{equation}
+  with $13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$ and coordination shell growth $S_k(3) = 10k^2 + 2$ ($12, 42, 92, 162$).
 \end{enumerate}
 \end{theorem}
+
+\begin{proof}
+In item~(1), the single-tick state transition matrix $(\varphi(t), \varphi(t-1)) \mapsto (\alpha\varphi(t) + \beta\varphi(t-1), \varphi(t))$ has determinant $\det J = \alpha\cdot 0 - \beta\cdot 1 = -\beta$. Setting $-\beta = 1$ gives $\beta = -1$, and $\alpha + \beta = 1$ gives $\alpha = 2$. Swapping $(\varphi(t+1), \varphi(t)) \leftrightarrow (\varphi(t-1), \varphi(t))$ preserves $\varphi(t+1) + \varphi(t-1) \equiv 2\varphi(t) + \Phi_{\mathrm{gate}} \pmod{512}$, establishing time-reversal involution.
+
+In item~(2), $\{-1,0,+1\}^3 \setminus \{\mathbf{0}\}$ partitions into $O_1(3)$ ($6$ vertices), $O_2(3)$ ($12$ vertices), and $O_3(3)$ ($8$ vertices). On $O_1(3)$, the mixed moment $\sum e_x^2 e_y^2 = 0$ leaves coordinate axes uncoupled; on $O_3(3)$, all $8$ vertices have $|e_i| = 1$ in every coordinate, so none lie in the coordinate planes $e_z = 0$, $e_x = 0$, $e_y = 0$. Only $O_2(3)$ contains three equatorial $4$-vertex squares in the coordinate planes and moments $\sum e_i^2 = 8$, $\sum_{i\ne j} e_i^2 e_j^2 = 4$, satisfying~\eqref{eq:o2-second-moment} and $\frac{1}{4}\sum_{e\in O_2(3)}(f(e) - f(\mathbf{0})) = \Delta f(\mathbf{0})$ on all quadratic forms.
+\end{proof}
 
 \section{Deterministic Born's Rule, Heisenberg Deadband \texorpdfstring{$\Delta\varphi_{\mathrm{disc}}=41$}{dphi=41}, Discrete Maxwell Electrodynamics, and \texorpdfstring{$T$}{T}-Layer Projection Blindness \texorpdfstring{$72^2=5\,184$}{72^2=5184}}
 \label{sec:born-maxwell-heisenberg}
 
 \begin{theorem}[Wave--Particle Quotient--Remainder Splitting, Born's Rule $P(\mu)=\mu^2/512$, and Discrete Maxwell--Gauss--Faraday Laws]
 \label{thm:born-maxwell}
-For $d=3$ on $\mathbb{Z}_{512}$ and $O_2(3)$ (\texttt{quotient\_remainder\_512\_spec}, \texttt{bornClickCountOp}, \texttt{d1\_d0\_zero}, \texttt{discrete\_gauss\_cube\_divergence\_zero}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
-\item every phase difference $\delta = \varphi_y - \varphi_x\in(-512,512)$ splits uniquely into $\delta = 512 q(\delta) + r(\delta)$ with wave remainder $r(\delta)\in(-256,256]$ and corpuscular carry $q(\delta)\in\{-1,0,+1\}$. For an incident wave of integer amplitude $\mu\in\{0,\dots,16\}$ ($\Phi_{\mathrm{wave}} = \mu^2\le 256$) on a detector of uniform background phase $\varphi_{\mathrm{bg}}\in\mathbb{Z}_{512}$, the number of background states triggering a carry click $q(\varphi_{\mathrm{bg}}+\mu^2)=1$ is identically $N_{\mathrm{clicks}}(\mu) \equiv \mu^2 = |\psi|^2$, yielding $P(\mu) = \mu^2/512$;
-\item around any closed $4$-cycle face $f$, the remainder circulation satisfies $\sum_{e\in\partial f} r_e = -512\sum_{e\in\partial f} q_e = 512 w_f$, and over all $6$ faces of a closed cube $\partial\square^3$, the total magnetic monopole flux vanishes identically: $\sum_{f\in\partial c} w_f \equiv 0$.
+For $d=3$ on $\mathbb{Z}_{512}$ and $O_2(3)$, the following laws hold (\texttt{quotient\_remainder\_512\_spec}, \texttt{bornClickCountOp}, \texttt{d1\_d0\_zero}, \texttt{discrete\_gauss\_cube\_divergence\_zero}):
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
+\item Every phase difference $\delta = \varphi_y - \varphi_x \in (-512, 512)$ splits uniquely as
+  \begin{equation}
+    \label{eq:phase-qr-split}
+    \delta \;=\; 512\,q(\delta) + r(\delta)
+  \end{equation}
+  into a wave remainder $r(\delta) \in (-256, 256]$ and a corpuscular carry $q(\delta) \in \{-1, 0, +1\}$. For an incident wave of integer amplitude $\mu \in \{0, \dots, 16\}$ ($\Phi_{\mathrm{wave}} = \mu^2 \le 256$) on a detector of uniform background phase $\varphi_{\mathrm{bg}} \in \{0, \dots, 511\}$, the number of background states triggering a carry click $q(\varphi_{\mathrm{bg}} + \mu^2) = 1$ is identically equal to the squared amplitude:
+  \begin{equation}
+    \label{eq:born-rule-exact}
+    N_{\mathrm{clicks}}(\mu) \;\equiv\; \mu^2 \;=\; |\psi|^2,
+    \qquad
+    P(\mu) \;=\; \frac{N_{\mathrm{clicks}}(\mu)}{512} \;=\; \frac{\mu^2}{512}.
+  \end{equation}
+\item Around any closed $4$-cycle face $f$, the circulation of wave remainders is quantized by the winding number $w_f = -\sum_{e\in\partial f} q_e \in \mathbb{Z}$, and the total vortex flux across the $6$ faces of any closed cube $C_3$ vanishes identically:
+  \begin{align}
+    \sum_{e\in\partial f} r_e &= -512\sum_{e\in\partial f} q_e \;=\; 512\,w_f, \label{eq:maxwell-faraday-circulation} \\
+    \sum_{f\in\partial C_3} w_f &\equiv 0. \label{eq:maxwell-gauss-monopole-free}
+  \end{align}
 \end{enumerate}
 \end{theorem}
+
+\begin{proof}
+In item~(1), adding the incoming phase impulse $\Phi_{\mathrm{wave}} = \mu^2 \in [0, 256]$ to the detector background phase $\varphi_{\mathrm{bg}} \in \{0, 1, \dots, 511\}$ crosses the ring boundary $\varphi_{\mathrm{bg}} + \mu^2 \ge 512$ for exactly the $\mu^2$ values $\varphi_{\mathrm{bg}} \in \{512 - \mu^2, \dots, 511\}$, giving $N_{\mathrm{clicks}}(\mu) = \mu^2$ and $P(\mu) = \mu^2 / 512$.
+
+In item~(2), the sum of exact differences $\delta_e = \varphi_y - \varphi_x$ around the closed boundary $\partial f$ telescopes to zero: $\sum_{e\in\partial f} \delta_e = 0$. Substituting~\eqref{eq:phase-qr-split} gives $\sum_{e\in\partial f} r_e + 512\sum_{e\in\partial f} q_e = 0$, proving~\eqref{eq:maxwell-faraday-circulation}. Summing $w_f$ over the $6$ oriented faces of a closed cube $\partial C_3$ traverses each of the $12$ cube edges twice in opposite orientations, canceling identically to~\eqref{eq:maxwell-gauss-monopole-free}.
+\end{proof}
 
 \begin{theorem}[Heisenberg Threshold $\Delta\varphi_{\mathrm{disc}}(3)=41$, Zero-Landauer-Heat Sub-Threshold Corridor, and $72^2=5\,184$ Projection Blindness]
 \label{thm:born-heisenberg-maxwell}
-The total phase budget of the $13$-node core $B_1(3)$ with seam allowance $\Delta\varphi_{\mathrm{seam}}(3) = \lfloor 256/12\rfloor = 21$ equals $512 + 21 = 533 = 13\times 41 = N_\varphi(3)\Delta\varphi_{\mathrm{disc}}(3)$ (\texttt{heisenberg\_divisibility\_lock\_unique\_d3\_up\_to\_8}, \texttt{a6\_a8\_gate\_pauli\_ceiling\_256\_and\_heisenberg\_deadband\_41}), uniquely selecting $d=3$ (for $1\le d\le 8$) and fixing the emission quantum $\hat{n}_E(\Phi) = \lfloor |\Phi|/41\rfloor \in \{0,1,\dots,6\}$. Sub-threshold operations $|\Phi|\le 40$ ($|\mathcal{E}_{\mathrm{Heis}}(3)| = 2\cdot 41 - 1 = 81 = 3^4$ states) propagate reversibly with zero emitted thermal quanta ($\hat{n}_E = 0$), while a macroscopic $T$-instrument glues $K_P(3)\cdot |\mathcal{E}_{\mathrm{Heis}}(3)| = 64\times 81 = 5\,184 = 72^2 = (B_2(3))^2$ deterministic $M$-carrier microstates into a single $T$-macrostate.
+The total phase budget of the $13$-node core $B_1(3)$ with seam allowance $\Delta\varphi_{\mathrm{seam}}(3) = \lfloor 256/12\rfloor = 21$ is divisible by the core node count $N_\varphi(3) = 13$ uniquely at $d = 3$ (for $1 \le d \le 8$, \texttt{heisenberg\_divisibility\_lock\_unique\_d3\_up\_to\_8}, \texttt{a6\_a8\_gate\_pauli\_ceiling\_256\_and\_heisenberg\_deadband\_41}):
+\begin{equation}
+  \label{eq:heisenberg-533-factorization}
+  N_{\mathrm{ring}}(3) + \Delta\varphi_{\mathrm{seam}}(3) \;=\; 512 + 21 \;=\; 533 \;=\; 13 \times 41 \;=\; N_\varphi(3)\,\Delta\varphi_{\mathrm{disc}}(3),
+\end{equation}
+fixing the radiation threshold $\Delta\varphi_{\mathrm{disc}}(3) = 41$ and emitted quantum count
+\begin{equation}
+  \label{eq:heisenberg-quantum-count}
+  \hat{n}_E(\Phi) \;=\; \bigl\lfloor |\Phi| / 41 \bigr\rfloor \;\in\; \{0, 1, 2, 3, 4, 5, 6\}
+  \qquad (|\Phi| \le 256).
+\end{equation}
+In the sub-threshold corridor $|\Phi| \le 40$, containing $|\mathcal{E}_{\mathrm{Heis}}(3)| = 2\cdot 41 - 1 = 81 = 3^4$ states, logic operations propagate reversibly without radiation ($\hat{n}_E = 0$), while a macroscopic $T$-instrument glues
+\begin{equation}
+  \label{eq:projection-blindness-5184}
+  K_P(3)\cdot |\mathcal{E}_{\mathrm{Heis}}(3)| \;=\; 64 \times 81 \;=\; 5,184 \;=\; 72^2 \;=\; \bigl(B_2(3)\bigr)^2
+\end{equation}
+deterministic $M$-carrier microstates into a single $T$-macrostate.
 \end{theorem}
 
-\section{Simplicial Clique Complex \texorpdfstring{$\mathcal{C}_{13}$}{C13}, Standard Model Gauge Dimension \texorpdfstring{$1+3+8=12$}{1+3+8=12}, and the Fine-Structure Constant \texorpdfstring{$\alpha_{\mathrm{fs}}^{-1}$}{alpha\_fs\^{}(-1)}}
+\begin{proof}
+At $d = 3$, $N_\varphi(3) = 1 + |V_{O_2}(3)| = 13$ and $\Delta\varphi_{\mathrm{seam}}(3) = \lfloor 256 / 12\rfloor = 21$, so $512 + 21 = 533 = 13 \times 41$. Because $|\Phi| \le \Phi_{\mathrm{Pauli}}(3) = 256$ and $6 \times 41 = 246 \le 256 < 287 = 7 \times 41$, the floor quotient $\lfloor |\Phi|/41\rfloor$ ranges from $0$ to $6$, with $\lfloor |\Phi|/41\rfloor = 0 \iff |\Phi| \le 40$ ($40$ negative, $1$ zero, and $40$ positive states, totaling $81$). Multiplying $81$ sub-threshold states by the octant bisector step $K_P(3) = 64$ yields $64 \times 81 = 8^2 \times 9^2 = 72^2 = 5,184 = (B_2(3))^2$.
+\end{proof}
+
+\section{Simplicial Clique Complex \texorpdfstring{$\mathcal{C}_{13}$}{C13}, Lie Algebra Commutators of \texorpdfstring{$\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)$}{u(1)+su(2)+su(3)}, and Four-Loop Derivation of the Fine-Structure Constant \texorpdfstring{$\alpha_{\mathrm{fs}}^{-1}$}{alpha\_fs\^{}(-1)}}
 \label{sec:sm-alpha}
 
-\begin{theorem}[Clique Complex $\mathcal{C}_{13}$, Standard Model Gauge Algebra Dimension, Gaussian Coulomb Prime $\hat{M}(3)=97$, and Fine-Structure Constant $\alpha_{\mathrm{fs}}^{-1}$]
+\begin{theorem}[Clique Complex $\mathcal{C}_{13}$, Matrix Lie Commutators of $\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)$, Gaussian Coulomb Prime $\widehat{M}(3)=97$, and Derivation of $\alpha_{\mathrm{fs}}^{-1}$]
 \label{thm:sm-alpha}
-On the $13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$ (\texttt{gaussian\_coulomb\_lock\_iff\_d3}, \texttt{alpha\_fs\_exact\_z\_sqrt2\_canonical\_form\_and\_floor\_137}, \texttt{sm\_and\_cosmology\_closed\_rational\_operators}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
-\item the clique counts of $B_1(3)$ are $(K_1,K_2,K_3,K_4,K_{\ge 5}) = (13, 36, 32, 8, 0)$ with Euler characteristic $\chi(\mathcal{C}_{13}) = 13 - 36 + 32 - 8 = 1 = \mu_{\mathrm{vac}}(3)$, and the $1$ global $\mathbb{Z}_{512}$ phase connection, $d=3$ orthogonal equatorial square loops, and $K_4(3)=8$ tetrahedral cells yield $\dim(\mathrm{U}(1)\times\mathrm{SU}(2)\times\mathrm{SU}(3)) = 1 + 3 + 8 = 12 = |O_2(3)|$;
-\item the Gaussian norm $\hat{M}(d) = d_{\mathrm{in}}(\square)^2 + \mathrm{mod\_bits}(d)^2 = 4^2 + 9^2 = 97$ in $\mathbb{Z}[i]$ is prime uniquely at $d=3$, its sum with the Heisenberg deadband half-width $\Delta\varphi_{\mathrm{disc}}(3)-1 = d_{\mathrm{out}}(E)|{\triangle}(3)| = 40$ gives the integer floor $\lfloor\alpha_{\mathrm{fs}}^{-1}(3)\rfloor = 97 + 40 = 137 = Q_\square(3) + \mathrm{mod\_bits}(3) = (N_\varphi(3)-2)^2 + d_{\mathrm{in}}(\square)^2$, and on the cuboctahedral edge norm $\|e\|_2 = \sqrt{d-1} = \sqrt{2}$ and $|{\triangle}(d)|-1 = 7$ active vertex octants, clearing the common denominator $d_{\mathrm{in}}(\square)(|{\triangle}(d)|-1)^2\hat{M}(d)^4$ across the four successive inverse-$\hat{M}(d)$ orders $\bigl(1 - \frac{\sqrt{2}}{d_{\mathrm{in}}(\square)(|{\triangle}(d)|-1)\hat{M}(d)^3} - \frac{|{\triangle}(d)|}{(|{\triangle}(d)|-1)^2\hat{M}(d)^4}\bigr)\big/\bigl(\frac{\sqrt{2}}{2\hat{M}(d)} + \frac{1}{2(|{\triangle}(d)|-1)\hat{M}(d)^2}\bigr)$ defines the $\mathbb{Z}[\sqrt{2}]$ operator coefficients $A_{\mathrm{num}}(d) = \frac{d_{\mathrm{in}}(\square)}{2}(|{\triangle}(d)|-1)\hat{M}(d)^2 = 131\,726$, $B_{\mathrm{num}}(d) = \frac{d_{\mathrm{in}}(\square)}{2}(|{\triangle}(d)|-1)^2\hat{M}(d)^3 = 89\,441\,954$, $A_{\mathrm{den}}(d) = d_{\mathrm{in}}(\square)\bigl((|{\triangle}(d)|-1)^2\hat{M}(d)^4 - |{\triangle}(d)|\bigr) = 17\,351\,739\,044$, and $B_{\mathrm{den}}(d) = -(|{\triangle}(d)|-1)\hat{M}(d) = -679$, yielding the $\pi$-free algebraic form in $\mathbb{Q}(\sqrt{2})$:
+On the $13$-node causal core $B_1(3) = \{\mathbf{0}\}\cup O_2(3)$, the following structural laws hold (\texttt{gaussian\_coulomb\_lock\_iff\_d3}, \texttt{alpha\_fs\_exact\_z\_sqrt2\_canonical\_form\_and\_floor\_137}, \texttt{sm\_and\_cosmology\_closed\_rational\_operators}):
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
+\item \textbf{Simplicial topology of $\mathcal{C}_{13}$ and explicit realization of the Lie commutators of $\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)$:}
+  the non-empty clique counts of $B_1(3)$ by dimension are $(K_1, K_2, K_3, K_4, K_{\ge 5}) = (13, 36, 32, 8, 0)$ with Euler characteristic
+  \begin{equation}
+    \label{eq:c13-euler-char}
+    \chi(\mathcal{C}_{13}) \;=\; 13 - 36 + 32 - 8 \;=\; 1 \;=\; \mu_{\mathrm{vac}}(3).
+  \end{equation}
+  On the three coordinate planes $(yz, zx, xy)$ of $B_1(3)$, three families of integer $3\times 3$ matrix generators act under the Lie bracket $[A, B] = AB - BA$:
+  \begin{itemize}[leftmargin=*]
+  \item $1$ central $\mathfrak{u}(1)$ global phase-shift generator: the identity matrix $Y_0 = I_3$, commuting with all spatial transitions ($[Y_0, L_k] = 0$, $[Y_0, E_{ab}] = 0$);
+  \item $d = 3$ skew-symmetric generators of $90^\circ$ rotations on the three equatorial square $4$-cycles $(yz, zx, xy)$ of $O_2(3)$:
+    \begin{equation}
+      \label{eq:su2-generators-matrices}
+      L_1 = \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & -1 \\ 0 & 1 & 0 \end{pmatrix}, \qquad
+      L_2 = \begin{pmatrix} 0 & 0 & 1 \\ 0 & 0 & 0 \\ -1 & 0 & 0 \end{pmatrix}, \qquad
+      L_3 = \begin{pmatrix} 0 & -1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix},
+    \end{equation}
+    forming the closed Lie algebra $\mathfrak{so}(3) \cong \mathfrak{su}(2)$ with structure constants:
+    \begin{equation}
+      \label{eq:su2-commutators}
+      [L_1, L_2] \;=\; L_3, \qquad
+      [L_2, L_3] \;=\; L_1, \qquad
+      [L_3, L_1] \;=\; L_2;
+    \end{equation}
+  \item $K_4(3) = d^2 - 1 = 8$ traceless Cartan--Weyl generators of $\mathfrak{sl}_3 \cong \mathfrak{su}(3)$ on the three-plane vertex triad of the $8$ tetrahedral $4$-cliques $K_4$ ($6$ off-diagonal inter-plane transition matrices $E_{ab}$ for $a \ne b \in \{1,2,3\}$ and $2$ traceless Cartan diagonal generators $H_1 = E_{11} - E_{22}$, $H_2 = E_{22} - E_{33}$ with $\mathrm{Tr}(H_1) = \mathrm{Tr}(H_2) = 0$), satisfying the Lie commutation relations:
+    \begin{align}
+      [E_{ab}, E_{bc}] &= E_{ac} \qquad (a \ne c), \label{eq:su3-comm-step} \\
+      [E_{12}, E_{21}] &= H_1, \qquad [E_{23}, E_{32}] \;=\; H_2, \qquad [H_1, H_2] \;=\; 0, \label{eq:su3-comm-cartan}
+    \end{align}
+  \end{itemize}
+  yielding the total Standard Model gauge dimension:
+  \begin{equation}
+    \label{eq:sm-gauge-dim-12}
+    \dim\bigl(\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)\bigr) \;=\; 1 + 3 + 8 \;=\; 12 \;=\; |V_{O_2}(3)|.
+  \end{equation}
+
+\item \textbf{Gaussian Coulomb prime $\widehat{M}(3) = 97$ and four-loop physical-geometric derivation of the fine-structure constant $\alpha_{\mathrm{fs}}^{-1}(d)$ in $\mathbb{Q}(\sqrt{2})$:}
+  the squared Gaussian norm of the elementary cell impedance $Z_{\mathrm{cell}}(d) = d_{\mathrm{in}}(\square) + i\,\mathrm{mod\_bits}(d) \in \mathbb{Z}[i]$ (combining the $d_{\mathrm{in}}(\square) = 4$ edges of a square plaquette with the $\mathrm{mod\_bits}(d) = d^2 = 9$ internal axial transition channels) equals
+  \begin{equation}
+    \label{eq:mhat-97-def}
+    \widehat{M}(d) \;=\; d_{\mathrm{in}}(\square)^2 + \mathrm{mod\_bits}(d)^2 \;=\; 4^2 + 9^2 \;=\; 97,
+  \end{equation}
+  which is prime in $\mathbb{Z}$ and in $\mathbb{Z}[i]$ uniquely at $d = 3$, and added to the sub-threshold Heisenberg deadband half-width $\Delta\varphi_{\mathrm{disc}}(3) - 1 = d_{\mathrm{out}}(E)\,N_{\mathrm{tri}}(3) = 40$ gives the integer floor of the inverse fine-structure constant:
+  \begin{equation}
+    \label{eq:alpha-floor-137}
+    \bigl\lfloor\alpha_{\mathrm{fs}}^{-1}(3)\bigr\rfloor \;=\; \widehat{M}(3) + \bigl(\Delta\varphi_{\mathrm{disc}}(3) - 1\bigr) \;=\; 97 + 40 \;=\; 137 \;=\; Q_\square(3) + \mathrm{mod\_bits}(3) \;=\; 11^2 + 4^2.
+  \end{equation}
+  On the cuboctahedral shell $O_2(d)$ with edge length $|e|_2 = \sqrt{d-1} = \sqrt{2}$ and $N_{\mathrm{tri}}(d) - 1 = 7$ open octants around a source ($1$ octant occupied by the source), the inverse coupling $\alpha_{\mathrm{fs}}^{-1}(d) = T_{\mathrm{vac}}(d) / \Gamma_{\mathrm{em}}(d)$ is the ratio of vacuum transmittance $T_{\mathrm{vac}}(d)$ to the two-step vertex coupling amplitude $\Gamma_{\mathrm{em}}(d)$ across the four successive powers $\widehat{M}(d)^{-1}, \dots, \widehat{M}(d)^{-4}$:
+  \begin{align}
+    \Gamma_{\mathrm{em}}(d) &= \frac{\sqrt{2}}{2\,\widehat{M}(d)} \;+\; \frac{1}{2\bigl(N_{\mathrm{tri}}(d) - 1\bigr)\widehat{M}(d)^2}, \label{eq:alpha-gamma-denom} \\
+    T_{\mathrm{vac}}(d) &= 1 \;-\; \frac{\sqrt{2}}{d_{\mathrm{in}}(\square)\bigl(N_{\mathrm{tri}}(d) - 1\bigr)\widehat{M}(d)^3} \;-\; \frac{N_{\mathrm{tri}}(d)}{\bigl(N_{\mathrm{tri}}(d) - 1\bigr)^2\widehat{M}(d)^4}. \label{eq:alpha-tvac-numer}
+  \end{align}
+  In~\eqref{eq:alpha-gamma-denom}, the $\widehat{M}^{-1}$ term is the one-step projection of a unit quantum along an edge of length $\sqrt{2}$ with direction cosine $1/\sqrt{2} = \sqrt{2}/2$, while the $\widehat{M}^{-2}$ term is the two-step symmetric return flux across the $N_{\mathrm{tri}}(d) - 1 = 7$ open octants; in~\eqref{eq:alpha-tvac-numer}, unit vacuum transmittance is reduced by the three-step closed triangular-plaquette loop (distributed across $d_{\mathrm{in}}(\square) = 4$ plaquette sides and $7$ open octants, order $\widehat{M}^{-3}$) and the four-step closed square-plaquette loop (coupling all $N_{\mathrm{tri}}(d) = 8$ octants across the $(N_{\mathrm{tri}}(d) - 1)^2 = 49$ ordered open-octant pairs, order $\widehat{M}^{-4}$).
+
+  Multiplying the numerator~\eqref{eq:alpha-tvac-numer} and denominator~\eqref{eq:alpha-gamma-denom} by the common integer denominator $d_{\mathrm{in}}(\square)(N_{\mathrm{tri}}(d) - 1)^2\widehat{M}(d)^4$ yields the exact representation of $\alpha_{\mathrm{fs}}^{-1}(d)$ in $\mathbb{Q}(\sqrt{2})$ free of transcendental $\pi$:
   \begin{equation}
     \label{eq:alpha-fs-137}
-    \alpha_{\mathrm{fs}}^{-1}(d) \;=\; \frac{A_{\mathrm{den}}(d) + B_{\mathrm{den}}(d)\sqrt{2}}{A_{\mathrm{num}}(d) + B_{\mathrm{num}}(d)\sqrt{2}} \;=\; \frac{P_{\mathrm{rat}}(d) + Q_{\mathrm{rat}}(d)\sqrt{2}}{D_{\mathrm{rat}}(d)} \;=\; 137.035\,999\,187\dots
-    \qquad (\text{CODATA-2022: } 137.035\,999\,177(21),\ 0.47\sigma);
+    \alpha_{\mathrm{fs}}^{-1}(d) \;=\; \frac{T_{\mathrm{vac}}(d)}{\Gamma_{\mathrm{em}}(d)} \;=\; \frac{A_{\mathrm{den}}(d) + B_{\mathrm{den}}(d)\sqrt{2}}{A_{\mathrm{num}}(d) + B_{\mathrm{num}}(d)\sqrt{2}} \;=\; \frac{P_{\mathrm{rat}}(d) + Q_{\mathrm{rat}}(d)\sqrt{2}}{D_{\mathrm{rat}}(d)},
   \end{equation}
-\item integrality of the cross-stage transition matrix $\widetilde{P}_k = I_2 \pm k N_0 \in \mathrm{SL}_2(\mathbb{Z})$ ($N_0^2 = 0$, \texttt{thm6}, \texttt{thm15}) generates the four canonical Jordan locks $k\in\{6,12,15,40\}$, carving out the Heisenberg boundary $40\leftrightarrow 41$ and lifting coupled surface-and-volume states ($k=2\leftrightarrow k=3$) onto the 6th-degree curve of genus $g(6)=10\ge 2$ ($\chi(\mathcal{C}_6)=-18<0$).
+  where the integer coefficients at $d = 3$ evaluate to:
+  \begin{align}
+    A_{\mathrm{num}}(3) &= \frac{d_{\mathrm{in}}(\square)}{2}\bigl(N_{\mathrm{tri}}(3) - 1\bigr)\widehat{M}(3)^2 \;=\; 131,726, \label{eq:alpha-anum} \\
+    B_{\mathrm{num}}(3) &= \frac{d_{\mathrm{in}}(\square)}{2}\bigl(N_{\mathrm{tri}}(3) - 1\bigr)^2\widehat{M}(3)^3 \;=\; 89,441,954, \label{eq:alpha-bnum} \\
+    A_{\mathrm{den}}(3) &= d_{\mathrm{in}}(\square)\Bigl(\bigl(N_{\mathrm{tri}}(3) - 1\bigr)^2\widehat{M}(3)^4 - N_{\mathrm{tri}}(3)\Bigr) \;=\; 17,351,739,044, \label{eq:alpha-aden} \\
+    B_{\mathrm{den}}(3) &= -\bigl(N_{\mathrm{tri}}(3) - 1\bigr)\widehat{M}(3) \;=\; -679, \label{eq:alpha-bden}
+  \end{align}
+  giving the numerical value
+  \begin{equation}
+    \label{eq:alpha-numeric-codata}
+    \alpha_{\mathrm{fs}}^{-1}(3) \;=\; \frac{17,351,739,044 - 679\sqrt{2}}{131,726 + 89,441,954\sqrt{2}} \;=\; 137.035\,999\,187\dots
+  \end{equation}
+  (CODATA-2022 experimental value: $137.035\,999\,177(21)$, deviation $0.47$ standard deviations).
+
+\item \textbf{Parabolic $\mathrm{SL}_2(\mathbb{Z})$ Jordan locks and genus-$10$ lift:}
+  integrality of the normalized transition matrices $\widetilde{P}_k = I_2 \pm k N_0 \in \mathrm{SL}_2(\mathbb{Z})$ ($N_0^2 = 0$, \texttt{thm6}, \texttt{thm15}) selects the four canonical Jordan locks $k \in \{6, 12, 15, 40\}$, carving out the Heisenberg boundary $40 \leftrightarrow 41$ and lifting coupled surface-and-volume states ($k = 2 \leftrightarrow k = 3$) onto the $6$-th degree curve of genus $g(6) = 10 \ge 2$ ($\chi(\mathcal{C}_6) = -18 < 0$).
 \end{enumerate}
 \end{theorem}
 
-\section{Homeomorphism of the Foundations of Natural Sciences: Three-Law Integer Newtonian Mechanics on \texorpdfstring{$O_2(3)\times\mathbb{Z}_{512}$}{O2(3) x Z512} and Five Consequences of Lattice Discreteness}
+\begin{proof}
+In item~(1), enumerating complete subgraphs of the $13$-vertex graph $B_1(3)$ yields $13$ vertices ($K_1$), $12$ radial and $24$ surface edges ($K_2 = 36$), $24$ radial triangles and $8$ triangular shell faces ($K_3 = 32$), and $8$ tetrahedral $4$-cliques ($K_4 = 8$, one per octant), giving $\chi(\mathcal{C}_{13}) = 13 - 36 + 32 - 8 = 1$. Direct multiplication of the $3\times 3$ matrices~\eqref{eq:su2-generators-matrices} gives
+\begin{equation*}
+  L_1 L_2 - L_2 L_1 \;=\; \begin{pmatrix} 0 & 0 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} - \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} \;=\; \begin{pmatrix} 0 & -1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} \;=\; L_3,
+\end{equation*}
+and cyclically $[L_2, L_3] = L_1$, $[L_3, L_1] = L_2$. For the matrix units $(E_{ab})_{ij} = \delta_{ai}\delta_{bj}$, we have $E_{ab} E_{cd} = \delta_{bc} E_{ad}$, whence $[E_{ab}, E_{bc}] = E_{ac}$ for $a \ne c$ and $[E_{ab}, E_{ba}] = E_{aa} - E_{bb}$, proving~\eqref{eq:su3-comm-step}--\eqref{eq:su3-comm-cartan}.
+
+In item~(2), multiplying each term in~\eqref{eq:alpha-gamma-denom} and~\eqref{eq:alpha-tvac-numer} by $d_{\mathrm{in}}(\square)(N_{\mathrm{tri}}(d)-1)^2\widehat{M}(d)^4$ transforms $\Gamma_{\mathrm{em}}(d)$ into $A_{\mathrm{num}}(d) + B_{\mathrm{num}}(d)\sqrt{2}$ and $T_{\mathrm{vac}}(d)$ into $A_{\mathrm{den}}(d) + B_{\mathrm{den}}(d)\sqrt{2}$ with coefficients~\eqref{eq:alpha-anum}--\eqref{eq:alpha-bden}. Multiplying numerator and denominator of~\eqref{eq:alpha-fs-137} by the conjugate $A_{\mathrm{num}} - B_{\mathrm{num}}\sqrt{2}$ in $\mathbb{Q}(\sqrt{2})$ yields the rationalized form $(P_{\mathrm{rat}} + Q_{\mathrm{rat}}\sqrt{2})/D_{\mathrm{rat}}$ with Pell denominator $D_{\mathrm{rat}} = 2 B_{\mathrm{num}}^2 - A_{\mathrm{num}}^2 > 0$.
+\end{proof}
+
+\section{Two-Sorted Projection--Retraction Correspondence of Carriers \texorpdfstring{$\langle\mathcal{M},\mathcal{T}\rangle$}{<M,T>}: Three-Law Integer Newtonian Mechanics on \texorpdfstring{$O_2(3)\times\mathbb{Z}_{512}$}{O2(3) x Z512} and Five Consequences of Lattice Discreteness}
 \label{sec:newtonian-homeomorphism}
 
-The central conceptual result of Theorems~\ref{thm:d3-uniqueness}--\ref{thm:sm-alpha} is that **all branches of fundamental physics, chemistry, molecular biology, and engineering reduce via the bilateral carrier homomorphism $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ to classic three-law Newtonian mechanics in exact integers on the cuboctahedral lattice $O_2(3)\times\mathbb{Z}_{512}$**:
-\begin{enumerate}[label=\textbf{Newton's Law \Roman*.},leftmargin=*,noitemsep]
+The central structural consequence of Theorems~\ref{thm:d3-uniqueness}--\ref{thm:sm-alpha} is that \textbf{all branches of fundamental physics, chemistry, molecular biology, and engineering reduce via the two-sorted projection--retraction correspondence of carriers $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ to classic three-law Newtonian mechanics in exact integers on the cuboctahedral lattice $O_2(3)\times\mathbb{Z}_{512}$}:
+\begin{enumerate}[label=\textbf{Newton's Law \Roman*.},leftmargin=*]
 \item \textbf{Law of Inertia in the Sub-Threshold Gear Backlash ($|\Delta\varphi|\le 40 < 41 \implies \Phi_{\mathrm{rad}} = 0$):}
   when net supra-threshold torque vanishes, $\Delta^2\varphi(t) = 0 \implies \Delta\varphi(t) = v_0 = \mathrm{const}$ and $\varphi(t) = \varphi_0 + v_0 t$ (\texttt{thm1}, \texttt{thm36}). Stationary atomic orbits, superconductivity, ballistic excitons, and reversible Channel-1 logic gates move by pure inertia without radiation or Landauer heat ($\hat{n}_E = 0$).
 \item \textbf{Symplectic Second-Order Dynamics with Variable Node Inertia ($\Delta^2\varphi = \lfloor N_{\mathrm{torque}}/D(\mathbf{x})\rfloor$):}
   the unique time-reversible second-order update~\eqref{eq:verlet-law} is Newton's Second Law $a = \lfloor F/m\rfloor$ on $\mathbb{Z}_{512}$, where the node impedance $D(\mathbf{x})\in[8\,192,\; 833\times 8\,192]$ acts as local rotational inertia.
 \item \textbf{Action--Reaction Anti-Symmetry Across All 12 Cuboctahedral Shafts ($\mathcal{S}_3(-\Delta\varphi) = -\mathcal{S}_3(\Delta\varphi)$):}
-  by oddness of the rotator sine projection (\texttt{odd\_holonomy\_current\_pairwise\_conservation\_all\_512}), pairwise torques between any two neighboring nodes sum identically to zero ($F_{\mathbf{x}\to\mathbf{y}} + F_{\mathbf{y}\to\mathbf{x}} \equiv 0$), directly enforcing momentum, angular-momentum, and charge conservation as well as $d_1\circ d_0 \equiv 0$ and $d_2\circ d_1 \equiv 0$.
+  by oddness of the sine projection (\texttt{odd\_holonomy\_current\_pairwise\_conservation\_all\_512}), pairwise torques between any two neighboring nodes sum identically to zero ($F_{\mathbf{x}\to\mathbf{y}} + F_{\mathbf{y}\to\mathbf{x}} \equiv 0$), directly enforcing momentum, angular-momentum, and charge conservation as well as $d_1\circ d_0 \equiv 0$ and $d_2\circ d_1 \equiv 0$.
 \end{enumerate}
 
-All seemingly non-Newtonian phenomena of 20th-century continuum theories (CQM, SR, GR, QFT) arise not from the failure of Newton's three laws, but from **five mechanical properties of the discrete lattice $O_2(3)\times\mathbb{Z}_{512}$**, summarized in Table~\ref{tab:newtonian-homeomorphism}.
+All seemingly non-Newtonian phenomena of 20th-century continuum theories (CQM, SR, GR, QFT) arise not from the failure of Newton's three laws, but from \textbf{five mechanical properties of the discrete lattice $O_2(3)\times\mathbb{Z}_{512}$}, summarized in Table~\ref{tab:newtonian-homeomorphism}.
 
 \begin{table}[htbp]
 \centering
-\caption{Bilateral homeomorphism $\langle\mathcal{M},\mathcal{T}\rangle$: reduction of continuum physical and engineering postulates to three-law integer Newtonian mechanics on $O_2(3)\times\mathbb{Z}_{512}$.}
+\caption{Two-sorted projection--retraction correspondence $\langle\mathcal{M},\mathcal{T}\rangle$: reduction of continuum physical and engineering postulates to three-law integer Newtonian mechanics on $O_2(3)\times\mathbb{Z}_{512}$.}
 \label{tab:newtonian-homeomorphism}
 \footnotesize
 \begin{tabular}{@{}p{0.20\textwidth}p{0.36\textwidth}p{0.39\textwidth}@{}}
@@ -187,30 +350,45 @@ Shell closures ($S_k=10k^2+2$, $\mathcal{C}_{13}$) generate the Periodic Table; 
 \begin{theorem}[Scale Cancellation $A = K\cdot h_L$, Integer Voronoi Hausdorff Dimension $D_H = 3$ of the Bulk Carrier, and Sub-Cubic Natural Fractal Cascades $D_H = \ln N_{\mathrm{sub}}/\ln K < 3$]
 \label{thm:scale-cancellation-fractals}
 Under coarse-graining to any coherent macro-floor with edge step $A = K\cdot h_L$ ($K\in\mathbb{N}$, \texttt{scale\_invariance\_of\_holonomy\_and\_gate\_operators}, \texttt{scale\_cancellation\_voronoi\_hausdorff\_and\_fractal\_subcascades}, and \texttt{cross\_floor\_shell\_closure\_isomorphism\_operator}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
 \item \textbf{Exact $K^2$ cancellation in Newton's Second Law and action invariance $s_{\mathrm{floor}}(K) = s_0$:}
-  under floor rescaling $(\mu,\Sigma\mu)\mapsto(K\mu,K\Sigma\mu)$ and $(\zeta_r,\zeta_i)\mapsto(K^2\zeta_r,K^2\zeta_i)$, both the torque numerator and the inertia denominator in $\Delta^2\varphi = \lfloor N_{\mathrm{torque}}/D(\mathbf{x})\rfloor$ are homogeneous of degree~$2$ in~$K$ ($N_{\mathrm{torque}}^{(K)}\cdot D^{(1)} \equiv N_{\mathrm{torque}}^{(1)}\cdot D^{(K)}$), while the conjugate momentum step $\Delta p(K) = p_0/K$ preserves the elementary action quantum $s_{\mathrm{floor}}(K) = \Delta p(K)\cdot(K h_L) = s_0 = \hbar/2$ and the 9-bit ring $\mathbb{Z}_{512}$ across all scale floors $K$;
+  under floor rescaling $(\mu,\Sigma\mu)\mapsto(K\mu,K\Sigma\mu)$ and $(\zeta_r,\zeta_i)\mapsto(K^2\zeta_r,K^2\zeta_i)$, both the torque numerator and the inertia denominator in $\Delta^2\varphi = \lfloor N_{\mathrm{torque}}/D(\mathbf{x})\rfloor$ are homogeneous of degree~$2$ in~$K$:
+  \begin{equation}
+    \label{eq:scale-k2-cancel}
+    N_{\mathrm{torque}}^{(K)}\cdot D^{(1)} \;\equiv\; N_{\mathrm{torque}}^{(1)}\cdot D^{(K)},
+  \end{equation}
+  while the conjugate momentum step $\Delta p(K) = p_0/K$ preserves the elementary action quantum $s_{\mathrm{floor}}(K) = \Delta p(K)\cdot(K h_L) = s_0 = \hbar/2$ and the 9-bit ring $\mathbb{Z}_{512}$ across all scale floors $K$.
 \item \textbf{Space-filling Voronoi self-similarity of the vacuum carrier ($D_H = d = 3$):}
-  a macro Wigner--Seitz rhombic dodecahedron of edge $A = K\cdot h_L$ contains $N_{\mathrm{pack}}(d,K) = V_{\mathrm{WS}}(K h_L)/dV = K^d$ elementary cells, satisfying exact multiplicative self-similarity $N_{\mathrm{pack}}(d,K_1 K_2) = N_{\mathrm{pack}}(d,K_1)\,N_{\mathrm{pack}}(d,K_2)$ with integer Moran--Hausdorff similarity dimension $D_H^{(\mathrm{bulk})} = \ln(K^3)/\ln K = 3$ and 3D Hausdorff measure $\mathcal{H}^3 = K^3\ell_P^3/\sqrt{2}$, preserving Gauss's law and $1/R^2$ force laws in vacuum;
+  a macro Wigner--Seitz rhombic dodecahedron of edge $A = K\cdot h_L$ contains $N_{\mathrm{pack}}(d,K) = K^d$ elementary cells, satisfying exact multiplicative self-similarity $N_{\mathrm{pack}}(d,K_1 K_2) = N_{\mathrm{pack}}(d,K_1)\,N_{\mathrm{pack}}(d,K_2)$ with integer Moran--Hausdorff similarity dimension $D_H^{(\mathrm{bulk})} = \ln(K^3)/\ln K = 3$, preserving Gauss's law and $1/R^2$ force laws in vacuum.
 \item \textbf{Origin of natural fractals as sub-cubic selection sub-cascades ($1 < N_{\mathrm{sub}} < K^3 \implies 0 < D_H = \ln N_{\mathrm{sub}}/\ln K < 3$):}
-  whenever the local automaton rules (single-tick light cone $A_1$, Heisenberg threshold $\Delta\varphi_{\mathrm{disc}}=41$, Pauli exclusion $\Phi_{\mathrm{Pauli}}=256$, and Channel-2 quotient division) restrict active sub-nodes at scale factor~$K$ to $N_{\mathrm{sub}} < K^3$ (leaving a non-empty excised void complement $K^3 - N_{\mathrm{sub}} > 0$), iterated nesting across $m$ floors yields a porous discrete fractal with $N_{\mathrm{sub}}^m < K^{3m}$ active nodes and fractional Moran--Hausdorff dimension $D_H = \ln N_{\mathrm{sub}}/\ln K < 3$:
-  \begin{itemize}[noitemsep]
-  \item \emph{Channel-2 / 3-SAT Sierpi\'nski--Post octant sponge ($K = 2$):} $N_{\mathrm{sub}} = d_{\mathrm{out}}(V) = 2^3 - 1 = 7 < 8 = 2^3$ ($1$ falsifying vortex octant excised), yielding $D_H = \ln 7/\ln 2 \approx 2.807355$;
-  \item \emph{Cuboctahedral Menger-like causal cluster $\mathcal{C}_{13}$ inside the $3\times 3\times 3$ Moore cube ($K = d = 3$):} single-tick causality retains $N_{\mathrm{sub}} = N_\varphi(3) = 13 < 27 = 3^3$ nodes ($27 - 13 = 14 = Z(\mathrm{Si})$ non-lightlike nodes excised), yielding $D_H = \ln 13/\ln 3 \approx 2.334718$ (and $D_H = \ln 12/\ln 3 \approx 2.261860$ for the surface shell $O_2(3)$);
-  \item \emph{Hierarchical clustering of bound matter on the fine-structure ladder ($K = \lfloor\alpha_{\mathrm{fs}}^{-1}\rfloor = 137$):} coherent shell closures $N_{\mathrm{sub}}\in\{N_\varphi=13,\,S_2=42,\,B_3=147\} \ll 137^3 = 2\,571\,353$ occupy a porous fractal subset ($D_H = \ln N_{\mathrm{sub}}/\ln 137 \in [0.522, 0.999] < 3$);
-  \item \emph{Biological vascular and bronchial branching networks (\texttt{allometryExponentRatioOp}):} 4-fold cuboctahedral square-face branching $k = d_{\mathrm{in}}(\square) = 4$ in $d = 3$ spatial dimensions yields Kleiber's $3/4$ metabolic fractal scaling exponent $(d_{\mathrm{in}}(\square)-\mu_{\mathrm{vac}})/d_{\mathrm{in}}(\square) = 3/4$;
+  whenever local automaton rules restrict active sub-nodes at scale factor~$K$ to $N_{\mathrm{sub}} < K^3$ (leaving a non-empty excised void complement $K^3 - N_{\mathrm{sub}} > 0$), iterated nesting across $m$ floors yields a porous discrete fractal with $N_{\mathrm{sub}}^m < K^{3m}$ active nodes and fractional Moran--Hausdorff dimension $D_H = \ln N_{\mathrm{sub}}/\ln K < 3$:
+  \begin{itemize}[leftmargin=*]
+  \item \emph{Channel-2 / 3-SAT Sierpi\'nski--Post octant sponge ($K = 2$):} $N_{\mathrm{sub}} = 2^3 - 1 = 7 < 8 = 2^3$, yielding $D_H = \ln 7/\ln 2 \approx 2.807355$;
+  \item \emph{Cuboctahedral causal cluster $\mathcal{C}_{13}$ inside the $3\times 3\times 3$ Moore cube ($K = d = 3$):} single-tick causality retains $N_{\mathrm{sub}} = N_\varphi(3) = 13 < 27 = 3^3$ nodes, yielding $D_H = \ln 13/\ln 3 \approx 2.334718$;
+  \item \emph{Hierarchical clustering of bound matter on the fine-structure ladder ($K = \lfloor\alpha_{\mathrm{fs}}^{-1}\rfloor = 137$):} coherent shell closures $N_{\mathrm{sub}}\in\{13, 42, 147\} \ll 137^3$ occupy a porous fractal subset ($D_H = \ln N_{\mathrm{sub}}/\ln 137 \in [0.522, 0.999] < 3$);
+  \item \emph{Biological vascular and bronchial branching networks (\texttt{allometryExponentRatioOp}):} $4$-fold cuboctahedral square-face branching $k = d_{\mathrm{in}}(\square) = 4$ in $3$ spatial dimensions yields Kleiber's $3/4$ metabolic fractal scaling exponent $(d_{\mathrm{in}}(\square)-\mu_{\mathrm{vac}})/d_{\mathrm{in}}(\square) = 3/4$.
   \end{itemize}
-\item \textbf{$\mathbb{Z}_{4Q}$ rotator logarithm $\log_a(b)$, rational power/root operator $a^{p/q}$, and Moran--Hausdorff inversion $K^{D_H} = N_{\mathrm{sub}}$ (\texttt{rotatorLog2HomogQOp}, \texttt{rotatorLogBaseRatQOp}, \texttt{rotatorPowRatQOp}):}
-  for any quarter-period $Q\ge 1$ on $\mathbb{Z}_{4Q}$, decomposing $x = 2^k + m$ into octave characteristic $k = \lfloor\log_2 x\rfloor$ and first-quadrant mantissa phase $\mu = \lfloor m Q/2^k\rfloor\in[0,Q]$ ($\mathcal{C}_Q(\mu)=Q-\mu,\ \mathcal{S}_Q(\mu)=\mu,\ \mathcal{C}_Q(\mu)+\mathcal{S}_Q(\mu)=Q$) defines the homogeneous base-2 logarithm numerator
-  \[
-    \widehat{\operatorname{Log2}}_{d,Q}(k,\mu) \;:=\; \bigl(d_{\mathrm{in}}(\square)\,|\Delta(d)|\bigr)Q^2\bigl(k Q + \mathcal{S}_Q(\mu)\bigr) + \mathcal{C}_Q(\mu)\mathcal{S}_Q(\mu)\Bigl(\bigl(|N_{12}(d)|-\mu_{\mathrm{vac}}(d)\bigr)Q + d\bigl(\mathcal{C}_Q(\mu)-\mathcal{S}_Q(\mu)\bigr)\Bigr),
-  \]
-  and its inverse mantissa numerator $\widehat{\operatorname{Exp2Mant}}_{d,Q}(r) := \bigl(d_{\mathrm{in}}(\square)\,|\Delta(d)|\bigr)Q^2\mathcal{S}_Q(r) - \mathcal{C}_Q(r)\mathcal{S}_Q(r)\bigl((|N_{12}(d)|-\mu_{\mathrm{vac}}(d))Q - d(\mathcal{C}_Q(r)-\mathcal{S}_Q(r))\bigr)$, satisfying seamless octave continuity and exact cubic homogeneity $\widehat{\operatorname{Log2}}_{d,KQ}(k,K\mu) \equiv K^3\,\widehat{\operatorname{Log2}}_{d,Q}(k,\mu)$, $\widehat{\operatorname{Exp2Mant}}_{d,KQ}(K r) \equiv K^3\,\widehat{\operatorname{Exp2Mant}}_{d,Q}(r)$. Consequently, $Q^3$ cancels identically in $\operatorname{LogBaseRat}_{d,Q}(a,b) = \operatorname{reduceRat}\bigl(\operatorname{Log2Rot}_{d,Q}(b),\,\operatorname{Log2Rot}_{d,Q}(a)\bigr)$, while composing $\operatorname{Exp2Scaled}_{d,Q}(y) = \bigl(Q + \operatorname{Exp2Mant}_{d,Q}(y\bmod Q)\bigr)\,2^{\lfloor y/Q\rfloor}$ with $y = \operatorname{round}\bigl(p\,\operatorname{Log2Rot}_{d,Q}(a)/q\bigr)$ defines the arbitrary rational power/root operator $\operatorname{PowRat}_{d,Q}(a,p,q) \approx a^{p/q}$. At $d=3,\ Q=128$, these operators evaluate $\log_2(8)=(3,1)$, $\log_3(9)=\log_{10}(100)=(2,1)$, $\log_2(3)=(203,128)$, $\log_2(7)=(359,128)$, $\log_3(13)=(474,203)$, $\log_{10}(2)=(128,425)$, exact powers/roots $2^3=(8,1)$, $3^3=9^{3/2}=(27,1)$, $\sqrt{4}=\sqrt[3]{8}=(2,1)$, $\sqrt{9}=\sqrt[3]{27}=(3,1)$, $\sqrt{16}=8^{2/3}=(4,1)$, Kleiber $16^{3/4}=(8,1)$, Pell convergent $\sqrt{2}=2^{1/2}=(181,128)$, $\sqrt{3}=3^{1/2}=(111,64)$, and invert $K^{D_H} = N_{\mathrm{sub}}$: $2^{203/128}=(3,1)$, $\operatorname{round}(2^{359/128})=7$, and $3^{474/203}=(13,1)$.
+\item \textbf{$\mathbb{Z}_{4Q}$ logarithm $\log_a(b)$, rational power/root operator $a^{p/q}$, and Moran--Hausdorff inversion $K^{D_H} = N_{\mathrm{sub}}$ (\texttt{rotatorLog2HomogQOp}, \texttt{rotatorLogBaseRatQOp}, \texttt{rotatorPowRatQOp}):}
+  for any quarter-period $Q\ge 1$ on $\mathbb{Z}_{4Q}$, decomposing $x = 2^k + m$ into octave characteristic $k = \lfloor\log_2 x\rfloor$ and first-quadrant mantissa phase $\mu = \lfloor m Q/2^k\rfloor\in[0,Q]$ ($\mathcal{C}_Q(\mu)=Q-\mu$, $\mathcal{S}_Q(\mu)=\mu$) defines the homogeneous base-2 logarithm numerator
+  \begin{equation}
+    \label{eq:log2-homog-q}
+    \operatorname{Log2}_{d,Q}(k,\mu) \;:=\; \bigl(d_{\mathrm{in}}(\square)\,N_{\mathrm{tri}}(d)\bigr)Q^2\bigl(k Q + \mathcal{S}_Q(\mu)\bigr) + \mathcal{C}_Q(\mu)\mathcal{S}_Q(\mu)\Bigl(\bigl(|V_{O_2}(d)|-\mu_{\mathrm{vac}}(d)\bigr)Q + d\bigl(\mathcal{C}_Q(\mu)-\mathcal{S}_Q(\mu)\bigr)\Bigr)
+  \end{equation}
+  and its inverse mantissa numerator
+  \begin{equation}
+    \label{eq:exp2-homog-q}
+    \operatorname{Exp2Mant}_{d,Q}(r) \;:=\; \bigl(d_{\mathrm{in}}(\square)\,N_{\mathrm{tri}}(d)\bigr)Q^2\mathcal{S}_Q(r) - \mathcal{C}_Q(r)\mathcal{S}_Q(r)\Bigl(\bigl(|V_{O_2}(d)|-\mu_{\mathrm{vac}}(d)\bigr)Q - d\bigl(\mathcal{C}_Q(r)-\mathcal{S}_Q(r)\bigr)\Bigr),
+  \end{equation}
+  satisfying exact cubic homogeneity $\operatorname{Log2}_{d,KQ}(k,K\mu) \equiv K^3\,\operatorname{Log2}_{d,Q}(k,\mu)$ and $\operatorname{Exp2Mant}_{d,KQ}(K r) \equiv K^3\,\operatorname{Exp2Mant}_{d,Q}(r)$. Consequently, $Q^3$ cancels identically in $\operatorname{LogBaseRat}_{d,Q}(a,b) = \operatorname{reduceRat}\bigl(\operatorname{Log2Rot}_{d,Q}(b),\,\operatorname{Log2Rot}_{d,Q}(a)\bigr)$, while composing $\operatorname{Exp2Scaled}_{d,Q}(y) = \bigl(Q + \operatorname{Exp2Mant}_{d,Q}(y\bmod Q)\bigr)\,2^{\lfloor y/Q\rfloor}$ at integer argument $y = \operatorname{round}\bigl(p\,\operatorname{Log2Rot}_{d,Q}(a)/q\bigr)$ defines the arbitrary rational power/root operator $\operatorname{PowRat}_{d,Q}(a,p,q) \approx a^{p/q}$. At $d=3$ and $Q=128$, these operators evaluate $\log_2(8)=(3,1)$, $\log_3(9)=\log_{10}(100)=(2,1)$, $\log_2(3)=(203,128)$, $\log_2(7)=(359,128)$, $\log_3(13)=(474,203)$, $\log_{10}(2)=(128,425)$, exact powers/roots $2^3=(8,1)$, $3^3=9^{3/2}=(27,1)$, $\sqrt{4}=\sqrt[3]{8}=(2,1)$, $\sqrt{9}=\sqrt[3]{27}=(3,1)$, $\sqrt{16}=8^{2/3}=(4,1)$, Kleiber $16^{3/4}=(8,1)$, Pell convergent $\sqrt{2}=2^{1/2}=(181,128)$, $\sqrt{3}=3^{1/2}=(111,64)$, and invert $K^{D_H} = N_{\mathrm{sub}}$: $2^{203/128}=(3,1)$, $\operatorname{round}(2^{359/128})=7$, and $3^{474/203}=(13,1)$.
 \end{enumerate}
 \end{theorem}
 
+\begin{proof}
+In item~(1), rescaling $\mu \mapsto K\mu$ multiplies every quadratic amplitude form by $K^2$, so $N_{\mathrm{torque}}^{(K)} = K^2 N_{\mathrm{torque}}^{(1)}$ and $D^{(K)} = K^2 D^{(1)}$, proving~\eqref{eq:scale-k2-cancel}. In item~(2), the volume of a rhombic dodecahedron of edge $K h_L$ is $K^3 V_{\mathrm{WS}}(h_L)$, giving $N_{\mathrm{pack}}(d, K_1 K_2) = (K_1 K_2)^d = K_1^d K_2^d$. In item~(4), under $(Q, \mu) \mapsto (KQ, K\mu)$ we have $\mathcal{C}_{KQ}(K\mu) = K\mathcal{C}_Q(\mu)$ and $\mathcal{S}_{KQ}(K\mu) = K\mathcal{S}_Q(\mu)$, so every term in~\eqref{eq:log2-homog-q} and~\eqref{eq:exp2-homog-q} is homogeneous of degree~$3$ in $(Q, \mathcal{C}_Q, \mathcal{S}_Q)$ and acquires a common factor $K^3$, which cancels in the ratio $\operatorname{Log2Rot}_{d,Q}(b)/\operatorname{Log2Rot}_{d,Q}(a)$.
+\end{proof}
+
 \section{Formal Verification in Lean~4}
-All theorems above are formally verified in \texttt{lean/MtCarrier/} (\url{https://github.com/AI-Guiders/discrete-quantum-mechanics} and \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+All theorems in this work are formally verified in \texttt{lean/MtCarrier/} in the open repositories \url{https://github.com/AI-Guiders/discrete-quantum-mechanics} and \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}
