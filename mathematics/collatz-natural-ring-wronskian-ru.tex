@@ -191,8 +191,35 @@
 \end{enumerate}
 \end{theorem}
 
+\begin{theorem}[Экстремальная двусторонняя вилка остатка винта $3^B - 2^B \le R_w \le 2^{A-B}(3^B - 2^B)$ на моноиде бинарных слов шестерён $w \in \mathrm{List}\ \mathrm{Bool}$ и сжатие циклов без зависимости от перестановки шестерён, \texttt{thm31\_collatz\_binary\_gear\_word\_extremal\_drift\_envelope\_and\_cycle\_squeeze}]
+\label{thm:binary-gear-word-extremal-envelope}
+Пусть $\mathcal{L}(w) := \texttt{collatzWordScrews}\ w$ сопоставляет каждому бинарному слову шестерён $w \in \mathrm{List}\ \mathrm{Bool}$ многовинтовой каскад, порождённый двумя элементарными шестернями $\texttt{true} \mapsto \mathcal{G}_{\mathrm{odd}}=(2,3,1)$ и $\texttt{false} \mapsto \mathcal{G}_{\mathrm{even}}=(2,1,0)$, с полным двоичным знаменателем $P_w = P_{\mathrm{tot}}(\mathcal{L}(w)) = 2^A$, троичным числителем $Q_w = Q_{\mathrm{tot}}(\mathcal{L}(w)) = 3^B$, остатком винта $R_w = D_{\mathrm{tot}}(\mathcal{L}(w))$, двоичным весом нечётных шестерён $P_{\mathrm{odd}}(w) = 2^B$ (\texttt{collatzWordPOdd}) и двоичным весом чётных шестерён $P_{\mathrm{even}}(w) = 2^{A-B}$ (\texttt{collatzWordPEven}). Тогда для любого слова $w \in \mathrm{List}\ \mathrm{Bool}$ и любого $n_0 \in \mathbb{Z}$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Моноидальная факторизация и монотонность:}
+  $\mathcal{L}(w_1\mathbin{++}w_2) = \mathcal{L}(w_1)\mathbin{++}\mathcal{L}(w_2)$, $P_{\mathrm{odd}}(w_1\mathbin{++}w_2) = P_{\mathrm{odd}}(w_1)P_{\mathrm{odd}}(w_2)$, $P_{\mathrm{even}}(w_1\mathbin{++}w_2) = P_{\mathrm{even}}(w_1)P_{\mathrm{even}}(w_2)$, $1 \le P_{\mathrm{odd}}(w) \le Q_w$, $1 \le P_{\mathrm{even}}(w)$, $P_{\mathrm{odd}}(w) P_{\mathrm{even}}(w) = P_w$ и $0 \le R_w$;
+\item \textbf{Экстремальная двусторонняя вилка остатка $R_w$ независимо от внутренней перестановки шестерён:}
+  независимо от порядка следования нечётных и чётных шестерён внутри слова $w$,
+  \begin{equation}
+    \label{eq:binary-gear-word-extremal-bracket}
+    Q_w - P_{\mathrm{odd}}(w) \;\le\; R_w \;\le\; P_{\mathrm{even}}(w)\,\bigl(Q_w - P_{\mathrm{odd}}(w)\bigr) \;=\; P_{\mathrm{even}}(w)\,Q_w - P_w;
+  \end{equation}
+\item \textbf{Сжатие любого замкнутого цикла без зависимости от перестановки шестерён:}
+  на любом замкнутом цикле $(P_w - Q_w) n_0 = R_w$:
+  \begin{equation}
+    \label{eq:binary-gear-word-cycle-squeeze}
+    Q_w\,(n_0 + 1) \;\le\; P_w\,n_0 + P_{\mathrm{odd}}(w), \qquad
+    P_w\,(n_0 + 1) \;\le\; Q_w\,\bigl(n_0 + P_{\mathrm{even}}(w)\bigr),
+  \end{equation}
+  а в центрированной координате $u(n_0) = 2 n_0 + 1$:
+  \[
+    P_w + Q_w - 2 P_{\mathrm{odd}}(w) \;\le\; (P_w - Q_w)\,(2 n_0 + 1) \;\le\; \bigl(2 P_{\mathrm{even}}(w) - 1\bigr)\,Q_w - P_w.
+  \]
+  Если слово $w$ содержит хотя бы одну нечётную шестерню ($P_{\mathrm{odd}}(w) < Q_w$) и $n_0 \ge 1$, то $R_w \ge 1$ и $Q_w < P_w$ ($3^B < 2^A$); при $(P_w, Q_w, P_{\mathrm{odd}}(w), P_{\mathrm{even}}(w)) = (4, 3, 2, 2)$ ($A=2, B=1$) единственным нечётным началом цикла ($n_0 \bmod 2 = 1$) является $n_0 = 1$.
+\end{enumerate}
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:two-arc-wronskian}--\ref{thm:countable-multi-screw-cascade} (\texttt{thm18}--\texttt{thm29} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:two-arc-wronskian}--\ref{thm:binary-gear-word-extremal-envelope} (\texttt{thm18}--\texttt{thm29}, \texttt{thm31\_collatz\_binary\_gear\_word\_extremal\_drift\_envelope\_and\_cycle\_squeeze} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}

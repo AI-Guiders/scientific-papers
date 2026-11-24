@@ -70,6 +70,20 @@ For $A = \widetilde{C}Z^3 - \widetilde{B}Y^3$, $I_0 = Yw - Zv$, and $I_1 = Yw(\w
 and between the left and right Stern--Brocot parents $(v,w)$ and $(v_m,w_m) = (Y-v,Z-w)$ of the Farey mediant $(Y,Z)$ ($p = v_m w,\ q = v w_m,\ K_+ = w^3(2Zv-Yw),\ K_- = w_m^3(2Zv_m-Yw_m)$), eliminating $A$ cancels $Z^3$ identically: $I_1 K_- - I_{1m} K_+ \equiv \widetilde{B} I_0^3\bigl((vw + v_m w_m)(p+q) - (p^2+q^2)\bigr)$. Moreover, the quadratic-shaft descent invariant $I_2 := \widetilde{B}Yv^2(3Yw-Zv) - \widetilde{C}Zw^2(3Zv-Yw)$ eliminates $(v,w)$ from the right-hand side ($Z^2 I_2 + A w^2(3Zv-Yw) \equiv \widetilde{B}Y I_0^3$, $Y^2 I_2 + A v^2(3Yw-Zv) \equiv \widetilde{C}Z I_0^3$) and forms an $A$-free $2\times 2$ Wronskian system with $I_1$ of determinant $3 I_0^3$.
 \end{theorem}
 
+\begin{theorem}[Countable Pad\'e-tower cubic annihilation, $Z^3$ elimination, and adjacent-floor escape across arbitrary floors $\mathcal{R}\in\mathrm{List}\ \mathbb{Z}$, \texttt{thm12b\_abc\_countable\_pade\_tower\_cubic\_annihilation\_and\_adjacent\_floor\_escape}]
+\label{thm:countable-pade-tower-thm12b}
+For every floor $\mathcal{R}\in\mathrm{List}\ \mathbb{Z}$ of the countable Pad\'e approximant tower $(P_{\mathcal{R}},Q_{\mathcal{R}}) = (\texttt{padeTowerP}\ \mathcal{R}\ U\ V,\ \texttt{padeTowerQ}\ \mathcal{R}\ U\ V)$ built over $U = \widetilde{C}Z^3$, $V = \widetilde{B}Y^3$, $A = U - V$ ($A + B = C$), and any shaft-approximant pair $(w,v)$ with $a = v Z$, $b = w Y$, $A' = \widetilde{C}w^3 - \widetilde{B}v^3$, and floor invariant $I_{\mathcal{R}} = a P_{\mathcal{R}} - b Q_{\mathcal{R}}$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item $P_{\mathcal{R}} - Q_{\mathcal{R}} = \Pi_-(\mathcal{R})\,A$, $P_{\mathcal{R}} + Q_{\mathcal{R}} = \Pi_+(\mathcal{R})\,(U + V)$, and at base floor $\mathcal{R} = [3]$, $U P_{[3]}^3 - V Q_{[3]}^3 = A^3(U + V)$;
+\item With $u_Z = a P_{\mathcal{R}}$, $v_Y = b Q_{\mathcal{R}}$, and $\Phi_3(u_Z,v_Y) = u_Z^2 + u_Z v_Y + v_Y^2$, whenever $Z^3 \ge 1$ the factor $Z^3$ cancels identically on floor $\mathcal{R}$:
+  \begin{equation}
+    \label{eq:abc-arbitrary-floor-z3-cancel}
+    \widetilde{C}\,I_{\mathcal{R}}\,\Phi_3(u_Z, v_Y) \;=\; v^3\bigl(U P_{\mathcal{R}}^3 - V Q_{\mathcal{R}}^3\bigr) \;-\; A'\,Y^3 Q_{\mathcal{R}}^3;
+  \end{equation}
+\item Across adjacent floors $\mathcal{R}$ and $\mathcal{R}' = \mathcal{R}\mathbin{++}[k+1]$, $I_{\mathcal{R}'} - (k+1)I_{\mathcal{R}} = -k(a+b)\Pi_-(\mathcal{R})A$, so whenever $k(a+b)\Pi_-(\mathcal{R})A \ne 0$, $\neg(I_{\mathcal{R}} = 0 \land I_{\mathcal{R}'} = 0)$, $|I_{\mathcal{R}}| + |I_{\mathcal{R}'}| \ge 1$, and $I_{\mathcal{R}} = 0 \implies I_{\mathcal{R}'} = -k(a+b)\Pi_-(\mathcal{R})A \ne 0$.
+\end{enumerate}
+\end{theorem}
+
 \begin{theorem}[Integer Mason--Stothers--B\'ezout cubic Wronskian and fourth-power determinant, \texttt{thm13}]
 \label{thm:mason-stothers-thm13}
 For $\widetilde{A}X^3 + \widetilde{B}Y^3 = \widetilde{C}Z^3$ and $\widetilde{A}Xv_0 - \widetilde{B}Yu_0 = 1$, setting $\alpha = u_0 Z^2 + t\widetilde{A}X$, $\beta = v_0 Z^2 + t\widetilde{B}Y$, $\gamma = u_0 X^2 + v_0 Y^2 + t\widetilde{C}Z$ yields $A^*+B^*=C^*$ ($A^*=\alpha X^2,\ B^*=\beta Y^2,\ C^*=\gamma Z^2$) with shaft-square minors $(\widetilde{A}X\beta-\widetilde{B}Y\alpha,\ \widetilde{C}Z\alpha-\widetilde{A}X\gamma,\ \widetilde{C}Z\beta-\widetilde{B}Y\gamma) = (Z^2,Y^2,X^2)$ and exact Wronskian
@@ -89,6 +103,31 @@ With the full radical-shaft skeleton $R_{\mathrm{full}} := (\widetilde{A}\wideti
   (\widetilde{A}X)\,\beta \;=\; Z^2 + (\widetilde{B}Y)\,\alpha.
 \end{equation}
 Reducing $u_0 Z^2$ on the circle of circumference $\widetilde{A}X$ to $0\le\alpha\le\widetilde{A}X-1$ yields $(\widetilde{A}X)\beta \le Z^2 + (\widetilde{B}Y)(\widetilde{A}X-1)$ and $(\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$ (implying $C \le R_{\mathrm{full}}^2$ whenever $\beta\le R_{\mathrm{full}}$ and $C \le R_{\mathrm{full}}^3$ across all positive shafts and weights). For the $3\times 3$ cubic Cramer--B\'ezout system $U_0 Y^3 - V_0 X^3 = 1$ and $V_1 Z^3 - U_1 Y^3 = 1$, the determinant $\Delta_{\mathrm{cube}} := \widetilde{A}U_0 V_1 + \widetilde{B}V_0 V_1 - \widetilde{C}U_1 V_0 \in [1, \widetilde{A}+\widetilde{C}]$ satisfies $\Delta_{\mathrm{cube}}(X^3, Y^3, Z^3) = \bigl(\widetilde{C}(U_0+U_1)-\widetilde{B}V_1,\ \widetilde{A}V_1+\widetilde{C}V_0,\ \widetilde{A}(U_0+U_1)+\widetilde{B}V_0\bigr)$.
+\end{theorem}
+
+\begin{theorem}[Lagrange--Vandermonde floor-defect trichotomy $(S_1,S_2,S_3=0)$ and principal-cell bilateral B\'ezout height bracket, \texttt{thm14b\_abc\_hankel\_vandermonde\_floor\_defect\_trichotomy\_and\_bilateral\_bezout\_bracket}]
+\label{thm:floor-defect-trichotomy-thm14b}
+For any radical-floor decomposition $A = \widetilde{A}X^3,\ B = \widetilde{B}Y^3,\ C = \widetilde{C}Z^3$ satisfying $S_3 = A + B - C = 0$, with lower-floor defects $S_1 = \widetilde{A}X + \widetilde{B}Y - \widetilde{C}Z$ and $S_2 = \widetilde{A}X^2 + \widetilde{B}Y^2 - \widetilde{C}Z^2$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Full-height Lagrange--Vandermonde projectors at $S_3 = 0$:}
+  \[
+    C(Z-X)(Z-Y) \;=\; Z^2\bigl(S_2(X+Y) - S_1 XY\bigr), \quad
+    A(X-Y)(X-Z) \;=\; X^2\bigl(S_1 YZ - S_2(Y+Z)\bigr), \quad
+    B(Y-X)(Y-Z) \;=\; Y^2\bigl(S_1 ZX - S_2(Z+X)\bigr);
+  \]
+\item \textbf{Lower-floor non-degeneracy and sign trichotomy of $(S_1,S_2)$:}
+  whenever $\widetilde{C}\ge 1,\ X\ge 1,\ Y\ge 1,\ X<Z,\ Y<Z$, we have $S_2(X+Y) - S_1 XY = \widetilde{C}Z(Z-X)(Z-Y) \ge 1$, so $\neg(S_1=0\land S_2=0)$ and $|S_1|+|S_2|\ge 1$:
+  (a) if $S_1 \ge 0$, then $\widetilde{C}Z \le \widetilde{A}X + \widetilde{B}Y$ and $C \le (\widetilde{A}X + \widetilde{B}Y)Z^2$;
+  (b) if $S_2 \le 0$, then $S_1 \le -1$ and $(-S_1)XY \ge 1$;
+  (c) if $S_1 \le -1$ and $S_2 \ge 1$, then $\widetilde{A}X + \widetilde{B}Y + 1 \le \widetilde{C}Z$ and $\widetilde{C}Z^2 + 1 \le \widetilde{A}X^2 + \widetilde{B}Y^2$;
+\item \textbf{Principal-cell bilateral B\'ezout height bracket ($0 \le \alpha \le \widetilde{A}X - 1$):}
+  for any pair $(\alpha,\beta)$ satisfying $(\widetilde{A}X)\beta - (\widetilde{B}Y)\alpha = Z^2$ normalized into the principal fundamental cell $0 \le \alpha \le \widetilde{A}X - 1$ ($\widetilde{A}X \ge 1,\ \widetilde{B}Y \ge 1,\ \widetilde{C} \ge 1,\ Z \ge 1$), we have $\beta \ge 1$,
+  \begin{equation}
+    \label{eq:bilateral-bezout-height-bracket}
+    Z^2 \;\le\; (\widetilde{A}X)\,\beta \;\le\; Z^2 + (\widetilde{B}Y)(\widetilde{A}X - 1), \qquad
+    R_{\mathrm{full}}\,\beta - (\widetilde{B}^2\widetilde{C}Y^2 Z)(\widetilde{A}X - 1) \;\le\; (\widetilde{B}Y)\,C \;\le\; R_{\mathrm{full}}\,\beta.
+  \end{equation}
+\end{enumerate}
 \end{theorem}
 
 \begin{theorem}[Cross-floor $k=2 \leftrightarrow k=3$ coupling onto the genus-10 curve and Euler characteristic trichotomy, \texttt{thm15}]
@@ -114,7 +153,7 @@ For any $A+B=C\in\mathbb{Z}^3$ with B\'ezout partner $A v - B u = 1$ ($u+v=w$), 
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
 
-The formalization of Theorems~\ref{thm:main-8}--\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm13}, \texttt{thm14}, \texttt{thm15}, \texttt{thm16}) resides in \texttt{AbcPlanetaryWronskian.lean} in \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+The formalization of Theorems~\ref{thm:main-8}--\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm12b\_abc\_countable\_pade\_tower\_cubic\_annihilation\_and\_adjacent\_floor\_escape}, \texttt{thm13}, \texttt{thm14}, \texttt{thm14b\_abc\_hankel\_vandermonde\_floor\_defect\_trichotomy\_and\_bilateral\_bezout\_bracket}, \texttt{thm15}, \texttt{thm16}) resides in \texttt{AbcPlanetaryWronskian.lean} in \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

@@ -1,3 +1,5 @@
+import PillaiDiophantine
+
 namespace RotatorCalculusPaper
 
 set_option linter.unusedSimpArgs false
@@ -359,6 +361,263 @@ theorem thm16_weierstrass_stereographic_abc_embedding_into_z512_rotator
                         Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega,
           by omega, by omega, by omega, by omega, by omega⟩
 
+/-- **Theorem 12b (Countable Padé-Tower Cubic Annihilation Law, `Z³` Elimination,
+and Adjacent-Floor Escape across Arbitrary Floors `R : List Int` for `A + B = C`)**:
+For every floor `R : List Int` of the countable Padé approximant tower
+`(P_R, Q_R) = (padeTowerP R U V, padeTowerQ R U V)` built over `U = C̃ Z³`, `V = B̃ Y³`,
+`A = U - V` (`A + B = C`), and any shaft-approximant pair `(w, v)` with `a = v * Z`, `b = w * Y`,
+`A' = C̃ w³ - B̃ v³`, and floor invariant `I_R = a * P_R - b * Q_R`:
+1. **Arbitrary-Floor Padé Difference, Sum, and Reverse Cubic Annihilation:**
+   - `P_R - Q_R = padeTowerProdMinus R * A` and `P_R + Q_R = padeTowerProdPlus R * (U + V)`,
+   - at base floor `R = [3]`, `U * P_{[3]}³ - V * Q_{[3]}³ = A³ * (U + V)`.
+2. **Exact `Z³` Elimination on Every Floor `R : List Int`:**
+   With `u_Z = a * P_R`, `v_Y = b * Q_R`, and `Φ₃(u_Z, v_Y) = u_Z² + u_Z v_Y + v_Y²`:
+   - `U * I_R * Φ₃(u_Z, v_Y) = a³ * (U * P_R³ - V * Q_R³) - (U * b³ - V * a³) * Q_R³`,
+   - whenever `1 ≤ Z³`:
+     `C̃ * I_R * Φ₃(u_Z, v_Y) = v³ * (U * P_R³ - V * Q_R³) - A' * Y³ * Q_R³`.
+3. **Adjacent-Floor Escape and Non-Degeneracy across `R` and `R' = R ++ [kShift + 1]`:**
+   With `P_{R'} = padeTowerP (R ++ [kShift + 1]) U V`, `Q_{R'} = padeTowerQ (R ++ [kShift + 1]) U V`,
+   and `I_{R'} = a * P_{R'} - b * Q_{R'}`:
+   - `I_{R'} - (kShift + 1) * I_R = -kShift * (a + b) * padeTowerProdMinus R * A`,
+   - whenever `kShift * (a + b) * padeTowerProdMinus R * A ≠ 0`:
+     `¬(I_R = 0 ∧ I_{R'} = 0)` and `1 ≤ |I_R| + |I_{R'}|`,
+   - if `I_R = 0`, then `I_{R'} = -kShift * (a + b) * padeTowerProdMinus R * A ≠ 0` and `1 ≤ |I_{R'}|`. -/
+theorem thm12b_abc_countable_pade_tower_cubic_annihilation_and_adjacent_floor_escape
+    (R : List Int) (kShift Ct Bt Z Y w v : Int) :
+    let Z3 := Z * Z * Z
+    let Y3 := Y * Y * Y
+    let w3 := w * w * w
+    let v3 := v * v * v
+    let U  := Ct * Z3
+    let V  := Bt * Y3
+    let A  := U - V
+    let Ap := Ct * w3 - Bt * v3
+    let PR := padeTowerP R U V
+    let QR := padeTowerQ R U V
+    let PNext := padeTowerP (R ++ [kShift + 1]) U V
+    let QNext := padeTowerQ (R ++ [kShift + 1]) U V
+    let a  := v * Z
+    let b  := w * Y
+    let IR := a * PR - b * QR
+    let INext := a * PNext - b * QNext
+    let uZ := a * PR
+    let vY := b * QR
+    let phi3R := uZ * uZ + uZ * vY + vY * vY
+    (PR - QR = padeTowerProdMinus R * A ∧
+     PR + QR = padeTowerProdPlus R * (U + V)) ∧
+    (U * ((padeTowerP [3] U V) * (padeTowerP [3] U V) * (padeTowerP [3] U V)) -
+     V * ((padeTowerQ [3] U V) * (padeTowerQ [3] U V) * (padeTowerQ [3] U V)) =
+     (A * A * A) * (U + V)) ∧
+    (U * IR * phi3R = (a * a * a) * (U * (PR * PR * PR) - V * (QR * QR * QR)) -
+                      (U * (b * b * b) - V * (a * a * a)) * (QR * QR * QR)) ∧
+    (1 ≤ Z3 →
+      Ct * IR * phi3R = v3 * (U * (PR * PR * PR) - V * (QR * QR * QR)) - Ap * Y3 * (QR * QR * QR)) ∧
+    (INext - (kShift + 1) * IR = -kShift * (a + b) * padeTowerProdMinus R * A) ∧
+    (kShift * (a + b) * padeTowerProdMinus R * A ≠ 0 →
+      ¬(IR = 0 ∧ INext = 0) ∧ 1 ≤ IR.natAbs + INext.natAbs) ∧
+    (IR = 0 →
+      INext = -kShift * (a + b) * padeTowerProdMinus R * A ∧
+      (kShift * (a + b) * padeTowerProdMinus R * A ≠ 0 → INext ≠ 0 ∧ 1 ≤ INext.natAbs)) := by
+  dsimp
+  have h7 := (thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
+               R [] kShift 0 0 0 0 (Ct * (Z * Z * Z) - Bt * (Y * Y * Y)) (Bt * (Y * Y * Y)) (v * Z) (w * Y)).2.2.2.2
+  have hUV : (Ct * (Z * Z * Z) - Bt * (Y * Y * Y)) + Bt * (Y * Y * Y) = Ct * (Z * Z * Z) := by omega
+  rw [hUV] at h7
+  have hSum := h7.2.2.2.2.2.2.1
+  have hDiff := h7.2.2.2.2.2.2.2.1
+  have hStep := h7.2.2.2.2.2.2.2.2.2.1
+  have hNondeg := h7.2.2.2.2.2.2.2.2.2.2.2.2.2.1
+  have h10b := thm10b_pillai_same_cell_two_solution_collision_and_gap_law
+                 R kShift Ct Bt (Z * Z * Z) (Y * Y * Y) (w * w * w) (v * v * v) Z Y w v rfl rfl rfl rfl
+  dsimp at h10b
+  rcases h10b with ⟨_, hGenCube, _, hCancelZ3, hFloor3, _, hEscape⟩
+  exact ⟨⟨hDiff, hSum⟩, hFloor3, hGenCube, hCancelZ3, hStep, hNondeg, hEscape⟩
+
+/-- **Theorem 14b (Lagrange–Vandermonde Floor-Defect Trichotomy `(S₁, S₂, S₃ = 0)`
+and Principal-Cell Bilateral Bézout Height Bracket for `A + B = C`)**:
+For any radical-floor decomposition `A = Ã X³`, `B = B̃ Y³`, `C = C̃ Z³` satisfying
+`S₃ = A + B - C = 0`, with lower-floor defects `S₁ = Ã X + B̃ Y - C̃ Z` and
+`S₂ = Ã X² + B̃ Y² - C̃ Z²`:
+1. **Exact Full-Height Lagrange–Vandermonde Projectors at `S₃ = 0`:**
+   - `C * (Z - X) * (Z - Y) = Z² * (S₂ * (X + Y) - S₁ * X * Y)`,
+   - `A * (X - Y) * (X - Z) = X² * (S₁ * Y * Z - S₂ * (Y + Z))`,
+   - `B * (Y - X) * (Y - Z) = Y² * (S₁ * Z * X - S₂ * (Z + X))`.
+2. **Lower-Floor Non-Degeneracy and Sign Trichotomy of `(S₁, S₂)`:**
+   Whenever `1 ≤ C̃`, `1 ≤ X`, `1 ≤ Y`, `X < Z`, and `Y < Z`:
+   - `1 ≤ C̃ * Z * (Z - X) * (Z - Y)` and `S₂ * (X + Y) - S₁ * X * Y = C̃ * Z * (Z - X) * (Z - Y) ≥ 1`,
+   - `¬(S₁ = 0 ∧ S₂ = 0)` and `1 ≤ |S₁| + |S₂|`,
+   - **Branch I (`0 ≤ S₁`):** `C̃ * Z ≤ Ã * X + B̃ * Y` and `C ≤ (Ã * X + B̃ * Y) * Z²`,
+   - **Branch II (`S₂ ≤ 0`):** `S₁ ≤ -1` and `1 ≤ (-S₁) * X * Y`,
+   - **Branch III (`S₁ ≤ -1 ∧ 1 ≤ S₂`):** `Ã * X + B̃ * Y + 1 ≤ C̃ * Z` and `C̃ * Z² + 1 ≤ Ã * X² + B̃ * Y²`.
+3. **Principal-Cell Bilateral Bézout Height Bracket (`0 ≤ α ≤ Ã X - 1`):**
+   For any Mason–Stothers–Bézout pair `(α, β)` satisfying `(Ã X) β - (B̃ Y) α = Z²`
+   normalized into the principal fundamental cell `0 ≤ α ≤ Ã X - 1` (with `1 ≤ Ã X`, `1 ≤ B̃ Y`, `1 ≤ C̃`, `1 ≤ Z`):
+   - `Z² ≤ (Ã * X) * β ∧ (Ã * X) * β ≤ Z² + (B̃ * Y) * (Ã * X - 1)` and `1 ≤ β`,
+   - `(B̃ * Y) * C + (B̃ * B̃ * C̃) * (Y * Y * Z) * α = R_full * β` (`R_full = Ã B̃ C̃ X Y Z`),
+   - **Bilateral Volume-to-Radical Bracket:**
+     `R_full * β - (B̃ * B̃ * C̃) * (Y * Y * Z) * (Ã * X - 1) ≤ (B̃ * Y) * C ∧ (B̃ * Y) * C ≤ R_full * β`. -/
+theorem thm14b_abc_hankel_vandermonde_floor_defect_trichotomy_and_bilateral_bezout_bracket
+    (At Bt Ct X Y Z alpha beta : Int)
+    (hABC : At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z = 0) :
+    let A  := At * X * X * X
+    let B  := Bt * Y * Y * Y
+    let C  := Ct * Z * Z * Z
+    let S1 := At * X + Bt * Y - Ct * Z
+    let S2 := At * X * X + Bt * Y * Y - Ct * Z * Z
+    let wx := At * X
+    let wy := Bt * Y
+    let Rfull := (At * Bt * Ct) * (X * Y * Z)
+    (C * (Z - X) * (Z - Y) = (Z * Z) * (S2 * (X + Y) - S1 * X * Y) ∧
+     A * (X - Y) * (X - Z) = (X * X) * (S1 * Y * Z - S2 * (Y + Z)) ∧
+     B * (Y - X) * (Y - Z) = (Y * Y) * (S1 * Z * X - S2 * (Z + X))) ∧
+    (1 ≤ Ct → 1 ≤ X → 1 ≤ Y → X < Z → Y < Z →
+      1 ≤ Ct * Z * (Z - X) * (Z - Y) ∧
+      S2 * (X + Y) - S1 * X * Y = Ct * Z * (Z - X) * (Z - Y) ∧
+      ¬(S1 = 0 ∧ S2 = 0) ∧
+      1 ≤ Int.natAbs S1 + Int.natAbs S2 ∧
+      (0 ≤ S1 → Ct * Z ≤ At * X + Bt * Y ∧ C ≤ (At * X + Bt * Y) * (Z * Z)) ∧
+      (S2 ≤ 0 → S1 ≤ -1 ∧ 1 ≤ (-S1) * X * Y) ∧
+      (S1 ≤ -1 → 1 ≤ S2 → At * X + Bt * Y + 1 ≤ Ct * Z ∧ Ct * Z * Z + 1 ≤ At * X * X + Bt * Y * Y)) ∧
+    (wx * beta - wy * alpha = Z * Z →
+     1 ≤ wx → 1 ≤ wy → 1 ≤ Ct → 1 ≤ Z → 0 ≤ alpha → alpha ≤ wx - 1 →
+      (Z * Z ≤ wx * beta ∧ wx * beta ≤ Z * Z + wy * (wx - 1) ∧ 1 ≤ beta) ∧
+      (wy * C + (Bt * Bt * Ct) * (Y * Y * Z) * alpha = Rfull * beta) ∧
+      (Rfull * beta - (Bt * Bt * Ct) * (Y * Y * Z) * (wx - 1) ≤ wy * C ∧
+       wy * C ≤ Rfull * beta)) := by
+  dsimp
+  have h9 := (thm9_pillai_abc_differential_bezout_and_pade_laws
+               0 0 0 0 0 0 0 0 0 0 At Bt Ct X Y Z 0 0 0 0).2.2.2.2.1
+  dsimp at h9
+  rcases h9 with ⟨hVandA, hVandB, hVandC⟩
+  rw [hABC] at hVandA hVandB hVandC
+  have hProjC : (Ct * Z * Z * Z) * (Z - X) * (Z - Y) =
+                (Z * Z) * ((At * X * X + Bt * Y * Y - Ct * Z * Z) * (X + Y) - (At * X + Bt * Y - Ct * Z) * X * Y) := by
+    have hMul := congrArg (fun t => (Z * Z) * t) hVandC
+    have hL : (Z * Z) * (Ct * Z * (Z - X) * (Z - Y)) = (Ct * Z * Z * Z) * (Z - X) * (Z - Y) := by
+      simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    rw [hL, Int.sub_zero] at hMul
+    exact hMul.symm
+  have hProjA : (At * X * X * X) * (X - Y) * (X - Z) =
+                (X * X) * ((At * X + Bt * Y - Ct * Z) * Y * Z - (At * X * X + Bt * Y * Y - Ct * Z * Z) * (Y + Z)) := by
+    have hMul := congrArg (fun t => (X * X) * t) hVandA
+    have hL : (X * X) * (At * X * (X - Y) * (X - Z)) = (At * X * X * X) * (X - Y) * (X - Z) := by
+      simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    rw [hL, Int.add_zero] at hMul
+    exact hMul.symm
+  have hProjB : (Bt * Y * Y * Y) * (Y - X) * (Y - Z) =
+                (Y * Y) * ((At * X + Bt * Y - Ct * Z) * Z * X - (At * X * X + Bt * Y * Y - Ct * Z * Z) * (Z + X)) := by
+    have hMul := congrArg (fun t => (Y * Y) * t) hVandB
+    have hL : (Y * Y) * (Bt * Y * (Y - X) * (Y - Z)) = (Bt * Y * Y * Y) * (Y - X) * (Y - Z) := by
+      simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    rw [hL, Int.add_zero] at hMul
+    exact hMul.symm
+  refine ⟨⟨hProjC, hProjA, hProjB⟩, ?_, ?_⟩
+  · intro hCt1 hX1 hY1 hXZ hYZ
+    have hZ1 : 1 ≤ Z := by omega
+    have hZX1 : 1 ≤ Z - X := by omega
+    have hZY1 : 1 ≤ Z - Y := by omega
+    have hCtZ : 1 ≤ Ct * Z := by
+      have := Int.mul_le_mul hCt1 hZ1 (by omega) (by omega); omega
+    have hCtZX : 1 ≤ Ct * Z * (Z - X) := by
+      have := Int.mul_le_mul hCtZ hZX1 (by omega) (by omega); omega
+    have hPos : 1 ≤ Ct * Z * (Z - X) * (Z - Y) := by
+      have := Int.mul_le_mul hCtZX hZY1 (by omega) (by omega); omega
+    have hVandEq : (At * X * X + Bt * Y * Y - Ct * Z * Z) * (X + Y) -
+                   (At * X + Bt * Y - Ct * Z) * X * Y =
+                   Ct * Z * (Z - X) * (Z - Y) := by
+      rw [Int.sub_zero] at hVandC
+      exact hVandC
+    have hNotBoth : ¬(At * X + Bt * Y - Ct * Z = 0 ∧ At * X * X + Bt * Y * Y - Ct * Z * Z = 0) := by
+      intro hBoth
+      rcases hBoth with ⟨hS10, hS20⟩
+      rw [hS10, hS20] at hVandEq
+      simp only [Int.zero_mul, Int.sub_zero] at hVandEq
+      omega
+    have hAbsPos : 1 ≤ (At * X + Bt * Y - Ct * Z).natAbs + (At * X * X + Bt * Y * Y - Ct * Z * Z).natAbs := by
+      rcases Int.lt_trichotomy (At * X + Bt * Y - Ct * Z) 0 with hLt1 | hEq1 | hGt1
+      · omega
+      · rcases Int.lt_trichotomy (At * X * X + Bt * Y * Y - Ct * Z * Z) 0 with hLt2 | hEq2 | hGt2
+        · omega
+        · exact False.elim (hNotBoth ⟨hEq1, hEq2⟩)
+        · omega
+      · omega
+    refine ⟨hPos, hVandEq, hNotBoth, hAbsPos, ?_, ?_, by intro _ _; exact ⟨by omega, by omega⟩⟩
+    · intro hS1ge0
+      have hLin : Ct * Z ≤ At * X + Bt * Y := by omega
+      have hZ2ge0 : 0 ≤ Z * Z := Int.mul_nonneg (by omega) (by omega)
+      have hDiff : (At * X + Bt * Y) * (Z * Z) - Ct * Z * Z * Z =
+                   (At * X + Bt * Y - Ct * Z) * (Z * Z) := by
+        simp only [Int.sub_mul, Int.mul_assoc]
+      have hProdGe0 : 0 ≤ (At * X + Bt * Y - Ct * Z) * (Z * Z) :=
+        Int.mul_nonneg hS1ge0 hZ2ge0
+      exact ⟨hLin, by omega⟩
+    · intro hS2le0
+      have hS2XY : (At * X * X + Bt * Y * Y - Ct * Z * Z) * (X + Y) ≤ 0 :=
+        Int.mul_nonpos_of_nonpos_of_nonneg hS2le0 (by omega)
+      have hNegS1XY : 1 ≤ (-(At * X + Bt * Y - Ct * Z)) * X * Y := by
+        have : (-(At * X + Bt * Y - Ct * Z)) * X * Y = -((At * X + Bt * Y - Ct * Z) * X * Y) := by
+          simp only [Int.neg_mul]
+        omega
+      have hXYpos : 1 ≤ X * Y := by
+        have := Int.mul_le_mul hX1 hY1 (by omega) (by omega); omega
+      have hS1neg : At * X + Bt * Y - Ct * Z ≤ -1 := by
+        rcases Int.lt_trichotomy (At * X + Bt * Y - Ct * Z) 0 with hLt | hEq | hGt
+        · omega
+        · rw [hEq] at hNegS1XY; simp only [Int.neg_zero, Int.zero_mul] at hNegS1XY; omega
+        · have hNonneg : 0 ≤ (At * X + Bt * Y - Ct * Z) * (X * Y) :=
+            Int.mul_nonneg (by omega) (by omega)
+          have hEqAssoc : (-(At * X + Bt * Y - Ct * Z)) * X * Y =
+                          -((At * X + Bt * Y - Ct * Z) * (X * Y)) := by
+            simp only [Int.neg_mul, Int.mul_assoc]
+          omega
+      exact ⟨hS1neg, hNegS1XY⟩
+  · intro hBezZ2 hWx1 hWy1 hCt1 hZ1 hAlpha0 hAlphaMax
+    have hZ2pos : 1 ≤ Z * Z := by
+      have := Int.mul_le_mul hZ1 hZ1 (by omega) (by omega); omega
+    have hWyAlpha0 : 0 ≤ (Bt * Y) * alpha := Int.mul_nonneg (by omega) hAlpha0
+    have hWyAlphaMax : (Bt * Y) * alpha ≤ (Bt * Y) * (At * X - 1) := by
+      have hDiff : (Bt * Y) * (At * X - 1) - (Bt * Y) * alpha = (Bt * Y) * ((At * X - 1) - alpha) := by
+        simp only [Int.mul_sub]
+      have hNonneg : 0 ≤ (Bt * Y) * ((At * X - 1) - alpha) :=
+        Int.mul_nonneg (by omega) (by omega)
+      omega
+    have hWxBetaLow : Z * Z ≤ (At * X) * beta := by omega
+    have hWxBetaHigh : (At * X) * beta ≤ Z * Z + (Bt * Y) * (At * X - 1) := by omega
+    have hBeta1 : 1 ≤ beta := by
+      rcases Int.lt_trichotomy beta 1 with hLt | hEq | hGt
+      · have hWxBetaNonpos : (At * X) * beta ≤ 0 :=
+          Int.mul_nonpos_of_nonneg_of_nonpos (by omega) (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+      · omega
+      · omega
+    have hCollapse :
+        (Bt * Y) * (Ct * Z * Z * Z) + (Bt * Bt * Ct) * (Y * Y * Z) * alpha -
+        ((At * Bt * Ct) * (X * Y * Z)) * beta =
+        (Bt * Ct * Y * Z) * (Z * Z - ((At * X) * beta - (Bt * Y) * alpha)) := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hZero : Z * Z - ((At * X) * beta - (Bt * Y) * alpha) = 0 := by omega
+    rw [hZero, Int.mul_zero] at hCollapse
+    have hCoeffNonneg : 0 ≤ (Bt * Bt * Ct) * (Y * Y * Z) := by
+      have hB2Y2 : 0 ≤ (Bt * Y) * (Bt * Y) := Int.mul_nonneg (by omega) (by omega)
+      have hCtZ : 0 ≤ Ct * Z := Int.mul_nonneg (by omega) (by omega)
+      have hProd : 0 ≤ ((Bt * Y) * (Bt * Y)) * (Ct * Z) := Int.mul_nonneg hB2Y2 hCtZ
+      have hEq : (Bt * Bt * Ct) * (Y * Y * Z) = ((Bt * Y) * (Bt * Y)) * (Ct * Z) := by
+        simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      rw [hEq]; exact hProd
+    have hTermLow : 0 ≤ (Bt * Bt * Ct) * (Y * Y * Z) * alpha :=
+      Int.mul_nonneg hCoeffNonneg hAlpha0
+    have hTermHigh : (Bt * Bt * Ct) * (Y * Y * Z) * alpha ≤
+                     (Bt * Bt * Ct) * (Y * Y * Z) * (At * X - 1) := by
+      have hDiff : (Bt * Bt * Ct) * (Y * Y * Z) * (At * X - 1) -
+                   (Bt * Bt * Ct) * (Y * Y * Z) * alpha =
+                   (Bt * Bt * Ct) * (Y * Y * Z) * ((At * X - 1) - alpha) := by
+        simp only [Int.mul_sub]
+      have hNonneg : 0 ≤ (Bt * Bt * Ct) * (Y * Y * Z) * ((At * X - 1) - alpha) :=
+        Int.mul_nonneg hCoeffNonneg (by omega)
+      omega
+    exact ⟨⟨hWxBetaLow, hWxBetaHigh, hBeta1⟩, by omega, ⟨by omega, by omega⟩⟩
+
 #print axioms thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
 #print axioms thm9_pillai_abc_differential_bezout_and_pade_laws
 #print axioms thm12_reverse_pade_bezout_cubic_annihilation_and_radical_bound
@@ -366,5 +625,7 @@ theorem thm16_weierstrass_stereographic_abc_embedding_into_z512_rotator
 #print axioms thm14_master_pillai_and_abc_bilateral_convergence_chains
 #print axioms thm15_cross_floor_k2_k3_sixth_power_genus10_lock
 #print axioms thm16_weierstrass_stereographic_abc_embedding_into_z512_rotator
+#print axioms thm12b_abc_countable_pade_tower_cubic_annihilation_and_adjacent_floor_escape
+#print axioms thm14b_abc_hankel_vandermonde_floor_defect_trichotomy_and_bilateral_bezout_bracket
 
 end RotatorCalculusPaper
