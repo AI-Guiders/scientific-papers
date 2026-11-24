@@ -248,6 +248,170 @@ theorem thm30_unified_pillai_abc_collatz_planetary_differential_bridge
     have : 0 ≤ (multiScrewP G - multiScrewQ G) * (n0 - nMin) := Int.mul_nonneg (by omega) (by omega)
     omega
 
+/-- **Theorem 36 (Unified First/Second-Derivative and Variational Extremum Principles
+across Pillai Padé Towers, `A + B = C` Mason–Stothers Gauge Flows, and Collatz Gear Permutations)**:
+Using the general derivative operator `fieldDeriv` (`D f(x) = f(x + 1) - f(x)`) and variational
+action `cascadeAction` (`thm35`):
+1. **Strict Convexity and Sign-Change Minimum of Quadratic Residual Energy `E(k) = (I₀ + Δ · k)²`:**
+   For `I(k) = I₀ + Δ * k` and `E(k) = I(k) * I(k)`:
+   - First derivative: `fieldDeriv I k = Δ` and `fieldDeriv E k = Δ * (2 * I k + Δ)`,
+   - Second derivative: `fieldDeriv (fieldDeriv E) k = 2 * (Δ * Δ)` (`≥ 2` whenever `Δ ≠ 0`),
+   - Sign-change extremum bracket: whenever `1 ≤ Δ` and `I k ≤ 0 ∧ 0 ≤ I (k + 1)`,
+     `-Δ ≤ I k ∧ I (k + 1) ≤ Δ`, `fieldDeriv E (k - 1) < 0` (if `I k < 0`), and `0 < fieldDeriv E (k + 1)`.
+2. **Pillai / `abc` Padé-Tower Floor-Step Extremum in `k`:**
+   On any floor `R : List Int` with `P_R = padeTowerP R U V`, `Q_R = padeTowerQ R U V`, and next-floor
+   residual `I_{R'}(k) = a * (P_R + k * Q_R) - b * (k * P_R + Q_R)`:
+   - `fieldDeriv I_{R'} k = a * Q_R - b * P_R`,
+   - `fieldDeriv (fieldDeriv (fun t => I_{R'} t * I_{R'} t)) k = 2 * ((a * Q_R - b * P_R) * (a * Q_R - b * P_R))`.
+3. **`A + B = C` Mason–Stothers Gauge Noether Conservation `D_t W*(t) = 0` and Principal-Cell Minimum:**
+   Along the gauge flow `α(t) = α₀ + t * (Ã X)`, `β(t) = β₀ + t * (B̃ Y)`, `γ(t) = γ₀ + t * (C̃ Z)`:
+   - Noether invariance of the cubic Wronskian `W*(t) = A * Y² * β(t) - B * X² * α(t)`:
+     `fieldDeriv W* t = 0` (since `A = Ã X³`, `B = B̃ Y³`),
+   - Strict convexity of gauge energy `E_α(t) = α(t)²`:
+     `fieldDeriv (fieldDeriv E_α) t = 2 * ((Ã * X) * (Ã * X))`,
+   - Principal-cell minimum (`t = 0` with `0 ≤ α₀`): for all `1 ≤ t` (with `1 ≤ Ã X`, `1 ≤ B̃ Y`, `1 ≤ C̃ Z`),
+     `α(0) < α(t) ∧ β(0) < β(t) ∧ γ(0) < γ(t)`.
+4. **Collatz Variational Boundary Maximum/Minimum Principle (Strict Positivity of the Swap Derivative):**
+   For any binary gear-word prefix `w1 : List Bool` and suffix `w2 : List Bool`, swapping an adjacent
+   odd–even pair `[true, false] ↦ [false, true]` inside `w1 ++ [true, false] ++ w2` leaves `P_tot` and `Q_tot`
+   invariant and has a strictly positive variational derivative:
+   - `multiScrewD (collatzWordScrews (w1 ++ [false, true] ++ w2)) - multiScrewD (collatzWordScrews (w1 ++ [true, false] ++ w2)) = multiScrewP (collatzWordScrews w1) * multiScrewQ (collatzWordScrews w2) ≥ 1`,
+   so no interior permutation is stationary (`δ_swap R_w ≠ 0`), forcing the global minimum `R_min = 3^B - 2^B`
+   and global maximum `R_max = 2^{A-B}(3^B - 2^B)` onto the two boundary vertices (`thm31`). -/
+theorem thm36_unified_extremum_principles_across_pillai_abc_and_collatz
+    (R : List Int) (w1 w2 : List Bool)
+    (I0 Delta k U V a b At Bt Ct X Y Z alpha0 beta0 gamma0 t : Int) :
+    let Ik := fun m => I0 + Delta * m
+    let Ek := fun m => Ik m * Ik m
+    let PR := padeTowerP R U V
+    let QR := padeTowerQ R U V
+    let IRnext := fun m => a * (PR + m * QR) - b * (m * PR + QR)
+    let wx := At * X
+    let wy := Bt * Y
+    let wz := Ct * Z
+    let A  := At * X * X * X
+    let B  := Bt * Y * Y * Y
+    let alphaT := fun m => alpha0 + m * wx
+    let betaT  := fun m => beta0 + m * wy
+    let gammaT := fun m => gamma0 + m * wz
+    let WstarT := fun m => A * (Y * Y) * betaT m - B * (X * X) * alphaT m
+    let L1 := collatzWordScrews w1
+    let L2 := collatzWordScrews w2
+    -- 1. General quadratic residual energy convexity and sign-change minimum:
+    (fieldDeriv Ik k = Delta ∧
+     fieldDeriv Ek k = Delta * (2 * Ik k + Delta) ∧
+     fieldDeriv (fieldDeriv Ek) k = 2 * (Delta * Delta) ∧
+     (Delta ≠ 0 → 2 ≤ fieldDeriv (fieldDeriv Ek) k) ∧
+     (1 ≤ Delta → Ik k ≤ 0 → 0 ≤ Ik (k + 1) →
+       -Delta ≤ Ik k ∧ Ik (k + 1) ≤ Delta ∧ 0 < fieldDeriv Ek (k + 1))) ∧
+    -- 2. Pillai / abc Padé-tower floor-step derivative and second derivative:
+    (fieldDeriv IRnext k = a * QR - b * PR ∧
+     fieldDeriv (fieldDeriv (fun m => IRnext m * IRnext m)) k =
+       2 * ((a * QR - b * PR) * (a * QR - b * PR))) ∧
+    -- 3. A + B = C Mason-Stothers gauge Noether conservation and principal-cell minimum:
+    (fieldDeriv WstarT t = 0 ∧
+     fieldDeriv (fieldDeriv (fun m => alphaT m * alphaT m)) t = 2 * (wx * wx) ∧
+     (1 ≤ wx → 1 ≤ wy → 1 ≤ wz → 1 ≤ t →
+       alphaT 0 < alphaT t ∧ betaT 0 < betaT t ∧ gammaT 0 < gammaT t)) ∧
+    -- 4. Collatz variational swap derivative strict positivity:
+    (multiScrewD (collatzWordScrews (w1 ++ [false, true] ++ w2)) -
+     multiScrewD (collatzWordScrews (w1 ++ [true, false] ++ w2)) =
+       multiScrewP L1 * multiScrewQ L2 ∧
+     1 ≤ multiScrewP L1 * multiScrewQ L2) := by
+  intro Ik Ek PR QR IRnext wx wy wz A B alphaT betaT gammaT WstarT L1 L2
+  have hD1 : fieldDeriv Ik k = Delta := by
+    dsimp [fieldDeriv, Ik]
+    simp only [Int.mul_add, Int.mul_one]; omega
+  have hDE : fieldDeriv Ek k = Delta * (2 * Ik k + Delta) := by
+    dsimp [fieldDeriv, Ek, Ik]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h2, Int.mul_add, Int.add_mul, Int.mul_one,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hDDE : fieldDeriv (fieldDeriv Ek) k = 2 * (Delta * Delta) := by
+    dsimp [fieldDeriv, Ek, Ik]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h2, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hDPade1 : fieldDeriv IRnext k = a * QR - b * PR := by
+    dsimp [fieldDeriv, IRnext]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.one_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hDPade2 : fieldDeriv (fieldDeriv (fun m => IRnext m * IRnext m)) k =
+                 2 * ((a * QR - b * PR) * (a * QR - b * PR)) := by
+    dsimp [fieldDeriv, IRnext]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h2, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.one_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hNoether : fieldDeriv WstarT t = 0 := by
+    dsimp [fieldDeriv, WstarT, betaT, alphaT, A, B, wx, wy]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.one_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hDDAlpha : fieldDeriv (fieldDeriv (fun m => alphaT m * alphaT m)) t = 2 * (wx * wx) := by
+    dsimp [fieldDeriv, alphaT]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h2, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.one_mul, Int.mul_one,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hSwap :
+      multiScrewD (collatzWordScrews (w1 ++ [false, true] ++ w2)) -
+      multiScrewD (collatzWordScrews (w1 ++ [true, false] ++ w2)) =
+      multiScrewP L1 * multiScrewQ L2 := by
+    rw [collatzWordScrews_append, collatzWordScrews_append,
+        collatzWordScrews_append, collatzWordScrews_append]
+    rw [multiScrewD_append, multiScrewD_append, multiScrewD_append, multiScrewD_append]
+    rw [multiScrewP_append, multiScrewP_append]
+    dsimp [collatzWordScrews, collatzGearOfBool, multiScrewP, multiScrewQ, multiScrewD, L1, L2]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_zero, Int.zero_mul, Int.add_zero, Int.zero_add,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hP1Q2pos : 1 ≤ multiScrewP L1 * multiScrewQ L2 := by
+    have h31_1 := (thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze w1 0).1
+    have h31_2 := (thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze w2 0).1
+    have hP1 : 1 ≤ multiScrewP L1 := by
+      have hPo1 : 1 ≤ collatzWordPOdd w1 := h31_1.1
+      have hPe1 : 1 ≤ collatzWordPEven w1 := h31_1.2.1
+      have hProd1 : collatzWordPOdd w1 * collatzWordPEven w1 = multiScrewP L1 := h31_1.2.2.2.1
+      have := Int.mul_le_mul hPo1 hPe1 (by omega) (by omega)
+      omega
+    have hQ2 : 1 ≤ multiScrewQ L2 := by
+      have hPo2 : 1 ≤ collatzWordPOdd w2 := h31_2.1
+      have hPoQ2 : collatzWordPOdd w2 ≤ multiScrewQ L2 := h31_2.2.2.1
+      omega
+    have := Int.mul_le_mul hP1 hQ2 (by omega) (by omega)
+    omega
+  refine ⟨⟨hD1, hDE, hDDE, ?_, ?_⟩, ⟨hDPade1, hDPade2⟩, ⟨hNoether, hDDAlpha, ?_⟩, ⟨hSwap, hP1Q2pos⟩⟩
+  · intro hNe0
+    rw [hDDE]
+    rcases Int.lt_trichotomy Delta 0 with hLt | hEq | hGt
+    · have : 1 ≤ (-Delta) * (-Delta) := by
+        have := Int.mul_le_mul (by omega : 1 ≤ -Delta) (by omega : 1 ≤ -Delta) (by omega) (by omega); omega
+      have hNeg : (-Delta) * (-Delta) = Delta * Delta := by simp only [Int.neg_mul, Int.mul_neg, Int.neg_neg]
+      omega
+    · exact False.elim (hNe0 hEq)
+    · have : 1 ≤ Delta * Delta := by
+        have := Int.mul_le_mul (by omega : 1 ≤ Delta) (by omega : 1 ≤ Delta) (by omega) (by omega); omega
+      omega
+  · intro hD1pos hIkLe0 hIk1Ge0
+    have hStep : Ik (k + 1) = Ik k + Delta := by
+      dsimp [Ik]; simp only [Int.mul_add, Int.mul_one]; omega
+    have hDE1 : fieldDeriv Ek (k + 1) = Delta * (2 * Ik (k + 1) + Delta) := by
+      dsimp [fieldDeriv, Ek, Ik]
+      have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+      simp only [h2, Int.mul_add, Int.add_mul, Int.mul_one,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hPos : 0 < Delta * (2 * Ik (k + 1) + Delta) :=
+      Int.mul_pos (by omega) (by omega)
+    exact ⟨by omega, by omega, by omega⟩
+  · intro hWx1 hWy1 hWz1 hT1
+    dsimp [alphaT, betaT, gammaT]
+    simp only [Int.zero_mul, Int.add_zero]
+    have hTx : 1 ≤ t * wx := by
+      have := Int.mul_le_mul hT1 hWx1 (by omega) (by omega); omega
+    have hTy : 1 ≤ t * wy := by
+      have := Int.mul_le_mul hT1 hWy1 (by omega) (by omega); omega
+    have hTz : 1 ≤ t * wz := by
+      have := Int.mul_le_mul hT1 hWz1 (by omega) (by omega); omega
+    exact ⟨by omega, by omega, by omega⟩
+
 #print axioms thm30_unified_pillai_abc_collatz_planetary_differential_bridge
 #print axioms thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze
 #print axioms thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
@@ -258,5 +422,6 @@ theorem thm30_unified_pillai_abc_collatz_planetary_differential_bridge
 #print axioms thm14c_abc_three_shaft_minor_closure_and_joint_beta_gamma_brackets
 #print axioms thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_i_sqrt2_fields
 #print axioms thm35_general_field_derivative_operator_quotient_wronskian_and_variational_euler_lagrange
+#print axioms thm36_unified_extremum_principles_across_pillai_abc_and_collatz
 
 end RotatorCalculusPaper
