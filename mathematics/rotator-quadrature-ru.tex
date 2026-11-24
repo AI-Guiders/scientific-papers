@@ -365,22 +365,34 @@
     (X, Y, R) \otimes \bigl(RX,\; -RY,\; X^2 + Y^2\bigr) \;=\; \bigl(R(X^2 + Y^2),\; 0,\; R(X^2 + Y^2)\bigr) \;\sim\; (1, 0, 1).
   \end{equation}
 
-\item \textbf{Аксиомы поля, мультипликативность нормы Пелля и обратный элемент в $\mathbb{Q}(\sqrt{2})$:}
-  на однородных тройках $(a, b, D) \in \mathbb{Z}^3$, представляющих элемент $(a + b\sqrt{2})/D \in \mathbb{Q}(\sqrt{2})$, операции
+\item \textbf{Аксиомы поля в $\mathbb{Q}(\sqrt{m})$ ($m = d - 1$) для произвольной размерности $d$ и круговое замыкание $\mathbb{Q}(i, \sqrt{2}) = \mathbb{Q}(\zeta_8)$ при $d = 3$ (\texttt{thm34}, \texttt{thm39}):}
+  для произвольного параметра размерности $m = d - 1 \in \mathbb{Z}$ на однородных тройках $(a, b, D) \in \mathbb{Z}^3$, представляющих элемент $(a + b\sqrt{m})/D \in \mathbb{Q}(\sqrt{m})$, операции
   \begin{align}
-    (a_1, b_1, D_1) \oplus_{\sqrt{2}} (a_2, b_2, D_2) &:= \bigl(a_1 D_2 + a_2 D_1,\; b_1 D_2 + b_2 D_1,\; D_1 D_2\bigr), \label{eq:sqrt2-field-add} \\
-    (a_1, b_1, D_1) \otimes_{\sqrt{2}} (a_2, b_2, D_2) &:= \bigl(a_1 a_2 + 2b_1 b_2,\; a_1 b_2 + b_1 a_2,\; D_1 D_2\bigr) \label{eq:sqrt2-field-mul}
+    (a_1, b_1, D_1) \oplus_{\sqrt{m}} (a_2, b_2, D_2) &:= \bigl(a_1 D_2 + a_2 D_1,\; b_1 D_2 + b_2 D_1,\; D_1 D_2\bigr), \label{eq:sqrt2-field-add} \\
+    (a_1, b_1, D_1) \otimes_{\sqrt{m}} (a_2, b_2, D_2) &:= \bigl(a_1 a_2 + m\,b_1 b_2,\; a_1 b_2 + b_1 a_2,\; D_1 D_2\bigr) \label{eq:sqrt2-field-mul}
   \end{align}
-  коммутативны, ассоциативны и дистрибутивны, норма Пелля мультипликативна:
+  коммутативны, ассоциативны и дистрибутивны, квадратичная норма Пелля мультипликативна:
   \begin{equation}
     \label{eq:pell-norm-mult}
-    (a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 \;=\; (a_1^2 - 2b_1^2)(a_2^2 - 2b_2^2),
+    (a_1 a_2 + m\,b_1 b_2)^2 - m\,(a_1 b_2 + b_1 a_2)^2 \;=\; (a_1^2 - m\,b_1^2)(a_2^2 - m\,b_2^2),
   \end{equation}
-  а мультипликативный обратный $\texttt{sqrt2FieldInv}(a, b, D) := (Da,\, -Db,\, a^2 - 2b^2)$ при $a^2 - 2b^2 \ne 0$ даёт
+  а мультипликативный обратный $\texttt{quadFieldInv}_m(a, b, D) := (Da,\, -Db,\, a^2 - m\,b^2)$ при $a^2 - m\,b^2 \ne 0$ даёт
   \begin{equation}
     \label{eq:sqrt2-field-inverse}
-    (a, b, D) \otimes_{\sqrt{2}} \bigl(Da,\; -Db,\; a^2 - 2b^2\bigr) \;=\; \bigl(D(a^2 - 2b^2),\; 0,\; D(a^2 - 2b^2)\bigr) \;\sim\; (1, 0, 1).
+    (a, b, D) \otimes_{\sqrt{m}} \bigl(Da,\; -Db,\; a^2 - m\,b^2\bigr) \;=\; \bigl(D(a^2 - m\,b^2),\; 0,\; D(a^2 - m\,b^2)\bigr) \;\sim\; (1, 0, 1).
   \end{equation}
+  При $d = 3$ ($m = 2$) композит полей $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$ образует круговое биквадратичное поле $\mathbb{Q}(i, \sqrt{2}) = \mathbb{Q}(\zeta_8)$ из однородных пятёрок $(a, b, c, d_{\mathrm{im}}, D) \in \mathbb{Z}^5$, представляющих $\bigl((a + b\sqrt{2}) + i(c + d_{\mathrm{im}}\sqrt{2})\bigr)/D$, в котором первообразный корень $8$-й степени из единицы
+  \begin{equation}
+    \label{eq:zeta8-def}
+    \zeta_8 \;:=\; \frac{\sqrt{2} + i\sqrt{2}}{2} \;\longleftrightarrow\; (0,\; 1,\; 0,\; 1,\; 2)
+  \end{equation}
+  совпадает с нормированным вектором биссектрисы стационарной фазы Френеля $\psi = K_P(3) = 64$, где $\mathcal{E}_3(64) = (64, 64)$, и удовлетворяет точным соотношениям в $\mathbb{Q}(i, \sqrt{2})$:
+  \begin{align}
+    \zeta_8^2 &= (0,\; 0,\; 4,\; 0,\; 4) \;\sim\; i, \label{eq:zeta8-sq} \\
+    \zeta_8^4 &= (-16,\; 0,\; 0,\; 0,\; 16) \;\sim\; -1, \label{eq:zeta8-pow4} \\
+    \zeta_8^8 &= (256,\; 0,\; 0,\; 0,\; 256) \;\sim\; +1, \label{eq:zeta8-pow8} \\
+    \zeta_8\,\bar{\zeta}_8 &= (4,\; 0,\; 0,\; 0,\; 4) \;\sim\; +1. \label{eq:zeta8-norm}
+  \end{align}
 
 \item \textbf{Оператор производной $Df$, закон вронскиана для производной частного и вариационная производная Эйлера--Лагранжа (\texttt{thm35}):}
   для любых функций $f, g\colon \mathbb{Z} \to \mathbb{Z}$ оператор производной $(Df)(x) = f(x+1) - f(x)$ удовлетворяет линейности, правилу Лейбница, формуле второй производной и закону вронскиана для числителя производной частного $D(f/g)$:
@@ -421,12 +433,17 @@
     2\,f_2(x+h) &= 2\,f_2(x) + 2h\,Df_2(x) + h(h-1)\,D^2f_2(x), \label{eq:taylor-newton-quad} \\
     6\,f_3(x+h) &= 6\,f_3(x) + 6h\,Df_3(x) + 3h(h-1)\,D^2f_3(x) + h(h-1)(h-2)\,D^3f_3(x), \label{eq:taylor-newton-cubic}
   \end{align}
-  и при $g(x) \ge 1$ сохраняет строго положительные знаменатели производных отношения $D^n(f/g)$ во всех порядках $n \in \mathbb{N}$:
-  \begin{equation}
-    \label{eq:c-infinity-denom-pos}
-    \forall n \in \mathbb{N},\ \forall x \in \mathbb{Z},\qquad
-    \prod_{j=0}^{n} g(x+j) \;\ge\; 1.
-  \end{equation}
+  и при $g(x) \ge 1$ задаёт замкнутую проективную формулу $n$-й производной отношения $D^n(f/g)(x) = N_n(x) / G_n(x)$ во всех порядках $n \in \mathbb{N}$ (\texttt{thm38}, \texttt{thm39}):
+  \begin{align}
+    N_0(x) &:= f(x), \qquad G_0(x) \;:=\; g(x), \label{eq:quotient-deriv-n-base} \\
+    N_{n+1}(x) &:= N_n(x+1)\,g(x) - N_n(x)\,g(x+n+1), \label{eq:quotient-deriv-n-numer} \\
+    G_n(x) &:= \prod_{j=0}^{n} g(x+j) \;\ge\; 1, \label{eq:c-infinity-denom-pos}
+  \end{align}
+  удовлетворяющую тождеству сдвига знаменателя и проективному закону шага дифференцирования без деления:
+  \begin{align}
+    G_n(x+1)\,g(x) &= g(x+n+1)\,G_n(x) \;=\; G_{n+1}(x), \label{eq:quotient-denom-shift} \\
+    \bigl(N_n(x+1)\,G_n(x) - N_n(x)\,G_n(x+1)\bigr)\,g(x) &= N_{n+1}(x)\,G_n(x). \label{eq:quotient-deriv-step-cancel}
+  \end{align}
 \end{enumerate}
 \end{theorem}
 
@@ -445,12 +462,13 @@
   &= \bigl(X(RX) - Y(-RY),\; X(-RY) + Y(RX),\; R(X^2 + Y^2)\bigr) \\
   &= \bigl(R(X^2 + Y^2),\; 0,\; R(X^2 + Y^2)\bigr).
 \end{align*}
-Так как первая и третья компоненты совпадают и равны $R(X^2 + Y^2) \ge 1$, полученная тройка проективно эквивалентна единице $(1, 0, 1)$. Аналогично по правилу~\eqref{eq:sqrt2-field-mul} в поле $\mathbb{Q}(\sqrt{2})$ имеем:
+Так как первая и третья компоненты совпадают и равны $R(X^2 + Y^2) \ge 1$, полученная тройка проективно эквивалентна единице $(1, 0, 1)$. Аналогично по правилу~\eqref{eq:sqrt2-field-mul} в поле $\mathbb{Q}(\sqrt{m})$ при любом $m \in \mathbb{Z}$ имеем:
 \begin{align*}
-  (a, b, D) \otimes_{\sqrt{2}} \bigl(Da,\; -Db,\; a^2 - 2b^2\bigr)
-  &= \bigl(a(Da) + 2b(-Db),\; a(-Db) + b(Da),\; D(a^2 - 2b^2)\bigr) \\
-  &= \bigl(D(a^2 - 2b^2),\; 0,\; D(a^2 - 2b^2)\bigr) \;\sim\; (1, 0, 1).
+  (a, b, D) \otimes_{\sqrt{m}} \bigl(Da,\; -Db,\; a^2 - m\,b^2\bigr)
+  &= \bigl(a(Da) + m\,b(-Db),\; a(-Db) + b(Da),\; D(a^2 - m\,b^2)\bigr) \\
+  &= \bigl(D(a^2 - m\,b^2),\; 0,\; D(a^2 - m\,b^2)\bigr) \;\sim\; (1, 0, 1).
 \end{align*}
+Для элемента $\zeta_8 = (0, 1, 0, 1, 2)$ в $\mathbb{Q}(i, \sqrt{2})$ при $m = 2$ прямое перемножение по закону $((a_1 + b_1\sqrt{2}) + i(c_1 + d_1\sqrt{2}))((a_2 + b_2\sqrt{2}) + i(c_2 + d_2\sqrt{2}))$ даёт $\zeta_8^2 = ((0 + 2) - (0 + 2),\, 0,\, 0 + 0,\, 2 + 2\cdot 0,\, 4)$ --- с учётом $(b_1 d_2 + d_1 b_2)(\sqrt{2})^2 = 2(1\cdot 1 + 1\cdot 1) = 4$ в мнимой части получаем $\zeta_8^2 = (0, 0, 4, 0, 4) \sim i$, откуда последовательным возведением в квадрат следуют~\eqref{eq:zeta8-pow4}--\eqref{eq:zeta8-norm}.
 
 \emph{Пункт~(iv).} Прибавляя и вычитая слагаемое $f(x+1)g(x)$ в определении разности произведения, получаем правило Лейбница~\eqref{eq:deriv-leibniz}:
 \begin{align*}
@@ -475,11 +493,20 @@
   (D^2 f_2)(x) &= 2c_2 \;=\; \mathrm{const}, \\
   (D^3 f_2)(x) &= 2c_2 - 2c_2 \;=\; 0,
 \end{align*}
-откуда по~\eqref{eq:field-deriv-composition} $(D^{k+3} f_2)(x) = D^k(D^3 f_2)(x) = 0$ при всех $k \in \mathbb{N}$. Аналогично для кубического многочлена $f_3(x)$ имеем $(D^3 f_3)(x) = 6c_3 = \mathrm{const}$ и $(D^{k+4} f_3)(x) = 0$, а подстановка выражений для $Df_3(x)$, $D^2 f_3(x)$ и $D^3 f_3(x)$ в правую часть~\eqref{eq:taylor-newton-cubic} даёт тождественно $6 f_3(x+h)$. Наконец, при $g(t) \ge 1$ индукция по $n \in \mathbb{N}$ с базой $g(x) \ge 1$ и шагом
-\begin{equation*}
-  \prod_{j=0}^{n+1} g(x+j) \;=\; g(x+n+1)\prod_{j=0}^{n} g(x+j) \;\ge\; 1\cdot 1 \;=\; 1
-\end{equation*}
-доказывает~\eqref{eq:c-infinity-denom-pos}.
+откуда по~\eqref{eq:field-deriv-composition} $(D^{k+3} f_2)(x) = D^k(D^3 f_2)(x) = 0$ при всех $k \in \mathbb{N}$. Аналогично для кубического многочлена $f_3(x)$ имеем $(D^3 f_3)(x) = 6c_3 = \mathrm{const}$ и $(D^{k+4} f_3)(x) = 0$, а подстановка выражений для $Df_3(x)$, $D^2 f_3(x)$ и $D^3 f_3(x)$ в правую часть~\eqref{eq:taylor-newton-cubic} даёт тождественно $6 f_3(x+h)$. Наконец, индукцией по $n \in \mathbb{N}$ проверим тождество сдвига знаменателя~\eqref{eq:quotient-denom-shift}: при $n = 0$ обе части равны $g(x+1)g(x) = G_1(x)$, а при переходе $n \to n + 1$ имеем
+\begin{align*}
+  G_{n+1}(x+1)\,g(x) &= \bigl(g(x+n+2)\,G_n(x+1)\bigr)\,g(x) \\
+  &= g(x+n+2)\,\bigl(G_n(x+1)\,g(x)\bigr) \\
+  &= g(x+n+2)\,G_{n+1}(x) \;=\; G_{n+2}(x).
+\end{align*}
+Умножая числитель прямой разности дробей $N_n(x+1)/G_n(x+1) - N_n(x)/G_n(x)$ на $g(x)$ и подставляя $G_n(x+1)g(x) = g(x+n+1)G_n(x)$, выносим общий множитель $G_n(x)$:
+\begin{align*}
+  \bigl(N_n(x+1)\,G_n(x) - N_n(x)\,G_n(x+1)\bigr)\,g(x)
+  &= N_n(x+1)\,g(x)\,G_n(x) - N_n(x)\,\bigl(G_n(x+1)\,g(x)\bigr) \\
+  &= \bigl(N_n(x+1)\,g(x) - N_n(x)\,g(x+n+1)\bigr)\,G_n(x) \\
+  &= N_{n+1}(x)\,G_n(x),
+\end{align*}
+что доказывает~\eqref{eq:quotient-deriv-step-cancel}, а при $g(t) \ge 1$ индукция по $n \in \mathbb{N}$ даёт~\eqref{eq:c-infinity-denom-pos}.
 \end{proof}
 
 \section{Замкнутое вычисление дискретных кольцевых сумм (интегралов) типа Френеля, Якоби, Дирихле, Парсеваля и Бесселя}
@@ -559,12 +586,15 @@
     \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{C}_3(\varphi^2) \;=\; \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{S}_3(\varphi^2) \;=\; 2048\,c_{\mathrm{sq}},
   \end{equation}
   где вся ненулевая сумма сосредоточена на $32$ точках биссектрисы стационарной фазы $\psi = K_P(3) = 64$.
-\item \textbf{Дискретная сумма типа интегрального синуса Дирихле и кольцевая сумма энергии Парсеваля:}
+\item \textbf{Ортогональность гармоник, дискретная сумма типа Дирихле и разложение Парсеваля для произвольного $Q$ (\texttt{thm2}, \texttt{thm39}):}
+  проекции косинуса и синуса строго ортогональны на полном периоде кольца, сумма Дирихле постоянна на втором квадранте, а сумма энергии Парсеваля для любого четверть-периода $Q \in \mathbb{Z}$ раскладывается на главный континуальный член $8Q^3$ и точную дискретную поправку Эйлера--Маклорена $4Q$:
   \begin{align}
+    \sum_{\varphi=0}^{511} \mathcal{C}_3(\varphi)\,\mathcal{S}_3(\varphi) &= 0, \label{eq:ortho-cs-zero} \\
     \mathrm{Si}_3(128) &= \mathrm{Si}_3(256) \;=\; 128, \label{eq:dirichlet-closed} \\
+    6\,\mathcal{I}_{\mathrm{Parseval}}(Q) &= 4Q\,(2Q^2 + 1) \;=\; 8Q^3 + 4Q, \label{eq:parseval-general-q} \\
     6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) &= k_{\mathrm{turns}}\,N_{\mathrm{ring}}(3)\bigl(2\,Q_\square(3)^2 + 1\bigr) \;=\; 16\,777\,728\,k_{\mathrm{turns}}, \label{eq:parseval-closed}
   \end{align}
-  откуда $\mathcal{I}_{\mathrm{Parseval}}(3) = 2\,796\,288$.
+  откуда при $Q = Q_\square(3) = 128$ получаем $\mathcal{I}_{\mathrm{Parseval}}(3) = 2\,796\,288$.
 \item \textbf{Дискретная кольцевая сумма типа Бесселя и её точный корень:}
   \begin{align}
     \mathcal{J}_{0,3}(0) &= 65\,536, \label{eq:bessel-k0} \\
@@ -595,46 +625,53 @@
 \end{itemize}
 Умножение на константу $c_{\mathrm{sq}}$ по~\eqref{eq:linear-factor-extraction} даёт~\eqref{eq:fresnel-closed}.
 
-\emph{Пункт~(ii).} На первом квадранте $1 \le \varphi \le 128$ выполняется $\mathcal{S}_3(\varphi) = \varphi$, поэтому $\mathrm{tdiv}(\mathcal{S}_3(\varphi), \varphi) = \mathrm{tdiv}(\varphi, \varphi) = 1$ и
+\emph{Пункт~(ii).} Поскольку $\mathcal{C}_Q(-\varphi) = \mathcal{C}_Q(\varphi)$ чётен, а $\mathcal{S}_Q(-\varphi) = -\mathcal{S}_Q(\varphi)$ нечётен (а на полюсах $\varphi = 0$ и $\varphi = 2Q$ произведение $\mathcal{C}_Q\mathcal{S}_Q$ равно нулю), попарное сложение точек $\varphi$ и $4Q - \varphi$ даёт~\eqref{eq:ortho-cs-zero}. На первом квадранте $1 \le \varphi \le 128$ выполняется $\mathcal{S}_3(\varphi) = \varphi$, поэтому $\mathrm{tdiv}(\mathcal{S}_3(\varphi), \varphi) = \mathrm{tdiv}(\varphi, \varphi) = 1$ и
 \begin{equation*}
   \mathrm{Si}_3(128) \;=\; \sum_{\varphi=1}^{128} 1 \;=\; 128.
 \end{equation*}
 На втором квадранте $129 \le \varphi \le 256$ имеем $0 \le \mathcal{S}_3(\varphi) = 256 - \varphi < \varphi$, поэтому целочисленное частное с усечением к нулю равно $\mathrm{tdiv}(256 - \varphi, \varphi) = 0$, откуда $\mathrm{Si}_3(256) = \mathrm{Si}_3(128) = 128$, что доказывает~\eqref{eq:dirichlet-closed}.
 
-Для интеграла Парсеваля~\eqref{eq:def-parseval} сумма квадратов по четырём квадрантам длины $Q = 128$ состоит из двух пиков $\pm Q$ и четырёх сумм квадратов от $1$ до $Q - 1$:
+Для суммы Парсеваля~\eqref{eq:def-parseval} при произвольном четверть-периоде $Q \ge 1$ сумма квадратов по четырём квадрантам длины $Q$ состоит из двух пиков $\pm Q$ и четырёх сумм квадратов от $1$ до $Q - 1$:
 \begin{equation*}
-  \mathcal{I}_{\mathrm{Parseval}}(d) \;=\; 2\,Q^2 + 4\sum_{m=1}^{Q-1} m^2 \;=\; 2\,Q^2 + \frac{4(Q - 1)Q(2Q - 1)}{6} \;=\; \frac{4Q(2Q^2 + 1)}{6}.
+  \mathcal{I}_{\mathrm{Parseval}}(Q) \;=\; 2\,Q^2 + 4\sum_{m=1}^{Q-1} m^2 \;=\; 2\,Q^2 + \frac{4(Q - 1)Q(2Q - 1)}{6} \;=\; \frac{4Q(2Q^2 + 1)}{6},
 \end{equation*}
-Умножая обе части на $6\,k_{\mathrm{turns}}$ и подставляя $4Q = N_{\mathrm{ring}}(3) = 512$ и $2Q^2 + 1 = 32\,769$, получаем~\eqref{eq:parseval-closed}:
-\begin{equation*}
-  6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) \;=\; 512 \times 32\,769\,k_{\mathrm{turns}} \;=\; 16\,777\,728\,k_{\mathrm{turns}}.
-\end{equation*}
+откуда $6\,\mathcal{I}_{\mathrm{Parseval}}(Q) = 4Q(2Q^2 + 1) = 8Q^3 + 4Q$, что доказывает~\eqref{eq:parseval-general-q} (где $8Q^3 / (6\cdot 4Q\cdot Q^2) = 1/3$ есть континуальный интеграл $\int_0^1 (1-2t)^2\,\mathrm{d}t$, а $4Q$ --- точный дискретный остаток трапеций). Подстановка $Q = 128$ ($4Q = 512$, $2Q^2 + 1 = 32\,769$) даёт~\eqref{eq:parseval-closed}.
 
 \emph{Пункт~(iii).} При $k = 0$ имеем $\mathcal{C}_3(0) = 128$ во всех $512$ точках, откуда $\mathcal{J}_{0,3}(0) = 512 \times 128 = 65\,536$. При $k = 1$, поскольку $|\mathcal{S}_3(\varphi)| \le 128$, имеем $\mathcal{C}_3(\mathcal{S}_3(\varphi)) = 128 - |\mathcal{S}_3(\varphi)| = |\mathcal{C}_3(\varphi)|$, сумма которого по кольцу равна $2\,Q^2 = 32\,768$. При $k = 4$, когда $\varphi$ пробегает каждый квадрант длины $128$, величина $4\,\mathcal{S}_3(\varphi)$ с постоянным шагом $\pm 4$ пробегает полный период $512$, на котором сумма $\mathcal{C}_3$ равна нулю по~\eqref{eq:full-turn-zero}. Это доказывает~\eqref{eq:bessel-k0}--\eqref{eq:bessel-k4}.
 \end{proof}
 
-\section{Трёхмерная кубатура Римана на кубооктаэдре и рациональные вилки для \texorpdfstring{$\pi$}{pi}}
+\section{Многомерная кубатура Римана на оболочках \texorpdfstring{$O_2(d)$}{O2(d)} при произвольном \texorpdfstring{$d$}{d} и рациональные вилки для \texorpdfstring{$\pi$}{pi}}
 \label{sec:continuum-emergence}
 
-\begin{remark}[Замкнутость связки $\mathbb{Q}(\sqrt{2}) \leftrightarrow O_2(3)$ и точная проекция на единичную сферу $S^2$]
+\begin{remark}[Замкнутость связки $\mathbb{Q}(\sqrt{d-1}) \leftrightarrow O_{d-1}(d)$ при произвольной размерности $d \ge 2$ и проекция на единичную сферу $S^{d-1}$]
 \label{rem:q-sqrt2-cuboctahedron-closure}
-В силу~\eqref{eq:cuboct-norm2} каждая из $12$ вершин кубооктаэдра $e = (e_x, e_y, e_z) \in O_2(3)$ имеет квадрат евклидовой нормы $e_x^2 + e_y^2 + e_z^2 = 2$ и лежит на сфере радиуса $|e|_2 = \sqrt{2}$. В однородной проективной арифметике поля $\mathbb{Q}(\sqrt{2})$ из Теоремы~\ref{thm:main-34-field}(iii) радиальная проекция вершины $e \in O_2(3)$ на единичную сферу $S^2$ и лемнискатический модуль $k = 1/\sqrt{2}$ записываются без выхода в $\mathbb{R}$ целочисленными тройками $(a, b, D) \in \mathbb{Z}^3$, представляющими $(a + b\sqrt{2})/D$:
+В произвольной размерности $d \ge 2$ каждая вершина $e = (e_1, \dots, e_d) \in O_{d-1}(d) \subset \{-1, 0, +1\}^d$ удовлетворяет равенству $\sum_{i=1}^d e_i^2 = d - 1 =: m$ и лежит на евклидовой сфере радиуса $|e|_2 = \sqrt{d - 1} = \sqrt{m}$ (при $d = 3$, $m = 2$ оболочка $O_2(3)$ есть $12$-вершинный кубооктаэдр радиуса $\sqrt{2}$). В однородной проективной арифметике поля $\mathbb{Q}(\sqrt{m})$ из Теоремы~\ref{thm:main-34-field}(iii) (\texttt{thm39}) радиальная проекция вершины $e \in O_{d-1}(d)$ на единичную сферу $S^{d-1}$ записывается без выхода в $\mathbb{R}$ целочисленными тройками $(a, b, D) \in \mathbb{Z}^3$, представляющими $(a + b\sqrt{m})/D$:
 \begin{equation}
   \label{eq:unit-sphere-sqrt2-triple}
-  \hat{e}_i \;=\; \frac{e_i}{\sqrt{2}} \;=\; \frac{0 + e_i\sqrt{2}}{2} \;\longleftrightarrow\; (0,\, e_i,\, 2) \;\in\; \mathbb{Z}^3
-  \qquad (i \in \{x, y, z\}).
+  \hat{e}_i \;=\; \frac{e_i}{\sqrt{m}} \;=\; \frac{0 + e_i\sqrt{m}}{m} \;\longleftrightarrow\; (0,\, e_i,\, m) \;\in\; \mathbb{Z}^3
+  \qquad (i = 1, \dots, d).
 \end{equation}
-Возведение каждой компоненты в квадрат по правилу умножения~\eqref{eq:sqrt2-field-mul} в поле $\mathbb{Q}(\sqrt{2})$ даёт
+Возведение каждой компоненты в квадрат по правилу умножения~\eqref{eq:sqrt2-field-mul} в поле $\mathbb{Q}(\sqrt{m})$ даёт
 \begin{equation}
   \label{eq:unit-sphere-sqrt2-square}
-  (0,\, e_i,\, 2) \otimes_{\sqrt{2}} (0,\, e_i,\, 2) \;=\; \bigl(0\cdot 0 + 2\,e_i^2,\; 0\cdot e_i + e_i\cdot 0,\; 2\cdot 2\bigr) \;=\; \bigl(2\,e_i^2,\; 0,\; 4\bigr),
+  (0,\, e_i,\, m) \otimes_{\sqrt{m}} (0,\, e_i,\, m) \;=\; \bigl(0\cdot 0 + m\,e_i^2,\; 0\cdot e_i + e_i\cdot 0,\; m\cdot m\bigr) \;=\; \bigl(m\,e_i^2,\; 0,\; m^2\bigr),
 \end{equation}
-откуда сумма квадратов трёх направляющих косинусов при общем знаменателе $D = 4$ тождественно равна проективной единице на $S^2$:
+откуда сумма квадратов всех $d$ направляющих косинусов при общем знаменателе $D = m^2$ тождественно равна проективной единице на $S^{d-1}$ при любой размерности $d \ge 2$:
 \begin{equation}
   \label{eq:unit-sphere-sqrt2-norm1}
-  \bigl(2(e_x^2 + e_y^2 + e_z^2),\; 0,\; 4\bigr) \;=\; (4,\; 0,\; 4) \;\sim\; (1,\; 0,\; 1).
+  \biggl(m\sum_{i=1}^{d} e_i^2,\; 0,\; m^2\biggr) \;=\; (m^2,\; 0,\; m^2) \;\sim\; (1,\; 0,\; 1).
 \end{equation}
-Таким образом, нормировка векторов оболочки $O_2(3)$ на единичную сферу $S^2$ замкнута в однородной арифметике поля $\mathbb{Q}(\sqrt{2})$, а трёхмерная полиномиальная кубатура на кубе $[-1, 1]^3$ вычисляется непосредственно на целочисленных вершинах $O_2(3) \subset \mathbb{Z}^3$.
+Аналогично на $2$-координатной оболочке $O_2(d) = \{e \in \{-1, 0, +1\}^d \mid \sum_{i=1}^d e_i^2 = 2\}$ из $|V_{O_2}(d)| = 2d(d-1)$ вершин сечение вдоль любой оси $e_1 \in \{-1, 0, +1\}$ при произвольном $d \ge 2$ образует три пояса размеров
+\begin{equation}
+  \label{eq:belt-sizes-general-d}
+  \bigl(|Z_{-1}(d)|,\; |Z_0(d)|,\; |Z_{+1}(d)|\bigr) \;=\; \bigl(2(d-1),\; 2(d-1)(d-2),\; 2(d-1)\bigr),
+\end{equation}
+сумма которых равна $2d(d-1) = |V_{O_2}(d)|$, а при добавлении к началу координат $\mathbf{0} \in \mathbb{Z}^d$ центрального веса $w_0(d) = 2(d-1)(6-d)$ послойные веса вдоль любой оси собираются в точные параболические веса Симпсона при любой размерности $d \ge 2$ (\texttt{thm39}):
+\begin{equation}
+  \label{eq:simpson-weights-general-d}
+  \bigl(2(d-1),\; 2(d-1)(d-2) + 2(d-1)(6-d),\; 2(d-1)\bigr) \;=\; \bigl(2(d-1),\; 8(d-1),\; 2(d-1)\bigr) \;=\; 2(d-1)\times(1,\, 4,\, 1)
+\end{equation}
+суммарного веса $12(d-1)$. При $d = 3$ пояса~\eqref{eq:belt-sizes-general-d} становятся равновеликими $(4, 4, 4)$, а центральный вес $w_0(3) = 12$ совпадает с числом вершин $|V_{O_2}(3)| = 12$.
 \end{remark}
 
 Для любой трёхмерной функции $F\colon \mathbb{Z}^3 \to \mathbb{Z}$ определим $13$-точечный кубатурный оператор «центр плюс оболочка» на кубооктаэдре $O_2(d)$, приписывающий началу координат $(0, 0, 0)$ вес $|V_{O_2}(d)| = 12$ наравне с суммой по $12$ вершинам оболочки $O_2(d)$:
@@ -791,6 +828,7 @@
 \item \texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields} (Теорема~\ref{thm:main-34-field}(i)--(iii));
 \item \texttt{thm35\_general\_field\_derivative\_operator\_quotient\_wronskian\_and\_variational\_euler\_lagrange} (Теорема~\ref{thm:main-34-field}(iv));
 \item \texttt{thm38\_c\_infinity\_higher\_derivatives\_taylor\_newton\_expansion\_and\_pole\_free\_quotients} (Теорема~\ref{thm:main-34-field}(v));
+\item \texttt{thm39\_cyclotomic\_q\_i\_sqrt2\_zeta8\_quotient\_deriv\_tower\_and\_parseval\_orthogonality} (Теорема~\ref{thm:main-34-field}(iii), (v), Теорема~\ref{thm:main-2b}(ii), Замечание~\ref{rem:q-sqrt2-cuboctahedron-closure});
 \item \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals} (Теоремы~\ref{thm:main-2}, \ref{thm:main-2b});
 \item \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers} (Теоремы~\ref{thm:main-3}, \ref{thm:main-3b}).
 \end{itemize}

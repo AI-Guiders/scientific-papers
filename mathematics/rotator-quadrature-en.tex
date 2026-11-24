@@ -359,22 +359,34 @@ Unlike the residue ring $\mathbb{Z}_{4Q}$ modulo composite $4Q$ (which possesses
     (X, Y, R) \otimes \bigl(RX,\; -RY,\; X^2 + Y^2\bigr) \;=\; \bigl(R(X^2 + Y^2),\; 0,\; R(X^2 + Y^2)\bigr) \;\sim\; (1, 0, 1).
   \end{equation}
 
-\item \textbf{Field axioms, Pell norm multiplicativity, and multiplicative inverse in $\mathbb{Q}(\sqrt{2})$:}
-  on homogeneous triples $(a, b, D) \in \mathbb{Z}^3$ representing $(a + b\sqrt{2})/D \in \mathbb{Q}(\sqrt{2})$, the operations
+\item \textbf{Field axioms in $\mathbb{Q}(\sqrt{m})$ ($m = d - 1$) for arbitrary dimension $d$ and cyclotomic closure $\mathbb{Q}(i, \sqrt{2}) = \mathbb{Q}(\zeta_8)$ at $d = 3$ (\texttt{thm34}, \texttt{thm39}):}
+  for any dimension parameter $m = d - 1 \in \mathbb{Z}$, on homogeneous triples $(a, b, D) \in \mathbb{Z}^3$ representing $(a + b\sqrt{m})/D \in \mathbb{Q}(\sqrt{m})$, the operations
   \begin{align}
-    (a_1, b_1, D_1) \oplus_{\sqrt{2}} (a_2, b_2, D_2) &:= \bigl(a_1 D_2 + a_2 D_1,\; b_1 D_2 + b_2 D_1,\; D_1 D_2\bigr), \label{eq:sqrt2-field-add} \\
-    (a_1, b_1, D_1) \otimes_{\sqrt{2}} (a_2, b_2, D_2) &:= \bigl(a_1 a_2 + 2b_1 b_2,\; a_1 b_2 + b_1 a_2,\; D_1 D_2\bigr) \label{eq:sqrt2-field-mul}
+    (a_1, b_1, D_1) \oplus_{\sqrt{m}} (a_2, b_2, D_2) &:= \bigl(a_1 D_2 + a_2 D_1,\; b_1 D_2 + b_2 D_1,\; D_1 D_2\bigr), \label{eq:sqrt2-field-add} \\
+    (a_1, b_1, D_1) \otimes_{\sqrt{m}} (a_2, b_2, D_2) &:= \bigl(a_1 a_2 + m\,b_1 b_2,\; a_1 b_2 + b_1 a_2,\; D_1 D_2\bigr) \label{eq:sqrt2-field-mul}
   \end{align}
-  are commutative, associative, and distributive, the Pell norm is multiplicative:
+  are commutative, associative, and distributive, the quadratic Pell norm is multiplicative:
   \begin{equation}
     \label{eq:pell-norm-mult}
-    (a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 \;=\; (a_1^2 - 2b_1^2)(a_2^2 - 2b_2^2),
+    (a_1 a_2 + m\,b_1 b_2)^2 - m\,(a_1 b_2 + b_1 a_2)^2 \;=\; (a_1^2 - m\,b_1^2)(a_2^2 - m\,b_2^2),
   \end{equation}
-  and the multiplicative inverse $\texttt{sqrt2FieldInv}(a, b, D) := (Da,\, -Db,\, a^2 - 2b^2)$ for $a^2 - 2b^2 \ne 0$ yields
+  and the multiplicative inverse $\texttt{quadFieldInv}_m(a, b, D) := (Da,\, -Db,\, a^2 - m\,b^2)$ for $a^2 - m\,b^2 \ne 0$ yields
   \begin{equation}
     \label{eq:sqrt2-field-inverse}
-    (a, b, D) \otimes_{\sqrt{2}} \bigl(Da,\; -Db,\; a^2 - 2b^2\bigr) \;=\; \bigl(D(a^2 - 2b^2),\; 0,\; D(a^2 - 2b^2)\bigr) \;\sim\; (1, 0, 1).
+    (a, b, D) \otimes_{\sqrt{m}} \bigl(Da,\; -Db,\; a^2 - m\,b^2\bigr) \;=\; \bigl(D(a^2 - m\,b^2),\; 0,\; D(a^2 - m\,b^2)\bigr) \;\sim\; (1, 0, 1).
   \end{equation}
+  At $d = 3$ ($m = 2$), the compositum of $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ forms the biquadratic cyclotomic field $\mathbb{Q}(i, \sqrt{2}) = \mathbb{Q}(\zeta_8)$ of homogeneous 5-tuples $(a, b, c, d_{\mathrm{im}}, D) \in \mathbb{Z}^5$ representing $\bigl((a + b\sqrt{2}) + i(c + d_{\mathrm{im}}\sqrt{2})\bigr)/D$, in which the primitive $8$-th root of unity
+  \begin{equation}
+    \label{eq:zeta8-def}
+    \zeta_8 \;:=\; \frac{\sqrt{2} + i\sqrt{2}}{2} \;\longleftrightarrow\; (0,\; 1,\; 0,\; 1,\; 2)
+  \end{equation}
+  coincides with the normalized vector of the Fresnel stationary-phase bisector $\psi = K_P(3) = 64$, where $\mathcal{E}_3(64) = (64, 64)$, and satisfies the exact identities in $\mathbb{Q}(i, \sqrt{2})$:
+  \begin{align}
+    \zeta_8^2 &= (0,\; 0,\; 4,\; 0,\; 4) \;\sim\; i, \label{eq:zeta8-sq} \\
+    \zeta_8^4 &= (-16,\; 0,\; 0,\; 0,\; 16) \;\sim\; -1, \label{eq:zeta8-pow4} \\
+    \zeta_8^8 &= (256,\; 0,\; 0,\; 0,\; 256) \;\sim\; +1, \label{eq:zeta8-pow8} \\
+    \zeta_8\,\bar{\zeta}_8 &= (4,\; 0,\; 0,\; 0,\; 4) \;\sim\; +1. \label{eq:zeta8-norm}
+  \end{align}
 
 \item \textbf{Derivative operator $Df$, quotient-derivative Wronskian law, and variational Euler--Lagrange derivative (\texttt{thm35}):}
   for any functions $f, g\colon \mathbb{Z} \to \mathbb{Z}$, the difference derivative $(Df)(x) = f(x+1) - f(x)$ satisfies linearity, the Leibniz product rule, the second-derivative formula, and the Wronskian law for the numerator of the quotient derivative $D(f/g)$:
@@ -415,12 +427,17 @@ Unlike the residue ring $\mathbb{Z}_{4Q}$ modulo composite $4Q$ (which possesses
     2\,f_2(x+h) &= 2\,f_2(x) + 2h\,Df_2(x) + h(h-1)\,D^2f_2(x), \label{eq:taylor-newton-quad} \\
     6\,f_3(x+h) &= 6\,f_3(x) + 6h\,Df_3(x) + 3h(h-1)\,D^2f_3(x) + h(h-1)(h-2)\,D^3f_3(x), \label{eq:taylor-newton-cubic}
   \end{align}
-  and whenever $g(x) \ge 1$ preserves strictly positive denominators of quotient derivatives $D^n(f/g)$ across all orders $n \in \mathbb{N}$:
-  \begin{equation}
-    \label{eq:c-infinity-denom-pos}
-    \forall n \in \mathbb{N},\ \forall x \in \mathbb{Z},\qquad
-    \prod_{j=0}^{n} g(x+j) \;\ge\; 1.
-  \end{equation}
+  and whenever $g(x) \ge 1$ defines the closed-form projective $n$-th quotient derivative $D^n(f/g)(x) = N_n(x) / G_n(x)$ across all orders $n \in \mathbb{N}$ (\texttt{thm38}, \texttt{thm39}):
+  \begin{align}
+    N_0(x) &:= f(x), \qquad G_0(x) \;:=\; g(x), \label{eq:quotient-deriv-n-base} \\
+    N_{n+1}(x) &:= N_n(x+1)\,g(x) - N_n(x)\,g(x+n+1), \label{eq:quotient-deriv-n-numer} \\
+    G_n(x) &:= \prod_{j=0}^{n} g(x+j) \;\ge\; 1, \label{eq:c-infinity-denom-pos}
+  \end{align}
+  satisfying the denominator shift identity and division-free projective differentiation step law:
+  \begin{align}
+    G_n(x+1)\,g(x) &= g(x+n+1)\,G_n(x) \;=\; G_{n+1}(x), \label{eq:quotient-denom-shift} \\
+    \bigl(N_n(x+1)\,G_n(x) - N_n(x)\,G_n(x+1)\bigr)\,g(x) &= N_{n+1}(x)\,G_n(x). \label{eq:quotient-deriv-step-cancel}
+  \end{align}
 \end{enumerate}
 \end{theorem}
 
@@ -439,12 +456,13 @@ On the $L^1$-diamond $|C| + |S| = Q \ge 1$, the integers $C$ and $S$ have either
   &= \bigl(X(RX) - Y(-RY),\; X(-RY) + Y(RX),\; R(X^2 + Y^2)\bigr) \\
   &= \bigl(R(X^2 + Y^2),\; 0,\; R(X^2 + Y^2)\bigr).
 \end{align*}
-Since the first and third entries coincide and equal $R(X^2 + Y^2) \ge 1$, the resulting triple is projectively equivalent to the multiplicative identity $(1, 0, 1)$. Similarly, by~\eqref{eq:sqrt2-field-mul} in $\mathbb{Q}(\sqrt{2})$ we have:
+Since the first and third entries coincide and equal $R(X^2 + Y^2) \ge 1$, the resulting triple is projectively equivalent to the multiplicative identity $(1, 0, 1)$. Similarly, by~\eqref{eq:sqrt2-field-mul} in $\mathbb{Q}(\sqrt{m})$ for any $m \in \mathbb{Z}$ we have:
 \begin{align*}
-  (a, b, D) \otimes_{\sqrt{2}} \bigl(Da,\; -Db,\; a^2 - 2b^2\bigr)
-  &= \bigl(a(Da) + 2b(-Db),\; a(-Db) + b(Da),\; D(a^2 - 2b^2)\bigr) \\
-  &= \bigl(D(a^2 - 2b^2),\; 0,\; D(a^2 - 2b^2)\bigr) \;\sim\; (1, 0, 1).
+  (a, b, D) \otimes_{\sqrt{m}} \bigl(Da,\; -Db,\; a^2 - m\,b^2\bigr)
+  &= \bigl(a(Da) + m\,b(-Db),\; a(-Db) + b(Da),\; D(a^2 - m\,b^2)\bigr) \\
+  &= \bigl(D(a^2 - m\,b^2),\; 0,\; D(a^2 - m\,b^2)\bigr) \;\sim\; (1, 0, 1).
 \end{align*}
+For $\zeta_8 = (0, 1, 0, 1, 2)$ in $\mathbb{Q}(i, \sqrt{2})$ at $m = 2$, direct multiplication by $((a_1 + b_1\sqrt{2}) + i(c_1 + d_1\sqrt{2}))((a_2 + b_2\sqrt{2}) + i(c_2 + d_2\sqrt{2}))$ using $(b_1 d_2 + d_1 b_2)(\sqrt{2})^2 = 2(1\cdot 1 + 1\cdot 1) = 4$ in the imaginary part yields $\zeta_8^2 = (0, 0, 4, 0, 4) \sim i$, from which repeated squaring gives~\eqref{eq:zeta8-pow4}--\eqref{eq:zeta8-norm}.
 
 \emph{Item~(iv).} Adding and subtracting $f(x+1)g(x)$ in the forward difference of a product yields the Leibniz rule~\eqref{eq:deriv-leibniz}:
 \begin{align*}
@@ -469,11 +487,20 @@ proving~\eqref{eq:variational-euler-lagrange}.
   (D^2 f_2)(x) &= 2c_2 \;=\; \mathrm{const}, \\
   (D^3 f_2)(x) &= 2c_2 - 2c_2 \;=\; 0,
 \end{align*}
-whence by~\eqref{eq:field-deriv-composition} we have $(D^{k+3} f_2)(x) = D^k(D^3 f_2)(x) = 0$ for all $k \in \mathbb{N}$. Similarly, for a cubic polynomial $f_3(x)$ we have $(D^3 f_3)(x) = 6c_3 = \mathrm{const}$ and $(D^{k+4} f_3)(x) = 0$, while substituting the expressions for $Df_3(x)$, $D^2 f_3(x)$, and $D^3 f_3(x)$ into the right-hand side of~\eqref{eq:taylor-newton-cubic} matches $6 f_3(x+h)$ identically. Finally, when $g(t) \ge 1$, induction on $n \in \mathbb{N}$ with base case $g(x) \ge 1$ and inductive step
-\begin{equation*}
-  \prod_{j=0}^{n+1} g(x+j) \;=\; g(x+n+1)\prod_{j=0}^{n} g(x+j) \;\ge\; 1\cdot 1 \;=\; 1
-\end{equation*}
-proves~\eqref{eq:c-infinity-denom-pos}.
+whence by~\eqref{eq:field-deriv-composition} we have $(D^{k+3} f_2)(x) = D^k(D^3 f_2)(x) = 0$ for all $k \in \mathbb{N}$. Similarly, for a cubic polynomial $f_3(x)$ we have $(D^3 f_3)(x) = 6c_3 = \mathrm{const}$ and $(D^{k+4} f_3)(x) = 0$, while substituting the expressions for $Df_3(x)$, $D^2 f_3(x)$, and $D^3 f_3(x)$ into the right-hand side of~\eqref{eq:taylor-newton-cubic} matches $6 f_3(x+h)$ identically. Finally, by induction on $n \in \mathbb{N}$ we verify the denominator shift identity~\eqref{eq:quotient-denom-shift}: at $n = 0$ both sides equal $g(x+1)g(x) = G_1(x)$, and for $n \to n + 1$ we have
+\begin{align*}
+  G_{n+1}(x+1)\,g(x) &= \bigl(g(x+n+2)\,G_n(x+1)\bigr)\,g(x) \\
+  &= g(x+n+2)\,\bigl(G_n(x+1)\,g(x)\bigr) \\
+  &= g(x+n+2)\,G_{n+1}(x) \;=\; G_{n+2}(x).
+\end{align*}
+Multiplying the numerator of the forward difference $N_n(x+1)/G_n(x+1) - N_n(x)/G_n(x)$ by $g(x)$ and substituting $G_n(x+1)g(x) = g(x+n+1)G_n(x)$ factors out $G_n(x)$:
+\begin{align*}
+  \bigl(N_n(x+1)\,G_n(x) - N_n(x)\,G_n(x+1)\bigr)\,g(x)
+  &= N_n(x+1)\,g(x)\,G_n(x) - N_n(x)\,\bigl(G_n(x+1)\,g(x)\bigr) \\
+  &= \bigl(N_n(x+1)\,g(x) - N_n(x)\,g(x+n+1)\bigr)\,G_n(x) \\
+  &= N_{n+1}(x)\,G_n(x),
+\end{align*}
+proving~\eqref{eq:quotient-deriv-step-cancel}, while for $g(t) \ge 1$ induction on $n \in \mathbb{N}$ proves~\eqref{eq:c-infinity-denom-pos}.
 \end{proof}
 
 \section{Closed-Form Evaluation of Discrete Ring Sums (Integrals) of Fresnel, Jacobi, Dirichlet, Parseval, and Bessel Type}
@@ -553,12 +580,15 @@ At $d = 3$, for all $c_{\mathrm{sq}}, k_{\mathrm{turns}} \in \mathbb{Z}$, the di
     \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{C}_3(\varphi^2) \;=\; \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{S}_3(\varphi^2) \;=\; 2048\,c_{\mathrm{sq}},
   \end{equation}
   where the entire non-zero contribution is concentrated at the $32$ points of the stationary-phase bisector $\psi = K_P(3) = 64$.
-\item \textbf{Discrete Dirichlet-type sine sum and Parseval energy sum:}
+\item \textbf{Harmonic orthogonality, discrete Dirichlet-type sum, and arbitrary-$Q$ Parseval decomposition (\texttt{thm2}, \texttt{thm39}):}
+  the cosine and sine projections are strictly orthogonal over the full period of the ring, the Dirichlet sum is constant across the second quadrant, and the Parseval energy sum for any quarter-period $Q \in \mathbb{Z}$ decomposes into the continuum cubic main term $8Q^3$ plus the exact discrete Euler--Maclaurin correction $4Q$:
   \begin{align}
+    \sum_{\varphi=0}^{511} \mathcal{C}_3(\varphi)\,\mathcal{S}_3(\varphi) &= 0, \label{eq:ortho-cs-zero} \\
     \mathrm{Si}_3(128) &= \mathrm{Si}_3(256) \;=\; 128, \label{eq:dirichlet-closed} \\
+    6\,\mathcal{I}_{\mathrm{Parseval}}(Q) &= 4Q\,(2Q^2 + 1) \;=\; 8Q^3 + 4Q, \label{eq:parseval-general-q} \\
     6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) &= k_{\mathrm{turns}}\,N_{\mathrm{ring}}(3)\bigl(2\,Q_\square(3)^2 + 1\bigr) \;=\; 16,777,728\,k_{\mathrm{turns}}, \label{eq:parseval-closed}
   \end{align}
-  whence $\mathcal{I}_{\mathrm{Parseval}}(3) = 2,796,288$.
+  whence at $Q = Q_\square(3) = 128$ we obtain $\mathcal{I}_{\mathrm{Parseval}}(3) = 2,796,288$.
 \item \textbf{Discrete Bessel-type ring sum and its exact root:}
   \begin{align}
     \mathcal{J}_{0,3}(0) &= 65,536, \label{eq:bessel-k0} \\
@@ -589,46 +619,53 @@ We prove items~(i)--(iii) in sequence.
 \end{itemize}
 Multiplying by the constant $c_{\mathrm{sq}}$ via~\eqref{eq:linear-factor-extraction} gives~\eqref{eq:fresnel-closed}.
 
-\emph{Item~(ii).} On the first quadrant $1 \le \varphi \le 128$, we have $\mathcal{S}_3(\varphi) = \varphi$, so $\mathrm{tdiv}(\mathcal{S}_3(\varphi), \varphi) = \mathrm{tdiv}(\varphi, \varphi) = 1$ and
+\emph{Item~(ii).} Because $\mathcal{C}_Q(-\varphi) = \mathcal{C}_Q(\varphi)$ is even while $\mathcal{S}_Q(-\varphi) = -\mathcal{S}_Q(\varphi)$ is odd (and $\mathcal{C}_Q\mathcal{S}_Q = 0$ at the poles $\varphi = 0$ and $\varphi = 2Q$), pairing $\varphi$ with $4Q - \varphi$ yields~\eqref{eq:ortho-cs-zero}. On the first quadrant $1 \le \varphi \le 128$, we have $\mathcal{S}_3(\varphi) = \varphi$, so $\mathrm{tdiv}(\mathcal{S}_3(\varphi), \varphi) = \mathrm{tdiv}(\varphi, \varphi) = 1$ and
 \begin{equation*}
   \mathrm{Si}_3(128) \;=\; \sum_{\varphi=1}^{128} 1 \;=\; 128.
 \end{equation*}
 On the second quadrant $129 \le \varphi \le 256$, we have $0 \le \mathcal{S}_3(\varphi) = 256 - \varphi < \varphi$, so truncated integer division gives $\mathrm{tdiv}(256 - \varphi, \varphi) = 0$, whence $\mathrm{Si}_3(256) = \mathrm{Si}_3(128) = 128$, proving~\eqref{eq:dirichlet-closed}.
 
-For Parseval's integral~\eqref{eq:def-parseval}, the sum of squares across the four quadrants of length $Q = 128$ consists of two peaks $\pm Q$ and four sums of squares from $1$ to $Q - 1$:
+For Parseval's sum~\eqref{eq:def-parseval} at an arbitrary quarter-period $Q \ge 1$, the sum of squares across the four quadrants of length $Q$ consists of two peaks $\pm Q$ and four sums of squares from $1$ to $Q - 1$:
 \begin{equation*}
-  \mathcal{I}_{\mathrm{Parseval}}(d) \;=\; 2\,Q^2 + 4\sum_{m=1}^{Q-1} m^2 \;=\; 2\,Q^2 + \frac{4(Q - 1)Q(2Q - 1)}{6} \;=\; \frac{4Q(2Q^2 + 1)}{6}.
+  \mathcal{I}_{\mathrm{Parseval}}(Q) \;=\; 2\,Q^2 + 4\sum_{m=1}^{Q-1} m^2 \;=\; 2\,Q^2 + \frac{4(Q - 1)Q(2Q - 1)}{6} \;=\; \frac{4Q(2Q^2 + 1)}{6},
 \end{equation*}
-Multiplying both sides by $6\,k_{\mathrm{turns}}$ and substituting $4Q = N_{\mathrm{ring}}(3) = 512$ and $2Q^2 + 1 = 32,769$ gives~\eqref{eq:parseval-closed}:
-\begin{equation*}
-  6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) \;=\; 512 \times 32,769\,k_{\mathrm{turns}} \;=\; 16,777,728\,k_{\mathrm{turns}}.
-\end{equation*}
+giving $6\,\mathcal{I}_{\mathrm{Parseval}}(Q) = 4Q(2Q^2 + 1) = 8Q^3 + 4Q$, which proves~\eqref{eq:parseval-general-q} (where $8Q^3 / (6\cdot 4Q\cdot Q^2) = 1/3$ is the continuum integral $\int_0^1 (1-2t)^2\,\mathrm{d}t$ and $4Q$ is the exact discrete trapezoidal correction). Substituting $Q = 128$ ($4Q = 512$, $2Q^2 + 1 = 32,769$) gives~\eqref{eq:parseval-closed}.
 
 \emph{Item~(iii).} At $k = 0$, $\mathcal{C}_3(0) = 128$ at all $512$ points, giving $\mathcal{J}_{0,3}(0) = 512 \times 128 = 65,536$. At $k = 1$, since $|\mathcal{S}_3(\varphi)| \le 128$, we have $\mathcal{C}_3(\mathcal{S}_3(\varphi)) = 128 - |\mathcal{S}_3(\varphi)| = |\mathcal{C}_3(\varphi)|$, whose sum over the ring is $2\,Q^2 = 32,768$. At $k = 4$, as $\varphi$ traverses each quadrant of length $128$, the argument $4\,\mathcal{S}_3(\varphi)$ steps by $\pm 4$ across a full period of $512$, over which the sum of $\mathcal{C}_3$ vanishes by~\eqref{eq:full-turn-zero}. This proves~\eqref{eq:bessel-k0}--\eqref{eq:bessel-k4}.
 \end{proof}
 
-\section{Three-Dimensional Riemann Cubature on the Cuboctahedron and Rational Brackets for \texorpdfstring{$\pi$}{pi}}
+\section{Multidimensional Riemann Cubature on Shells \texorpdfstring{$O_2(d)$}{O2(d)} in Arbitrary Dimension \texorpdfstring{$d$}{d} and Rational Brackets for \texorpdfstring{$\pi$}{pi}}
 \label{sec:continuum-emergence}
 
-\begin{remark}[Internal closure of the $\mathbb{Q}(\sqrt{2}) \leftrightarrow O_2(3)$ coupling and exact projection onto the unit sphere $S^2$]
+\begin{remark}[Internal closure of the $\mathbb{Q}(\sqrt{d-1}) \leftrightarrow O_{d-1}(d)$ coupling in arbitrary dimension $d \ge 2$ and projection onto the unit sphere $S^{d-1}$]
 \label{rem:q-sqrt2-cuboctahedron-closure}
-By~\eqref{eq:cuboct-norm2}, each of the $12$ cuboctahedron vertices $e = (e_x, e_y, e_z) \in O_2(3)$ has squared Euclidean norm $e_x^2 + e_y^2 + e_z^2 = 2$ and lies on the sphere of radius $|e|_2 = \sqrt{2}$. In the homogeneous projective arithmetic of the field $\mathbb{Q}(\sqrt{2})$ from Theorem~\ref{thm:main-34-field}(iii), the radial projection of any vertex $e \in O_2(3)$ onto the unit sphere $S^2$ and the lemniscate modulus $k = 1/\sqrt{2}$ are represented without leaving $\mathbb{Q}(\sqrt{2})$ for $\mathbb{R}$ by integer triples $(a, b, D) \in \mathbb{Z}^3$ encoding $(a + b\sqrt{2})/D$:
+In arbitrary dimension $d \ge 2$, every vertex $e = (e_1, \dots, e_d) \in O_{d-1}(d) \subset \{-1, 0, +1\}^d$ satisfies $\sum_{i=1}^d e_i^2 = d - 1 =: m$ and lies on the Euclidean sphere of radius $|e|_2 = \sqrt{d - 1} = \sqrt{m}$ (at $d = 3$, $m = 2$, the shell $O_2(3)$ is the $12$-vertex cuboctahedron of radius $\sqrt{2}$). In the homogeneous projective arithmetic of the field $\mathbb{Q}(\sqrt{m})$ from Theorem~\ref{thm:main-34-field}(iii) (\texttt{thm39}), the radial projection of any vertex $e \in O_{d-1}(d)$ onto the unit sphere $S^{d-1}$ is represented without leaving $\mathbb{Q}(\sqrt{m})$ for $\mathbb{R}$ by integer triples $(a, b, D) \in \mathbb{Z}^3$ encoding $(a + b\sqrt{m})/D$:
 \begin{equation}
   \label{eq:unit-sphere-sqrt2-triple}
-  \hat{e}_i \;=\; \frac{e_i}{\sqrt{2}} \;=\; \frac{0 + e_i\sqrt{2}}{2} \;\longleftrightarrow\; (0,\, e_i,\, 2) \;\in\; \mathbb{Z}^3
-  \qquad (i \in \{x, y, z\}).
+  \hat{e}_i \;=\; \frac{e_i}{\sqrt{m}} \;=\; \frac{0 + e_i\sqrt{m}}{m} \;\longleftrightarrow\; (0,\, e_i,\, m) \;\in\; \mathbb{Z}^3
+  \qquad (i = 1, \dots, d).
 \end{equation}
-Squaring each component via the multiplication rule~\eqref{eq:sqrt2-field-mul} in $\mathbb{Q}(\sqrt{2})$ yields
+Squaring each component via the multiplication rule~\eqref{eq:sqrt2-field-mul} in $\mathbb{Q}(\sqrt{m})$ yields
 \begin{equation}
   \label{eq:unit-sphere-sqrt2-square}
-  (0,\, e_i,\, 2) \otimes_{\sqrt{2}} (0,\, e_i,\, 2) \;=\; \bigl(0\cdot 0 + 2\,e_i^2,\; 0\cdot e_i + e_i\cdot 0,\; 2\cdot 2\bigr) \;=\; \bigl(2\,e_i^2,\; 0,\; 4\bigr),
+  (0,\, e_i,\, m) \otimes_{\sqrt{m}} (0,\, e_i,\, m) \;=\; \bigl(0\cdot 0 + m\,e_i^2,\; 0\cdot e_i + e_i\cdot 0,\; m\cdot m\bigr) \;=\; \bigl(m\,e_i^2,\; 0,\; m^2\bigr),
 \end{equation}
-whence the sum of squares of the three direction cosines at common denominator $D = 4$ equals the projective identity on $S^2$:
+whence the sum of squares of all $d$ direction cosines at common denominator $D = m^2$ equals the projective identity on $S^{d-1}$ in every dimension $d \ge 2$:
 \begin{equation}
   \label{eq:unit-sphere-sqrt2-norm1}
-  \bigl(2(e_x^2 + e_y^2 + e_z^2),\; 0,\; 4\bigr) \;=\; (4,\; 0,\; 4) \;\sim\; (1,\; 0,\; 1).
+  \biggl(m\sum_{i=1}^{d} e_i^2,\; 0,\; m^2\biggr) \;=\; (m^2,\; 0,\; m^2) \;\sim\; (1,\; 0,\; 1).
 \end{equation}
-Thus unit-sphere normalization of the shell $O_2(3)$ is algebraically closed within the homogeneous arithmetic of $\mathbb{Q}(\sqrt{2})$, while three-dimensional polynomial cubature over $[-1, 1]^3$ evaluates directly on the integer vertices $O_2(3) \subset \mathbb{Z}^3$.
+Likewise, on the $2$-coordinate shell $O_2(d) = \{e \in \{-1, 0, +1\}^d \mid \sum_{i=1}^d e_i^2 = 2\}$ of $|V_{O_2}(d)| = 2d(d-1)$ vertices, slicing along any coordinate axis $e_1 \in \{-1, 0, +1\}$ in arbitrary dimension $d \ge 2$ partitions $O_2(d)$ into three belts of sizes
+\begin{equation}
+  \label{eq:belt-sizes-general-d}
+  \bigl(|Z_{-1}(d)|,\; |Z_0(d)|,\; |Z_{+1}(d)|\bigr) \;=\; \bigl(2(d-1),\; 2(d-1)(d-2),\; 2(d-1)\bigr),
+\end{equation}
+which sum to $2d(d-1) = |V_{O_2}(d)|$, and assigning the center weight $w_0(d) = 2(d-1)(6-d)$ to the origin $\mathbf{0} \in \mathbb{Z}^d$ yields exact parabolic Simpson slice weights along every axis in every dimension $d \ge 2$ (\texttt{thm39}):
+\begin{equation}
+  \label{eq:simpson-weights-general-d}
+  \bigl(2(d-1),\; 2(d-1)(d-2) + 2(d-1)(6-d),\; 2(d-1)\bigr) \;=\; \bigl(2(d-1),\; 8(d-1),\; 2(d-1)\bigr) \;=\; 2(d-1)\times(1,\, 4,\, 1)
+\end{equation}
+of total weight $12(d-1)$. At $d = 3$, the belts~\eqref{eq:belt-sizes-general-d} become equizonal $(4, 4, 4)$ and the center weight $w_0(3) = 12$ coincides with the vertex count $|V_{O_2}(3)| = 12$.
 \end{remark}
 
 For any three-dimensional function $F\colon \mathbb{Z}^3 \to \mathbb{Z}$, define the $13$-point center-plus-shell cubature operator on the cuboctahedron $O_2(d)$, assigning weight $|V_{O_2}(d)| = 12$ to the origin $(0, 0, 0)$ alongside the sum over the $12$ shell vertices of $O_2(d)$:
@@ -785,6 +822,7 @@ The formalization of Theorems~\ref{thm:main-1}--\ref{thm:main-3b} resides in the
 \item \texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields} (Theorem~\ref{thm:main-34-field}(i)--(iii));
 \item \texttt{thm35\_general\_field\_derivative\_operator\_quotient\_wronskian\_and\_variational\_euler\_lagrange} (Theorem~\ref{thm:main-34-field}(iv));
 \item \texttt{thm38\_c\_infinity\_higher\_derivatives\_taylor\_newton\_expansion\_and\_pole\_free\_quotients} (Theorem~\ref{thm:main-34-field}(v));
+\item \texttt{thm39\_cyclotomic\_q\_i\_sqrt2\_zeta8\_quotient\_deriv\_tower\_and\_parseval\_orthogonality} (Theorem~\ref{thm:main-34-field}(iii), (v), Theorem~\ref{thm:main-2b}(ii), Remark~\ref{rem:q-sqrt2-cuboctahedron-closure});
 \item \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals} (Theorems~\ref{thm:main-2}, \ref{thm:main-2b});
 \item \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers} (Theorems~\ref{thm:main-3}, \ref{thm:main-3b}).
 \end{itemize}

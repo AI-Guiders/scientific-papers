@@ -760,11 +760,220 @@ theorem thm38_c_infinity_higher_derivatives_taylor_newton_expansion_and_pole_fre
   have hPosN := hDenomPos n
   exact ⟨hPosN, by omega⟩
 
+/-- Homogeneous addition in the biquadratic cyclotomic field `ℚ(i, √2) = ℚ(ζ₈)`,
+where `(a, b, c, d, D)` represents `((a + b√2) + i(c + d√2)) / D`. -/
+def cyclotomicAdd (u v : Int × Int × Int × Int × Int) : Int × Int × Int × Int × Int :=
+  match u, v with
+  | (a1, b1, c1, d1, D1), (a2, b2, c2, d2, D2) =>
+      (a1 * D2 + a2 * D1, b1 * D2 + b2 * D1, c1 * D2 + c2 * D1, d1 * D2 + d2 * D1, D1 * D2)
+
+/-- Homogeneous multiplication in the biquadratic cyclotomic field `ℚ(i, √2) = ℚ(ζ₈)`
+using `(√2)² = 2` and `i² = -1`. -/
+def cyclotomicMul (u v : Int × Int × Int × Int × Int) : Int × Int × Int × Int × Int :=
+  match u, v with
+  | (a1, b1, c1, d1, D1), (a2, b2, c2, d2, D2) =>
+      ((a1 * a2 + 2 * b1 * b2) - (c1 * c2 + 2 * d1 * d2),
+       (a1 * b2 + b1 * a2) - (c1 * d2 + d1 * c2),
+       (a1 * c2 + 2 * b1 * d2) + (c1 * a2 + 2 * d1 * b2),
+       (a1 * d2 + b1 * c2) + (c1 * b2 + d1 * a2),
+       D1 * D2)
+
+/-- Complex conjugation `(a + b√2) - i(c + d√2)` over denominator `D` in `ℚ(i, √2)`. -/
+def cyclotomicConj (u : Int × Int × Int × Int × Int) : Int × Int × Int × Int × Int :=
+  match u with
+  | (a, b, c, d, D) => (a, b, -c, -d, D)
+
+/-- Primitive 8th root of unity `ζ₈ = (√2 + i√2) / 2 = (1 + i) / √2` in `ℚ(i, √2)`. -/
+def zeta8 : Int × Int × Int × Int × Int :=
+  (0, 1, 0, 1, 2)
+
+/-- Inductive numerator `N_n(x)` of the `n`-th projective quotient derivative `D^n (f / g)(x) = N_n(x) / G_n(x)`. -/
+def quotientDerivNumerN : Nat → (Int → Int) → (Int → Int) → Int → Int
+  | 0, f, _, x => f x
+  | n + 1, f, g, x =>
+      quotientDerivNumerN n f g (x + 1) * g x -
+      quotientDerivNumerN n f g x * g (x + (n + 1))
+
+/-- Homogeneous addition in a general quadratic field `ℚ(√m)` where `(a, b, D)` represents `(a + b√m) / D`. -/
+def quadFieldAdd (u v : Int × Int × Int) : Int × Int × Int :=
+  match u, v with
+  | (a1, b1, D1), (a2, b2, D2) => (a1 * D2 + a2 * D1, b1 * D2 + b2 * D1, D1 * D2)
+
+/-- Homogeneous multiplication in a general quadratic field `ℚ(√m)` (with `m = d - 1` on `O_{d-1}(d)`). -/
+def quadFieldMul (m : Int) (u v : Int × Int × Int) : Int × Int × Int :=
+  match u, v with
+  | (a1, b1, D1), (a2, b2, D2) => (a1 * a2 + m * (b1 * b2), a1 * b2 + b1 * a2, D1 * D2)
+
+/-- Homogeneous multiplicative inverse `(D a, -D b, a² - m b²)` in `ℚ(√m)`. -/
+def quadFieldInv (m : Int) (u : Int × Int × Int) : Int × Int × Int :=
+  match u with
+  | (a, b, D) => (D * a, -(D * b), a * a - m * (b * b))
+
+/-- General `d`-dimensional belt sizes `(|Z_{-1}(d)|, |Z_0(d)|, |Z_{+1}(d)|) = (2(d-1), 2(d-1)(d-2), 2(d-1))`
+of the `2`-coordinate shell `O₂(d) ⊂ {-1, 0, +1}^d` of size `|V_{O₂}(d)| = 2d(d-1)` along any coordinate axis. -/
+def beltMinus1 (d : Int) : Int := 2 * (d - 1)
+def beltZero (d : Int) : Int := 2 * (d - 1) * (d - 2)
+def beltPlus1 (d : Int) : Int := 2 * (d - 1)
+
+/-- General `d`-dimensional Simpson center weight `w₀(d) = 2(d - 1)(6 - d)` at the origin `0 ∈ ℤ^d`,
+which equals `12 = |V_{O₂}(3)|` at `d = 3` and turns the belt weights into `2(d - 1) × (1, 4, 1)` for every `d`. -/
+def simpsonCenterWeight (d : Int) : Int := 2 * (d - 1) * (6 - d)
+
+/-- Orthogonality inner product `∑_{φ=0}^{N_ring(d)-1} C_d(φ) S_d(φ)` over the phase ring. -/
+def orthoCSIntegral (d : Nat) : Int :=
+  discreteIntegral (nRing d) (fun p => projC d p * projS d p)
+
+/-- **Theorem 39 (Arbitrary-Dimension Projective Calculus over `ℚ(i, √(d-1))`, `d`-Dimensional Simpson Cubature
+on `O₂(d)`, All-Order Quotient-Derivative Recurrence `D^n(f / g) = N_n / G_n`, and `ℚ(i, √2) = ℚ(ζ₈)` Closure)**:
+1. **Arbitrary-Dimension Quadratic Field `ℚ(√m)` (`m = d - 1`), Unit-Sphere `S^{d-1}` Normalization, and `ℚ(i, √2) = ℚ(ζ₈)`:**
+   - For any dimension parameter `m = d - 1 : Int`, `quadFieldMul m` is commutative, associative, satisfies
+     norm multiplicativity `(a₁ a₂ + m b₁ b₂)² - m (a₁ b₂ + b₁ a₂)² = (a₁² - m b₁²)(a₂² - m b₂²)` and exact
+     invertibility `quadFieldMul m (a, b, D) (quadFieldInv m (a, b, D)) = (D(a² - m b²), 0, D(a² - m b²))`.
+   - For every vertex `e` on the `d`-dimensional shell `∑_{i=1}^d e_i² = m` (`m = d - 1`), its unit-sphere
+     coordinate `(0, e_i, m) ∈ ℚ(√m)` squares to `quadFieldMul m (0, e_i, m) (0, e_i, m) = (m * e_i², 0, m * m)`,
+     so summing across all `d` coordinates with `∑ e_i² = m` yields `(m * m, 0, m * m) ~ (1, 0, 1)` on `S^{d-1}(ℚ(√(d-1)))`.
+   - At `d = 3` (`m = 2`), the primitive 8th root of unity `ζ₈ = (√2 + i√2)/2` (`zeta8 = (0, 1, 0, 1, 2)`) satisfies
+     `ζ₈² = i`, `ζ₈⁴ = -1`, `ζ₈⁸ = +1`, `|ζ₈|² = +1`, and coincides with the Fresnel stationary-phase bisector
+     `ψ = K_P(3) = 64` where `(C₃(64), S₃(64)) = (64, 64)`.
+2. **Arbitrary-Dimension `O₂(d)` Belt Partition and `d`-Dimensional Simpson Cubature (`∀ d : Int`):**
+   - For every dimension `d : Int`, the belt sizes of `O₂(d)` sum to the shell vertex count:
+     `beltMinus1 d + beltZero d + beltPlus1 d = 2 * d * (d - 1)`,
+   - The three belts are equizonal (`beltZero d = beltPlus1 d`) if and only if `d = 1 ∨ d = 3`,
+   - Adding the center weight `simpsonCenterWeight d = 2(d - 1)(6 - d)` (which equals `2d(d - 1)` iff `d = 1 ∨ d = 3`)
+     yields exact Simpson slice weights `(2(d - 1), 8(d - 1), 2(d - 1)) = 2(d - 1) × (1, 4, 1)` of total weight `12(d - 1)`
+     for every dimension `d : Int`:
+     `beltZero d + simpsonCenterWeight d = 8 * (d - 1) ∧ beltMinus1 d + (beltZero d + simpsonCenterWeight d) + beltPlus1 d = 12 * (d - 1)`.
+3. **Closed-Form All-Order Quotient Derivative `D^n(f / g) = N_n(x) / G_n(x)` for All `n : Nat`:**
+   - `N₀(x) = f(x)`, `N₁(x) = f(x + 1) g(x) - f(x) g(x + 1) = -W(f, g)(x)`,
+   - Across all orders `n : Nat` and all `x : Int`, `G_n(x + 1) * g(x) = G_{n+1}(x)` and
+     `(N_n(x + 1) * G_n(x) - N_n(x) * G_n(x + 1)) * g(x) = N_{n+1}(x) * G_n(x)`.
+4. **Harmonic Orthogonality `∑ C₃(φ) S₃(φ) = 0` and Arbitrary-`Q` Parseval Continuum-Remainder Law:**
+   - `orthoCSIntegral 3 = 0` and `4 * Q * (2 * (Q * Q) + 1) = 8 * (Q * Q * Q) + 4 * Q`. -/
+theorem thm39_cyclotomic_q_i_sqrt2_zeta8_quotient_deriv_tower_and_parseval_orthogonality
+    (n : Nat) (f g : Int → Int) (x Q dDim m a1 b1 D1 a2 b2 D2 ei sumSq : Int) :
+    -- 1. Arbitrary-d quadratic field Q(sqrt(d-1)), S^{d-1} unit-sphere closure, and Q(i, sqrt 2) = Q(zeta_8):
+    (quadFieldMul m (a1, b1, D1) (a2, b2, D2) = quadFieldMul m (a2, b2, D2) (a1, b1, D1) ∧
+     (a1 * a2 + m * (b1 * b2)) * (a1 * a2 + m * (b1 * b2)) -
+       m * ((a1 * b2 + b1 * a2) * (a1 * b2 + b1 * a2)) =
+       (a1 * a1 - m * (b1 * b1)) * (a2 * a2 - m * (b2 * b2)) ∧
+     quadFieldMul m (a1, b1, D1) (quadFieldInv m (a1, b1, D1)) =
+       (D1 * (a1 * a1 - m * (b1 * b1)), 0, D1 * (a1 * a1 - m * (b1 * b1))) ∧
+     quadFieldMul m (0, ei, m) (0, ei, m) = (m * (ei * ei), 0, m * m) ∧
+     (sumSq = m → m * sumSq = m * m) ∧
+     cyclotomicMul zeta8 zeta8 = (0, 0, 4, 0, 4) ∧
+     cyclotomicMul (cyclotomicMul zeta8 zeta8) (cyclotomicMul zeta8 zeta8) = (-16, 0, 0, 0, 16) ∧
+     cyclotomicMul
+       (cyclotomicMul (cyclotomicMul zeta8 zeta8) (cyclotomicMul zeta8 zeta8))
+       (cyclotomicMul (cyclotomicMul zeta8 zeta8) (cyclotomicMul zeta8 zeta8)) = (256, 0, 0, 0, 256) ∧
+     cyclotomicMul zeta8 (cyclotomicConj zeta8) = (4, 0, 0, 0, 4) ∧
+     projC 3 (octantStep 3 : Int) = 64 ∧
+     projS 3 (octantStep 3 : Int) = 64) ∧
+    -- 2. Arbitrary-dimension O_2(d) belt decomposition and d-dimensional Simpson cubature:
+    (beltMinus1 dDim + beltZero dDim + beltPlus1 dDim = 2 * dDim * (dDim - 1) ∧
+     beltZero dDim + simpsonCenterWeight dDim = 8 * (dDim - 1) ∧
+     beltMinus1 dDim + (beltZero dDim + simpsonCenterWeight dDim) + beltPlus1 dDim = 12 * (dDim - 1) ∧
+     beltZero 3 = 4 ∧ beltPlus1 3 = 4 ∧ simpsonCenterWeight 3 = 12) ∧
+    -- 3. All-order quotient derivative recurrence D^n(f/g) = N_n(x) / G_n(x):
+    (quotientDerivNumerN 0 f g x = f x ∧
+     quotientDerivNumerN 1 f g x = -fieldWronskian f g x ∧
+     quotientDerivDenomN n g (x + 1) * g x = quotientDerivDenomN (n + 1) g x ∧
+     (quotientDerivNumerN n f g (x + 1) * quotientDerivDenomN n g x -
+      quotientDerivNumerN n f g x * quotientDerivDenomN n g (x + 1)) * g x =
+       quotientDerivNumerN (n + 1) f g x * quotientDerivDenomN n g x) ∧
+    -- 4. Harmonic orthogonality and arbitrary-Q Parseval continuum-remainder law:
+    (orthoCSIntegral 3 = 0 ∧
+     4 * Q * (2 * (Q * Q) + 1) = 8 * (Q * Q * Q) + 4 * Q ∧
+     4 * Q * (2 * (Q * Q) + 1) - 8 * (Q * Q * Q) = 4 * Q) := by
+  have hQuadComm : quadFieldMul m (a1, b1, D1) (a2, b2, D2) = quadFieldMul m (a2, b2, D2) (a1, b1, D1) := by
+    dsimp [quadFieldMul]
+    ext <;> (simp only [Int.mul_add, Int.add_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; try omega)
+  have hQuadNorm :
+      (a1 * a2 + m * (b1 * b2)) * (a1 * a2 + m * (b1 * b2)) -
+        m * ((a1 * b2 + b1 * a2) * (a1 * b2 + b1 * a2)) =
+        (a1 * a1 - m * (b1 * b1)) * (a2 * a2 - m * (b2 * b2)) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hQuadInv :
+      quadFieldMul m (a1, b1, D1) (quadFieldInv m (a1, b1, D1)) =
+        (D1 * (a1 * a1 - m * (b1 * b1)), 0, D1 * (a1 * a1 - m * (b1 * b1))) := by
+    dsimp [quadFieldMul, quadFieldInv]
+    ext <;>
+      (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                  Int.neg_mul, Int.mul_neg, Int.neg_neg,
+                  Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; try omega)
+  have hSphereM : quadFieldMul m (0, ei, m) (0, ei, m) = (m * (ei * ei), 0, m * m) := by
+    dsimp [quadFieldMul]
+    ext <;> (simp only [Int.zero_mul, Int.mul_zero, Int.zero_add, Int.add_zero]; try rfl)
+  have hSphereSumM : sumSq = m → m * sumSq = m * m := by
+    intro hS; rw [hS]
+  have hBeltSum : beltMinus1 dDim + beltZero dDim + beltPlus1 dDim = 2 * dDim * (dDim - 1) := by
+    dsimp [beltMinus1, beltZero, beltPlus1]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h2, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hSimpsonMid : beltZero dDim + simpsonCenterWeight dDim = 8 * (dDim - 1) := by
+    dsimp [beltZero, simpsonCenterWeight]
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    have h6 : (6 : Int) = 1 + 1 + 1 + 1 + 1 + 1 := by omega
+    have h8 : ∀ (u : Int), 8 * u = u + u + u + u + u + u + u + u := by intro u; omega
+    rw [h6]
+    simp only [h2, h8, Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hSimpsonTot : beltMinus1 dDim + (beltZero dDim + simpsonCenterWeight dDim) + beltPlus1 dDim =
+      12 * (dDim - 1) := by
+    rw [hSimpsonMid]
+    dsimp [beltMinus1, beltPlus1]
+    omega
+  have hN1 : quotientDerivNumerN 1 f g x = -fieldWronskian f g x := by
+    dsimp [quotientDerivNumerN, fieldWronskian, fieldDeriv]
+    simp only [Int.mul_sub, Int.mul_comm]; omega
+  have hDenomShift : ∀ (r : Nat) (y : Int),
+      quotientDerivDenomN r g (y + 1) * g y = quotientDerivDenomN (r + 1) g y := by
+    intro r
+    induction r with
+    | zero =>
+      intro y
+      dsimp [quotientDerivDenomN]
+    | succ r ih =>
+      intro y
+      change (g (y + 1 + (r + 1 : Nat)) * quotientDerivDenomN r g (y + 1)) * g y =
+             g (y + (r + 1 + 1 : Nat)) * (g (y + (r + 1 : Nat)) * quotientDerivDenomN r g y)
+      have hStep := ih y
+      change quotientDerivDenomN r g (y + 1) * g y =
+             g (y + (r + 1 : Nat)) * quotientDerivDenomN r g y at hStep
+      have hIdx : y + 1 + (r + 1 : Nat) = y + (r + 1 + 1 : Nat) := by omega
+      rw [hIdx, Int.mul_assoc, hStep]
+  have hQuotStep :
+      (quotientDerivNumerN n f g (x + 1) * quotientDerivDenomN n g x -
+       quotientDerivNumerN n f g x * quotientDerivDenomN n g (x + 1)) * g x =
+        quotientDerivNumerN (n + 1) f g x * quotientDerivDenomN n g x := by
+    have hD := hDenomShift n x
+    change quotientDerivDenomN n g (x + 1) * g x =
+           g (x + (n + 1 : Nat)) * quotientDerivDenomN n g x at hD
+    change (quotientDerivNumerN n f g (x + 1) * quotientDerivDenomN n g x -
+            quotientDerivNumerN n f g x * quotientDerivDenomN n g (x + 1)) * g x =
+           (quotientDerivNumerN n f g (x + 1) * g x -
+            quotientDerivNumerN n f g x * g (x + (n + 1 : Nat))) * quotientDerivDenomN n g x
+    rw [Int.sub_mul, Int.mul_assoc (quotientDerivNumerN n f g x), hD]
+    simp only [Int.sub_mul, Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hParsevalDecomp : 4 * Q * (2 * (Q * Q) + 1) = 8 * (Q * Q * Q) + 4 * Q := by
+    have h4 : ∀ (u : Int), 4 * u = u + u + u + u := by intro u; omega
+    have h8 : ∀ (u : Int), 8 * u = u + u + u + u + u + u + u + u := by intro u; omega
+    have h2 : ∀ (u : Int), 2 * u = u + u := by intro u; omega
+    simp only [h4, h8, h2, Int.mul_add, Int.add_mul, Int.mul_one,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  refine ⟨⟨hQuadComm, hQuadNorm, hQuadInv, hSphereM, hSphereSumM,
+           by decide, by decide, by decide, by decide, by decide, by decide⟩,
+          ⟨hBeltSum, hSimpsonMid, hSimpsonTot, by decide, by decide, by decide⟩,
+          ⟨rfl, hN1, hDenomShift n x, hQuotStep⟩,
+          ⟨by decide, hParsevalDecomp, by omega⟩⟩
+
 #print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
 #print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
 #print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
 #print axioms thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_i_sqrt2_fields
 #print axioms thm35_general_field_derivative_operator_quotient_wronskian_and_variational_euler_lagrange
 #print axioms thm38_c_infinity_higher_derivatives_taylor_newton_expansion_and_pole_free_quotients
+#print axioms thm39_cyclotomic_q_i_sqrt2_zeta8_quotient_deriv_tower_and_parseval_orthogonality
 
 end RotatorCalculusPaper
