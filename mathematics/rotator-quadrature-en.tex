@@ -25,442 +25,753 @@
 \newtheorem{remark}[theorem]{Remark}
 
 \title{\textbf{Projective Calculus over $\mathbb{Q}(i,\sqrt{2})$:\\ Discrete Euler Exponential on $\mathbb{Z}_{4Q}$, Constant Wronskian, and Closed-Form Quadrature in Lean~4}}
-\author{Dmitrii A.~Karataev\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Formal Lean~4 verification and analytical development were conducted in partnership with \emph{Luch} (AI research partner, AI-Guiders).}}
-\date{}
+\author{Dmitrii A.~Karataev\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders/scientific-papers}). Formal verification in Lean~4 was conducted in collaboration with AI researcher Luch (AI-Guiders). Licensed under strong reciprocal Copyleft: text and tables under Creative Commons Attribution-ShareAlike 4.0 International (\texttt{CC-BY-SA-4.0}); Lean~4 proof code under GNU General Public License v3.0 or later (\texttt{GPL-3.0-or-later}).}}
+\date{2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We construct an exact, pole-free $C^\infty$ projective differential, variational, and integral calculus over the fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ parameterized by a cyclic residue register $\mathbb{Z}_{4Q}$ ($N_{\mathrm{ring}} = 4\,Q_\square = 512$ at $Q_\square = 2^{|\triangle|-1} = 128$ on the three-dimensional cuboctahedral shell $O_2(3)\subset\{-1,0,+1\}^3$ with $|V_{O_2}|=12$ vertices, $|\square|=6$ square faces, and $|\triangle|=8$ triangular faces). In classical analysis, the Weierstrass substitution $t = \tan(\theta/2) = S/C$ suffers from a pole $t\to\infty$ at $\theta=\pi$ ($C=0$), while in $L^1$ ``taxicab trigonometry'' (Krause 1986; Thompson, \texttt{arXiv:1205.3814}) piecewise derivatives break down at the four diamond corners and naive modulo-$4Q$ residue multiplication has zero divisors. We resolve both obstacles simultaneously by keeping the discrete Euler exponential pair $\mathcal{E}_Q(\varphi) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ homogeneous on the closed $L^1$-diamond $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q\ge 1$ and lifting it via $\pi_{M\to T}(C,S) = (C^2-S^2 : 2CS : C^2+S^2)$ into projective coordinates over $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$. Because $2(\mathcal{C}_Q^2+\mathcal{S}_Q^2) = (\mathcal{C}_Q+\mathcal{S}_Q)^2 + (\mathcal{C}_Q-\mathcal{S}_Q)^2 \ge Q^2 \ge 1$, the Weierstrass denominator $R_Q(\varphi) = \mathcal{C}_Q(\varphi)^2+\mathcal{S}_Q(\varphi)^2 \ge 1$ never vanishes (\texttt{thm34}), eliminating zero divisors and the $\theta=\pi$ pole, while at the four diamond corners the derivative jump multiplies a vanishing coordinate so that the one-step difference Wronskian $\mathcal{W}_Q(\varphi)=\mathcal{C}_Q(\varphi)\Delta\mathcal{S}_Q(\varphi)-\mathcal{S}_Q(\varphi)\Delta\mathcal{C}_Q(\varphi)\equiv Q$ is identically constant across all $4Q$ points (\texttt{thm1}).
-
-From this projective field structure, all differential, variational, and integral laws follow directly: (1)~the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies the projective quotient-derivative Wronskian law $f(x+1)g(x)-f(x)g(x+1) = -\mathcal{W}(f,g)(x)$, the variational Euler--Lagrange derivative $\delta\mathcal{S}/\delta D_w = P_1 Q_2$ on trajectory monoids (\texttt{thm35}), and the inductive $C^\infty$ higher-derivative tower $D^n f$ (\texttt{thm38}) with pole-free denominators $\prod_{j=0}^n R_Q(\varphi+j)\ge 1$ for all $n\in\mathbb{N}$ and exact remainder-free Taylor--Newton series; (2)~the two-tick symplectic Verlet recurrence and two-ring coupling at the cuboctahedron modulus $k^2 = 1/\|e\|_2^2 = 1/2$ yield closed-form integer evaluations of the Fresnel diffraction integrals ($2048$), lemniscate Jacobi elliptic integrals, the Dirichlet sine integral ($128$), Parseval energy ($2,796,288$), and the zero-order Bessel integral ($\mathcal{J}_{0,3}(0)=65,536$, $\mathcal{J}_{0,3}(4)=0$, \texttt{thm2}); and (3)~slicing the $12$ vertices of $O_2(3)$ along any axis yields the equizonal partition $(4,4,4)$, which with the origin weight $12$ forms Simpson's weights $(4,16,4)=4\times(1,4,1)$ and reproduces the exact 3D continuum Riemann integral $\iiint_{[-1,1]^3} F\,\mathrm{d}V$ in $13$ points (\texttt{thm3}). All theorems (\texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}) are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
-
-\medskip\noindent
-\textbf{Keywords:} piecewise-linear trigonometry, Euler's identity, difference Wronskian, Weierstrass substitution, cuboctahedron, Fresnel integrals, lemniscate Jacobi elliptic functions, formal verification, Lean~4.
-
-\smallskip\noindent
-\textbf{MSC 2020:} 26A06, 33E05, 39A12, 65D30, 68V20.
+In this first paper of the series, we construct an exact, pole-free projective differential, variational, and integral calculus in homogeneous coordinates over the number fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, parameterized by a cyclic phase ring $\mathbb{Z}_{4Q}$. In classical analysis, the universal trigonometric substitution of Weierstrass exhibits a pole at the half-turn angle, whereas in piecewise-linear $L^1$ trigonometry the derivatives break down at the four vertices of the diamond and direct multiplication of residues modulo composite $4Q$ possesses zero divisors. We prove that representing the discrete Euler exponential on the closed $L^1$-diamond and lifting it via the homogeneous Weierstrass map into projective coordinates over $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ resolves both obstacles simultaneously: the Weierstrass denominator is strictly positive across all phases and bounded away from zero, while the one-step difference Wronskian is identically equal to the quarter-period $Q$ at every point of the ring, including the four diamond corners. On this foundation, we construct an inductive $C^\infty$ tower of higher difference derivatives with strictly positive denominators at all orders, an exact remainder-free Taylor--Newton expansion, and a variational Euler--Lagrange derivative on composite trajectory monoids. As direct consequences, we obtain closed-form integer evaluations of the Fresnel diffraction integrals, lemniscate Jacobi elliptic integrals, Dirichlet sine integral, Parseval energy integral, and Bessel integral, together with an exact $13$-point three-dimensional Simpson cubature rule on the cuboctahedron $O_2(3)$. All definitions and theorems are formally verified in the \textbf{Lean~4} theorem prover without non-constructive axioms (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 \end{abstract}
 
-\section{Introduction and Historical Context}
+\section{Introduction and Historical Overview}
 \label{sec:intro}
 
-The components of the calculus developed in this paper have deep roots in four classical mathematical traditions that evolved independently and were never synthesized into a single computational framework:
-\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,noitemsep]
-\item \textbf{Projective parameterization of genus-0 curves vs.\ the affine Weierstrass pole (Diophantus, Brahmagupta 628, Pl\"ucker, Weierstrass):}
-  in standard analysis, the universal trigonometric substitution $t = \tan(\theta/2) = S/C \mapsto \bigl((1-t^2)/(1+t^2),\,2t/(1+t^2)\bigr)$ is written in a single affine coordinate $t\in\mathbb{Q}\cup\{\infty\}$ and therefore suffers from a pole $t\to\infty$ at $\theta=\pi$ ($C=0$), requiring two coordinate charts. In projective algebraic geometry, by contrast, the homogeneous map $\mathbb{P}^1(\mathbb{Q})\to S^1(\mathbb{Q})$, $(C : S)\mapsto (C^2-S^2 : 2CS : C^2+S^2)$, is regular everywhere because $C^2+S^2$ is anisotropic over $\mathbb{Q}$. Yet projective equivalence classes $(C : S)\sim(\lambda C : \lambda S)$ lacked a canonical finite cyclic clock section with a uniform step $\varphi\mapsto\varphi+1$;
-\item \textbf{Exact calculus of finite differences and remainder-free Taylor--Newton series (Gregory 1670, Newton 1687, Taylor 1715, Boole 1860~\cite{Boole1860}):}
-  the difference derivative $(Df)(x)=f(x+1)-f(x)$, the quotient rule $D(f/g) = -\mathcal{W}(f,g)/(g\,g_{+1})$, Pochhammer falling factorials $x^{\underline{n}}$, and exact finite Taylor--Newton expansions were fully established by Newton, Taylor (\emph{Methodus Incrementorum}, 1715), and Boole (\emph{A Treatise on the Calculus of Finite Differences}, 1860~\cite{Boole1860}). In the 20th century, however, scientific computing abandoned exact projective difference algebra in favor of IEEE~754 floating-point approximations (`Float64`) with truncation and rounding drift;
-\item \textbf{Piecewise-linear $L^1$ ``taxicab trigonometry'' (Minkowski, Krause 1986~\cite{Krause1986}, Thompson 2011--2012~\cite{Thompson2011,Thompson2012}):}
-  parameterizing the $L^1$-diamond $|C|+|S|=Q$ by arc length provided a natural cyclic phase register $\varphi\in\mathbb{Z}_{4Q}$, but in~\cite{Thompson2012} (\texttt{arXiv:1205.3814}) three obstacles remained unresolved: (a)~piecewise derivatives broke down at the four diamond corners and lost Euclidean coupling; (b)~quadrant transitions required branched powers $i^{k-2}$; and (c)~integral calculus, the lift to the Euclidean circle, and classical non-elementary integrals (Fresnel, Jacobi elliptic, Bessel, Dirichlet) were left open;
-\item \textbf{Invariant 3D cubature on the cuboctahedron $O_2(3)$ (Stroud 1971~\cite{Stroud1971}, Sobolev 1974~\cite{Sobolev1974}):}
-  spherical and polyhedral cubature theory~\cite{Sobolev1974,Stroud1971} established isotropic 3D integration on the $12$ vertices of the cuboctahedron plus the origin, but treated the weights in continuum floating-point arithmetic rather than linking $O_2(3)$ to the quadratic field $\mathbb{Q}(\sqrt{2})$ and the discrete Euler exponential on $\mathbb{Z}_{4Q}$.
+The construction of a closed differential and integral calculus free of irrational square roots, transcendental series truncations, and coordinate singularities draws upon four classical mathematical traditions that developed independently:
+
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
+\item \textbf{Projective parameterization of the rational circle and elimination of the Weierstrass pole (Diophantus, Brahmagupta, Pl\"ucker, Weierstrass).}
+  In standard analysis courses, the universal trigonometric substitution of Weierstrass is written in a single affine coordinate $t$ via the ratio
+  \begin{equation}
+    \label{eq:classical-weierstrass-affine}
+    t \;=\; \tan\frac{\theta}{2} \;=\; \frac{S}{C},
+  \end{equation}
+  mapping the angle to the rational pair
+  \begin{equation}
+    \label{eq:classical-weierstrass-circle}
+    \cos\theta \;=\; \frac{1 - t^2}{1 + t^2},
+    \qquad
+    \sin\theta \;=\; \frac{2t}{1 + t^2}.
+  \end{equation}
+  Because $t$ diverges to infinity at $C = 0$ ($\theta = \pi$), the affine parameterization~\eqref{eq:classical-weierstrass-circle} has a pole and requires gluing two coordinate charts. In projective algebraic geometry, this pole disappears upon passing to homogeneous coordinates $(C : S) \in \mathbb{P}^1(\mathbb{Q})$ and the projective morphism
+  \begin{equation}
+    \label{eq:projective-weierstrass-map}
+    (C : S) \;\longmapsto\; \bigl(C^2 - S^2 \;:\; 2CS \;:\; C^2 + S^2\bigr),
+  \end{equation}
+  which is regular everywhere because the quadratic form $C^2 + S^2$ is anisotropic over $\mathbb{Q}$. However, projective equivalence classes
+  \[
+    (C : S) \;\sim\; (\lambda C : \lambda S)
+  \]
+  lacked a canonical finite cyclic gauge section with uniform phase stepping.
+
+\item \textbf{Calculus of finite differences and factorial Taylor--Newton series (Gregory 1670, Newton 1687, Taylor 1715, Boole 1860~\cite{Boole1860}).}
+  The forward difference operator
+  \begin{equation}
+    \label{eq:intro-forward-diff}
+    (Df)(x) \;=\; f(x+1) - f(x)
+  \end{equation}
+  and its iterates $D^n f$ yield exact polynomial expansions in falling factorials without truncation error, but in classical analysis they were applied only to polynomials on the open integer line $\mathbb{Z}$ rather than to rational projective functions on a closed cyclic phase ring $\mathbb{Z}_{4Q}$.
+
+\item \textbf{Piecewise-linear $L^1$ trigonometry on the Minkowski diamond (Minkowski, Krause 1986~\cite{Krause1986}, Thompson 2011--2012~\cite{Thompson2011,Thompson2012}).}
+  Parameterizing the $L^1$-diamond
+  \begin{equation}
+    \label{eq:intro-l1-diamond}
+    |C| + |S| \;=\; Q
+  \end{equation}
+  by arc length defines a natural cyclic phase register $\varphi \in \mathbb{Z}_{4Q}$. Yet in~\cite{Thompson2011,Thompson2012} three fundamental obstacles remained unresolved:
+  \begin{enumerate}[label=(\alph*)]
+  \item piecewise derivatives broke down at the four diamond corners and lost coupling to the Euclidean circle;
+  \item quadrant transitions required branched powers of the imaginary unit;
+  \item integral calculus, the lift to the Euclidean circle, and classical non-elementary integrals (Fresnel, Jacobi, Bessel, Dirichlet) remained open.
+  \end{enumerate}
+
+\item \textbf{Invariant three-dimensional cubature rules on the cuboctahedron $O_2(3)$ (Stroud 1971~\cite{Stroud1971}, S.\,L.~Sobolev 1974~\cite{Sobolev1974}).}
+  Spherical and polyhedral cubature theory~\cite{Sobolev1974,Stroud1971} established isotropic three-dimensional integration over the $12$ vertices of the cuboctahedron plus the origin, but treated the nodes and weights in floating-point real arithmetic without linking $O_2(3)$ to the quadratic field $\mathbb{Q}(\sqrt{2})$ and the discrete Euler exponential on $\mathbb{Z}_{4Q}$.
 \end{enumerate}
 
-In this paper (Part~I of the mathematical series), we unite these four traditions by choosing the closed $L^1$-diamond $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|=Q\ge 1$ on $\mathbb{Z}_{4Q}$ as the canonical global gauge section of the projective line $\mathbb{P}^1(\mathbb{Q})$ over the three-dimensional cuboctahedral shell
-\[
-  O_2(d) \;=\; \bigl\{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \;\big|\; e_x^2+e_y^2+e_z^2 = d-1\bigr\} \qquad (d=3)
-\]
-and its associated integer phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ with structural constants:
+In this paper, we unite these four traditions by selecting the closed $L^1$-diamond~\eqref{eq:intro-l1-diamond} on $\mathbb{Z}_{4Q}$ as the canonical global gauge section of the projective line $\mathbb{P}^1(\mathbb{Q})$. For the three-dimensional cubature in Section~\ref{sec:continuum-emergence}, we consider the integer cuboctahedral shell in dimension $d = 3$:
+\begin{equation}
+  \label{eq:cuboct-shell-def}
+  O_2(d) \;=\; \bigl\{\,e = (e_x, e_y, e_z) \in \{-1, 0, +1\}^3 \;\big|\; e_x^2 + e_y^2 + e_z^2 = d - 1\,\bigr\},
+\end{equation}
+whose combinatorial invariants at $d = 3$ take the values:
 \begin{align}
-  |{\triangle}(d)| &= 2^d = 8, &
-  |\square(d)| &= 2d = 6, &
-  |V_{O_2}(d)| &= 2d(d-1) = 12, \label{eq:cuboct-counts-1} \\
-  d_{\mathrm{in}}(\square) &= 4, &
-  d_{\mathrm{out}}(E)(d) &= 2^d - d = 5, &
-  \|e\|_2^2 &= d - 1 = 2, \label{eq:cuboct-counts-2} \\
-  Q_\square(d) &= 2^{|{\triangle}(d)|-1} = 128, &
-  \Phi_{\mathrm{half}}(d) &= 2\,Q_\square(d) = 256, &
-  N_{\mathrm{ring}}(d) &= 4\,Q_\square(d) = 512, \label{eq:cuboct-counts-3}
+  |{\triangle}(d)| &= 2^d = 8, \label{eq:cuboct-triangles} \\
+  |\square(d)| &= 2d = 6, \label{eq:cuboct-squares} \\
+  |V_{O_2}(d)| &= 2d(d-1) = 12, \label{eq:cuboct-vertices} \\
+  d_{\mathrm{in}}(\square) &= 4, \label{eq:cuboct-din} \\
+  d_{\mathrm{out}}(E)(d) &= 2^d - d = 5, \label{eq:cuboct-dout} \\
+  \|e\|_2^2 &= d - 1 = 2. \label{eq:cuboct-norm2}
 \end{align}
-and bisector step $K_P(d) = N_{\mathrm{ring}}(d)/|{\triangle}(d)| = 64$. All definitions and theorems below correspond to \texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, and \texttt{thm38} in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorQuadrature.lean}.
+The associated phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ at $d = 3$ is specified by the parameters:
+\begin{align}
+  Q_\square(d) &= 2^{|{\triangle}(d)| - 1} = 128, \label{eq:ring-quarter} \\
+  \Phi_{\mathrm{half}}(d) &= 2\,Q_\square(d) = 256, \label{eq:ring-half} \\
+  N_{\mathrm{ring}}(d) &= 4\,Q_\square(d) = 512, \label{eq:ring-full} \\
+  K_P(d) &= \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64. \label{eq:ring-bisector}
+\end{align}
+All definitions and theorems in this work are formalized in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorQuadrature.lean}.
 
-\section{Discrete Euler Exponential, Euler's Identity \texorpdfstring{$e^{i\pi}+1=0$}{e\^{}(i pi)+1=0}, Constant Wronskian, and Homogeneous Arithmetic in the Fields \texorpdfstring{$\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$}{Q(i) and Q(sqrt 2)}}
+\section{Discrete Euler Exponential, Constant Wronskian, and Homogeneous Arithmetic in the Fields \texorpdfstring{$\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$}{Q(i) and Q(sqrt 2)}}
 \label{sec:wronskian-euler}
 
-For any $x\in\mathbb{Z}$, define the principal symmetric branch wrapper into $(-\Phi_{\mathrm{half}}(d),\Phi_{\mathrm{half}}(d)]$:
+For any quarter-period $Q = Q_\square(d) \ge 1$, half-period $\Phi_{\mathrm{half}}(d) = 2Q$, and full period $N_{\mathrm{ring}}(d) = 4Q$, define the symmetric folding of an integer argument $x \in \mathbb{Z}$ into the interval $(-\Phi_{\mathrm{half}}(d),\, \Phi_{\mathrm{half}}(d)]$:
 \begin{equation}
   \label{eq:wrap-ring}
-  \mathrm{wrap}_d(x) \;:=\; \Phi_{\mathrm{half}}(d) - \bigl((\Phi_{\mathrm{half}}(d) - x) \bmod N_{\mathrm{ring}}(d)\bigr),
+  \mathrm{wrap}_d(x) \;:=\; \Phi_{\mathrm{half}}(d) - \bigl((\Phi_{\mathrm{half}}(d) - x) \bmod N_{\mathrm{ring}}(d)\bigr).
 \end{equation}
-and the branchless piecewise-linear cosine and sine projections:
-\begin{equation}
-  \label{eq:proj-cs}
-  \mathcal{C}_d(\varphi) \;:=\; Q_\square(d) - |\mathrm{wrap}_d(\varphi)|,\qquad
-  \mathcal{S}_d(\varphi) \;:=\; \mathcal{C}_d\bigl(\varphi - Q_\square(d)\bigr).
-\end{equation}
+In terms of this folding, the branchless piecewise-linear cosine and sine projections on $\mathbb{Z}_{4Q}$ are defined by:
+\begin{align}
+  \mathcal{C}_d(\varphi) &:= Q_\square(d) - |\mathrm{wrap}_d(\varphi)|, \label{eq:proj-c} \\
+  \mathcal{S}_d(\varphi) &:= \mathcal{C}_d\bigl(\varphi - Q_\square(d)\bigr). \label{eq:proj-s}
+\end{align}
 
 \begin{definition}[Discrete Euler exponential and one-step difference Wronskian]
 \label{def:euler-exp-wronskian}
-We define the \emph{discrete Euler exponential} on $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ by the pair
-\[
-  \mathcal{E}_d(\varphi) \;:=\; \bigl(\mathcal{C}_d(\varphi),\,\mathcal{S}_d(\varphi)\bigr) \;\in\; \mathbb{Z}^2,
-\]
-and the \emph{one-step difference Wronskian} by
+The \emph{discrete Euler exponential} on the cyclic phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ is the ordered pair of projections
+\begin{equation}
+  \label{eq:euler-exp-pair}
+  \mathcal{E}_d(\varphi) \;:=\; \bigl(\mathcal{C}_d(\varphi),\, \mathcal{S}_d(\varphi)\bigr) \;\in\; \mathbb{Z}^2.
+\end{equation}
+The \emph{one-step difference Wronskian} of the pair $(\mathcal{C}_d, \mathcal{S}_d)$ is the quantity
 \begin{equation}
   \label{eq:rotator-wronskian}
   \mathcal{W}_d(\varphi) \;:=\; \mathcal{C}_d(\varphi)\,\mathcal{S}_d(\varphi+1) - \mathcal{S}_d(\varphi)\,\mathcal{C}_d(\varphi+1)
   \;=\; \mathcal{C}_d(\varphi)\,\Delta\mathcal{S}_d(\varphi) - \mathcal{S}_d(\varphi)\,\Delta\mathcal{C}_d(\varphi),
 \end{equation}
-where $\Delta f(\varphi) = f(\varphi+1)-f(\varphi)$.
+where $\Delta f(\varphi) = f(\varphi+1) - f(\varphi)$ denotes the forward first difference operator.
 \end{definition}
 
-To each $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ we associate the rational Brahmagupta--Weierstrass lift onto the Euclidean circle $X^2+Y^2=R^2$:
-\begin{equation}
-  \label{eq:weierstrass-lift}
-  X_d(\varphi) := \mathcal{C}_d(\varphi)^2 - \mathcal{S}_d(\varphi)^2,\qquad
-  Y_d(\varphi) := \|e\|_2^2\,\mathcal{C}_d(\varphi)\,\mathcal{S}_d(\varphi),\qquad
-  R_d(\varphi) := \mathcal{C}_d(\varphi)^2 + \mathcal{S}_d(\varphi)^2.
-\end{equation}
+To each phase $\varphi \in \mathbb{Z}_{N_{\mathrm{ring}}(d)}$ we associate the homogeneous projective Brahmagupta--Weierstrass triple on the Euclidean circle $X^2 + Y^2 = R^2$:
+\begin{align}
+  X_d(\varphi) &:= \mathcal{C}_d(\varphi)^2 - \mathcal{S}_d(\varphi)^2, \label{eq:weierstrass-x} \\
+  Y_d(\varphi) &:= 2\,\mathcal{C}_d(\varphi)\,\mathcal{S}_d(\varphi), \label{eq:weierstrass-y} \\
+  R_d(\varphi) &:= \mathcal{C}_d(\varphi)^2 + \mathcal{S}_d(\varphi)^2. \label{eq:weierstrass-r}
+\end{align}
 
 \begin{theorem}[Discrete Euler's Identity, Multi-Turn Periodicity, and Constant Difference Wronskian]
 \label{thm:main-1}
-For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, and integration horizon $L\in\mathbb{N}$, the discrete Euler exponential $\mathcal{E}_Q = (\mathcal{C}_Q,\mathcal{S}_Q)$ on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+For any quarter-period $Q \in \mathbb{Z}$, intra-quadrant phase $m \in \mathbb{Z}$, turn count $k_{\mathrm{turns}} \in \mathbb{Z}$, and integration horizon $L \in \mathbb{N}$, the discrete Euler exponential $\mathcal{E}_Q = (\mathcal{C}_Q, \mathcal{S}_Q)$ on $\mathbb{Z}_{4Q}$ satisfies the following laws (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Multi-turn periodicity, constant $L^1$ norm, and Euler's identity $e^{i\pi}+1=0$:}
+\item \textbf{Multi-turn periodicity and constant $L^1$ norm:}
   \begin{align}
-    \mathcal{E}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) &= \mathcal{E}_Q(\varphi), &
-    |\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| &\equiv Q, \label{eq:rotator-period-l1} \\
-    \mathcal{E}_Q(\varphi + Q) &= \bigl(-\mathcal{S}_Q(\varphi),\,+\mathcal{C}_Q(\varphi)\bigr), &
-    \mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) &= (0,\,0). \label{eq:rotator-euler-identity}
+    \mathcal{E}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) &= \mathcal{E}_Q(\varphi), \label{eq:rotator-period} \\
+    |\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| &\equiv Q. \label{eq:rotator-l1}
   \end{align}
-\item \textbf{Constant difference Wronskian and pointwise-constant integral extraction:}
-  across all four quadrants and all four corner vertices of the $L^1$ diamond, the one-step difference Wronskian is identically equal to the constant $Q$:
+\item \textbf{Quarter-turn rotation and discrete Euler's identity $e^{i\pi} + 1 = 0$:}
+  \begin{align}
+    \mathcal{E}_Q(\varphi + Q) &= \bigl(-\mathcal{S}_Q(\varphi),\, +\mathcal{C}_Q(\varphi)\bigr), \label{eq:rotator-quarter-turn} \\
+    \mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) &= (0,\, 0). \label{eq:rotator-euler-identity}
+  \end{align}
+\item \textbf{Identical constancy of the one-step difference Wronskian:}
+  across all four quadrants and all four corner vertices of the $L^1$-diamond, the difference Wronskian is identically equal to the constant $Q$:
   \begin{equation}
     \label{eq:constant-wronskian-all-512}
-    \mathcal{W}_Q(\varphi) \;=\; (Q-m)(m+1) - m(Q-m-1) \;\equiv\; Q
-    \qquad (\forall Q,m\in\mathbb{Z}).
+    \mathcal{W}_Q(\varphi) \;=\; (Q - m)(m + 1) - m(Q - m - 1) \;\equiv\; Q
+    \qquad (\forall Q, m \in \mathbb{Z}).
   \end{equation}
-  Consequently, for any pointwise-constant invariant $g(\varphi)\equiv c_{\mathrm{inv}}$ (including $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q$ and $\mathcal{W}_Q(\varphi)\equiv Q$), the constant factors directly out of the discrete integral over any horizon $L\in\mathbb{N}$:
-  \begin{equation}
-    \label{eq:constant-extraction}
-    \sum_{\varphi=0}^{L-1} g(\varphi) \;=\; c_{\mathrm{inv}}\sum_{\varphi=0}^{L-1} 1 \;=\; L\cdot c_{\mathrm{inv}},
-    \qquad
-    \sum_{\varphi=0}^{L-1} c_{\mathrm{sq}}\,f(\varphi) \;=\; c_{\mathrm{sq}}\sum_{\varphi=0}^{L-1} f(\varphi).
-  \end{equation}
+\item \textbf{Extraction of pointwise-constant invariants from discrete integrals:}
+  for any pointwise-constant invariant $g(\varphi) \equiv c_{\mathrm{inv}}$ and any constant factor $c_{\mathrm{sq}} \in \mathbb{Z}$ over any horizon $L \in \mathbb{N}$:
+  \begin{align}
+    \sum_{\varphi=0}^{L-1} g(\varphi) &= c_{\mathrm{inv}}\sum_{\varphi=0}^{L-1} 1 \;=\; L\cdot c_{\mathrm{inv}}, \label{eq:constant-extraction} \\
+    \sum_{\varphi=0}^{L-1} c_{\mathrm{sq}}\,f(\varphi) &= c_{\mathrm{sq}}\sum_{\varphi=0}^{L-1} f(\varphi). \label{eq:linear-factor-extraction}
+  \end{align}
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-(i)~By definition~\eqref{eq:wrap-ring}, shifting $x$ by any integer multiple $4Q\,k_{\mathrm{turns}} = N_{\mathrm{ring}}\,k_{\mathrm{turns}}$ leaves $(2Q - x)\bmod 4Q$ invariant, so $\mathrm{wrap}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) = \mathrm{wrap}_Q(\varphi)$ and $\mathcal{E}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) = \mathcal{E}_Q(\varphi)$. Within any quadrant parameterized by $m\in[0,Q]$, the projections take the signed values $(\pm(Q-m),\,\pm m)$, whence $|\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| = (Q-m) + m \equiv Q$. By~\eqref{eq:proj-cs}, $\mathcal{S}_Q(\varphi+Q) = \mathcal{C}_Q(\varphi+Q-Q) = \mathcal{C}_Q(\varphi)$, while shifting by $+2Q$ reflects $|\mathrm{wrap}_Q(\varphi+2Q)| = 2Q - |\mathrm{wrap}_Q(\varphi)|$, giving $\mathcal{C}_Q(\varphi+2Q) = Q - (2Q - |\mathrm{wrap}_Q(\varphi)|) = -(Q - |\mathrm{wrap}_Q(\varphi)|) = -\mathcal{C}_Q(\varphi)$ and likewise $\mathcal{S}_Q(\varphi+2Q) = -\mathcal{S}_Q(\varphi)$. Combining both gives $\mathcal{E}_Q(\varphi+Q) = (-\mathcal{S}_Q(\varphi),+\mathcal{C}_Q(\varphi))$ and $\mathcal{E}_Q(\varphi+2Q) + \mathcal{E}_Q(\varphi) = (0,0)$.
+We prove claims~(i)--(iv) in sequence.
 
-(ii)~In Quadrant~I ($0\le m < Q$), $\mathcal{E}_Q(m) = (Q-m, m)$ and $\mathcal{E}_Q(m+1) = (Q-m-1, m+1)$. Substituting into~\eqref{eq:rotator-wronskian} and expanding over $\mathbb{Z}$ gives
-\[
-  \mathcal{W}_Q(m) \;=\; (Q-m)(m+1) - m(Q-m-1) \;=\; (Qm + Q - m^2 - m) - (Qm - m^2 - m) \;\equiv\; Q.
-\]
-At the diamond corner $m = Q$ where the slope $\Delta\mathcal{C}_Q$ changes sign from $-1$ to $+1$, we have $\mathcal{E}_Q(Q) = (0, Q)$ and $\mathcal{E}_Q(Q+1) = (-1, Q-1)$; because the slope jump occurs at the vanishing coordinate $\mathcal{C}_Q(Q) = 0$, the Wronskian evaluates to $\mathcal{W}_Q(Q) = 0\cdot(Q-1) - Q\cdot(-1) = Q$. The same cancellation holds at all four corners $(Q,0), (0,Q), (-Q,0), (0,-Q)$ by quarter-turn symmetry~\eqref{eq:rotator-euler-identity}. Finally, if $g(\varphi) = c_{\mathrm{inv}}$ for all $\varphi$, induction on $L\in\mathbb{N}$ gives $\sum_{\varphi=0}^{L-1} g(\varphi) = L\cdot c_{\mathrm{inv}}$.
+\emph{Claim~(i).} By definition~\eqref{eq:wrap-ring}, shifting the argument $x$ by an integer multiple of the full period $4Q\,k_{\mathrm{turns}}$ leaves the residue modulo $4Q$ unchanged:
+\begin{equation*}
+  \bigl(2Q - (\varphi + 4Q\,k_{\mathrm{turns}})\bigr) \bmod 4Q \;=\; (2Q - \varphi) \bmod 4Q,
+\end{equation*}
+so $\mathrm{wrap}_Q(\varphi + 4Q\,k_{\mathrm{turns}}) = \mathrm{wrap}_Q(\varphi)$, proving~\eqref{eq:rotator-period}. Within each of the four quadrants with local phase $m \in [0, Q]$, the projections take the signed values $\pm(Q - m)$ and $\pm m$, whose absolute values sum to
+\begin{equation*}
+  |\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| \;=\; (Q - m) + m \;\equiv\; Q,
+\end{equation*}
+establishing~\eqref{eq:rotator-l1}.
+
+\emph{Claim~(ii).} From the definition of the sine projection~\eqref{eq:proj-s}, we have immediately
+\begin{equation*}
+  \mathcal{S}_Q(\varphi + Q) \;=\; \mathcal{C}_Q(\varphi + Q - Q) \;=\; \mathcal{C}_Q(\varphi).
+\end{equation*}
+Shifting the phase by the half-period $+2Q$ reflects the absolute value of the symmetric folding across the quadrant midpoint:
+\begin{equation*}
+  |\mathrm{wrap}_Q(\varphi + 2Q)| \;=\; 2Q - |\mathrm{wrap}_Q(\varphi)|.
+\end{equation*}
+Substituting this relation into~\eqref{eq:proj-c} yields anti-periodicity of both cosine and sine:
+\begin{align*}
+  \mathcal{C}_Q(\varphi + 2Q) &= Q - \bigl(2Q - |\mathrm{wrap}_Q(\varphi)|\bigr) \;=\; -\bigl(Q - |\mathrm{wrap}_Q(\varphi)|\bigr) \;=\; -\mathcal{C}_Q(\varphi), \\
+  \mathcal{S}_Q(\varphi + 2Q) &= \mathcal{C}_Q(\varphi + Q) \;=\; -\mathcal{C}_Q(\varphi - Q) \;=\; -\mathcal{S}_Q(\varphi),
+\end{align*}
+from which both~\eqref{eq:rotator-quarter-turn} and~\eqref{eq:rotator-euler-identity} follow.
+
+\emph{Claim~(iii).} In Quadrant~I ($0 \le m < Q$), adjacent states are given by
+\begin{align*}
+  \mathcal{E}_Q(m) &= (Q - m,\, m), \\
+  \mathcal{E}_Q(m + 1) &= (Q - m - 1,\, m + 1).
+\end{align*}
+Substituting these into the Wronskian~\eqref{eq:rotator-wronskian} and expanding over $\mathbb{Z}$ yields:
+\begin{align*}
+  \mathcal{W}_Q(m) &= (Q - m)(m + 1) - m(Q - m - 1) \\
+  &= (Qm + Q - m^2 - m) - (Qm - m^2 - m) \\
+  &\equiv Q.
+\end{align*}
+At the diamond corner vertex $m = Q$, where the difference $\Delta\mathcal{C}_Q$ reverses sign from $-1$ to $+1$, we have
+\begin{align*}
+  \mathcal{E}_Q(Q) &= (0,\, Q), \\
+  \mathcal{E}_Q(Q + 1) &= (-1,\, Q - 1).
+\end{align*}
+Because the slope jump $\Delta\mathcal{C}_Q$ is multiplied by the coordinate $\mathcal{C}_Q(Q) = 0$ that vanishes at this vertex, the Wronskian at the vertex retains the exact same value:
+\begin{equation*}
+  \mathcal{W}_Q(Q) \;=\; 0\cdot(Q - 1) - Q\cdot(-1) \;=\; Q.
+\end{equation*}
+By quarter-turn symmetry~\eqref{eq:rotator-quarter-turn}, the same identity holds at all four corners $(Q,0)$, $(0,Q)$, $(-Q,0)$, and $(0,-Q)$.
+
+\emph{Claim~(iv).} When $g(\varphi) = c_{\mathrm{inv}}$ for all $\varphi \in \mathbb{Z}$, induction on the horizon $L \in \mathbb{N}$ via
+\begin{equation*}
+  \sum_{\varphi=0}^{L} c_{\mathrm{inv}} \;=\; \sum_{\varphi=0}^{L-1} c_{\mathrm{inv}} + c_{\mathrm{inv}} \;=\; L\cdot c_{\mathrm{inv}} + c_{\mathrm{inv}} \;=\; (L + 1)\,c_{\mathrm{inv}}
+\end{equation*}
+proves~\eqref{eq:constant-extraction}, while distributivity of multiplication in $\mathbb{Z}$ gives~\eqref{eq:linear-factor-extraction}.
 \end{proof}
 
-\begin{theorem}[Root-Free Euclidean Weierstrass Lift and Brahmagupta Step Identities]
+\begin{theorem}[Weierstrass Euclidean Circle Identity and Brahmagupta Step Laws]
 \label{thm:main-1b}
-For all integer projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the Euclidean circle identity
+For all integer projections $\mathcal{C}_0, \mathcal{S}_0, \mathcal{C}_1, \mathcal{S}_1 \in \mathbb{Z}$, the Weierstrass coordinates~\eqref{eq:weierstrass-x}--\eqref{eq:weierstrass-r} satisfy the Euclidean circle identity
 \begin{equation}
   \label{eq:weierstrass-circle-id}
   X_0^2 + Y_0^2 \;=\; (\mathcal{C}_0^2 - \mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 \;=\; (\mathcal{C}_0^2 + \mathcal{S}_0^2)^2 \;=\; R_0^2,
 \end{equation}
-and the Brahmagupta--Weierstrass step decomposition with inner product $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ and Wronskian $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
-\begin{equation}
-  \label{eq:brahmagupta-step}
-  R_0 R_1 - \mathcal{I}^2 \;=\; \mathcal{W}^2,\qquad
-  X_0 Y_1 - Y_0 X_1 \;=\; 2\,\mathcal{W}\,\mathcal{I},\qquad
-  X_0 X_1 + Y_0 Y_1 \;=\; \mathcal{I}^2 - \mathcal{W}^2.
-\end{equation}
+and for the inner product $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ and Wronskian $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$ of two states, the three Brahmagupta--Weierstrass step relations hold:
+\begin{align}
+  R_0 R_1 - \mathcal{I}^2 &= \mathcal{W}^2, \label{eq:brahmagupta-step-1} \\
+  X_0 Y_1 - Y_0 X_1 &= 2\,\mathcal{W}\,\mathcal{I}, \label{eq:brahmagupta-step-2} \\
+  X_0 X_1 + Y_0 Y_1 &= \mathcal{I}^2 - \mathcal{W}^2. \label{eq:brahmagupta-step-3}
+\end{align}
 \end{theorem}
 
 \begin{proof}
-Expanding the left-hand side of~\eqref{eq:weierstrass-circle-id} gives $(\mathcal{C}_0^4 - 2\mathcal{C}_0^2\mathcal{S}_0^2 + \mathcal{S}_0^4) + 4\mathcal{C}_0^2\mathcal{S}_0^2 = \mathcal{C}_0^4 + 2\mathcal{C}_0^2\mathcal{S}_0^2 + \mathcal{S}_0^4 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R_0^2$. For the first identity in~\eqref{eq:brahmagupta-step}, Brahmagupta's identity for the product of two sums of two squares yields
-\[
-  R_0 R_1 \;=\; (\mathcal{C}_0^2 + \mathcal{S}_0^2)(\mathcal{C}_1^2 + \mathcal{S}_1^2)
-  \;=\; (\mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1)^2 + (\mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1)^2
-  \;=\; \mathcal{I}^2 + \mathcal{W}^2.
-\]
-For the second and third identities in~\eqref{eq:brahmagupta-step}, in the Gaussian ring $\mathbb{Z}[i]$ let $z_0 = \mathcal{C}_0 + i\mathcal{S}_0$ and $z_1 = \mathcal{C}_1 + i\mathcal{S}_1$; then $\bar{z}_0 z_1 = \mathcal{I} + i\mathcal{W}$, while $z_0^2 = X_0 + iY_0$ and $z_1^2 = X_1 + iY_1$, so
-\[
-  (X_0 X_1 + Y_0 Y_1) + i(X_0 Y_1 - Y_0 X_1) \;=\; \bar{z}_0^2 z_1^2 \;=\; (\bar{z}_0 z_1)^2 \;=\; (\mathcal{I} + i\mathcal{W})^2 \;=\; (\mathcal{I}^2 - \mathcal{W}^2) + i(2\mathcal{W}\mathcal{I}).
-\]
-Equating real and imaginary parts gives both identities in~\eqref{eq:brahmagupta-step}.
+Expanding the squares on the left-hand side of~\eqref{eq:weierstrass-circle-id} gives:
+\begin{align*}
+  X_0^2 + Y_0^2 &= (\mathcal{C}_0^4 - 2\mathcal{C}_0^2\mathcal{S}_0^2 + \mathcal{S}_0^4) + 4\mathcal{C}_0^2\mathcal{S}_0^2 \\
+  &= \mathcal{C}_0^4 + 2\mathcal{C}_0^2\mathcal{S}_0^2 + \mathcal{S}_0^4 \\
+  &= (\mathcal{C}_0^2 + \mathcal{S}_0^2)^2 \;=\; R_0^2.
+\end{align*}
+Identity~\eqref{eq:brahmagupta-step-1} follows from the two-square identity of Brahmagupta--Fibonacci:
+\begin{align*}
+  R_0 R_1 &= (\mathcal{C}_0^2 + \mathcal{S}_0^2)(\mathcal{C}_1^2 + \mathcal{S}_1^2) \\
+  &= (\mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1)^2 + (\mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1)^2 \\
+  &= \mathcal{I}^2 + \mathcal{W}^2.
+\end{align*}
+To derive~\eqref{eq:brahmagupta-step-2} and~\eqref{eq:brahmagupta-step-3}, consider in the Gaussian ring $\mathbb{Z}[i]$ the elements $z_0 = \mathcal{C}_0 + i\mathcal{S}_0$ and $z_1 = \mathcal{C}_1 + i\mathcal{S}_1$. Then
+\begin{align*}
+  \bar{z}_0 z_1 &= (\mathcal{C}_0 - i\mathcal{S}_0)(\mathcal{C}_1 + i\mathcal{S}_1) \;=\; \mathcal{I} + i\mathcal{W}, \\
+  z_0^2 &= X_0 + iY_0, \\
+  z_1^2 &= X_1 + iY_1.
+\end{align*}
+Squaring the relation $\bar{z}_0 z_1 = \mathcal{I} + i\mathcal{W}$ yields:
+\begin{equation*}
+  (X_0 X_1 + Y_0 Y_1) + i(X_0 Y_1 - Y_0 X_1) \;=\; \bar{z}_0^2 z_1^2 \;=\; (\mathcal{I} + i\mathcal{W})^2 \;=\; (\mathcal{I}^2 - \mathcal{W}^2) + i(2\mathcal{W}\mathcal{I}).
+\end{equation*}
+Equating real and imaginary parts establishes~\eqref{eq:brahmagupta-step-2} and~\eqref{eq:brahmagupta-step-3}.
 \end{proof}
 
-\begin{theorem}[Fundamental Theorem of Discrete Calculus and Multiplierless Arithmetic]
+\begin{theorem}[Fundamental Theorem of Discrete Calculus and Quarter-Square Multiplication]
 \label{thm:main-1c}
-For every dimension $d\in\mathbb{N}$, upper limit $L\in\mathbb{N}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, function $f\colon\mathbb{Z}\to\mathbb{Z}$, and integers $Q,x,y\in\mathbb{Z}$ (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+For any function $f\colon \mathbb{Z} \to \mathbb{Z}$ with cumulative antiderivative sum
 \begin{equation}
-  \label{eq:newton-leibniz-universal}
-  \sum_{\varphi=0}^{L} f(\varphi) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L),\qquad
-  \Delta\widehat{\Phi}_{\mathcal{C}}(d,L) \;=\; \mathcal{C}_d(L),\qquad
-  \Delta\widehat{\Phi}_{\mathcal{S}}(d,L) \;=\; \mathcal{S}_d(L),
+  \label{eq:antiderivative-sum-def}
+  \widehat{\Phi}_f(L) \;:=\; \sum_{\varphi=0}^{L-1} f(\varphi)
 \end{equation}
-and the full-turn, half-wave, and quarter-square identities hold:
-\begin{equation}
-  \label{eq:half-wave-quarter-square}
-  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{C}}(3,512) \;=\; k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3,512) \;=\; 0, \qquad
-  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3,256) \;=\; 16,384\,k_{\mathrm{turns}}, \qquad
-  (x+y)^2 - (x-y)^2 \;=\; 4xy.
-\end{equation}
+and for all $d, L \in \mathbb{N}$, turn count $k_{\mathrm{turns}} \in \mathbb{Z}$, and integers $x, y \in \mathbb{Z}$, the following identities hold (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+\begin{align}
+  \Delta\widehat{\Phi}_f(L) &= \sum_{\varphi=0}^{L} f(\varphi) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L), \label{eq:newton-leibniz-general} \\
+  \Delta\widehat{\Phi}_{\mathcal{C}}(d, L) &= \mathcal{C}_d(L), \label{eq:newton-leibniz-c} \\
+  \Delta\widehat{\Phi}_{\mathcal{S}}(d, L) &= \mathcal{S}_d(L), \label{eq:newton-leibniz-s} \\
+  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{C}}(3, 512) &= k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3, 512) \;=\; 0, \label{eq:full-turn-zero} \\
+  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3, 256) &= 16,384\,k_{\mathrm{turns}}, \label{eq:half-wave-area} \\
+  (x + y)^2 - (x - y)^2 &= 4xy. \label{eq:quarter-square-mul}
+\end{align}
 \end{theorem}
 
 \begin{proof}
-By recursive definition of the cumulative sum $\widehat{\Phi}_f(L) = \sum_{\varphi=0}^{L-1} f(\varphi)$, its forward difference is $\Delta\widehat{\Phi}_f(L) = \widehat{\Phi}_f(L+1) - \widehat{\Phi}_f(L) = f(L)$, proving~\eqref{eq:newton-leibniz-universal}. Over a full period $N_{\mathrm{ring}}(3) = 512 = 4Q$, pairing each $\varphi\in[0,255]$ with $\varphi+256$ cancels all terms identically via Euler's identity $\mathcal{E}_3(\varphi+256) + \mathcal{E}_3(\varphi) = (0,0)$ from Theorem~\ref{thm:main-1}(i). Over the positive half-wave $\varphi\in[0,255]$ ($2Q = 256$), pairing $\varphi=m$ with $\varphi=Q+m$ for $m\in[0,Q-1]$ gives $\mathcal{S}_Q(m) + \mathcal{S}_Q(Q+m) = m + (Q-m) = Q$, so $\sum_{\varphi=0}^{2Q-1}\mathcal{S}_Q(\varphi) = Q\cdot Q = Q^2 = 128^2 = 16,384$. Finally, $(x+y)^2 - (x-y)^2 = (x^2+2xy+y^2)-(x^2-2xy+y^2) = 4xy$.
+From the recursive definition of the cumulative sum~\eqref{eq:antiderivative-sum-def}, we have
+\begin{equation*}
+  \Delta\widehat{\Phi}_f(L) \;=\; \widehat{\Phi}_f(L + 1) - \widehat{\Phi}_f(L) \;=\; \biggl(\sum_{\varphi=0}^{L-1} f(\varphi) + f(L)\biggr) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L),
+\end{equation*}
+which proves~\eqref{eq:newton-leibniz-general}--\eqref{eq:newton-leibniz-s}. Over a full period $N_{\mathrm{ring}}(3) = 512 = 4Q$ ($Q = 128$), partitioning the summation range into $256$ antipodal pairs $(\varphi,\, \varphi + 256)$ for $\varphi \in [0, 255]$ gives
+\begin{equation*}
+  \sum_{\varphi=0}^{511} \mathcal{E}_3(\varphi) \;=\; \sum_{\varphi=0}^{255} \bigl(\mathcal{E}_3(\varphi) + \mathcal{E}_3(\varphi + 256)\bigr) \;=\; (0,\, 0)
+\end{equation*}
+by Euler's identity~\eqref{eq:rotator-euler-identity}, establishing~\eqref{eq:full-turn-zero}. Over the positive half-wave $\varphi \in [0, 255]$ ($2Q = 256$), grouping pairs $(m,\, Q + m)$ for $m \in [0, Q - 1]$ yields
+\begin{equation*}
+  \mathcal{S}_Q(m) + \mathcal{S}_Q(Q + m) \;=\; m + (Q - m) \;=\; Q,
+\end{equation*}
+whence the half-wave sum equals
+\begin{equation*}
+  \widehat{\Phi}_{\mathcal{S}}(3, 256) \;=\; \sum_{m=0}^{Q-1} Q \;=\; Q^2 \;=\; 128^2 \;=\; 16,384,
+\end{equation*}
+proving~\eqref{eq:half-wave-area}. Finally, expanding $(x^2 + 2xy + y^2) - (x^2 - 2xy + y^2) = 4xy$ proves~\eqref{eq:quarter-square-mul}.
 \end{proof}
 
-\begin{theorem}[Homogeneous Projective Arithmetic of the Fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, Embedding of the $L^1$-Diamond into $\mathbb{Q}(i)^\times$, and the $C^\infty$ Derivative and Variational Tower, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}]
+\begin{theorem}[Homogeneous Projective Arithmetic of the Fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, Embedding of the $L^1$-Diamond into $\mathbb{Q}(i)^\times$, and the $C^\infty$ Derivative and Variational Tower]
 \label{thm:main-34-field}
-Unlike the residue ring $\mathbb{Z}_{4Q}$ modulo composite $4Q$ (which possesses zero divisors), homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ ($R\ge 1$) and $(a,b,D)\in\mathbb{Z}^3$ ($D\ge 1$) define exact projective arithmetic in the number fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, while every pair $(C,S) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ on the $L^1$-diamond $|C|+|S|=Q\ge 1$ and its Weierstrass lift $(X_T,Y_T,R_T) = (C^2-S^2,2CS,C^2+S^2)$ embed into the multiplicative group $\mathbb{Q}(i)^\times$ of non-zero invertible elements of the field $\mathbb{Q}(i)$ (\texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}):
+Unlike the residue ring $\mathbb{Z}_{4Q}$ modulo composite $4Q$ (which possesses zero divisors), homogeneous triples $(X, Y, R) \in \mathbb{Z}^3$ ($R \ge 1$) and $(a, b, D) \in \mathbb{Z}^3$ ($D \ge 1$) define exact projective arithmetic in the number fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$, while every point $(C, S) = (\mathcal{C}_Q(\varphi), \mathcal{S}_Q(\varphi))$ on the $L^1$-diamond $|C| + |S| = Q \ge 1$ and its Weierstrass lift $(X_T, Y_T, R_T) = (C^2 - S^2, 2CS, C^2 + S^2)$ embed into the multiplicative group $\mathbb{Q}(i)^\times$ of non-zero invertible elements of the field $\mathbb{Q}(i)$ (\texttt{thm34}, \texttt{thm35}, \texttt{thm38}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Strict norm positivity on the $L^1$-diamond and closure in $\mathbb{Q}(i)^\times$:}
-  \begin{equation}
-    \label{eq:diamond-norm-positivity}
-    2\bigl(C^2 + S^2\bigr) \;=\; (C + S)^2 + (C - S)^2 \;\ge\; Q^2 \;\ge\; 1, \qquad
-    R_T(\varphi) \;=\; C^2 + S^2 \;\ge\; 1 \;>\; 0,
-  \end{equation}
+  for $|C| + |S| = Q \ge 1$, the following inequalities hold:
+  \begin{align}
+    2\bigl(C^2 + S^2\bigr) &= (C + S)^2 + (C - S)^2 \;\ge\; Q^2 \;\ge\; 1, \label{eq:diamond-norm-positivity} \\
+    R_T(\varphi) &= C^2 + S^2 \;\ge\; 1 \;>\; 0, \label{eq:weierstrass-denom-pos}
+  \end{align}
   and by Brahmagupta--Fibonacci norm multiplicativity
   \begin{equation}
     \label{eq:brahmagupta-no-zero-divisors}
     (C_1 C_2 - S_1 S_2)^2 + (C_1 S_2 + S_1 C_2)^2 \;=\; (C_1^2 + S_1^2)(C_2^2 + S_2^2) \;\ge\; 1,
   \end{equation}
-  the Gaussian product of any two diamond states is non-zero and invertible in $\mathbb{Q}(i)$.
-\item \textbf{Abelian additive group, Abelian multiplicative group of non-zero elements, and distributivity in $\mathbb{Q}(i)$:}
-  in homogeneous triples $(X,Y,R)\in\mathbb{Z}^3$ representing $(X+iY)/R\in\mathbb{Q}(i)$, the operations
+  the Gaussian product of any two points on the $L^1$-diamond is non-zero and invertible in $\mathbb{Q}(i)$.
+
+\item \textbf{Field axioms and multiplicative inverse in $\mathbb{Q}(i)$:}
+  on homogeneous triples $(X, Y, R) \in \mathbb{Z}^3$ representing the element $(X + iY)/R \in \mathbb{Q}(i)$, the addition and multiplication operations
   \begin{align}
-    (X_1,Y_1,R_1)\oplus(X_2,Y_2,R_2) &:= \bigl(X_1 R_2 + X_2 R_1,\; Y_1 R_2 + Y_2 R_1,\; R_1 R_2\bigr), \label{eq:gauss-field-add} \\
-    (X_1,Y_1,R_1)\otimes(X_2,Y_2,R_2) &:= \bigl(X_1 X_2 - Y_1 Y_2,\; X_1 Y_2 + Y_1 X_2,\; R_1 R_2\bigr) \label{eq:gauss-field-mul}
+    (X_1, Y_1, R_1) \oplus (X_2, Y_2, R_2) &:= \bigl(X_1 R_2 + X_2 R_1,\; Y_1 R_2 + Y_2 R_1,\; R_1 R_2\bigr), \label{eq:gauss-field-add} \\
+    (X_1, Y_1, R_1) \otimes (X_2, Y_2, R_2) &:= \bigl(X_1 X_2 - Y_1 Y_2,\; X_1 Y_2 + Y_1 X_2,\; R_1 R_2\bigr) \label{eq:gauss-field-mul}
   \end{align}
-  satisfy commutativity, associativity, and distributivity, $(X,Y,R)\oplus(-X,-Y,R) = (0,0,R^2)$, and the multiplicative inverse $\texttt{gaussFieldInv}(X,Y,R) = (RX,-RY,X^2+Y^2)$ satisfies
+  are commutative, associative, and distributive, the additive inverse $(-X, -Y, R)$ satisfies $(X, Y, R) \oplus (-X, -Y, R) = (0, 0, R^2)$, and the multiplicative inverse
+  \begin{equation}
+    \label{eq:gauss-field-inv-def}
+    \texttt{gaussFieldInv}(X, Y, R) \;:=\; \bigl(RX,\; -RY,\; X^2 + Y^2\bigr)
+  \end{equation}
+  for $R \ge 1$ and $X^2 + Y^2 \ge 1$ satisfies the projective identity relation:
   \begin{equation}
     \label{eq:gauss-field-inverse}
-    (X,Y,R)\otimes (RX,\,-RY,\,X^2+Y^2) \;=\; \bigl(R(X^2+Y^2),\,0,\,R(X^2+Y^2)\bigr) \;\sim\; (1,0,1).
+    (X, Y, R) \otimes \bigl(RX,\; -RY,\; X^2 + Y^2\bigr) \;=\; \bigl(R(X^2 + Y^2),\; 0,\; R(X^2 + Y^2)\bigr) \;\sim\; (1, 0, 1).
   \end{equation}
+
 \item \textbf{Field axioms, Pell norm multiplicativity, and multiplicative inverse in $\mathbb{Q}(\sqrt{2})$:}
-  in homogeneous triples $(a,b,D)\in\mathbb{Z}^3$ representing $(a+b\sqrt{2})/D\in\mathbb{Q}(\sqrt{2})$, the operations \texttt{sqrt2FieldAdd} and \texttt{sqrt2FieldMul} satisfy commutativity and associativity, the Pell norm is multiplicative:
+  on homogeneous triples $(a, b, D) \in \mathbb{Z}^3$ representing $(a + b\sqrt{2})/D \in \mathbb{Q}(\sqrt{2})$, the operations
+  \begin{align}
+    (a_1, b_1, D_1) \oplus_{\sqrt{2}} (a_2, b_2, D_2) &:= \bigl(a_1 D_2 + a_2 D_1,\; b_1 D_2 + b_2 D_1,\; D_1 D_2\bigr), \label{eq:sqrt2-field-add} \\
+    (a_1, b_1, D_1) \otimes_{\sqrt{2}} (a_2, b_2, D_2) &:= \bigl(a_1 a_2 + 2b_1 b_2,\; a_1 b_2 + b_1 a_2,\; D_1 D_2\bigr) \label{eq:sqrt2-field-mul}
+  \end{align}
+  are commutative, associative, and distributive, the Pell norm is multiplicative:
   \begin{equation}
     \label{eq:pell-norm-mult}
     (a_1 a_2 + 2b_1 b_2)^2 - 2(a_1 b_2 + b_1 a_2)^2 \;=\; (a_1^2 - 2b_1^2)(a_2^2 - 2b_2^2),
   \end{equation}
-  and $\texttt{sqrt2FieldInv}(a,b,D) = (Da,-Db,a^2-2b^2)$ satisfies
+  and the multiplicative inverse $\texttt{sqrt2FieldInv}(a, b, D) := (Da,\, -Db,\, a^2 - 2b^2)$ for $a^2 - 2b^2 \ne 0$ yields
   \begin{equation}
     \label{eq:sqrt2-field-inverse}
-    (a,b,D)\otimes_{\sqrt{2}}(Da,\,-Db,\,a^2-2b^2) \;=\; \bigl(D(a^2-2b^2),\,0,\,D(a^2-2b^2)\bigr) \;\sim\; (1,0,1).
+    (a, b, D) \otimes_{\sqrt{2}} \bigl(Da,\; -Db,\; a^2 - 2b^2\bigr) \;=\; \bigl(D(a^2 - 2b^2),\; 0,\; D(a^2 - 2b^2)\bigr) \;\sim\; (1, 0, 1).
   \end{equation}
-\item \textbf{General field derivative operator $Df$, quotient-derivative Wronskian law, variational derivative $\delta\mathcal{S}/\delta D_w = P_1 Q_2$, and $C^\infty$ Taylor--Newton tower (\texttt{thm35}, \texttt{thm38}):}
-  for any $f,g\colon\mathbb{Z}\to\mathbb{Z}$, the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies
+
+\item \textbf{Derivative operator $Df$, quotient-derivative Wronskian law, and variational Euler--Lagrange derivative (\texttt{thm35}):}
+  for any functions $f, g\colon \mathbb{Z} \to \mathbb{Z}$, the difference derivative $(Df)(x) = f(x+1) - f(x)$ satisfies linearity, the Leibniz product rule, the second-derivative formula, and the Wronskian law for the numerator of the quotient derivative $D(f/g)$:
   \begin{align}
     D(af + bg)(x) &= a\,Df(x) + b\,Dg(x), \label{eq:deriv-lin} \\
     D(f\cdot g)(x) &= f(x+1)\,Dg(x) + Df(x)\,g(x), \label{eq:deriv-leibniz} \\
     D(Df)(x) &= f(x+2) - 2f(x+1) + f(x), \label{eq:deriv-second} \\
-    f(x+1)g(x) - f(x)g(x+1) &= g(x)Df(x) - f(x)Dg(x) \;=\; -\mathcal{W}(f,g)(x), \label{eq:deriv-quotient-wronskian}
+    f(x+1)g(x) - f(x)g(x+1) &= g(x)\,Df(x) - f(x)\,Dg(x) \;=\; -\mathcal{W}(f, g)(x). \label{eq:deriv-quotient-wronskian}
   \end{align}
-  so $f/g$ is stationary at $x \iff \mathcal{W}(f,g)(x)=0$ and strictly increases $\iff \mathcal{W}(f,g)(x)<0$. On any composite trajectory $(L_1,w,L_2)$ with action $\mathcal{S} = Q_2(Q_w D_1 + P_1 D_w) + P_1 P_w D_2$, varying $D_w\mapsto D_w'$ at fixed boundary multipliers $(P_w,Q_w)$ yields
+  For the action functional of a composite trajectory $(L_1, w, L_2)$ of the form
+  \begin{equation}
+    \label{eq:cascade-action-def}
+    \mathcal{S}(D_w) \;=\; Q_2\bigl(Q_w D_1 + P_1 D_w\bigr) + P_1 P_w D_2,
+  \end{equation}
+  varying the active segment drift $D_w \mapsto D_w'$ at fixed boundary multipliers $(P_w, Q_w)$ yields
   \begin{equation}
     \label{eq:variational-euler-lagrange}
-    \delta\mathcal{S} \;=\; \mathcal{S}(D_w') - \mathcal{S}(D_w) \;=\; P_1\,(D_w' - D_w)\,Q_2, \qquad
-    \delta\mathcal{S} = 0 \;\Longleftrightarrow\; D_w' = D_w \quad (P_1,Q_2\ge 1).
+    \delta\mathcal{S} \;=\; \mathcal{S}(D_w') - \mathcal{S}(D_w) \;=\; P_1\,(D_w' - D_w)\,Q_2,
   \end{equation}
-  Moreover, the inductive $n$-th derivative tower $D^n f$ (\texttt{fieldDerivN}) obeys $D^m(D^n f)=D^{m+n}f$, annihilates quadratic polynomials $f_2$ at all orders $n\ge 3$ and cubic polynomials $f_3$ at all orders $n\ge 4$ with exact remainder-free Taylor--Newton series
+  where for $P_1, Q_2 \ge 1$ the stationarity condition $\delta\mathcal{S} = 0$ is equivalent to $D_w' = D_w$.
+
+\item \textbf{Inductive $C^\infty$ tower of higher derivatives $D^n f$, exact Taylor--Newton expansion, and pole-free denominators at all orders (\texttt{thm38}):}
+  the derivative tower
+  \begin{equation}
+    \label{eq:field-deriv-n-def}
+    (D^0 f)(x) \;:=\; f(x),
+    \qquad
+    (D^{n+1} f)(x) \;:=\; (D^n f)(x+1) - (D^n f)(x)
+  \end{equation}
+  satisfies the semigroup composition law
+  \begin{equation}
+    \label{eq:field-deriv-composition}
+    D^m\bigl(D^n f\bigr)(x) \;=\; \bigl(D^{m+n} f\bigr)(x)
+    \qquad (\forall m, n \in \mathbb{N}),
+  \end{equation}
+  annihilates quadratic polynomials $f_2(x) = c_2 x^2 + c_1 x + c_0$ at all orders $n \ge 3$ and cubic polynomials $f_3(x) = c_3 x^3 + c_2 x^2 + c_1 x + c_0$ at all orders $n \ge 4$, reconstructs $f_2(x+h)$ and $f_3(x+h)$ by exact finite Taylor--Newton series without remainder:
   \begin{align}
     2\,f_2(x+h) &= 2\,f_2(x) + 2h\,Df_2(x) + h(h-1)\,D^2f_2(x), \label{eq:taylor-newton-quad} \\
     6\,f_3(x+h) &= 6\,f_3(x) + 6h\,Df_3(x) + 3h(h-1)\,D^2f_3(x) + h(h-1)(h-2)\,D^3f_3(x), \label{eq:taylor-newton-cubic}
   \end{align}
-  and preserves strictly positive denominators across all orders $n\in\mathbb{N}$ whenever $g\ge 1$ ($C^\infty$ pole-free smoothness):
+  and whenever $g(x) \ge 1$ preserves strictly positive denominators of quotient derivatives $D^n(f/g)$ across all orders $n \in \mathbb{N}$:
   \begin{equation}
     \label{eq:c-infinity-denom-pos}
-    \forall n\in\mathbb{N},\ \forall x\in\mathbb{Z},\qquad
-    1 \;\le\; \prod_{j=0}^{n} g(x+j) \quad\text{and}\quad \prod_{j=0}^{n} g(x+j) \;\ne\; 0.
+    \forall n \in \mathbb{N},\ \forall x \in \mathbb{Z},\qquad
+    \prod_{j=0}^{n} g(x+j) \;\ge\; 1.
   \end{equation}
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-(i)~Expanding $(C+S)^2 + (C-S)^2 = (C^2+2CS+S^2) + (C^2-2CS+S^2) = 2(C^2+S^2)$ proves the parallelogram identity in~\eqref{eq:diamond-norm-positivity}. On the $L^1$-diamond $|C|+|S|=Q\ge 1$, either $|C+S|=Q$ (when $C,S$ have the same sign) or $|C-S|=Q$ (when $C,S$ have opposite signs); thus one of $(C+S)^2, (C-S)^2$ equals $Q^2\ge 1$ while the other is a square $\ge 0$, giving $2(C^2+S^2) \ge Q^2 \ge 1$ and hence $C^2+S^2 \ge 1 > 0$ in $\mathbb{Z}$. Equation~\eqref{eq:brahmagupta-no-zero-divisors} follows by expanding both sides; since the product of two integers $\ge 1$ is $\ge 1$, no product of $L^1$-diamond states can vanish.
+We establish items~(i)--(v) in order.
 
-(ii)--(iii)~Commutativity, associativity, and distributivity of~\eqref{eq:gauss-field-add}--\eqref{eq:gauss-field-mul} and of \texttt{sqrt2FieldAdd}/\texttt{sqrt2FieldMul} follow by polynomial expansion over $\mathbb{Z}$. For the multiplicative inverse~\eqref{eq:gauss-field-inverse} in $\mathbb{Q}(i)$,
-\[
-  \bigl(X(RX) - Y(-RY),\; X(-RY) + Y(RX),\; R(X^2+Y^2)\bigr) \;=\; \bigl(R(X^2+Y^2),\; 0,\; R(X^2+Y^2)\bigr),
-\]
-whose first and third entries are equal and non-zero for $R\ge 1, X^2+Y^2\ge 1$. Similarly, in $\mathbb{Q}(\sqrt{2})$, $(a(Da) + 2b(-Db),\, a(-Db) + b(Da),\, D(a^2-2b^2)) = (D(a^2-2b^2),\,0,\,D(a^2-2b^2))$, proving~\eqref{eq:sqrt2-field-inverse}.
+\emph{Item~(i).} Expanding the squares gives the parallelogram identity:
+\begin{equation*}
+  (C + S)^2 + (C - S)^2 \;=\; (C^2 + 2CS + S^2) + (C^2 - 2CS + S^2) \;=\; 2(C^2 + S^2).
+\end{equation*}
+On the $L^1$-diamond $|C| + |S| = Q \ge 1$, the integers $C$ and $S$ have either the same sign (so $|C + S| = |C| + |S| = Q$) or opposite signs (so $|C - S| = |C| + |S| = Q$). In either case, one of the squares $(C + S)^2$ or $(C - S)^2$ equals $Q^2 \ge 1$ while the other is non-negative as the square of an integer. This yields~\eqref{eq:diamond-norm-positivity} and~\eqref{eq:weierstrass-denom-pos}. Equation~\eqref{eq:brahmagupta-no-zero-divisors} is the Brahmagupta--Fibonacci identity; since the product of two integers $\ge 1$ is $\ge 1$, the product of any two diamond points never vanishes.
 
-(iv)~Adding and subtracting $f(x+1)g(x)$ in $D(f\cdot g)(x) = f(x+1)g(x+1) - f(x)g(x)$ yields~\eqref{eq:deriv-leibniz}, while expanding $g(x)(f(x+1)-f(x)) - f(x)(g(x+1)-g(x)) = f(x+1)g(x) - f(x)g(x+1)$ yields~\eqref{eq:deriv-quotient-wronskian}. Subtracting $\mathcal{S}(D_w)$ from $\mathcal{S}(D_w')$ cancels $Q_2 Q_w D_1$ and $P_1 P_w D_2$, leaving $Q_2 P_1(D_w'-D_w) = P_1(D_w'-D_w)Q_2$ in~\eqref{eq:variational-euler-lagrange}; since $P_1 Q_2 \ge 1$ has no zero divisors in $\mathbb{Z}$, $\delta\mathcal{S} = 0 \iff D_w' = D_w$. By induction on $m\in\mathbb{N}$, $D^m(D^n f) = D^{m+n}f$. For $f_2(t) = c_2 t^2 + c_1 t + c_0$, direct evaluation gives $(D^2 f_2)(x) = 2c_2$ (a constant), so $(D^3 f_2)(x) = 0$ and $(D^{k+3}f_2)(x) = D^k(D^3 f_2)(x) = 0$; similarly $(D^3 f_3)(x) = 6c_3$ and $(D^{k+4}f_3)(x) = 0$, and substituting $D f_3(x), D^2 f_3(x), D^3 f_3(x)$ into~\eqref{eq:taylor-newton-cubic} matches $6 f_3(x+h)$ identically. Finally, if $g(t)\ge 1$ for all $t\in\mathbb{Z}$, induction on $n\in\mathbb{N}$ via $\prod_{j=0}^{n+1} g(x+j) = g(x+n+1)\prod_{j=0}^n g(x+j) \ge 1\cdot 1 = 1$ proves~\eqref{eq:c-infinity-denom-pos}.
+\emph{Items~(ii)--(iii).} Commutativity, associativity, and distributivity of~\eqref{eq:gauss-field-add}--\eqref{eq:gauss-field-mul} and~\eqref{eq:sqrt2-field-add}--\eqref{eq:sqrt2-field-mul}, as well as Pell norm multiplicativity~\eqref{eq:pell-norm-mult}, follow by polynomial expansion over $\mathbb{Z}$. Evaluating the product on the left-hand side of~\eqref{eq:gauss-field-inverse} via~\eqref{eq:gauss-field-mul} gives:
+\begin{align*}
+  (X, Y, R) \otimes \bigl(RX,\; -RY,\; X^2 + Y^2\bigr)
+  &= \bigl(X(RX) - Y(-RY),\; X(-RY) + Y(RX),\; R(X^2 + Y^2)\bigr) \\
+  &= \bigl(R(X^2 + Y^2),\; 0,\; R(X^2 + Y^2)\bigr).
+\end{align*}
+Since the first and third entries coincide and equal $R(X^2 + Y^2) \ge 1$, the resulting triple is projectively equivalent to the multiplicative identity $(1, 0, 1)$. Similarly, by~\eqref{eq:sqrt2-field-mul} in $\mathbb{Q}(\sqrt{2})$ we have:
+\begin{align*}
+  (a, b, D) \otimes_{\sqrt{2}} \bigl(Da,\; -Db,\; a^2 - 2b^2\bigr)
+  &= \bigl(a(Da) + 2b(-Db),\; a(-Db) + b(Da),\; D(a^2 - 2b^2)\bigr) \\
+  &= \bigl(D(a^2 - 2b^2),\; 0,\; D(a^2 - 2b^2)\bigr) \;\sim\; (1, 0, 1).
+\end{align*}
+
+\emph{Item~(iv).} Adding and subtracting $f(x+1)g(x)$ in the forward difference of a product yields the Leibniz rule~\eqref{eq:deriv-leibniz}:
+\begin{align*}
+  D(f\cdot g)(x) &= f(x+1)g(x+1) - f(x)g(x) \\
+  &= f(x+1)\bigl(g(x+1) - g(x)\bigr) + \bigl(f(x+1) - f(x)\bigr)g(x) \\
+  &= f(x+1)\,Dg(x) + Df(x)\,g(x).
+\end{align*}
+Expanding the right-hand side of~\eqref{eq:deriv-quotient-wronskian} gives:
+\begin{align*}
+  g(x)\,Df(x) - f(x)\,Dg(x) &= g(x)\bigl(f(x+1) - f(x)\bigr) - f(x)\bigl(g(x+1) - g(x)\bigr) \\
+  &= f(x+1)g(x) - f(x)g(x+1) \;=\; -\mathcal{W}(f, g)(x).
+\end{align*}
+Subtracting $\mathcal{S}(D_w)$ from $\mathcal{S}(D_w')$ in~\eqref{eq:cascade-action-def} cancels the boundary terms $Q_2 Q_w D_1$ and $P_1 P_w D_2$, leaving
+\begin{equation*}
+  \delta\mathcal{S} \;=\; Q_2 P_1 (D_w' - D_w) \;=\; P_1\,(D_w' - D_w)\,Q_2,
+\end{equation*}
+proving~\eqref{eq:variational-euler-lagrange}.
+
+\emph{Item~(v).} The composition law~\eqref{eq:field-deriv-composition} follows by induction on $m \in \mathbb{N}$: for $m = 0$ both sides equal $D^n f$, and the inductive step $m \to m + 1$ follows from~\eqref{eq:field-deriv-n-def}. For a quadratic polynomial $f_2(x) = c_2 x^2 + c_1 x + c_0$, direct evaluation gives:
+\begin{align*}
+  (Df_2)(x) &= 2c_2 x + c_2 + c_1, \\
+  (D^2 f_2)(x) &= 2c_2 \;=\; \mathrm{const}, \\
+  (D^3 f_2)(x) &= 2c_2 - 2c_2 \;=\; 0,
+\end{align*}
+whence by~\eqref{eq:field-deriv-composition} we have $(D^{k+3} f_2)(x) = D^k(D^3 f_2)(x) = 0$ for all $k \in \mathbb{N}$. Similarly, for a cubic polynomial $f_3(x)$ we have $(D^3 f_3)(x) = 6c_3 = \mathrm{const}$ and $(D^{k+4} f_3)(x) = 0$, while substituting the expressions for $Df_3(x)$, $D^2 f_3(x)$, and $D^3 f_3(x)$ into the right-hand side of~\eqref{eq:taylor-newton-cubic} matches $6 f_3(x+h)$ identically. Finally, when $g(t) \ge 1$, induction on $n \in \mathbb{N}$ with base case $g(x) \ge 1$ and inductive step
+\begin{equation*}
+  \prod_{j=0}^{n+1} g(x+j) \;=\; g(x+n+1)\prod_{j=0}^{n} g(x+j) \;\ge\; 1\cdot 1 \;=\; 1
+\end{equation*}
+proves~\eqref{eq:c-infinity-denom-pos}.
 \end{proof}
 
-\section{Native Non-Elementary Basis and Closed-Form Evaluation of Fresnel, Jacobi, Dirichlet, Parseval, and Bessel Integrals}
+\section{Closed-Form Evaluation of Fresnel, Jacobi, Dirichlet, Parseval, and Bessel Integrals}
 \label{sec:integrals}
 
-In Liouville's differential algebra, Fresnel integrals $\int\cos(\varphi^2)\,\mathrm{d}\varphi$, elliptic integrals, Dirichlet's sine integral $\mathrm{Si}(\Phi)$, and Bessel integrals $J_0(k)$ admit no closed form in terms of the elementary circular exponential. On $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, two native operators close these families:
-\begin{enumerate}[leftmargin=*,noitemsep]
+In Liouville's differential algebra, Fresnel diffraction integrals, elliptic integrals, Dirichlet's sine integral, and Bessel integrals admit no closed form in terms of the elementary circular exponential. On the phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, these families close via two operators:
+\begin{enumerate}[leftmargin=*]
 \item The two-tick symplectic Verlet difference recurrence
   \begin{equation}
-    \label{eq:verlet-parabola}
-    \varphi(t+1) - 2\varphi(t) + \varphi(t-1) = \Phi_{\mathrm{accel}}
-    \quad\Longrightarrow\quad
-    \varphi(t) = \varphi_0 + \omega_0 t + \Phi_{\mathrm{accel}}\,\frac{t(t-1)}{2}
+    \label{eq:verlet-recurrence}
+    \varphi(t+1) - 2\varphi(t) + \varphi(t-1) \;=\; \Phi_{\mathrm{accel}}
   \end{equation}
-  generates Liouville's elementary circular basis at zero acceleration ($\Phi_{\mathrm{accel}}=0$) and the quadratic-phase Fresnel--Airy basis at constant non-zero acceleration ($\Phi_{\mathrm{accel}}\ne 0$).
-\item On two coupled rings at the intrinsic cuboctahedron modulus $k^2 = 1/\|e\|_2^2 = 1/(d-1) = 1/2$ (Gauss's lemniscate modulus with complex multiplication in $\mathbb{Z}[i]$), the Jacobi triad $\mathrm{sn}_d(\varphi):=\mathcal{S}_d(\varphi)$, $\mathrm{cn}_d(\varphi):=\mathcal{C}_d(\varphi)$, $2\,\mathrm{dn}_d(\varphi):=\Phi_{\mathrm{half}}(d)-|\mathcal{S}_d(\varphi)|$ satisfies both conservation laws in exact integers.
+  has the exact quadratic-phase solution
+  \begin{equation}
+    \label{eq:verlet-parabola}
+    \varphi(t) \;=\; \varphi_0 + \omega_0 t + \Phi_{\mathrm{accel}}\,\frac{t(t-1)}{2},
+  \end{equation}
+  which generates Liouville's elementary circular basis at zero acceleration ($\Phi_{\mathrm{accel}} = 0$) and the quadratic-phase Fresnel--Airy basis at constant non-zero acceleration ($\Phi_{\mathrm{accel}} \ne 0$).
+\item On two coupled rings at Gauss's lemniscate modulus $k^2 = 1/\|e\|_2^2 = 1/2$, the Jacobi elliptic triad is defined by:
+  \begin{align}
+    \mathrm{sn}_Q(\varphi) &:= \mathcal{S}_Q(\varphi), \label{eq:jacobi-sn} \\
+    \mathrm{cn}_Q(\varphi) &:= \mathcal{C}_Q(\varphi), \label{eq:jacobi-cn} \\
+    2\,\mathrm{dn}_Q(\varphi) &:= 2Q - |\mathcal{S}_Q(\varphi)|. \label{eq:jacobi-dn}
+  \end{align}
 \end{enumerate}
 
 Define the five canonical ring integrals:
 \begin{align}
-  \mathcal{C}_{\mathrm{Fresnel}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d(\varphi^2),\qquad
-  \mathcal{S}_{\mathrm{Fresnel}}(d) := \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{S}_d(\varphi^2), \label{eq:def-fresnel}\\
-  \mathcal{I}_{\mathrm{ell}}(d;a,b) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\bigl(a\,|\mathcal{C}_d(\varphi)| + b\,|\mathcal{S}_d(\varphi)|\bigr), \label{eq:def-elliptic}\\
-  \mathrm{Si}_d(\Phi) &:= \sum_{\varphi=1}^{\Phi}\mathrm{tdiv}\bigl(\mathcal{S}_d(\varphi),\,\varphi\bigr), \label{eq:def-dirichlet}\\
-  \mathcal{I}_{\mathrm{Parseval}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d(\varphi)^2 = \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{S}_d(\varphi)^2, \label{eq:def-parseval}\\
-  \mathcal{J}_{0,d}(k) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d\bigl(k\,\mathcal{S}_d(\varphi)\bigr). \label{eq:def-bessel}
+  \mathcal{C}_{\mathrm{Fresnel}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d(\varphi^2), \label{eq:def-fresnel-c} \\
+  \mathcal{S}_{\mathrm{Fresnel}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{S}_d(\varphi^2), \label{eq:def-fresnel-s} \\
+  \mathcal{I}_{\mathrm{ell}}(d; a, b) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\bigl(a\,|\mathcal{C}_d(\varphi)| + b\,|\mathcal{S}_d(\varphi)|\bigr), \label{eq:def-elliptic} \\
+  \mathrm{Si}_d(\Phi) &:= \sum_{\varphi=1}^{\Phi}\mathrm{tdiv}\bigl(\mathcal{S}_d(\varphi),\, \varphi\bigr), \label{eq:def-dirichlet} \\
+  \mathcal{I}_{\mathrm{Parseval}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d(\varphi)^2 \;=\; \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{S}_d(\varphi)^2, \label{eq:def-parseval} \\
+  \mathcal{J}_{0,d}(k) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d\bigl(k\,\mathcal{S}_d(\varphi)\bigr), \label{eq:def-bessel}
 \end{align}
+where $\mathrm{tdiv}(a, b)$ denotes integer division truncated toward zero.
 
-\begin{theorem}[Lemniscate Jacobi Elliptic Triad Invariants and Parametric Multi-Turn Elliptic Integrals]
+\begin{theorem}[Lemniscate Jacobi Elliptic Triad Invariants and Parametric Elliptic Integrals]
 \label{thm:main-2}
-For all $Q,m,k_{\mathrm{turns}},a,b\in\mathbb{Z}$ and any integration horizon $L\in\mathbb{N}$, the Jacobi elliptic triad on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
-\[
-  |\mathrm{sn}_Q(\varphi)| + |\mathrm{cn}_Q(\varphi)| \;=\; m + (Q-m) \;\equiv\; Q,\qquad
-  2\,\mathrm{dn}_Q(\varphi) + |\mathrm{sn}_Q(\varphi)| \;=\; (2Q-m) + m \;\equiv\; 2Q,
-\]
-so factoring the pointwise-constant invariants out of the integral yields $\sum_{\varphi=0}^{L-1}(|\mathrm{sn}_Q|+|\mathrm{cn}_Q|) = L Q$ and $\sum_{\varphi=0}^{L-1}(2\,\mathrm{dn}_Q+|\mathrm{sn}_Q|) = 2 L Q$, while for $d=3$ ($Q_\square(3)=128$) and any linear weights $a,b\in\mathbb{Z}$:
-\begin{equation}
-  \label{eq:parametric-elliptic}
-  k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{ell}}(3;\,a,b) \;=\; 32,768\,k_{\mathrm{turns}}(a+b),\qquad
-  \sum_{\varphi=0}^{127}\bigl(a\,\mathcal{C}_3(\varphi) + b\,\mathcal{S}_3(\varphi)\bigr) \;=\; 8256\,a + 8128\,b.
-\end{equation}
+For all $Q, m, k_{\mathrm{turns}}, a, b \in \mathbb{Z}$ and any integration horizon $L \in \mathbb{N}$, the Jacobi triad~\eqref{eq:jacobi-sn}--\eqref{eq:jacobi-dn} on $\mathbb{Z}_{4Q}$ satisfies the pointwise conservation laws (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+\begin{align}
+  |\mathrm{sn}_Q(\varphi)| + |\mathrm{cn}_Q(\varphi)| &= m + (Q - m) \;\equiv\; Q, \label{eq:jacobi-inv-1} \\
+  2\,\mathrm{dn}_Q(\varphi) + |\mathrm{sn}_Q(\varphi)| &= (2Q - m) + m \;\equiv\; 2Q, \label{eq:jacobi-inv-2}
+\end{align}
+the integral identities over any horizon $L \in \mathbb{N}$:
+\begin{align}
+  \sum_{\varphi=0}^{L-1}\bigl(|\mathrm{sn}_Q(\varphi)| + |\mathrm{cn}_Q(\varphi)|\bigr) &= L\,Q, \label{eq:jacobi-int-1} \\
+  \sum_{\varphi=0}^{L-1}\bigl(2\,\mathrm{dn}_Q(\varphi) + |\mathrm{sn}_Q(\varphi)|\bigr) &= 2\,L\,Q, \label{eq:jacobi-int-2}
+\end{align}
+and the closed-form evaluations at $d = 3$ ($Q_\square(3) = 128$):
+\begin{align}
+  k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{ell}}(3;\, a, b) &= 32,768\,k_{\mathrm{turns}}(a + b), \label{eq:parametric-elliptic-full} \\
+  \sum_{\varphi=0}^{127}\bigl(a\,\mathcal{C}_3(\varphi) + b\,\mathcal{S}_3(\varphi)\bigr) &= 8256\,a + 8128\,b. \label{eq:parametric-elliptic-quad}
+\end{align}
 \end{theorem}
+
+\begin{proof}
+Identities~\eqref{eq:jacobi-inv-1} and~\eqref{eq:jacobi-inv-2} follow by direct substitution of the local projections $|\mathrm{sn}_Q| = m$, $|\mathrm{cn}_Q| = Q - m$, and $2\,\mathrm{dn}_Q = 2Q - m$. Since the right-hand sides of~\eqref{eq:jacobi-inv-1} and~\eqref{eq:jacobi-inv-2} are constant in phase, factoring the constant out of the sum via Theorem~\ref{thm:main-1}(iv)~\eqref{eq:constant-extraction} yields~\eqref{eq:jacobi-int-1} and~\eqref{eq:jacobi-int-2}. Over the full ring $N_{\mathrm{ring}}(3) = 512$, each absolute projection $|\mathcal{C}_3|$ and $|\mathcal{S}_3|$ equals the sum of two positive half-waves~\eqref{eq:half-wave-area}:
+\begin{equation*}
+  \sum_{\varphi=0}^{511} |\mathcal{C}_3(\varphi)| \;=\; \sum_{\varphi=0}^{511} |\mathcal{S}_3(\varphi)| \;=\; 2\,Q_\square(3)^2 \;=\; 2\times 128^2 \;=\; 32,768,
+\end{equation*}
+which by linearity gives~\eqref{eq:parametric-elliptic-full}. Over the first quadrant $\varphi \in [0, 127]$, we have $\mathcal{C}_3(m) = 128 - m$ and $\mathcal{S}_3(m) = m$, so by the arithmetic series formula:
+\begin{align*}
+  \sum_{m=0}^{127} \mathcal{C}_3(m) &= \sum_{m=0}^{127} (128 - m) \;=\; \frac{128\cdot 129}{2} \;=\; 8256, \\
+  \sum_{m=0}^{127} \mathcal{S}_3(m) &= \sum_{m=0}^{127} m \;=\; \frac{127\cdot 128}{2} \;=\; 8128,
+\end{align*}
+proving~\eqref{eq:parametric-elliptic-quad}.
+\end{proof}
 
 \begin{theorem}[Closed-Form Fresnel Diffraction, Dirichlet, Parseval, and Bessel Integrals]
 \label{thm:main-2b}
-For $d=3$ and any amplitude factor $c_{\mathrm{sq}}\in\mathbb{Z}$ and turn count $k_{\mathrm{turns}}\in\mathbb{Z}$ (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+At $d = 3$, for all $c_{\mathrm{sq}}, k_{\mathrm{turns}} \in \mathbb{Z}$, the following exact closed-form evaluations hold (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Fresnel diffraction integrals:}
   \begin{equation}
     \label{eq:fresnel-closed}
     \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{C}_3(\varphi^2) \;=\; \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{S}_3(\varphi^2) \;=\; 2048\,c_{\mathrm{sq}},
   \end{equation}
-  concentrated at the stationary-phase bisector $\psi = K_P(3) = 64$.
+  where the entire non-zero contribution is concentrated at the $32$ points of the stationary-phase bisector $\psi = K_P(3) = 64$.
 \item \textbf{Dirichlet sine integral and Parseval energy integral:}
-  \begin{equation}
-    \label{eq:dirichlet-parseval-closed}
-    \mathrm{Si}_3(128) \;=\; \mathrm{Si}_3(256) \;=\; 128, \qquad
-    6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) \;=\; k_{\mathrm{turns}}\,N_{\mathrm{ring}}(3)\bigl(2Q_\square(3)^2+1\bigr) \;=\; 16,777,728\,k_{\mathrm{turns}},
-  \end{equation}
-  so that $\mathcal{I}_{\mathrm{Parseval}}(3) = 2,796,288$.
+  \begin{align}
+    \mathrm{Si}_3(128) &= \mathrm{Si}_3(256) \;=\; 128, \label{eq:dirichlet-closed} \\
+    6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) &= k_{\mathrm{turns}}\,N_{\mathrm{ring}}(3)\bigl(2\,Q_\square(3)^2 + 1\bigr) \;=\; 16,777,728\,k_{\mathrm{turns}}, \label{eq:parseval-closed}
+  \end{align}
+  whence $\mathcal{I}_{\mathrm{Parseval}}(3) = 2,796,288$.
 \item \textbf{Discrete Bessel integral and its exact root:}
-  \begin{equation}
-    \label{eq:bessel-closed}
-    \mathcal{J}_{0,3}(0) \;=\; 65,536, \qquad
-    \mathcal{J}_{0,3}(1) \;=\; 32,768, \qquad
-    \mathcal{J}_{0,3}\bigl(d_{\mathrm{in}}(\square)\bigr) \;=\; \mathcal{J}_{0,3}(4) \;=\; 0.
-  \end{equation}
+  \begin{align}
+    \mathcal{J}_{0,3}(0) &= 65,536, \label{eq:bessel-k0} \\
+    \mathcal{J}_{0,3}(1) &= 32,768, \label{eq:bessel-k1} \\
+    \mathcal{J}_{0,3}\bigl(d_{\mathrm{in}}(\square)\bigr) &= \mathcal{J}_{0,3}(4) \;=\; 0. \label{eq:bessel-k4}
+  \end{align}
 \end{enumerate}
 \end{theorem}
 
-\begin{proof}[Proof of Theorems~\ref{thm:main-2}--\ref{thm:main-2b}]
-In Theorem~\ref{thm:main-2}, $|\mathrm{sn}_Q(\varphi)|+|\mathrm{cn}_Q(\varphi)| = m+(Q-m)\equiv Q$ and $2\,\mathrm{dn}_Q(\varphi)+|\mathrm{sn}_Q(\varphi)| = (2Q-m)+m\equiv 2Q$ are pointwise constants in $m$, so Theorem~\ref{thm:main-1}(ii) extracts them out of $\sum_{\varphi=0}^{L-1}$. Over the full ring $N_{\mathrm{ring}}(3)=512$, each of $|\mathcal{C}_3|$ and $|\mathcal{S}_3|$ sums to $2 Q_\square(3)^2 = 2\times 128^2 = 32,768$, while over Quadrant~I ($\varphi\in[0,127]$) we have $\sum_{m=0}^{127}(128-m) = \frac{128\times 129}{2} = 8256$ and $\sum_{m=0}^{127} m = \frac{127\times 128}{2} = 8128$, proving~\eqref{eq:parametric-elliptic}.
+\begin{proof}
+We prove items~(i)--(iii) in sequence.
 
-For Theorem~\ref{thm:main-2b}(i), partition $\varphi\in\{0,\dots,511\}$ by the $2$-adic valuation of $\varphi$: for odd $\varphi$ and for $\varphi\equiv 2,4\pmod 8$, the map $\varphi\mapsto \varphi+128$ (or $\varphi+64$) shifts $\varphi^2\pmod{512}$ by $+256$, so these cosets cancel pairwise via Euler's identity $\mathcal{E}_3(\psi+256) = -\mathcal{E}_3(\psi)$. For $\varphi\equiv 0\pmod{16}$, $\varphi^2\equiv 0\pmod{512}$ ($32$ points) and for $\varphi\equiv 8\pmod{16}$ ($\varphi=8(2k+1)$, $32$ points), $(8(2k+1))^2 = 64(4k(k+1)+1)\equiv 64\pmod{512}$. Since $\mathcal{C}_3(0)+\mathcal{C}_3(256) = 128-128=0$ on the $\varphi\equiv 0\pmod 8$ subcosets except at the stationary-phase bisector $\psi=64$ where $\mathcal{C}_3(64)=\mathcal{S}_3(64)=64$, the $32$ surviving stationary points yield $32\times 64 = 2048$, proving~\eqref{eq:fresnel-closed}.
+\emph{Item~(i).} Partition the $512$ residues $\varphi \in \{0, 1, \dots, 511\}$ by their $2$-adic valuation:
+\begin{itemize}[leftmargin=*]
+\item For odd $\varphi = 2k + 1$ ($256$ points) and even $\varphi \equiv 2, 4, 6 \pmod 8$ ($192$ points), shifting the argument by $+128$ or $+64$ shifts the quadratic phase $\varphi^2 \pmod{512}$ by the exact half-period $+256$. By Euler's identity~\eqref{eq:rotator-euler-identity}, these $448$ terms cancel pairwise to zero:
+  \begin{equation*}
+    \mathcal{E}_3(\psi + 256) + \mathcal{E}_3(\psi) \;=\; (0,\, 0).
+  \end{equation*}
+\item For $\varphi \equiv 0 \pmod{16}$ ($32$ points of the form $\varphi = 16k$), the square is divisible by $256$, where the $16$ points with even $k$ yield $\varphi^2 \equiv 0 \pmod{512}$ ($\mathcal{C}_3(0) = +128$) and the $16$ points with odd $k$ yield $\varphi^2 \equiv 256 \pmod{512}$ ($\mathcal{C}_3(256) = -128$), summing to zero.
+\item For the remaining $32$ points $\varphi \equiv 8 \pmod{16}$, of the form $\varphi = 8(2k + 1)$ for $k \in \{0, \dots, 31\}$, the square evaluates to
+  \begin{equation*}
+    \varphi^2 \;=\; 64\,(2k + 1)^2 \;=\; 64\,\bigl(8\,\tfrac{k(k+1)}{2} + 1\bigr) \;\equiv\; 64 \pmod{512}.
+  \end{equation*}
+  All $32$ of these points land on the stationary-phase bisector $\psi = K_P(3) = 64$, where $\mathcal{C}_3(64) = \mathcal{S}_3(64) = 64$, yielding
+  \begin{equation*}
+    \mathcal{C}_{\mathrm{Fresnel}}(3) \;=\; \mathcal{S}_{\mathrm{Fresnel}}(3) \;=\; 32 \times 64 \;=\; 2048.
+  \end{equation*}
+\end{itemize}
+Multiplying by the constant $c_{\mathrm{sq}}$ via~\eqref{eq:linear-factor-extraction} gives~\eqref{eq:fresnel-closed}.
 
-For Theorem~\ref{thm:main-2b}(ii), in Quadrant~I ($\varphi\in[1,128]$) we have $\mathcal{S}_3(\varphi) = \varphi$, so $\mathrm{tdiv}(\mathcal{S}_3(\varphi),\varphi) = 1$ for $1\le\varphi\le 128$, giving $\mathrm{Si}_3(128) = \sum_{\varphi=1}^{128} 1 = 128$, while for $129\le\varphi\le 256$ we have $0\le\mathcal{S}_3(\varphi)=256-\varphi < \varphi$, so $\mathrm{tdiv}(\mathcal{S}_3(\varphi),\varphi)=0$ and $\mathrm{Si}_3(256)=128$. For Parseval's integral, summing $\mathcal{S}_3(\varphi)^2$ across the four quadrants gives $4\sum_{m=1}^{Q-1} m^2 + 2 Q^2 = \frac{2Q(2Q^2+1)}{3}$; multiplying by $6$ gives $6\,\mathcal{I}_{\mathrm{Parseval}}(3) = 4Q(2Q^2+1) = 512\times 32,769 = 16,777,728$.
+\emph{Item~(ii).} On the first quadrant $1 \le \varphi \le 128$, we have $\mathcal{S}_3(\varphi) = \varphi$, so $\mathrm{tdiv}(\mathcal{S}_3(\varphi), \varphi) = \mathrm{tdiv}(\varphi, \varphi) = 1$ and
+\begin{equation*}
+  \mathrm{Si}_3(128) \;=\; \sum_{\varphi=1}^{128} 1 \;=\; 128.
+\end{equation*}
+On the second quadrant $129 \le \varphi \le 256$, we have $0 \le \mathcal{S}_3(\varphi) = 256 - \varphi < \varphi$, so truncated integer division gives $\mathrm{tdiv}(256 - \varphi, \varphi) = 0$, whence $\mathrm{Si}_3(256) = \mathrm{Si}_3(128) = 128$, proving~\eqref{eq:dirichlet-closed}.
 
-For Theorem~\ref{thm:main-2b}(iii), at $k=0$, $\mathcal{C}_3(0)=128$ across all $512$ points gives $512\times 128 = 65,536$. At $k=1$, as $\mathcal{S}_3(\varphi)$ sweeps $[-128,128]$ uniformly four times, $\mathcal{C}_3(\mathcal{S}_3(\varphi)) = 128 - |\mathcal{S}_3(\varphi)|$ averages to $64$, yielding $512\times 64 = 32,768$. At $k=4$, as $\mathcal{S}_3(\varphi)$ steps by $\pm 1$, the argument $4\mathcal{S}_3(\varphi)$ sweeps full periods of $512$ uniformly, so $\mathcal{J}_{0,3}(4) = 0$ by full-turn cancellation~\eqref{eq:half-wave-quarter-square}.
+For Parseval's integral~\eqref{eq:def-parseval}, the sum of squares across the four quadrants of length $Q = 128$ consists of two peaks $\pm Q$ and four sums of squares from $1$ to $Q - 1$:
+\begin{equation*}
+  \mathcal{I}_{\mathrm{Parseval}}(d) \;=\; 2\,Q^2 + 4\sum_{m=1}^{Q-1} m^2 \;=\; 2\,Q^2 + \frac{4(Q - 1)Q(2Q - 1)}{6} \;=\; \frac{4Q(2Q^2 + 1)}{6}.
+\end{equation*}
+Multiplying both sides by $6\,k_{\mathrm{turns}}$ and substituting $4Q = N_{\mathrm{ring}}(3) = 512$ and $2Q^2 + 1 = 32,769$ gives~\eqref{eq:parseval-closed}:
+\begin{equation*}
+  6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) \;=\; 512 \times 32,769\,k_{\mathrm{turns}} \;=\; 16,777,728\,k_{\mathrm{turns}}.
+\end{equation*}
+
+\emph{Item~(iii).} At $k = 0$, $\mathcal{C}_3(0) = 128$ at all $512$ points, giving $\mathcal{J}_{0,3}(0) = 512 \times 128 = 65,536$. At $k = 1$, since $|\mathcal{S}_3(\varphi)| \le 128$, we have $\mathcal{C}_3(\mathcal{S}_3(\varphi)) = 128 - |\mathcal{S}_3(\varphi)| = |\mathcal{C}_3(\varphi)|$, whose sum over the ring is $2\,Q^2 = 32,768$. At $k = 4$, as $\varphi$ traverses each quadrant of length $128$, the argument $4\,\mathcal{S}_3(\varphi)$ steps by $\pm 4$ across a full period of $512$, over which the sum of $\mathcal{C}_3$ vanishes by~\eqref{eq:full-turn-zero}. This proves~\eqref{eq:bessel-k0}--\eqref{eq:bessel-k4}.
 \end{proof}
 
-\section{Emergence of the Continuum Circle, \texorpdfstring{$\pi$}{pi}, and the Riemann Integral from 512-gon Rectification and the Equizonal Partition of the Cuboctahedron}
+\section{Three-Dimensional Riemann Cubature on the Cuboctahedron and Rational Brackets for \texorpdfstring{$\pi$}{pi}}
 \label{sec:continuum-emergence}
 
-For any 3D function $F\colon\mathbb{Z}^3\to\mathbb{Z}$, define the natural center-plus-shell integrator on the cuboctahedron ball $B_1(d)=\{0\}\cup O_2(d)$, weighting the origin $(0,0,0)$ by $|V_{O_2}(d)|=12$ equally against the sum over the $12$ vertices of $O_2(d)$:
+For any three-dimensional function $F\colon \mathbb{Z}^3 \to \mathbb{Z}$, define the $13$-point center-plus-shell cubature operator on the cuboctahedron $O_2(d)$, assigning weight $|V_{O_2}(d)| = 12$ to the origin $(0, 0, 0)$ alongside the sum over the $12$ shell vertices of $O_2(d)$:
 \begin{equation}
   \label{eq:cuboct-3d-integrator}
-  \widehat{\mathcal{I}}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0,0,0) \;+\; \sum_{e\in O_2(d)} F(e_x,e_y,e_z).
+  \widehat{\mathcal{I}}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0, 0, 0) \;+\; \sum_{e \in O_2(d)} F(e_x, e_y, e_z).
 \end{equation}
 
 \begin{theorem}[Equizonal Partition and Functional 3D Cubature on the Cuboctahedron]
 \label{thm:main-3}
-For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficients $c_0,c_x,c_y,c_z,c_{xy},c_{xz},c_{yz}\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+At $d = 3$, for any functions $F, G\colon \mathbb{Z}^3 \to \mathbb{Z}$ of arbitrary degree and any coefficients $c_0, c_x, c_y, c_z, c_{xy}, c_{xz}, c_{yz} \in \mathbb{Z}$, the following statements hold (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Equizonal partition into Simpson weights $(4,16,4)=4\times(1,4,1)$:}
-  slicing $O_2(3)$ along $e_x\in\{-1,0,+1\}$ partitions the $12$ vertices into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each; adding the origin weight $|V_{O_2}(3)|=12$ to the equatorial zone $e_x=0$ yields $(4,16,4)$ with total weight $24$.
-\item \textbf{Functional additivity, odd-function annihilation, and unified even quadratic/quartic cubature:}
-  for all functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$ of arbitrary degree,
+\item \textbf{Equizonal partition and Simpson weights:}
+  projecting the $12$ vertices of the cuboctahedron $O_2(3)$ onto any coordinate axis $e_x \in \{-1, 0, +1\}$ partitions the shell into three equizonal belts of $4$ vertices each:
+  \begin{equation}
+    \label{eq:equizonal-444}
+    \bigl(|Z_{-1}|,\, |Z_0|,\, |Z_{+1}|\bigr) \;=\; (4,\, 4,\, 4),
+  \end{equation}
+  which combined with the central node of weight $12$ in the operator~\eqref{eq:cuboct-3d-integrator} form the one-dimensional parabolic Simpson weights of total weight $24$:
+  \begin{equation}
+    \label{eq:simpson-weights-4-16-4}
+    (4,\, 4 + 12,\, 4) \;=\; (4,\, 16,\, 4) \;=\; 4\times(1,\, 4,\, 1).
+  \end{equation}
+
+\item \textbf{Additivity and annihilation of odd functions of arbitrary order:}
+  the functional $\widehat{\mathcal{I}}_{O_2(3)}$ is linear and identically annihilates every centrally odd and every axis-reflection-odd function:
   \begin{align}
-    \widehat{\mathcal{I}}_{O_2(3)}(F+G) &= \widehat{\mathcal{I}}_{O_2(3)}(F) + \widehat{\mathcal{I}}_{O_2(3)}(G), \label{eq:functional-additivity} \\
-    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(\mathbf{e}) - F(-\mathbf{e})\bigr) &= 0, \qquad
-    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(e_x,e_y,e_z) - F(-e_x,e_y,e_z)\bigr) = 0, \label{eq:functional-odd-annihilation}
+    \widehat{\mathcal{I}}_{O_2(3)}(F + G) &= \widehat{\mathcal{I}}_{O_2(3)}(F) + \widehat{\mathcal{I}}_{O_2(3)}(G), \label{eq:functional-additivity} \\
+    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(\mathbf{e}) - F(-\mathbf{e})\bigr) &= 0, \label{eq:functional-central-odd} \\
+    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(e_x, e_y, e_z) - F(-e_x, e_y, e_z)\bigr) &= 0. \label{eq:functional-axis-odd}
   \end{align}
-  and on every even quadratic/quartic polynomial ($e_i^4 = e_i^2$ on $O_2(3)$):
+
+\item \textbf{Exact three-dimensional Riemann cubature and 2nd/4th moment isotropy laws:}
+  on every even quadratic and biquadratic form (using $e_i^4 = e_i^2$ on $O_2(3)$), the operator~\eqref{eq:cuboct-3d-integrator} evaluates to
   \begin{equation}
     \label{eq:unified-even-cubature}
     \widehat{\mathcal{I}}_{O_2(3)}\!\bigl(c_0 + c_x e_x^2 + c_y e_y^2 + c_z e_z^2 + c_{xy} e_x^2 e_y^2 + c_{xz} e_x^2 e_z^2 + c_{yz} e_y^2 e_z^2\bigr)
-    \;=\; 24\,c_0 + 8(c_x+c_y+c_z) + 4(c_{xy}+c_{xz}+c_{yz}),
+    \;=\; 24\,c_0 + 8(c_x + c_y + c_z) + 4(c_{xy} + c_{xz} + c_{yz}),
   \end{equation}
-  simultaneously reproducing the exact 3D continuum Riemann integral $3\iiint_{[-1,1]^3} P\,\mathrm{d}V = 24c_0 + 8(c_x+c_y+c_z)$ for every cubic polynomial $P$, the $O(|\mathbf{k}|^2)$ spherical isotropy, and the $O(|\mathbf{k}|^4)$ fourth-moment law:
+  reproducing the exact three-dimensional continuum Riemann integral for every cubic polynomial $P(x, y, z)$:
   \begin{equation}
-    \label{eq:cuboct-isotropy-moments}
-    \sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^2 \;=\; 8\,|\mathbf{k}|^2, \qquad
-    \sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^4 \;=\; 8\sum_{i=1}^3 k_i^4 + 24\sum_{1\le i<j\le 3}k_i^2 k_j^2 \;=\; 12\,|\mathbf{k}|^4 - 4\sum_{i=1}^3 k_i^4.
+    \label{eq:riemann-3d-exact}
+    \widehat{\mathcal{I}}_{O_2(3)}(P) \;=\; 3\iiint_{[-1,1]^3} P(x, y, z)\,\mathrm{d}x\,\mathrm{d}y\,\mathrm{d}z \;=\; 24\,c_0 + 8(c_x + c_y + c_z),
   \end{equation}
+  together with spherical second-moment isotropy and the fourth-moment law for any wavevector $\mathbf{k} = (k_1, k_2, k_3) \in \mathbb{Z}^3$:
+  \begin{align}
+    \sum_{e \in O_2(3)} (\mathbf{k}\cdot e)^2 &= 8\,|\mathbf{k}|^2, \label{eq:cuboct-isotropy-2} \\
+    \sum_{e \in O_2(3)} (\mathbf{k}\cdot e)^4 &= 8\sum_{i=1}^3 k_i^4 + 24\sum_{1\le i<j\le 3} k_i^2 k_j^2 \;=\; 12\,|\mathbf{k}|^4 - 4\sum_{i=1}^3 k_i^4. \label{eq:cuboct-isotropy-4}
+  \end{align}
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-(i)~The $12$ vertices of $O_2(3) = \{e\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2=2\}$ partition by $e_x$ into $e_x=-1$: $\{(-1,\pm 1,0),(-1,0,\pm 1)\}$ ($4$ vertices), $e_x=0$: $\{(0,\pm 1,\pm 1)\}$ ($4$ vertices), and $e_x=+1$: $\{(+1,\pm 1,0),(+1,0,\pm 1)\}$ ($4$ vertices). Adding the central node $(0,0,0)$ of weight $12$ to the $e_x=0$ slice yields slice weights $(4, 4+12, 4) = (4, 16, 4) = 4\times(1, 4, 1)$ of total weight $24$.
+We prove items~(i)--(iii) in sequence.
 
-(ii)~Linearity and odd-function annihilation~\eqref{eq:functional-odd-annihilation} follow from the central symmetry $\mathbf{e}\mapsto -\mathbf{e}$ and coordinate reflection symmetry $e_x\mapsto -e_x$ of $O_2(3)$. On $O_2(3)$, each coordinate $e_i^2\in\{0,1\}$ is non-zero on exactly $8$ vertices, so $\widehat{\mathcal{I}}_{O_2(3)}(e_i^2) = 8$, while each pair product $e_i^2 e_j^2$ ($i\ne j$) is non-zero on the $4$ vertices in the $(i,j)$-coordinate plane, giving $\widehat{\mathcal{I}}_{O_2(3)}(e_i^2 e_j^2) = 4$ and proving~\eqref{eq:unified-even-cubature}. Since $3\iiint_{[-1,1]^3} 1\,\mathrm{d}V = 3\times 8 = 24$, $3\iiint_{[-1,1]^3} x^2\,\mathrm{d}V = 3\times \frac{8}{3} = 8$, and all odd monomials integrate to $0$, $\frac{1}{3}\widehat{\mathcal{I}}_{O_2(3)}(P)$ equals $\iiint_{[-1,1]^3} P\,\mathrm{d}V$ for every cubic polynomial $P$. Expanding $(\mathbf{k}\cdot e)^2$ and $(\mathbf{k}\cdot e)^4$ via~\eqref{eq:unified-even-cubature} yields~\eqref{eq:cuboct-isotropy-moments}.
+\emph{Item~(i).} The twelve vertices of $O_2(3) = \{e \in \{-1, 0, +1\}^3 \mid e_x^2 + e_y^2 + e_z^2 = 2\}$ partition by the coordinate $e_x \in \{-1, 0, +1\}$ into three disjoint slices:
+\begin{align*}
+  Z_{-1} &= \bigl\{(-1, -1, 0),\; (-1, +1, 0),\; (-1, 0, -1),\; (-1, 0, +1)\bigr\}, \\
+  Z_{0} &= \bigl\{(0, -1, -1),\; (0, -1, +1),\; (0, +1, -1),\; (0, +1, +1)\bigr\}, \\
+  Z_{+1} &= \bigl\{(+1, -1, 0),\; (+1, +1, 0),\; (+1, 0, -1),\; (+1, 0, +1)\bigr\}.
+\end{align*}
+Each slice contains exactly $4$ vertices, giving~\eqref{eq:equizonal-444}. Adding the origin weight $|V_{O_2}(3)| = 12$ to the equatorial slice $e_x = 0$ yields slice weights $(4, 16, 4) = 4\times(1, 4, 1)$, proving~\eqref{eq:simpson-weights-4-16-4}.
+
+\emph{Item~(ii).} Linearity~\eqref{eq:functional-additivity} follows from termwise addition of the finite sums in~\eqref{eq:cuboct-3d-integrator}. Because central inversion $\mathbf{e} \mapsto -\mathbf{e}$ and coordinate reflection $e_x \mapsto -e_x$ are bijections of $O_2(3)$ onto itself that fix the origin $(0, 0, 0)$, the sums of differences $F(\mathbf{e}) - F(-\mathbf{e})$ and $F(e_x, e_y, e_z) - F(-e_x, e_y, e_z)$ cancel pairwise, establishing~\eqref{eq:functional-central-odd} and~\eqref{eq:functional-axis-odd}.
+
+\emph{Item~(iii).} We evaluate $\widehat{\mathcal{I}}_{O_2(3)}$ on the basis even monomials:
+\begin{itemize}[leftmargin=*]
+\item On the constant $1$:
+  \begin{equation*}
+    \widehat{\mathcal{I}}_{O_2(3)}(1) \;=\; 12\cdot 1 + 12\cdot 1 \;=\; 24.
+  \end{equation*}
+\item On each squared coordinate $e_i^2 \in \{0, 1\}$ ($i \in \{x, y, z\}$), which vanishes at the center and on the $4$ vertices of the equatorial belt $e_i = 0$ and equals $1$ on the $8$ vertices of the belts $e_i = \pm 1$:
+  \begin{equation*}
+    \widehat{\mathcal{I}}_{O_2(3)}(e_i^2) \;=\; 12\cdot 0 + 8\cdot 1 \;=\; 8.
+  \end{equation*}
+\item On each pairwise product $e_i^2 e_j^2$ ($i \ne j$), which equals $1$ on the $4$ vertices lying in the $(i, j)$ coordinate plane:
+  \begin{equation*}
+    \widehat{\mathcal{I}}_{O_2(3)}(e_i^2 e_j^2) \;=\; 12\cdot 0 + 4\cdot 1 \;=\; 4.
+  \end{equation*}
+\end{itemize}
+By linearity~\eqref{eq:functional-additivity}, this establishes~\eqref{eq:unified-even-cubature}. Comparing this with continuum Riemann integrals over the cube $[-1, 1]^3$ of volume $8$:
+\begin{align*}
+  3\iiint_{[-1,1]^3} 1\,\mathrm{d}V &= 3 \times 8 \;=\; 24, \\
+  3\iiint_{[-1,1]^3} x^2\,\mathrm{d}V &= 3 \times \biggl(4\int_{-1}^{1} x^2\,\mathrm{d}x\biggr) \;=\; 3 \times \frac{8}{3} \;=\; 8,
+\end{align*}
+and noting that all odd monomials integrate to zero by~\eqref{eq:functional-central-odd}--\eqref{eq:functional-axis-odd}, we obtain~\eqref{eq:riemann-3d-exact}. Finally, expanding $(\mathbf{k}\cdot e)^2 = \sum_i k_i^2 e_i^2 + 2\sum_{i<j} k_i k_j e_i e_j$ and $(\mathbf{k}\cdot e)^4$ and substituting into~\eqref{eq:unified-even-cubature} at $c_0 = 0$ yields~\eqref{eq:cuboct-isotropy-2} and~\eqref{eq:cuboct-isotropy-4}.
 \end{proof}
 
 \begin{theorem}[Wronskian-Cube Rational $\pi(n)$ Brackets, Verlet-Parabola Sine Defect Law, and 3D Euler Norm-Scaling]
 \label{thm:main-3b}
-For all $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+For all $Q, p, q, X, Y, x, y \in \mathbb{Z}$, the following relations hold (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Parallelogram radius bound and Wronskian-cube rational $\pi(n)$ brackets:}
-  $2 R_Q(\varphi) = Q^2 + (|\mathcal{C}_Q(\varphi)|-|\mathcal{S}_Q(\varphi)|)^2 \ge Q^2$; on the Weierstrass $n$-gon ($s=N_{\mathrm{ring}}(3)/n$), the inscribed and circumscribed estimators satisfy
+\item \textbf{Weierstrass radius bound and Wronskian-cube rational $\pi(n)$ brackets:}
+  on the $L^1$-diamond $|C| + |S| = Q$, the Weierstrass radius is bounded below by
+  \begin{equation}
+    \label{eq:parallelogram-radius-bound}
+    2\,R_Q(\varphi) \;=\; Q^2 + \bigl(|\mathcal{C}_Q(\varphi)| - |\mathcal{S}_Q(\varphi)|\bigr)^2 \;\ge\; Q^2,
+  \end{equation}
+  and on the Weierstrass $n$-gon with step $s = N_{\mathrm{ring}}(3)/n$, the gap between the circumscribed and inscribed rational estimators of $\pi$ equals the sum of cubes of the step Wronskian:
   \begin{equation}
     \label{eq:pi-wronskian-cube-gap}
     \pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) \;=\; \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)\,R_3(js)\,R_3((j+1)s)} \;>\; 0,
   \end{equation}
-  with strict nested monotonicity
+  with strict nested monotonicity as $n$ increases:
   \begin{equation}
     \label{eq:pi-nested-chain}
-    \pi_{\mathrm{in}}(8)=2 \;<\; \pi_{\mathrm{in}}(16)=\frac{14}{5} \;<\; \pi_{\mathrm{in}}(32)=\frac{6486}{2125} \;<\; \pi_{\mathrm{out}}(32)=\frac{2209}{693} \;<\; \pi_{\mathrm{out}}(16)=\frac{10}{3} \;<\; \pi_{\mathrm{out}}(8)=4,
+    \pi_{\mathrm{in}}(8) = 2 \;<\; \pi_{\mathrm{in}}(16) = \frac{14}{5} \;<\; \pi_{\mathrm{in}}(32) = \frac{6486}{2125} \;<\; \pi_{\mathrm{out}}(32) = \frac{2209}{693} \;<\; \pi_{\mathrm{out}}(16) = \frac{10}{3} \;<\; \pi_{\mathrm{out}}(8) = 4,
   \end{equation}
-  and Huygens--Snellius value $\pi_3(16) = \frac{1}{3}\bigl(\pi_{\mathrm{in}}(16)+2\pi_{\mathrm{out}}(16)\bigr) = \frac{142}{45}$.
+  and the Huygens--Snellius combination at $n = 16$ evaluates to
+  \begin{equation}
+    \label{eq:huygens-snellius-16}
+    \pi_3(16) \;:=\; \frac{1}{3}\bigl(\pi_{\mathrm{in}}(16) + 2\,\pi_{\mathrm{out}}(16)\bigr) \;=\; \frac{142}{45}.
+  \end{equation}
+
 \item \textbf{Verlet-parabola rational sine defect law and 3D Euler norm-scaling:}
-  for the Verlet parabola $P(p,q)=2pq-p^2$, the rational sine numerator $\mathrm{Num}(p,q)=4P(p,q)$ and denominator $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ obey the identity
+  for the Verlet parabola $P(p, q) = 2pq - p^2$, the rational sine numerator $\mathrm{Num}(p, q) = 4\,P(p, q)$ and denominator $\mathrm{Denom}(p, q) = 5q^2 - P(p, q)$ obey the identity
   \begin{equation}
     \label{eq:verlet-sine-defect}
-    \mathrm{Denom}(p,q) - \mathrm{Num}(p,q) \;=\; \bigl(5q^2 - (2pq-p^2)\bigr) - 4(2pq-p^2) \;=\; 5(q-p)^2 \;\ge\; 0,
+    \mathrm{Denom}(p, q) - \mathrm{Num}(p, q) \;=\; \bigl(5q^2 - (2pq - p^2)\bigr) - 4(2pq - p^2) \;=\; 5(q - p)^2 \;\ge\; 0,
   \end{equation}
-  while every planar Weierstrass rotation across the $3$ cuboctahedron coordinate planes scales squared Euclidean norms identically via
+  while every planar Weierstrass rotation across the three coordinate planes scales squared Euclidean norms via
   \begin{equation}
     \label{eq:euler-norm-scaling}
-    (Xx-Yy)^2 + (Yx+Xy)^2 \;=\; (X^2+Y^2)(x^2+y^2).
+    (Xx - Yy)^2 + (Yx + Xy)^2 \;=\; (X^2 + Y^2)(x^2 + y^2).
   \end{equation}
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-(i)~On each chord of step $s$, the circumscribed tangent segment is $\frac{W_s}{I_s}$ and the inscribed sine chord is $\frac{W_s I_s}{R_0 R_1}$. Subtracting the two and substituting Brahmagupta's step identity $R_0 R_1 - I_s^2 = W_s^2$ from Theorem~\ref{thm:main-1b}~\eqref{eq:brahmagupta-step} yields
-\[
-  \frac{W_s}{I_s} - \frac{W_s I_s}{R_0 R_1} \;=\; \frac{W_s(R_0 R_1 - I_s^2)}{I_s R_0 R_1} \;=\; \frac{W_s^3}{I_s R_0 R_1} \;>\; 0,
-\]
-proving~\eqref{eq:pi-wronskian-cube-gap}. Evaluating the rational sums at $n=8, 16, 32$ and cross-multiplying denominators verifies~\eqref{eq:pi-nested-chain} and $\pi_3(16) = \frac{1}{3}(\frac{14}{5} + \frac{20}{3}) = \frac{142}{45}$.
+We prove items~(i) and~(ii).
 
-(ii)~Expanding $\bigl(5q^2 - (2pq-p^2)\bigr) - 4(2pq-p^2) = 5q^2 - 10pq + 5p^2 = 5(q-p)^2 \ge 0$ proves~\eqref{eq:verlet-sine-defect}, and Brahmagupta's identity gives~\eqref{eq:euler-norm-scaling}.
+\emph{Item~(i).} Substituting $Q = |\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)|$ into the parallelogram identity gives~\eqref{eq:parallelogram-radius-bound}. On each chord of the $n$-gon with step $s$, the circumscribed tangent segment is $W_s / I_s$ and the inscribed sine chord is $(W_s I_s)/(R_0 R_1)$. Subtracting the latter from the former and substituting Brahmagupta's step identity $R_0 R_1 - I_s^2 = W_s^2$ from Theorem~\ref{thm:main-1b}~\eqref{eq:brahmagupta-step-1} yields:
+\begin{equation*}
+  \frac{W_s}{I_s} - \frac{W_s I_s}{R_0 R_1} \;=\; \frac{W_s(R_0 R_1 - I_s^2)}{I_s R_0 R_1} \;=\; \frac{W_s^3}{I_s R_0 R_1} \;>\; 0.
+\end{equation*}
+Summing over the semicircle $j \in \{0, \dots, n/2 - 1\}$ establishes~\eqref{eq:pi-wronskian-cube-gap}. Direct evaluation of the finite rational sums at $n = 8, 16, 32$ and reduction to common denominators verify the inequality chain~\eqref{eq:pi-nested-chain} and identity~\eqref{eq:huygens-snellius-16}:
+\begin{equation*}
+  \pi_3(16) \;=\; \frac{1}{3}\biggl(\frac{14}{5} + \frac{20}{3}\biggr) \;=\; \frac{1}{3}\cdot\frac{42 + 100}{15} \;=\; \frac{142}{45}.
+\end{equation*}
+
+\emph{Item~(ii).} Expanding the left-hand side of~\eqref{eq:verlet-sine-defect} gives:
+\begin{equation*}
+  5q^2 - 5(2pq - p^2) \;=\; 5(q^2 - 2pq + p^2) \;=\; 5(q - p)^2 \;\ge\; 0.
+\end{equation*}
+Finally, identity~\eqref{eq:euler-norm-scaling} is the Brahmagupta--Fibonacci identity for the product of sums of two squares.
 \end{proof}
 
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
 
-The formalization of Theorems~\ref{thm:main-1}--\ref{thm:main-3b} (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, \texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}, \texttt{thm35\_general\_field\_derivative\_operator\_quotient\_wronskian\_and\_variational\_euler\_lagrange}, and \texttt{thm38\_c\_infinity\_higher\_derivatives\_taylor\_newton\_expansion\_and\_pole\_free\_quotients}) resides in \texttt{RotatorQuadrature.lean} in \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+The formalization of Theorems~\ref{thm:main-1}--\ref{thm:main-3b} resides in the self-contained module \texttt{RotatorQuadrature.lean} in the open repository \url{https://github.com/AI-Guiders/scientific-papers} and comprises the following verified theorems (\texttt{0 sorryAx}, \texttt{0 Classical.choice}):
+\begin{itemize}[leftmargin=*]
+\item \texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz} (Theorems~\ref{thm:main-1}, \ref{thm:main-1b}, \ref{thm:main-1c});
+\item \texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields} (Theorem~\ref{thm:main-34-field}(i)--(iii));
+\item \texttt{thm35\_general\_field\_derivative\_operator\_quotient\_wronskian\_and\_variational\_euler\_lagrange} (Theorem~\ref{thm:main-34-field}(iv));
+\item \texttt{thm38\_c\_infinity\_higher\_derivatives\_taylor\_newton\_expansion\_and\_pole\_free\_quotients} (Theorem~\ref{thm:main-34-field}(v));
+\item \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals} (Theorems~\ref{thm:main-2}, \ref{thm:main-2b});
+\item \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers} (Theorems~\ref{thm:main-3}, \ref{thm:main-3b}).
+\end{itemize}
 
 \begin{thebibliography}{9}
 \bibitem{Boole1860}
 G.~Boole, \emph{A Treatise on the Calculus of Finite Differences}, Macmillan and Co., Cambridge--London, 1860.
+\bibitem{Stroud1971}
+A.\,H.~Stroud, \emph{Approximate Calculation of Multiple Integrals}, Prentice-Hall, Englewood Cliffs, NJ, 1971.
 \bibitem{Sobolev1974}
 S.\,L.~Sobolev, \emph{Introduction to the Theory of Cubature Formulae}, Nauka, Moscow, 1974 (English transl.: \emph{Cubature Formulas and Modern Analysis}, Gordon and Breach, 1992).
 \bibitem{Krause1986}
 E.\,F.~Krause, \emph{Taxicab Geometry: An Adventure in Non-Euclidean Geometry}, Dover Publications, New York, 1986.
 \bibitem{Thompson2011}
-K.\,P.~Thompson, ``The nature of length, area, and volume in taxicab geometry,'' \emph{arXiv preprint} \texttt{arXiv:1101.2922} [math.MG], 2011.
+K.\,P.~Thompson, ``The nature of length, area, and volume in taxicab geometry,'' \texttt{arXiv:1101.2922} [math.MG], 2011.
 \bibitem{Thompson2012}
-K.\,P.~Thompson, ``Taxicab calculus: Trig derivatives,'' \emph{arXiv preprint} \texttt{arXiv:1205.3814v2} [math.MG], 2012.
-\bibitem{Stroud1971}
-A.\,H.~Stroud, \emph{Approximate Calculation of Multiple Integrals}, Prentice-Hall, Englewood Cliffs, NJ, 1971.
+K.\,P.~Thompson, ``Taxicab calculus: Trig derivatives,'' \texttt{arXiv:1205.3814v2} [math.MG], 2012.
 \bibitem{Moura2021}
 L.~de~Moura and S.~Ullrich, ``The Lean~4 theorem prover and programming language,'' in \emph{CADE~28}, LNCS vol.~12699, Springer, 2021, pp.~625--635.
 \end{thebibliography}
