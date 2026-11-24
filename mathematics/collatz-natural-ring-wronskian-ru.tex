@@ -218,8 +218,20 @@
 \end{enumerate}
 \end{theorem}
 
+\begin{theorem}[Счётный моноид макро-ступеней нечётных ядер, закон сохранения двойного ядрового сноса $D_{\mathrm{core}}(L) + E_{\mathrm{core}}(L) = (U_{\mathrm{core}}(L) - Q_{\mathrm{core}}(L))q_0$ и мультипликативная щель циклов на произвольном списке ступеней $L \in \mathrm{List}(\mathbb{Z}\times\mathbb{Z}\times\mathbb{Z})$, \texttt{thm32\_collatz\_countable\_core\_stage\_monoid\_dual\_drift\_and\_cycle\_gap}]
+\label{thm:countable-core-stage-monoid}
+Для любых списков макро-ступеней нечётных ядер $L,L_1,L_2 \in \mathrm{List}(\mathbb{Z}\times\mathbb{Z}\times\mathbb{Z})$ с двоичным шагом $P_L = P_{\mathrm{tot}}(L)$, троичным шагом $Q_L = Q_{\mathrm{tot}}(L)$, верхней огибающей $U_L = \texttt{coreStageU}\ L = \prod_{(P,Q,p)\in L}(Q+p-1)$, прямым сносом ядер $D_L = \texttt{coreStageD}\ L$ и траекторией $P_L q_f - Q_L q_0 = D_L$ с двойственным дефектом верхней огибающей $E_L = U_L q_0 - P_L q_f$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Моноидный гомоморфизм:} $U_{L_1\mathbin{++}L_2} = U_{L_1}U_{L_2}$ и $D_{L_1\mathbin{++}L_2} = Q_{L_2}D_{L_1} + P_{L_1}D_{L_2}$;
+\item \textbf{Сохранение двойного ядрового сноса и критерий спуска Ферма на произвольном горизонте $L$:}
+  $D_L + E_L = (U_L - Q_L)q_0$ и $P_L(q_0 - q_f) = (P_L - Q_L)q_0 - D_L = (P_L - U_L)q_0 + E_L$, откуда при $P_L \ge 1,\ q_0 \ge 1,\ E_L \ge 0,\ U_L < P_L$ выполнены $D_L < (P_L - Q_L)q_0$ и $q_f < q_0$;
+\item \textbf{Мультипликативная щель показателей на любом замкнутом цикле ядер ($q_f = q_0$):}
+  на любом замкнутом цикле $q_f = q_0$ выполнены $(P_L - Q_L)q_0 = D_L$, $(U_L - P_L)q_0 = E_L$ и $(U_L - P_L)D_L = (P_L - Q_L)E_L$; при $q_0 \ge 1,\ D_L \ge 1,\ E_L \ge 0$ множители цикла зажаты в щели $Q_L < P_L \le U_L$, причём $P_L = U_L \iff E_L = 0$.
+\end{enumerate}
+\end{theorem}
+
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:two-arc-wronskian}--\ref{thm:binary-gear-word-extremal-envelope} (\texttt{thm18}--\texttt{thm29}, \texttt{thm31\_collatz\_binary\_gear\_word\_extremal\_drift\_envelope\_and\_cycle\_squeeze} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:two-arc-wronskian}--\ref{thm:countable-core-stage-monoid} (\texttt{thm18}--\texttt{thm29}, \texttt{thm31\_collatz\_binary\_gear\_word\_extremal\_drift\_envelope\_and\_cycle\_squeeze}, \texttt{thm32\_collatz\_countable\_core\_stage\_monoid\_dual\_drift\_and\_cycle\_gap} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}

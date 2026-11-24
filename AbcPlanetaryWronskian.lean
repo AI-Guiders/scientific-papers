@@ -618,6 +618,124 @@ theorem thm14b_abc_hankel_vandermonde_floor_defect_trichotomy_and_bilateral_bezo
       omega
     exact ⟨⟨hWxBetaLow, hWxBetaHigh, hBeta1⟩, by omega, ⟨by omega, by omega⟩⟩
 
+/-- **Theorem 14c (Three-Shaft Mason–Stothers Minor Closure `(Z², Y², X²)` and Joint Principal-Cell
+Bilateral Brackets for `(α, β, γ)` and `(A, B, C)`)**:
+When all three Mason–Stothers–Bézout shaft-square minor laws hold simultaneously:
+`(Ã X) β - (B̃ Y) α = Z²`, `(Ã X) γ - (C̃ Z) α = Y²`, `(C̃ Z) β - (B̃ Y) γ = X²`,
+together with `A* + B* = C*` (`X² α + Y² β = Z² γ`):
+1. **Three-Shaft Volume Collapse System over `R_full = Ã B̃ C̃ X Y Z`:**
+   - `(B̃ * Y) * C + (B̃ * B̃ * C̃) * (Y * Y * Z) * α = R_full * β`,
+   - `(C̃ * Z) * B + (B̃ * C̃ * C̃) * (Y * Z * Z) * α = R_full * γ`,
+   - `(B̃ * Y) * (C̃ * Z) * A = R_full * ((C̃ * Z) * β - (B̃ * Y) * γ)` (gauge-invariant, `α`-free).
+2. **Simultaneous Principal-Cell Bilateral Brackets (`0 ≤ α ≤ Ã X - 1`):**
+   Whenever `1 ≤ Ã X`, `1 ≤ B̃ Y`, `1 ≤ C̃ Z`, `1 ≤ Y`, and `0 ≤ α ≤ Ã X - 1`:
+   - `Y² ≤ (Ã * X) * γ ∧ (Ã * X) * γ ≤ Y² + (C̃ * Z) * (Ã * X - 1) ∧ 1 ≤ γ`,
+   - `R_full * γ - (B̃ * C̃ * C̃) * (Y * Z * Z) * (Ã * X - 1) ≤ (C̃ * Z) * B ∧ (C̃ * Z) * B ≤ R_full * γ`,
+   - `Y² * β ≤ Z² * γ ∧ Z² * γ ≤ Y² * β + A - X²`. -/
+theorem thm14c_abc_three_shaft_minor_closure_and_joint_beta_gamma_brackets
+    (At Bt Ct X Y Z alpha beta gamma : Int)
+    (hMinZ : (At * X) * beta - (Bt * Y) * alpha = Z * Z)
+    (hMinY : (At * X) * gamma - (Ct * Z) * alpha = Y * Y)
+    (hMinX : (Ct * Z) * beta - (Bt * Y) * gamma = X * X)
+    (hDeriv : (X * X) * alpha + (Y * Y) * beta = (Z * Z) * gamma) :
+    let A  := At * X * X * X
+    let B  := Bt * Y * Y * Y
+    let C  := Ct * Z * Z * Z
+    let wx := At * X
+    let wy := Bt * Y
+    let wz := Ct * Z
+    let Rfull := (At * Bt * Ct) * (X * Y * Z)
+    ((wy * C + (Bt * Bt * Ct) * (Y * Y * Z) * alpha = Rfull * beta) ∧
+     (wz * B + (Bt * Ct * Ct) * (Y * Z * Z) * alpha = Rfull * gamma) ∧
+     (wy * wz * A = Rfull * (wz * beta - wy * gamma))) ∧
+    (1 ≤ wx → 1 ≤ wy → 1 ≤ wz → 1 ≤ Y → 0 ≤ alpha → alpha ≤ wx - 1 →
+      (Y * Y ≤ wx * gamma ∧ wx * gamma ≤ Y * Y + wz * (wx - 1) ∧ 1 ≤ gamma) ∧
+      (Rfull * gamma - (Bt * Ct * Ct) * (Y * Z * Z) * (wx - 1) ≤ wz * B ∧
+       wz * B ≤ Rfull * gamma) ∧
+      ((Y * Y) * beta ≤ (Z * Z) * gamma ∧ (Z * Z) * gamma ≤ (Y * Y) * beta + A - X * X)) := by
+  intro A B C wx wy wz Rfull
+  have hColC : wy * C + (Bt * Bt * Ct) * (Y * Y * Z) * alpha = Rfull * beta := by
+    have hId : wy * C + (Bt * Bt * Ct) * (Y * Y * Z) * alpha - Rfull * beta =
+               (Bt * Ct * Y * Z) * (Z * Z - (wx * beta - wy * alpha)) := by
+      dsimp [wy, C, Rfull, wx]
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hZ0 : Z * Z - (wx * beta - wy * alpha) = 0 := by
+      dsimp [wx, wy]; omega
+    rw [hZ0, Int.mul_zero] at hId; omega
+  have hColB : wz * B + (Bt * Ct * Ct) * (Y * Z * Z) * alpha = Rfull * gamma := by
+    have hId : wz * B + (Bt * Ct * Ct) * (Y * Z * Z) * alpha - Rfull * gamma =
+               (Bt * Ct * Y * Z) * (Y * Y - (wx * gamma - wz * alpha)) := by
+      dsimp [wz, B, Rfull, wx]
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hY0 : Y * Y - (wx * gamma - wz * alpha) = 0 := by
+      dsimp [wx, wz]; omega
+    rw [hY0, Int.mul_zero] at hId; omega
+  have hColA : wy * wz * A = Rfull * (wz * beta - wy * gamma) := by
+    have hId : wy * wz * A - Rfull * (wz * beta - wy * gamma) =
+               Rfull * (X * X - (wz * beta - wy * gamma)) := by
+      dsimp [wy, wz, A, Rfull]
+      simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    have hX0 : X * X - (wz * beta - wy * gamma) = 0 := by
+      dsimp [wz, wy]; omega
+    rw [hX0, Int.mul_zero] at hId; omega
+  refine ⟨⟨hColC, hColB, hColA⟩, ?_⟩
+  intro hWx1 hWy1 hWz1 hY1 hAlpha0 hAlphaMax
+  have hY2pos : 1 ≤ Y * Y := by
+    have := Int.mul_le_mul hY1 hY1 (by omega) (by omega); omega
+  have hWzAlpha0 : 0 ≤ wz * alpha := Int.mul_nonneg (by omega) hAlpha0
+  have hWzAlphaMax : wz * alpha ≤ wz * (wx - 1) := by
+    have hDiff : wz * (wx - 1) - wz * alpha = wz * ((wx - 1) - alpha) := by
+      simp only [Int.mul_sub]
+    have hNonneg : 0 ≤ wz * ((wx - 1) - alpha) :=
+      Int.mul_nonneg (by omega) (by omega)
+    omega
+  have hWxGammaLow : Y * Y ≤ wx * gamma := by
+    dsimp [wx, wz] at hWzAlpha0 ⊢; omega
+  have hWxGammaHigh : wx * gamma ≤ Y * Y + wz * (wx - 1) := by
+    dsimp [wx, wz] at hWzAlphaMax ⊢; omega
+  have hGamma1 : 1 ≤ gamma := by
+    rcases Int.lt_trichotomy gamma 1 with hLt | hEq | hGt
+    · have hNonpos : wx * gamma ≤ 0 :=
+        Int.mul_nonpos_of_nonneg_of_nonpos (by omega) (by omega)
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+    · omega
+    · omega
+  have hCoeffBNonneg : 0 ≤ (Bt * Ct * Ct) * (Y * Z * Z) := by
+    have hEq : (Bt * Ct * Ct) * (Y * Z * Z) = wy * (wz * wz) := by
+      dsimp [wy, wz]; simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    have hWz2 : 0 ≤ wz * wz := Int.mul_nonneg (by omega) (by omega)
+    have hProd : 0 ≤ wy * (wz * wz) := Int.mul_nonneg (by omega) hWz2
+    rw [hEq]; exact hProd
+  have hBTermLow : 0 ≤ (Bt * Ct * Ct) * (Y * Z * Z) * alpha :=
+    Int.mul_nonneg hCoeffBNonneg hAlpha0
+  have hBTermHigh : (Bt * Ct * Ct) * (Y * Z * Z) * alpha ≤
+                    (Bt * Ct * Ct) * (Y * Z * Z) * (wx - 1) := by
+    have hDiff : (Bt * Ct * Ct) * (Y * Z * Z) * (wx - 1) -
+                 (Bt * Ct * Ct) * (Y * Z * Z) * alpha =
+                 (Bt * Ct * Ct) * (Y * Z * Z) * ((wx - 1) - alpha) := by
+      simp only [Int.mul_sub]
+    have hNonneg : 0 ≤ (Bt * Ct * Ct) * (Y * Z * Z) * ((wx - 1) - alpha) :=
+      Int.mul_nonneg hCoeffBNonneg (by omega)
+    omega
+  have hX2Nonneg : 0 ≤ X * X := by
+    rcases Int.lt_trichotomy X 0 with hLt | hEq | hGt
+    · have : 0 < (-X) * (-X) := Int.mul_pos (by omega) (by omega)
+      have hNegSq : (-X) * (-X) = X * X := by simp only [Int.neg_mul, Int.mul_neg, Int.neg_neg]
+      omega
+    · rw [hEq]; omega
+    · have := Int.mul_pos hGt hGt; omega
+  have hX2Alpha0 : 0 ≤ (X * X) * alpha := Int.mul_nonneg hX2Nonneg hAlpha0
+  have hX2AlphaMax : (X * X) * alpha ≤ A - X * X := by
+    have hId : (A - X * X) - (X * X) * alpha = (X * X) * ((wx - 1) - alpha) := by
+      dsimp [A, wx]
+      simp only [Int.mul_sub, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    have hNonneg : 0 ≤ (X * X) * ((wx - 1) - alpha) :=
+      Int.mul_nonneg hX2Nonneg (by omega)
+    omega
+  exact ⟨⟨hWxGammaLow, hWxGammaHigh, hGamma1⟩, ⟨by omega, by omega⟩, ⟨by omega, by omega⟩⟩
+
 #print axioms thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
 #print axioms thm9_pillai_abc_differential_bezout_and_pade_laws
 #print axioms thm12_reverse_pade_bezout_cubic_annihilation_and_radical_bound
@@ -627,5 +745,6 @@ theorem thm14b_abc_hankel_vandermonde_floor_defect_trichotomy_and_bilateral_bezo
 #print axioms thm16_weierstrass_stereographic_abc_embedding_into_z512_rotator
 #print axioms thm12b_abc_countable_pade_tower_cubic_annihilation_and_adjacent_floor_escape
 #print axioms thm14b_abc_hankel_vandermonde_floor_defect_trichotomy_and_bilateral_bezout_bracket
+#print axioms thm14c_abc_three_shaft_minor_closure_and_joint_beta_gamma_brackets
 
 end RotatorCalculusPaper

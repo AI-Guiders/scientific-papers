@@ -866,6 +866,170 @@ theorem thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze
       exact False.elim (Int.lt_irrefl 0 (by omega))
   exact ⟨hRw1, hQP⟩
 
+/-- Multiplicative upper-envelope factor `U_core(L) = ∏_{(P, Q, p) ∈ L} (Q + p - 1)`
+across an arbitrary odd-core macro-stage cascade `L : List (Int × Int × Int)`. -/
+def coreStageU : List (Int × Int × Int) → Int
+  | [] => 1
+  | (_, q, p) :: rest => (q + p - 1) * coreStageU rest
+
+/-- Cumulative forward odd-core drift `D_core(L)` across an arbitrary macro-stage cascade
+`L : List (Int × Int × Int)` where each stage `(P, Q, p)` satisfies `P q' = Q q + (p - 1)`. -/
+def coreStageD : List (Int × Int × Int) → Int
+  | [] => 0
+  | (P, _, p) :: rest => multiScrewQ rest * (p - 1) + P * coreStageD rest
+
+theorem coreStageU_append (L1 L2 : List (Int × Int × Int)) :
+    coreStageU (L1 ++ L2) = coreStageU L1 * coreStageU L2 := by
+  induction L1 with
+  | nil => dsimp [coreStageU]; omega
+  | cons hd tl ih =>
+    rcases hd with ⟨P, q, p⟩
+    dsimp [coreStageU]
+    rw [ih]
+    simp only [Int.mul_assoc]
+
+theorem coreStageD_append (L1 L2 : List (Int × Int × Int)) :
+    coreStageD (L1 ++ L2) = multiScrewQ L2 * coreStageD L1 + multiScrewP L1 * coreStageD L2 := by
+  induction L1 with
+  | nil => dsimp [coreStageD, multiScrewP]; omega
+  | cons hd tl ih =>
+    rcases hd with ⟨P, q, p⟩
+    dsimp [coreStageD, multiScrewP]
+    rw [ih, multiScrewQ_append]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    omega
+
+/-- **Theorem 32 (Countable Odd-Core Macro-Stage Monoid, Dual-Core Drift Conservation
+`D_core(L) + E_core(L) = (U_core(L) - Q_core(L)) q₀`, and Multiplicative Cycle Envelope Gap
+`Q_core(L) < P_core(L) ≤ U_core(L)` across Arbitrary Horizons `L : List (Int × Int × Int)`)**:
+For any odd-core macro-stage lists `L, L1, L2 : List (Int × Int × Int)` with total binary step
+`P_L = multiScrewP L`, ternary step `Q_L = multiScrewQ L`, upper envelope `U_L = coreStageU L`,
+forward core drift `D_L = coreStageD L`, initial odd core `q₀`, and final odd core `q_f`
+satisfying `P_L * q_f - Q_L * q₀ = D_L`, with dual upper-envelope defect `E_L = U_L * q₀ - P_L * q_f`:
+1. **Macro-Stage Monoid Homomorphism across Arbitrary Concatenations `L1 ++ L2`:**
+   - `multiScrewP (L1 ++ L2) = multiScrewP L1 * multiScrewP L2`,
+   - `multiScrewQ (L1 ++ L2) = multiScrewQ L1 * multiScrewQ L2`,
+   - `coreStageU (L1 ++ L2) = coreStageU L1 * coreStageU L2`,
+   - `coreStageD (L1 ++ L2) = multiScrewQ L2 * coreStageD L1 + multiScrewP L1 * coreStageD L2`.
+2. **Arbitrary-Horizon Dual-Core Drift Conservation and Fermat Descent Elimination:**
+   - `D_L + E_L = (U_L - Q_L) * q₀`,
+   - `P_L * (q₀ - q_f) = (P_L - Q_L) * q₀ - D_L`,
+   - `P_L * (q₀ - q_f) = (P_L - U_L) * q₀ + E_L`,
+   - whenever `1 ≤ P_L`, `1 ≤ q₀`, `0 ≤ E_L`, and `U_L < P_L`:
+     `D_L < (P_L - Q_L) * q₀` and `q_f < q₀`.
+3. **Arbitrary-Horizon Multiplicative Cycle Envelope Gap (`q_f = q₀`):**
+   On any closed odd-core cycle `q_f = q₀`:
+   - `(P_L - Q_L) * q₀ = D_L` and `(U_L - P_L) * q₀ = E_L`,
+   - `(U_L - P_L) * D_L = (P_L - Q_L) * E_L`,
+   - whenever `1 ≤ q₀`, `1 ≤ D_L`, and `0 ≤ E_L`:
+     `Q_L < P_L ∧ P_L ≤ U_L` and `(P_L = U_L ↔ E_L = 0)`. -/
+theorem thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
+    (L L1 L2 : List (Int × Int × Int)) (q0 qf : Int)
+    (hTraj : multiScrewP L * qf - multiScrewQ L * q0 = coreStageD L) :
+    let PL := multiScrewP L
+    let QL := multiScrewQ L
+    let UL := coreStageU L
+    let DL := coreStageD L
+    let EL := UL * q0 - PL * qf
+    (multiScrewP (L1 ++ L2) = multiScrewP L1 * multiScrewP L2 ∧
+     multiScrewQ (L1 ++ L2) = multiScrewQ L1 * multiScrewQ L2 ∧
+     coreStageU (L1 ++ L2) = coreStageU L1 * coreStageU L2 ∧
+     coreStageD (L1 ++ L2) = multiScrewQ L2 * coreStageD L1 + multiScrewP L1 * coreStageD L2) ∧
+    (DL + EL = (UL - QL) * q0 ∧
+     PL * (q0 - qf) = (PL - QL) * q0 - DL ∧
+     PL * (q0 - qf) = (PL - UL) * q0 + EL ∧
+     (1 ≤ PL → 1 ≤ q0 → 0 ≤ EL → UL < PL → DL < (PL - QL) * q0 ∧ qf < q0)) ∧
+    (qf = q0 →
+      (PL - QL) * q0 = DL ∧
+      (UL - PL) * q0 = EL ∧
+      (UL - PL) * DL = (PL - QL) * EL ∧
+      (1 ≤ q0 → 1 ≤ DL → 0 ≤ EL →
+        QL < PL ∧ PL ≤ UL ∧ (PL = UL ↔ EL = 0))) := by
+  intro PL QL UL DL EL
+  have hDual : DL + EL = (UL - QL) * q0 := by
+    dsimp [DL, EL, PL, QL, UL]
+    have hSub : (coreStageU L - multiScrewQ L) * q0 = coreStageU L * q0 - multiScrewQ L * q0 := by
+      simp only [Int.sub_mul]
+    omega
+  have hFermat1 : PL * (q0 - qf) = (PL - QL) * q0 - DL := by
+    dsimp [PL, QL, DL]
+    have h1 : multiScrewP L * (q0 - qf) = multiScrewP L * q0 - multiScrewP L * qf := by
+      simp only [Int.mul_sub]
+    have h2 : (multiScrewP L - multiScrewQ L) * q0 = multiScrewP L * q0 - multiScrewQ L * q0 := by
+      simp only [Int.sub_mul]
+    omega
+  have hFermat2 : PL * (q0 - qf) = (PL - UL) * q0 + EL := by
+    dsimp [PL, UL, EL]
+    have h1 : multiScrewP L * (q0 - qf) = multiScrewP L * q0 - multiScrewP L * qf := by
+      simp only [Int.mul_sub]
+    have h2 : (multiScrewP L - coreStageU L) * q0 = multiScrewP L * q0 - coreStageU L * q0 := by
+      simp only [Int.sub_mul]
+    omega
+  refine ⟨⟨multiScrewP_append L1 L2, multiScrewQ_append L1 L2,
+           coreStageU_append L1 L2, coreStageD_append L1 L2⟩,
+          ⟨hDual, hFermat1, hFermat2, ?_⟩, ?_⟩
+  · intro hPL1 hq01 hEL0 hULltPL
+    have hPos1 : 1 ≤ (PL - UL) * q0 := by
+      have := Int.mul_le_mul (by omega : 1 ≤ PL - UL) hq01 (by omega) (by omega); omega
+    have hPosDiff : 1 ≤ PL * (q0 - qf) := by omega
+    have hDLlt : DL < (PL - QL) * q0 := by omega
+    have hqflt : qf < q0 := by
+      rcases Int.lt_trichotomy qf q0 with hLt | hEq | hGt
+      · exact hLt
+      · have : PL * (q0 - qf) = 0 := by
+          have hSub0 : q0 - qf = 0 := by omega
+          rw [hSub0, Int.mul_zero]
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+      · have hNonpos : PL * (q0 - qf) ≤ 0 :=
+          Int.mul_nonpos_of_nonneg_of_nonpos (by omega) (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+    exact ⟨hDLlt, hqflt⟩
+  · intro hCyc
+    have hCycD : (PL - QL) * q0 = DL := by
+      dsimp [PL, QL, DL]
+      rw [hCyc] at hTraj
+      have : (multiScrewP L - multiScrewQ L) * q0 = multiScrewP L * q0 - multiScrewQ L * q0 := by
+        simp only [Int.sub_mul]
+      omega
+    have hCycE : (UL - PL) * q0 = EL := by
+      dsimp [UL, PL, EL]
+      rw [hCyc]
+      simp only [Int.sub_mul]
+    have hCross : (UL - PL) * DL = (PL - QL) * EL := by
+      rw [← hCycD, ← hCycE]
+      simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    refine ⟨hCycD, hCycE, hCross, ?_⟩
+    intro hq01 hDL1 hEL0
+    have hQLltPL : QL < PL := by
+      rcases Int.lt_trichotomy QL PL with hLt | hEq | hGt
+      · exact hLt
+      · have : (PL - QL) * q0 = 0 := by
+          have h0 : PL - QL = 0 := by omega
+          rw [h0, Int.zero_mul]
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+      · have hNonpos : (PL - QL) * q0 ≤ 0 :=
+          Int.mul_nonpos_of_nonpos_of_nonneg (by omega) (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+    have hPLleUL : PL ≤ UL := by
+      rcases Int.lt_trichotomy UL PL with hLt | hEq | hGt
+      · have hNeg : (UL - PL) * q0 < 0 :=
+          Int.mul_neg_of_neg_of_pos (by omega) (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+      · omega
+      · omega
+    refine ⟨hQLltPL, hPLleUL, ?_⟩
+    constructor
+    · intro hEqPU
+      have h0 : UL - PL = 0 := by omega
+      rw [← hCycE, h0, Int.zero_mul]
+    · intro hE0
+      rcases Int.lt_trichotomy PL UL with hLt | hEq | hGt
+      · have hPos : 0 < (UL - PL) * q0 :=
+          Int.mul_pos (by omega) (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+      · exact hEq
+      · omega
+
 #print axioms thm18_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -880,5 +1044,6 @@ theorem thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze
 #print axioms thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
 #print axioms thm29_collatz_trailing_ones_burn_macro_step
 #print axioms thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze
+#print axioms thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
 
 end RotatorCalculusPaper

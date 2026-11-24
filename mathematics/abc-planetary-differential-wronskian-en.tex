@@ -105,7 +105,7 @@ With the full radical-shaft skeleton $R_{\mathrm{full}} := (\widetilde{A}\wideti
 Reducing $u_0 Z^2$ on the circle of circumference $\widetilde{A}X$ to $0\le\alpha\le\widetilde{A}X-1$ yields $(\widetilde{A}X)\beta \le Z^2 + (\widetilde{B}Y)(\widetilde{A}X-1)$ and $(\widetilde{B}Y)C \le R_{\mathrm{full}}\beta$ (implying $C \le R_{\mathrm{full}}^2$ whenever $\beta\le R_{\mathrm{full}}$ and $C \le R_{\mathrm{full}}^3$ across all positive shafts and weights). For the $3\times 3$ cubic Cramer--B\'ezout system $U_0 Y^3 - V_0 X^3 = 1$ and $V_1 Z^3 - U_1 Y^3 = 1$, the determinant $\Delta_{\mathrm{cube}} := \widetilde{A}U_0 V_1 + \widetilde{B}V_0 V_1 - \widetilde{C}U_1 V_0 \in [1, \widetilde{A}+\widetilde{C}]$ satisfies $\Delta_{\mathrm{cube}}(X^3, Y^3, Z^3) = \bigl(\widetilde{C}(U_0+U_1)-\widetilde{B}V_1,\ \widetilde{A}V_1+\widetilde{C}V_0,\ \widetilde{A}(U_0+U_1)+\widetilde{B}V_0\bigr)$.
 \end{theorem}
 
-\begin{theorem}[Lagrange--Vandermonde floor-defect trichotomy $(S_1,S_2,S_3=0)$ and principal-cell bilateral B\'ezout height bracket, \texttt{thm14b\_abc\_hankel\_vandermonde\_floor\_defect\_trichotomy\_and\_bilateral\_bezout\_bracket}]
+\begin{theorem}[Lagrange--Vandermonde floor-defect trichotomy $(S_1,S_2,S_3=0)$, three-shaft minor closure $(Z^2,Y^2,X^2)$, and principal-cell bilateral B\'ezout brackets for $(\alpha,\beta,\gamma)$, \texttt{thm14b}, \texttt{thm14c}]
 \label{thm:floor-defect-trichotomy-thm14b}
 For any radical-floor decomposition $A = \widetilde{A}X^3,\ B = \widetilde{B}Y^3,\ C = \widetilde{C}Z^3$ satisfying $S_3 = A + B - C = 0$, with lower-floor defects $S_1 = \widetilde{A}X + \widetilde{B}Y - \widetilde{C}Z$ and $S_2 = \widetilde{A}X^2 + \widetilde{B}Y^2 - \widetilde{C}Z^2$:
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
@@ -120,12 +120,16 @@ For any radical-floor decomposition $A = \widetilde{A}X^3,\ B = \widetilde{B}Y^3
   (a) if $S_1 \ge 0$, then $\widetilde{C}Z \le \widetilde{A}X + \widetilde{B}Y$ and $C \le (\widetilde{A}X + \widetilde{B}Y)Z^2$;
   (b) if $S_2 \le 0$, then $S_1 \le -1$ and $(-S_1)XY \ge 1$;
   (c) if $S_1 \le -1$ and $S_2 \ge 1$, then $\widetilde{A}X + \widetilde{B}Y + 1 \le \widetilde{C}Z$ and $\widetilde{C}Z^2 + 1 \le \widetilde{A}X^2 + \widetilde{B}Y^2$;
-\item \textbf{Principal-cell bilateral B\'ezout height bracket ($0 \le \alpha \le \widetilde{A}X - 1$):}
-  for any pair $(\alpha,\beta)$ satisfying $(\widetilde{A}X)\beta - (\widetilde{B}Y)\alpha = Z^2$ normalized into the principal fundamental cell $0 \le \alpha \le \widetilde{A}X - 1$ ($\widetilde{A}X \ge 1,\ \widetilde{B}Y \ge 1,\ \widetilde{C} \ge 1,\ Z \ge 1$), we have $\beta \ge 1$,
+\item \textbf{Three-shaft minor closure and joint principal-cell bilateral brackets ($0 \le \alpha \le \widetilde{A}X - 1$):}
+  when $(\alpha,\beta,\gamma)$ satisfies all three shaft-square minor laws $(\widetilde{A}X)\beta - (\widetilde{B}Y)\alpha = Z^2$, $(\widetilde{A}X)\gamma - (\widetilde{C}Z)\alpha = Y^2$, $(\widetilde{C}Z)\beta - (\widetilde{B}Y)\gamma = X^2$ with $X^2\alpha + Y^2\beta = Z^2\gamma$, the three-shaft volume collapse system over $R_{\mathrm{full}} = \widetilde{A}\widetilde{B}\widetilde{C}XYZ$ reads $(\widetilde{B}Y)C + (\widetilde{B}^2\widetilde{C}Y^2 Z)\alpha = R_{\mathrm{full}}\beta$, $(\widetilde{C}Z)B + (\widetilde{B}\widetilde{C}^2 Y Z^2)\alpha = R_{\mathrm{full}}\gamma$, and $(\widetilde{B}Y)(\widetilde{C}Z)A = R_{\mathrm{full}}((\widetilde{C}Z)\beta - (\widetilde{B}Y)\gamma)$, while in the principal cell $0 \le \alpha \le \widetilde{A}X - 1$ ($\widetilde{A}X,\widetilde{B}Y,\widetilde{C}Z,Y,Z \ge 1$) one has $\beta \ge 1$, $\gamma \ge 1$, $Y^2\beta \le Z^2\gamma \le Y^2\beta + A - X^2$, and
   \begin{equation}
     \label{eq:bilateral-bezout-height-bracket}
-    Z^2 \;\le\; (\widetilde{A}X)\,\beta \;\le\; Z^2 + (\widetilde{B}Y)(\widetilde{A}X - 1), \qquad
-    R_{\mathrm{full}}\,\beta - (\widetilde{B}^2\widetilde{C}Y^2 Z)(\widetilde{A}X - 1) \;\le\; (\widetilde{B}Y)\,C \;\le\; R_{\mathrm{full}}\,\beta.
+    \begin{aligned}
+      Z^2 &\le (\widetilde{A}X)\beta \le Z^2 + (\widetilde{B}Y)(\widetilde{A}X - 1), &\quad
+      R_{\mathrm{full}}\beta - (\widetilde{B}^2\widetilde{C}Y^2 Z)(\widetilde{A}X - 1) &\le (\widetilde{B}Y)C \le R_{\mathrm{full}}\beta, \\
+      Y^2 &\le (\widetilde{A}X)\gamma \le Y^2 + (\widetilde{C}Z)(\widetilde{A}X - 1), &\quad
+      R_{\mathrm{full}}\gamma - (\widetilde{B}\widetilde{C}^2 Y Z^2)(\widetilde{A}X - 1) &\le (\widetilde{C}Z)B \le R_{\mathrm{full}}\gamma.
+    \end{aligned}
   \end{equation}
 \end{enumerate}
 \end{theorem}
@@ -153,7 +157,7 @@ For any $A+B=C\in\mathbb{Z}^3$ with B\'ezout partner $A v - B u = 1$ ($u+v=w$), 
 \section{Formal Verification in Lean~4}
 \label{sec:lean4}
 
-The formalization of Theorems~\ref{thm:main-8}--\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm12b\_abc\_countable\_pade\_tower\_cubic\_annihilation\_and\_adjacent\_floor\_escape}, \texttt{thm13}, \texttt{thm14}, \texttt{thm14b\_abc\_hankel\_vandermonde\_floor\_defect\_trichotomy\_and\_bilateral\_bezout\_bracket}, \texttt{thm15}, \texttt{thm16}) resides in \texttt{AbcPlanetaryWronskian.lean} in \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+The formalization of Theorems~\ref{thm:main-8}--\ref{thm:main-12-16} (\texttt{thm8}, \texttt{thm9}, \texttt{thm12}, \texttt{thm12b\_abc\_countable\_pade\_tower\_cubic\_annihilation\_and\_adjacent\_floor\_escape}, \texttt{thm13}, \texttt{thm14}, \texttt{thm14b\_abc\_hankel\_vandermonde\_floor\_defect\_trichotomy\_and\_bilateral\_bezout\_bracket}, \texttt{thm14c\_abc\_three\_shaft\_minor\_closure\_and\_joint\_beta\_gamma\_brackets}, \texttt{thm15}, \texttt{thm16}) resides in \texttt{AbcPlanetaryWronskian.lean} in \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

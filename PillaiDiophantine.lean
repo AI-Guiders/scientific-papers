@@ -440,6 +440,112 @@ theorem thm10b_pillai_same_cell_two_solution_collision_and_gap_law
       · omega
     exact ⟨hINextNe0, hAbs1⟩
 
+/-- **Theorem 10c (Closed-Form Cubic Padé Residual `8 (U P_R³ - V Q_R³)` across Arbitrary Floors `R : List Int`,
+Leading-Term Annihilation Condition `Π_+(R) + 3 Π_-(R) = 0`, and Annihilating-Floor Collision Gap Law)**:
+For every floor `R : List Int` of the countable Padé–Thue tower `(P_R, Q_R) = (padeTowerP R U V, padeTowerQ R U V)`
+with `C = U - V`, `S = U + V`, `Π_+(R) = padeTowerProdPlus R`, `Π_-(R) = padeTowerProdMinus R`,
+`Φ₃(P_R, Q_R) = P_R² + P_R Q_R + Q_R²`, and `Ψ₃(P_R, Q_R) = P_R² - P_R Q_R + Q_R²`:
+1. **Exact Divisibility by `C = U - V` and `C (U + V)` on Every Floor `R : List Int`:**
+   - `U * P_R³ - V * Q_R³ = C * (Π_-(R) * U * Φ₃(P_R, Q_R) + Q_R³) = C * (Π_-(R) * V * Φ₃(P_R, Q_R) + P_R³)`,
+   - `2 * (U * P_R³ - V * Q_R³) = C * S * (Π_-(R) * Φ₃(P_R, Q_R) + Π_+(R) * Ψ₃(P_R, Q_R))`.
+2. **Closed-Form Decomposition of `8 (U P_R³ - V Q_R³)` in Terms of `(Π_+(R), Π_-(R), C, U + V)`:**
+   `8 * (U * P_R³ - V * Q_R³) = C * S * (Π_+(R)² * (Π_+(R) + 3 * Π_-(R)) * S² + Π_-(R)² * (3 * Π_+(R) + Π_-(R)) * C²)`.
+3. **Leading-Term Cubic Annihilation on Any Floor `R` with `Π_+(R) + 3 * Π_-(R) = 0`:**
+   Whenever `Π_+(R) + 3 * Π_-(R) = 0` (such as `R = [3]` or any word with `∏ r_i = -3 ∏ (2 - r_i)`),
+   the `(U + V)³` leading term vanishes identically and
+   `U * P_R³ - V * Q_R³ = -(Π_-(R) * Π_-(R) * Π_-(R)) * (C * C * C) * S`. -/
+theorem thm10c_pillai_arbitrary_floor_closed_cubic_residual_and_annihilation_condition
+    (R : List Int) (U V : Int) :
+    let C := U - V
+    let S := U + V
+    let PR := padeTowerP R U V
+    let QR := padeTowerQ R U V
+    let Pp := padeTowerProdPlus R
+    let Pm := padeTowerProdMinus R
+    let phi3 := PR * PR + PR * QR + QR * QR
+    let psi3 := PR * PR - PR * QR + QR * QR
+    (U * (PR * PR * PR) - V * (QR * QR * QR) = C * (Pm * U * phi3 + QR * QR * QR) ∧
+     U * (PR * PR * PR) - V * (QR * QR * QR) = C * (Pm * V * phi3 + PR * PR * PR)) ∧
+    (2 * (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+      C * S * (Pm * phi3 + Pp * psi3)) ∧
+    (8 * (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+      C * S * ((Pp * Pp) * (Pp + 3 * Pm) * (S * S) + (Pm * Pm) * (3 * Pp + Pm) * (C * C))) ∧
+    (Pp + 3 * Pm = 0 →
+      U * (PR * PR * PR) - V * (QR * QR * QR) = -(Pm * Pm * Pm) * (C * C * C) * S) := by
+  intro C S PR QR Pp Pm phi3 psi3
+  have h7 := (thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
+               R [] 0 0 0 0 0 (U - V) V 0 0).2.2.2.2
+  have hUV : (U - V) + V = U := by omega
+  rw [hUV] at h7
+  have hSum : PR + QR = Pp * S := h7.2.2.2.2.2.2.1
+  have hDiff : PR - QR = Pm * C := h7.2.2.2.2.2.2.2.1
+  have hId1 : U * (PR * PR * PR) - V * (QR * QR * QR) =
+              U * (PR - QR) * phi3 + C * (QR * QR * QR) := by
+    dsimp [phi3, C]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hId2 : U * (PR * PR * PR) - V * (QR * QR * QR) =
+              V * (PR - QR) * phi3 + C * (PR * PR * PR) := by
+    dsimp [phi3, C]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hDiv1 : U * (PR * PR * PR) - V * (QR * QR * QR) =
+               C * (Pm * U * phi3 + QR * QR * QR) := by
+    rw [hId1, hDiff]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hDiv2 : U * (PR * PR * PR) - V * (QR * QR * QR) =
+               C * (Pm * V * phi3 + PR * PR * PR) := by
+    rw [hId2, hDiff]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hId2x : (U * (PR * PR * PR) - V * (QR * QR * QR)) + (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+               S * (PR - QR) * phi3 + C * (PR + QR) * psi3 := by
+    dsimp [phi3, psi3, C, S]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hDiv2x : 2 * (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+                C * S * (Pm * phi3 + Pp * psi3) := by
+    have h2 : 2 * (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+              (U * (PR * PR * PR) - V * (QR * QR * QR)) + (U * (PR * PR * PR) - V * (QR * QR * QR)) := by omega
+    rw [h2, hId2x, hDiff, hSum]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  have hPhi4 : phi3 + phi3 + phi3 + phi3 =
+               ((PR + QR) * (PR + QR) + (PR + QR) * (PR + QR) + (PR + QR) * (PR + QR)) +
+               (PR - QR) * (PR - QR) := by
+    dsimp [phi3]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hPsi4 : psi3 + psi3 + psi3 + psi3 =
+               (PR + QR) * (PR + QR) +
+               ((PR - QR) * (PR - QR) + (PR - QR) * (PR - QR) + (PR - QR) * (PR - QR)) := by
+    dsimp [psi3]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  have hClosed8x : 8 * (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+      C * S * ((Pp * Pp) * (Pp + 3 * Pm) * (S * S) +
+               (Pm * Pm) * (3 * Pp + Pm) * (C * C)) := by
+    have h8from2 : 8 * (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+                   4 * (2 * (U * (PR * PR * PR) - V * (QR * QR * QR))) := by omega
+    have h4 : 4 * (C * S * (Pm * phi3 + Pp * psi3)) =
+              C * S * (Pm * (phi3 + phi3 + phi3 + phi3) + Pp * (psi3 + psi3 + psi3 + psi3)) := by
+      have h4phi : 4 * phi3 = phi3 + phi3 + phi3 + phi3 := by omega
+      have h4psi : 4 * psi3 = psi3 + psi3 + psi3 + psi3 := by omega
+      rw [← h4phi, ← h4psi]
+      simp only [Int.mul_add, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    have h3Pm : Pp + 3 * Pm = Pp + (Pm + Pm + Pm) := by omega
+    have h3Pp : 3 * Pp + Pm = (Pp + Pp + Pp) + Pm := by omega
+    rw [h8from2, hDiv2x, h4, hPhi4, hPsi4, h3Pm, h3Pp, hSum, hDiff]
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  refine ⟨⟨hDiv1, hDiv2⟩, hDiv2x, hClosed8x, ?_⟩
+  intro hAnn
+  have h8Ann : 8 * (U * (PR * PR * PR) - V * (QR * QR * QR)) =
+               8 * (-(Pm * Pm * Pm) * (C * C * C) * S) := by
+    rw [hClosed8x, hAnn, Int.mul_zero, Int.zero_mul, Int.zero_add]
+    have h3 : 3 * Pp + Pm = -8 * Pm := by omega
+    rw [h3]
+    simp only [Int.mul_neg, Int.neg_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+  omega
+
 /-- **Theorem 11 (Cross-Floor Padé Wronskian `W_{2,3}` Identity
 `Q̂_{1,2}² P̂_{1,3}³ - P̂_{1,2}² Q̂_{1,3}³ = (U - V)³ (U² + 3UV + V²)` and Right Kernel & Trace
 of `P₃(A, B, A+B)`)**: -/
@@ -477,6 +583,7 @@ theorem thm11_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
 #print axioms thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
 #print axioms thm10_root_free_cubic_pade_compression
 #print axioms thm10b_pillai_same_cell_two_solution_collision_and_gap_law
+#print axioms thm10c_pillai_arbitrary_floor_closed_cubic_residual_and_annihilation_condition
 #print axioms thm11_cross_floor_wronskian_and_p3_kernel
 
 end RotatorCalculusPaper
