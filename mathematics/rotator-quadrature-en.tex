@@ -11,7 +11,7 @@
   linkcolor=blue!70!black,
   citecolor=blue!70!black,
   urlcolor=blue!70!black,
-  pdftitle={Cuboctahedral Rotator Calculus: Discrete Euler Exponential on Z_512, Constant Wronskian, and Closed-Form Quadrature on the Cuboctahedron O_2(3) in Lean 4},
+  pdftitle={Projective Calculus over Q(i, sqrt 2): Discrete Euler Exponential on Z_4Q, Constant Wronskian, and Closed-Form Quadrature in Lean 4},
   pdfauthor={Dmitrii A. Karataev}
 }
 
@@ -24,7 +24,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{\textbf{Cuboctahedral Rotator Calculus:\\ Discrete Euler Exponential on $\mathbb{Z}_{512}$, Constant Wronskian, and Closed-Form Quadrature on the Cuboctahedron $O_2(3)$ in Lean~4}}
+\title{\textbf{Projective Calculus over $\mathbb{Q}(i,\sqrt{2})$:\\ Discrete Euler Exponential on $\mathbb{Z}_{4Q}$, Constant Wronskian, and Closed-Form Quadrature in Lean~4}}
 \author{Dmitrii A.~Karataev\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Formal Lean~4 verification and analytical development were conducted in partnership with \emph{Luch} (AI research partner, AI-Guiders).}}
 \date{}
 
@@ -32,7 +32,7 @@
 \maketitle
 
 \begin{abstract}
-We construct an exact, pole-free $C^\infty$ projective differential, variational, and integral calculus over the fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ parameterized by a cyclic residue register $\mathbb{Z}_{4Q}$ ($N_{\mathrm{ring}} = 4\,Q_\square = 512$ at $Q_\square = 2^{|\triangle|-1} = 128$ on the three-dimensional cuboctahedral shell $O_2(3)\subset\{-1,0,+1\}^3$ with $|V_{O_2}|=12$ vertices, $|\square|=6$ square faces, and $|\triangle|=8$ triangular faces). In classical analysis, the Weierstrass substitution $t = \tan(\theta/2) = S/C$ suffers from a pole $t\to\infty$ at $\theta=\pi$ ($C=0$), while in $L^1$ ``taxicab trigonometry'' (Krause 1986; Thompson, \texttt{arXiv:1205.3814}) piecewise derivatives break down at the four diamond corners and naive modulo-$4Q$ residue multiplication has zero divisors. We resolve both obstacles simultaneously by keeping the rotator pair $\mathcal{E}_Q(\varphi) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ homogeneous on the closed $L^1$-diamond $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q\ge 1$ and lifting it via $\pi_{M\to T}(C,S) = (C^2-S^2 : 2CS : C^2+S^2)$ into projective coordinates over $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$. Because $2(\mathcal{C}_Q^2+\mathcal{S}_Q^2) = (\mathcal{C}_Q+\mathcal{S}_Q)^2 + (\mathcal{C}_Q-\mathcal{S}_Q)^2 \ge Q^2 \ge 1$, the Weierstrass denominator $R_Q(\varphi) = \mathcal{C}_Q(\varphi)^2+\mathcal{S}_Q(\varphi)^2 \ge 1$ never vanishes (\texttt{thm34}), eliminating zero divisors and the $\theta=\pi$ pole, while at the four diamond corners the derivative jump multiplies a vanishing coordinate so that the one-step difference Wronskian $\mathcal{W}_Q(\varphi)=\mathcal{C}_Q(\varphi)\Delta\mathcal{S}_Q(\varphi)-\mathcal{S}_Q(\varphi)\Delta\mathcal{C}_Q(\varphi)\equiv Q$ is identically constant across all $4Q$ points (\texttt{thm1}).
+We construct an exact, pole-free $C^\infty$ projective differential, variational, and integral calculus over the fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ parameterized by a cyclic residue register $\mathbb{Z}_{4Q}$ ($N_{\mathrm{ring}} = 4\,Q_\square = 512$ at $Q_\square = 2^{|\triangle|-1} = 128$ on the three-dimensional cuboctahedral shell $O_2(3)\subset\{-1,0,+1\}^3$ with $|V_{O_2}|=12$ vertices, $|\square|=6$ square faces, and $|\triangle|=8$ triangular faces). In classical analysis, the Weierstrass substitution $t = \tan(\theta/2) = S/C$ suffers from a pole $t\to\infty$ at $\theta=\pi$ ($C=0$), while in $L^1$ ``taxicab trigonometry'' (Krause 1986; Thompson, \texttt{arXiv:1205.3814}) piecewise derivatives break down at the four diamond corners and naive modulo-$4Q$ residue multiplication has zero divisors. We resolve both obstacles simultaneously by keeping the discrete Euler exponential pair $\mathcal{E}_Q(\varphi) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ homogeneous on the closed $L^1$-diamond $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q\ge 1$ and lifting it via $\pi_{M\to T}(C,S) = (C^2-S^2 : 2CS : C^2+S^2)$ into projective coordinates over $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$. Because $2(\mathcal{C}_Q^2+\mathcal{S}_Q^2) = (\mathcal{C}_Q+\mathcal{S}_Q)^2 + (\mathcal{C}_Q-\mathcal{S}_Q)^2 \ge Q^2 \ge 1$, the Weierstrass denominator $R_Q(\varphi) = \mathcal{C}_Q(\varphi)^2+\mathcal{S}_Q(\varphi)^2 \ge 1$ never vanishes (\texttt{thm34}), eliminating zero divisors and the $\theta=\pi$ pole, while at the four diamond corners the derivative jump multiplies a vanishing coordinate so that the one-step difference Wronskian $\mathcal{W}_Q(\varphi)=\mathcal{C}_Q(\varphi)\Delta\mathcal{S}_Q(\varphi)-\mathcal{S}_Q(\varphi)\Delta\mathcal{C}_Q(\varphi)\equiv Q$ is identically constant across all $4Q$ points (\texttt{thm1}).
 
 From this projective field structure, all differential, variational, and integral laws follow directly: (1)~the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies the projective quotient-derivative Wronskian law $f(x+1)g(x)-f(x)g(x+1) = -\mathcal{W}(f,g)(x)$, the variational Euler--Lagrange derivative $\delta\mathcal{S}/\delta D_w = P_1 Q_2$ on trajectory monoids (\texttt{thm35}), and the inductive $C^\infty$ higher-derivative tower $D^n f$ (\texttt{thm38}) with pole-free denominators $\prod_{j=0}^n R_Q(\varphi+j)\ge 1$ for all $n\in\mathbb{N}$ and exact remainder-free Taylor--Newton series; (2)~the two-tick symplectic Verlet recurrence and two-ring coupling at the cuboctahedron modulus $k^2 = 1/\|e\|_2^2 = 1/2$ yield closed-form integer evaluations of the Fresnel diffraction integrals ($2048$), lemniscate Jacobi elliptic integrals, the Dirichlet sine integral ($128$), Parseval energy ($2,796,288$), and the zero-order Bessel integral ($\mathcal{J}_{0,3}(0)=65,536$, $\mathcal{J}_{0,3}(4)=0$, \texttt{thm2}); and (3)~slicing the $12$ vertices of $O_2(3)$ along any axis yields the equizonal partition $(4,4,4)$, which with the origin weight $12$ forms Simpson's weights $(4,16,4)=4\times(1,4,1)$ and reproduces the exact 3D continuum Riemann integral $\iiint_{[-1,1]^3} F\,\mathrm{d}V$ in $13$ points (\texttt{thm3}). All theorems (\texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}) are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
@@ -55,7 +55,7 @@ The components of the calculus developed in this paper have deep roots in four c
 \item \textbf{Piecewise-linear $L^1$ ``taxicab trigonometry'' (Minkowski, Krause 1986~\cite{Krause1986}, Thompson 2011--2012~\cite{Thompson2011,Thompson2012}):}
   parameterizing the $L^1$-diamond $|C|+|S|=Q$ by arc length provided a natural cyclic phase register $\varphi\in\mathbb{Z}_{4Q}$, but in~\cite{Thompson2012} (\texttt{arXiv:1205.3814}) three obstacles remained unresolved: (a)~piecewise derivatives broke down at the four diamond corners and lost Euclidean coupling; (b)~quadrant transitions required branched powers $i^{k-2}$; and (c)~integral calculus, the lift to the Euclidean circle, and classical non-elementary integrals (Fresnel, Jacobi elliptic, Bessel, Dirichlet) were left open;
 \item \textbf{Invariant 3D cubature on the cuboctahedron $O_2(3)$ (Stroud 1971~\cite{Stroud1971}, Sobolev 1974~\cite{Sobolev1974}):}
-  spherical and polyhedral cubature theory~\cite{Sobolev1974,Stroud1971} established isotropic 3D integration on the $12$ vertices of the cuboctahedron plus the origin, but treated the weights in continuum floating-point arithmetic rather than linking $O_2(3)$ to the quadratic field $\mathbb{Q}(\sqrt{2})$ and the $\mathbb{Z}_{4Q}$ rotator.
+  spherical and polyhedral cubature theory~\cite{Sobolev1974,Stroud1971} established isotropic 3D integration on the $12$ vertices of the cuboctahedron plus the origin, but treated the weights in continuum floating-point arithmetic rather than linking $O_2(3)$ to the quadratic field $\mathbb{Q}(\sqrt{2})$ and the discrete Euler exponential on $\mathbb{Z}_{4Q}$.
 \end{enumerate}
 
 In this paper (Part~I of the mathematical series), we unite these four traditions by choosing the closed $L^1$-diamond $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|=Q\ge 1$ on $\mathbb{Z}_{4Q}$ as the canonical global gauge section of the projective line $\mathbb{P}^1(\mathbb{Q})$ over the three-dimensional cuboctahedral shell
@@ -116,7 +116,7 @@ To each $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ we associate the rational 
 
 \begin{theorem}[Discrete Euler's Identity, Multi-Turn Periodicity, and Constant Difference Wronskian]
 \label{thm:main-1}
-For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, and integration horizon $L\in\mathbb{N}$, the piecewise-linear rotator $(\mathcal{C}_Q,\mathcal{S}_Q)$ on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, and integration horizon $L\in\mathbb{N}$, the discrete Euler exponential $\mathcal{E}_Q = (\mathcal{C}_Q,\mathcal{S}_Q)$ on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
 \item \textbf{Multi-turn periodicity, constant $L^1$ norm, and Euler's identity $e^{i\pi}+1=0$:}
   \begin{align}
@@ -154,7 +154,7 @@ At the diamond corner $m = Q$ where the slope $\Delta\mathcal{C}_Q$ changes sign
 
 \begin{theorem}[Root-Free Euclidean Weierstrass Lift and Brahmagupta Step Identities]
 \label{thm:main-1b}
-For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the Euclidean circle identity
+For all integer projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the Euclidean circle identity
 \begin{equation}
   \label{eq:weierstrass-circle-id}
   X_0^2 + Y_0^2 \;=\; (\mathcal{C}_0^2 - \mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 \;=\; (\mathcal{C}_0^2 + \mathcal{S}_0^2)^2 \;=\; R_0^2,
@@ -271,7 +271,7 @@ Unlike the residue ring $\mathbb{Z}_{4Q}$ modulo composite $4Q$ (which possesses
 \end{theorem}
 
 \begin{proof}
-(i)~Expanding $(C+S)^2 + (C-S)^2 = (C^2+2CS+S^2) + (C^2-2CS+S^2) = 2(C^2+S^2)$ proves the parallelogram identity in~\eqref{eq:diamond-norm-positivity}. On the $L^1$-diamond $|C|+|S|=Q\ge 1$, either $|C+S|=Q$ (when $C,S$ have the same sign) or $|C-S|=Q$ (when $C,S$ have opposite signs); thus one of $(C+S)^2, (C-S)^2$ equals $Q^2\ge 1$ while the other is a square $\ge 0$, giving $2(C^2+S^2) \ge Q^2 \ge 1$ and hence $C^2+S^2 \ge 1 > 0$ in $\mathbb{Z}$. Equation~\eqref{eq:brahmagupta-no-zero-divisors} follows by expanding both sides; since the product of two integers $\ge 1$ is $\ge 1$, no product of rotator states can vanish.
+(i)~Expanding $(C+S)^2 + (C-S)^2 = (C^2+2CS+S^2) + (C^2-2CS+S^2) = 2(C^2+S^2)$ proves the parallelogram identity in~\eqref{eq:diamond-norm-positivity}. On the $L^1$-diamond $|C|+|S|=Q\ge 1$, either $|C+S|=Q$ (when $C,S$ have the same sign) or $|C-S|=Q$ (when $C,S$ have opposite signs); thus one of $(C+S)^2, (C-S)^2$ equals $Q^2\ge 1$ while the other is a square $\ge 0$, giving $2(C^2+S^2) \ge Q^2 \ge 1$ and hence $C^2+S^2 \ge 1 > 0$ in $\mathbb{Z}$. Equation~\eqref{eq:brahmagupta-no-zero-divisors} follows by expanding both sides; since the product of two integers $\ge 1$ is $\ge 1$, no product of $L^1$-diamond states can vanish.
 
 (ii)--(iii)~Commutativity, associativity, and distributivity of~\eqref{eq:gauss-field-add}--\eqref{eq:gauss-field-mul} and of \texttt{sqrt2FieldAdd}/\texttt{sqrt2FieldMul} follow by polynomial expansion over $\mathbb{Z}$. For the multiplicative inverse~\eqref{eq:gauss-field-inverse} in $\mathbb{Q}(i)$,
 \[
@@ -285,7 +285,7 @@ whose first and third entries are equal and non-zero for $R\ge 1, X^2+Y^2\ge 1$.
 \section{Native Non-Elementary Basis and Closed-Form Evaluation of Fresnel, Jacobi, Dirichlet, Parseval, and Bessel Integrals}
 \label{sec:integrals}
 
-In Liouville's differential algebra, Fresnel integrals $\int\cos(\varphi^2)\,\mathrm{d}\varphi$, elliptic integrals, Dirichlet's sine integral $\mathrm{Si}(\Phi)$, and Bessel integrals $J_0(k)$ admit no closed form in terms of a single circular rotator. On $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, two native operators close these families:
+In Liouville's differential algebra, Fresnel integrals $\int\cos(\varphi^2)\,\mathrm{d}\varphi$, elliptic integrals, Dirichlet's sine integral $\mathrm{Si}(\Phi)$, and Bessel integrals $J_0(k)$ admit no closed form in terms of the elementary circular exponential. On $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, two native operators close these families:
 \begin{enumerate}[leftmargin=*,noitemsep]
 \item The two-tick symplectic Verlet difference recurrence
   \begin{equation}
