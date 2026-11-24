@@ -862,7 +862,14 @@ theorem thm30_countable_multi_screw_cascade_composition_and_2adic_boundary_exclu
        (PR * pbeta) * (n0 - n1) = (PR * pbeta - QR) * n0 - (QR - PR) ∧
        (PR * pbeta) * (n0 - n1) = PR * ((PR * pbeta - QR) * q0 - (pbeta - 1)) ∧
        (PR > 0 → pbeta > 0 → ((PR * pbeta - QR) * q0 > pbeta - 1 ↔ n1 < n0)))) ∧
-    -- 4. Constructive global convergence to 1 whenever the countable contracting screw family covers all n > 1:
+    -- 4. Odd-Core Seesaw Law on (pbeta * PR_next) * q1 = QR * q0 + (pbeta - 1):
+    -- Whenever 2^(beta_m + R_{m+1}) >= 3^(R_m), the odd core cannot grow by >= 2 (q1 < q0 + 2, so for odd cores q1 <= q0);
+    -- conversely, any odd-core growth q1 >= q0 + 2 forces 2^(beta_m + R_{m+1}) < 3^(R_m) (consuming the trailing-ones reservoir):
+    ((pbeta * PR) * n1 = QR * q0 + (pbeta - 1) →
+      pbeta ≥ 2 → PR ≥ 2 → q0 ≥ 1 →
+      (pbeta * PR ≥ QR → n1 < q0 + 2) ∧
+      (n1 ≥ q0 + 2 → pbeta * PR < QR)) ∧
+    -- 5. Constructive global convergence to 1 whenever the countable contracting screw family covers all n > 1:
     ((∀ n : Nat, n > 1 → ∃ k : Nat, iter k n ≥ 1 ∧ iter k n < n) →
       ∀ n : Nat, n ≥ 1 → ∃ K : Nat, iter K n = 1) := by
   have hP := multiScrewP_append L1 L2
@@ -873,7 +880,7 @@ theorem thm30_countable_multi_screw_cascade_composition_and_2adic_boundary_exclu
     rw [hP, hQ]
     simp only [Int.mul_sub, Int.sub_mul, Int.mul_comm, Int.mul_left_comm]
     omega
-  refine ⟨⟨hP, hQ, hD, hC⟩, ⟨?_, ?_⟩, ⟨?_, ?_, ?_⟩, ?_⟩
+  refine ⟨⟨hP, hQ, hD, hC⟩, ⟨?_, ?_⟩, ⟨?_, ?_, ?_⟩, ?_, ?_⟩
   · intro hTraj1 hTraj2
     rw [hP, hQ, hD]
     unfold multiScrewC
@@ -988,6 +995,36 @@ theorem thm30_countable_multi_screw_cascade_composition_and_2adic_boundary_exclu
           Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
         omega
       · omega
+  · intro hCoreEq hpbeta2 hPR2 hq01
+    have hTwoProd : (pbeta * PR) * 2 ≥ 4 * pbeta := by
+      have : (pbeta * PR) * 2 - 4 * pbeta = (2 * pbeta) * (PR - 2) := by
+        simp only [Int.mul_sub, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+        omega
+      have hNonneg : (2 * pbeta) * (PR - 2) ≥ 0 := Int.mul_nonneg (by omega) (by omega)
+      omega
+    have hExpand : (pbeta * PR) * (q0 + 2) = (pbeta * PR) * q0 + (pbeta * PR) * 2 := by
+      simp only [Int.mul_add]
+    have hSeesaw : pbeta * PR ≥ QR → n1 < q0 + 2 := by
+      intro hGe
+      have hDiffNonneg : (pbeta * PR - QR) * q0 ≥ 0 := Int.mul_nonneg (by omega) (by omega)
+      have hDiffId : (pbeta * PR) * q0 - QR * q0 = (pbeta * PR - QR) * q0 := by
+        simp only [Int.sub_mul]
+      have hStrict : (pbeta * PR) * (q0 + 2 - n1) > 0 := by
+        have : (pbeta * PR) * (q0 + 2 - n1) = (pbeta * PR) * (q0 + 2) - (pbeta * PR) * n1 := by
+          simp only [Int.mul_sub]
+        omega
+      have hPosProd : pbeta * PR > 0 := Int.mul_pos (by omega) (by omega)
+      by_cases hLe : q0 + 2 - n1 ≤ 0
+      · have hNonpos : (pbeta * PR) * (q0 + 2 - n1) ≤ 0 :=
+          Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+        omega
+      · omega
+    refine ⟨hSeesaw, ?_⟩
+    intro hGrow
+    by_cases hGe : pbeta * PR ≥ QR
+    · have hLt := hSeesaw hGe
+      omega
+    · omega
   · intro hCover
     exact collatz_global_convergence_from_local_descent iter hZero hAdd hCover
 
