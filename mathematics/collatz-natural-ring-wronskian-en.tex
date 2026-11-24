@@ -222,12 +222,14 @@ For any odd-core macro-stage lists $L,L_1,L_2 \in \mathrm{List}(\mathbb{Z}\times
 \item \textbf{Arbitrary-horizon dual-core drift conservation and Fermat descent:}
   $D_L + E_L = (U_L - Q_L)q_0$ and $P_L(q_0 - q_f) = (P_L - Q_L)q_0 - D_L = (P_L - U_L)q_0 + E_L$, so whenever $P_L \ge 1,\ q_0 \ge 1,\ E_L \ge 0,\ U_L < P_L$, we have $D_L < (P_L - Q_L)q_0$ and $q_f < q_0$;
 \item \textbf{Arbitrary-horizon multiplicative cycle envelope gap ($q_f = q_0$):}
-  on any closed odd-core cycle $q_f = q_0$, $(P_L - Q_L)q_0 = D_L$, $(U_L - P_L)q_0 = E_L$, and $(U_L - P_L)D_L = (P_L - Q_L)E_L$; whenever $q_0 \ge 1,\ D_L \ge 1,\ E_L \ge 0$, the cycle factors are trapped inside $Q_L < P_L \le U_L$ with $P_L = U_L \iff E_L = 0$.
+  on any closed odd-core cycle $q_f = q_0$, $(P_L - Q_L)q_0 = D_L$, $(U_L - P_L)q_0 = E_L$, and $(U_L - P_L)D_L = (P_L - Q_L)E_L$; whenever $q_0 \ge 1,\ D_L \ge 1,\ E_L \ge 0$, the cycle factors are trapped inside $Q_L < P_L \le U_L$ with $P_L = U_L \iff E_L = 0$;
+\item \textbf{Boundary fixed-point reflection $n_\infty^{(-)}=-1 \leftrightarrow n_\infty^{(+)}=0 \leftrightarrow n^*=+1$, cycle max-to-min ratio $n_{\max} \le 2^{A-B}n_{\min}$, large-$n_0$ descent threshold, and $q_{\min}$-envelope collapse (\texttt{thm33}):}
+  the lower edge $R_{\min}=3^B-2^B$ ($P_w=2^B < 3^B=Q_w$) has the unique fixed point $n_\infty^{(-)}=-1$, the pure-even edge ($Q_w=1 < P_w,\ R_w=0$) has the unique fixed point $n_\infty^{(+)}=0$, and reflecting $n_\infty^{(-)}=-1$ across $n_\infty^{(+)}=0$ gives $n^*=2\cdot 0 - (-1) = +1$; across any two elements $n_{\min},n_{\max}$ of a cycle sharing $(P_w,Q_w,P_{\mathrm{odd}},P_{\mathrm{even}})$, $(P_w-Q_w)(n_{\max}-n_{\min}) \le (P_{\mathrm{even}}-1)(Q_w-P_{\mathrm{odd}})$ and $n_{\max} \le P_{\mathrm{even}} n_{\min} = 2^{A-B}n_{\min}$; for any trajectory with $(P_w-Q_w)n_0 > P_{\mathrm{even}}(Q_w-P_{\mathrm{odd}})$, $n_f < n_0$; and on any core step $P q' = Q q + (p-1)$ with $q \ge q_{\min}$ ($p > 1$), $(q_{\min}Q+p-1)q - q_{\min}P q' = (p-1)(q-q_{\min}) \ge 0$ (vanishing iff $q = q_{\min}$).
 \end{enumerate}
 \end{theorem}
 
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:two-arc-wronskian}--\ref{thm:countable-core-stage-monoid} (\texttt{thm18}--\texttt{thm29}, \texttt{thm31\_collatz\_binary\_gear\_word\_extremal\_drift\_envelope\_and\_cycle\_squeeze}, \texttt{thm32\_collatz\_countable\_core\_stage\_monoid\_dual\_drift\_and\_cycle\_gap}, and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:two-arc-wronskian}--\ref{thm:countable-core-stage-monoid} (\texttt{thm18}--\texttt{thm29}, \texttt{thm31\_collatz\_binary\_gear\_word\_extremal\_drift\_envelope\_and\_cycle\_squeeze}, \texttt{thm32\_collatz\_countable\_core\_stage\_monoid\_dual\_drift\_and\_cycle\_gap}, \texttt{thm33\_collatz\_boundary\_fixed\_point\_reflection\_cycle\_ratio\_and\_qmin\_collapse}, and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

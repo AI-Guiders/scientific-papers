@@ -1030,6 +1030,177 @@ theorem thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
       · exact hEq
       · omega
 
+/-- **Theorem 33 (Boundary Fixed-Point Reflection `n_∞^{(-)} = -1 ↔ n_∞^{(+)} = 0 ↔ n* = +1`,
+Cycle Max-to-Min Ratio Bound `n_max ≤ 2^{A-B} n_min`, Large-`n₀` Descent Threshold,
+and `q_min`-Parameterized Envelope Collapse)**:
+1. **Boundary Fixed Points of the Extremal Envelope Edges and Reflection Law:**
+   - On the pure-odd lower edge (`P_even = 1`, `P_w = P_odd`, `R_w = Q_w - P_odd` with `P_odd < Q_w`),
+     the cycle equation `(P_w - Q_w) * n₀ = Q_w - P_odd` has the unique solution `n₀ = -1` (`u(-1) = -1`).
+   - On the pure-even upper edge (`Q_w = 1`, `P_odd = 1`, `R_w = 0` with `1 < P_w`),
+     the cycle equation `(P_w - 1) * n₀ = 0` has the unique solution `n₀ = 0` (`u(0) = +1`).
+   - Reflection of `n_∞^{(-)} = -1` across `n_∞^{(+)} = 0` yields `n* = 2 * 0 - (-1) = +1` (`u(+1) = +3`).
+2. **Cycle Max-to-Min Ratio and Span Bound across Cyclic Shifts:**
+   For any two elements `n_min, n_max` of a cycle sharing the permutation invariants
+   `(P_w, Q_w, P_odd, P_even)` of `w : List Bool` (with `(P_w - Q_w) * n_min = multiScrewD (collatzWordScrews w_min)`
+   and `(P_w - Q_w) * n_max = multiScrewD (collatzWordScrews w_max)`):
+   - `(P_w - Q_w) * (n_max - n_min) ≤ (P_even - 1) * (Q_w - P_odd)`,
+   - whenever `P_odd < Q_w` and `Q_w < P_w`: `n_max ≤ P_even * n_min`.
+3. **Large-`n₀` Permutation-Free Descent Threshold:**
+   For any word `w : List Bool` and trajectory `P_w * n_f - Q_w * n₀ = R_w`,
+   whenever `P_even * (Q_w - P_odd) < (P_w - Q_w) * n₀` and `1 ≤ P_w`, one has `n_f < n₀`.
+4. **`q_min`-Parameterized Step Envelope Collapse:**
+   For any odd-core step `P * q' = Q * q + (p - 1)` with `q_min ≤ q` and `1 ≤ p`:
+   `(q_min * Q + p - 1) * q - q_min * P * q' = (p - 1) * (q - q_min) ≥ 0`,
+   with equality `(q_min * Q + p - 1) * q = q_min * P * q'` when `1 < p` iff `q = q_min`. -/
+theorem thm33_collatz_boundary_fixed_point_reflection_cycle_ratio_and_qmin_collapse
+    (w wMin wMax : List Bool) (n0 nf nMin nMax P Q p q qNext qMin : Int) :
+    let Pw := multiScrewP (collatzWordScrews w)
+    let Qw := multiScrewQ (collatzWordScrews w)
+    let Rw := multiScrewD (collatzWordScrews w)
+    let Podd := collatzWordPOdd w
+    let Peven := collatzWordPEven w
+    ((Podd < Qw → (Podd - Qw) * n0 = Qw - Podd → n0 = -1) ∧
+     (1 < Pw → (Pw - 1) * n0 = 0 → n0 = 0) ∧
+     (2 * (0 : Int) - (-1 : Int) = 1)) ∧
+    (multiScrewP (collatzWordScrews wMin) = Pw →
+     multiScrewQ (collatzWordScrews wMin) = Qw →
+     collatzWordPOdd wMin = Podd →
+     collatzWordPEven wMin = Peven →
+     multiScrewP (collatzWordScrews wMax) = Pw →
+     multiScrewQ (collatzWordScrews wMax) = Qw →
+     collatzWordPOdd wMax = Podd →
+     collatzWordPEven wMax = Peven →
+     (Pw - Qw) * nMin = multiScrewD (collatzWordScrews wMin) →
+     (Pw - Qw) * nMax = multiScrewD (collatzWordScrews wMax) →
+      (Pw - Qw) * (nMax - nMin) ≤ (Peven - 1) * (Qw - Podd) ∧
+      (Podd < Qw → Qw < Pw → nMax ≤ Peven * nMin)) ∧
+    (Pw * nf - Qw * n0 = Rw →
+     1 ≤ Pw →
+     Peven * (Qw - Podd) < (Pw - Qw) * n0 →
+      nf < n0) ∧
+    (P * qNext = Q * q + (p - 1) →
+     qMin ≤ q →
+     1 ≤ p →
+      (qMin * Q + p - 1) * q - qMin * P * qNext = (p - 1) * (q - qMin) ∧
+      0 ≤ (qMin * Q + p - 1) * q - qMin * P * qNext ∧
+      (1 < p → ((qMin * Q + p - 1) * q - qMin * P * qNext = 0 ↔ q = qMin))) := by
+  intro Pw Qw Rw Podd Peven
+  refine ⟨⟨?_, ?_, by omega⟩, ?_, ?_, ?_⟩
+  · intro hLt hEq
+    rcases Int.lt_trichotomy n0 (-1) with hLt1 | hEq1 | hGt1
+    · have hPos : (Podd - Qw) * (n0 + 1) > 0 :=
+        Int.mul_pos_of_neg_of_neg (by omega) (by omega)
+      have hExpand : (Podd - Qw) * (n0 + 1) = (Podd - Qw) * n0 - (Qw - Podd) := by
+        simp only [Int.mul_add, Int.mul_one]; omega
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+    · exact hEq1
+    · have hNeg : (Podd - Qw) * (n0 + 1) < 0 :=
+        Int.mul_neg_of_neg_of_pos (by omega) (by omega)
+      have hExpand : (Podd - Qw) * (n0 + 1) = (Podd - Qw) * n0 - (Qw - Podd) := by
+        simp only [Int.mul_add, Int.mul_one]; omega
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+  · intro hGt hEq
+    rcases Int.lt_trichotomy n0 0 with hLt0 | hEq0 | hGt0
+    · have : (Pw - 1) * n0 < 0 := Int.mul_neg_of_pos_of_neg (by omega) hLt0
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+    · exact hEq0
+    · have : (Pw - 1) * n0 > 0 := Int.mul_pos (by omega) hGt0
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+  · intro hPmin hQmin hPomin hPemin hPmax hQmax hPomax hPemax hCycMin hCycMax
+    have h31Min := (thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze wMin nMin).2.1
+    have h31Max := (thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze wMax nMax).2.1
+    rw [hQmin, hPomin, hPemin, ← hCycMin] at h31Min
+    rw [hQmax, hPomax, hPemax, ← hCycMax] at h31Max
+    rcases h31Min with ⟨hLowMin, _⟩
+    rcases h31Max with ⟨_, hHighMax, _⟩
+    have hSpan : (Pw - Qw) * (nMax - nMin) ≤ (Peven - 1) * (Qw - Podd) := by
+      have h1 : (Pw - Qw) * (nMax - nMin) = (Pw - Qw) * nMax - (Pw - Qw) * nMin := by
+        simp only [Int.mul_sub]
+      have h2 : (Peven - 1) * (Qw - Podd) = Peven * (Qw - Podd) - (Qw - Podd) := by
+        simp only [Int.sub_mul, Int.one_mul]
+      omega
+    refine ⟨hSpan, ?_⟩
+    intro hPoLtQ hQLtP
+    have hStep1 : (Qw - Podd) * ((Pw - Qw) * nMax) ≤
+                  (Qw - Podd) * (Peven * (Qw - Podd)) := by
+      have hDiff : (Qw - Podd) * (Peven * (Qw - Podd)) - (Qw - Podd) * ((Pw - Qw) * nMax) =
+                   (Qw - Podd) * (Peven * (Qw - Podd) - (Pw - Qw) * nMax) := by
+        simp only [Int.mul_sub]
+      have hNonneg : 0 ≤ (Qw - Podd) * (Peven * (Qw - Podd) - (Pw - Qw) * nMax) :=
+        Int.mul_nonneg (by omega) (by omega)
+      omega
+    have hStep2 : (Peven * (Qw - Podd)) * (Qw - Podd) ≤
+                  (Peven * (Qw - Podd)) * ((Pw - Qw) * nMin) := by
+      have h31w := (thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze w n0).1
+      have hPePos : 1 ≤ Peven := h31w.2.1
+      have hPeQPo : 0 ≤ Peven * (Qw - Podd) := Int.mul_nonneg (by omega) (by omega)
+      have hDiff : (Peven * (Qw - Podd)) * ((Pw - Qw) * nMin) -
+                   (Peven * (Qw - Podd)) * (Qw - Podd) =
+                   (Peven * (Qw - Podd)) * ((Pw - Qw) * nMin - (Qw - Podd)) := by
+        simp only [Int.mul_sub]
+      have hNonneg : 0 ≤ (Peven * (Qw - Podd)) * ((Pw - Qw) * nMin - (Qw - Podd)) :=
+        Int.mul_nonneg hPeQPo (by omega)
+      omega
+    have hCommMid : (Qw - Podd) * (Peven * (Qw - Podd)) = (Peven * (Qw - Podd)) * (Qw - Podd) := by
+      simp only [Int.mul_comm]
+    have hCombined : (Qw - Podd) * ((Pw - Qw) * nMax) ≤ (Peven * (Qw - Podd)) * ((Pw - Qw) * nMin) := by
+      omega
+    have hFactorDiff : 0 ≤ ((Qw - Podd) * (Pw - Qw)) * (Peven * nMin - nMax) := by
+      have hId : ((Qw - Podd) * (Pw - Qw)) * (Peven * nMin - nMax) =
+                 (Peven * (Qw - Podd)) * ((Pw - Qw) * nMin) - (Qw - Podd) * ((Pw - Qw) * nMax) := by
+        calc ((Qw - Podd) * (Pw - Qw)) * (Peven * nMin - nMax)
+          _ = ((Qw - Podd) * (Pw - Qw)) * (Peven * nMin) - ((Qw - Podd) * (Pw - Qw)) * nMax := by
+            simp only [Int.mul_sub]
+          _ = (Peven * (Qw - Podd)) * ((Pw - Qw) * nMin) - (Qw - Podd) * ((Pw - Qw) * nMax) := by
+            simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    have hCoeffPos : 0 < (Qw - Podd) * (Pw - Qw) := Int.mul_pos (by omega) (by omega)
+    rcases Int.lt_trichotomy (Peven * nMin - nMax) 0 with hLt | hEq | hGt
+    · have hNeg : ((Qw - Podd) * (Pw - Qw)) * (Peven * nMin - nMax) < 0 :=
+        Int.mul_neg_of_pos_of_neg hCoeffPos hLt
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+    · omega
+    · omega
+  · intro hTraj hPw1 hThresh
+    have h31 := (thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze w n0).2.1
+    rcases h31 with ⟨_, hRwHigh, _⟩
+    have hRwHigh' : Rw ≤ Peven * (Qw - Podd) := hRwHigh
+    have hFermat : Pw * (n0 - nf) = (Pw - Qw) * n0 - Rw := by
+      have h1 : Pw * (n0 - nf) = Pw * n0 - Pw * nf := by simp only [Int.mul_sub]
+      have h2 : (Pw - Qw) * n0 = Pw * n0 - Qw * n0 := by simp only [Int.sub_mul]
+      omega
+    have hPos : 0 < Pw * (n0 - nf) := by omega
+    rcases Int.lt_trichotomy nf n0 with hLt | hEq | hGt
+    · exact hLt
+    · have : Pw * (n0 - nf) = 0 := by
+        have h0 : n0 - nf = 0 := by omega
+        rw [h0, Int.mul_zero]
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+    · have hNonpos : Pw * (n0 - nf) ≤ 0 :=
+        Int.mul_nonpos_of_nonneg_of_nonpos (by omega) (by omega)
+      exact False.elim (Int.lt_irrefl 0 (by omega))
+  · intro hStep hqMin hP1
+    have hId : (qMin * Q + p - 1) * q - qMin * P * qNext = (p - 1) * (q - qMin) := by
+      have hMul : qMin * P * qNext = qMin * (P * qNext) := by simp only [Int.mul_assoc]
+      rw [hMul, hStep]
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                 Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+      omega
+    have hNonneg : 0 ≤ (p - 1) * (q - qMin) := Int.mul_nonneg (by omega) (by omega)
+    refine ⟨hId, by omega, ?_⟩
+    intro hPgt1
+    rw [hId]
+    constructor
+    · intro hZero
+      rcases Int.lt_trichotomy q qMin with hLt | hEq | hGt
+      · omega
+      · exact hEq
+      · have hPos : 0 < (p - 1) * (q - qMin) := Int.mul_pos (by omega) (by omega)
+        exact False.elim (Int.lt_irrefl 0 (by omega))
+    · intro hEq
+      have h0 : q - qMin = 0 := by omega
+      rw [h0, Int.mul_zero]
+
 #print axioms thm18_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
@@ -1045,5 +1216,6 @@ theorem thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
 #print axioms thm29_collatz_trailing_ones_burn_macro_step
 #print axioms thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze
 #print axioms thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
+#print axioms thm33_collatz_boundary_fixed_point_reflection_cycle_ratio_and_qmin_collapse
 
 end RotatorCalculusPaper
