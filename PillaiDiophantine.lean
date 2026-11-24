@@ -3,16 +3,16 @@ namespace RotatorCalculusPaper
 set_option linter.unusedSimpArgs false
 set_option maxHeartbeats 6400000
 
-/-- **Theorem 6 (Universal `∀`-Quantified Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone
-Generators, and Parabolic `SL₂(ℤ)` Jordan Lock `(P_K ∓ I₂)² ≡ 0` for All `K ∈ ℤ`)**:
-1. **Universal Skeletal Joint Determinant & Cross-Joint Shift Invariance:**
-   For any `(A, x_a, x_ma, x_step) ∈ ℤ⁴`, shifting a factor across the joint split satisfies
+/-- **Theorem 6 (Pillai Skeletal Joint Matrix Decomposition, Isotropic Discriminant Cone
+Generators, and Parabolic `SL₂(ℤ)` Jordan Lock `(P_K ∓ I₂)² ≡ 0`)**:
+1. **Skeletal Joint Determinant & Cross-Joint Shift Invariance:**
+   For `(A, x_a, x_ma, x_step) ∈ ℤ⁴`, shifting a factor across the joint split satisfies
    `(A * x_ma * x_step) * x_a - (A * x_ma) * (x_step * x_a) = 0`.
 2. **Isotropic Discriminant Cone (`Tr² - 4 det = 4 X²`) and Symmetric Generator Factorization:**
    For trace `2 T` and determinant `T² - X²`, `Tr² - 4 det = 4 X²`, vanishing on the isotropic cone `X = 0`;
    along `y_nb = y_b`, `x_ma * x_a - y_b² = (x_ma - y_b) * (x_a - y_b) + y_b * (x_ma + x_a - 2 y_b)`.
-3. **Universal Parabolic `SL₂(ℤ)` Jordan Lock for Every `K ∈ ℤ` (Covering `K ∈ {6, 12, 15, 40}`):**
-   For any `K ∈ ℤ`, `P_K^{(∓)} = [[∓1 - K, -K], [K, ∓1 + K]]` has `det = +1`, `Tr = ∓2`, and nilpotent
+3. **Parabolic `SL₂(ℤ)` Jordan Lock `(P_K^{(∓)} ± I₂)² = 0`:**
+   For `K ∈ ℤ`, `P_K^{(∓)} = [[∓1 - K, -K], [K, ∓1 + K]]` has `det = +1`, `Tr = ∓2`, and nilpotent
    Jordan square `(P_K^{(∓)} ± I₂)² = [[0, 0], [0, 0]]`. -/
 theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych
     (A xa xma xstep yb K T X : Int) :
@@ -58,8 +58,8 @@ def padeTowerQ : List Int → Int → Int → Int
     let qNext := (r - 1) * U + V
     padeTowerQ rest pNext qNext
 
-/-- **Theorem 7 (Universal `∀`-Quantified Three-Level Recursive Descent Invariant, Hankel–Wronskian Square Law,
-and Arbitrary-Depth `M`-Floor Padé–Thue Gear-Cascade Monoid & Cramer Law across All `ℛ₁, ℛ₂ : List Int`)**: -/
+/-- **Theorem 7 (Three-Level Recursive Descent Invariant, Hankel–Wronskian Square Law,
+and `M`-Floor Padé–Thue Gear-Cascade Monoid & Cramer Law)**: -/
 theorem thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
     (R1 R2 : List Int) (kShift At Bt X Y A B u v : Int) :
     let C0 := At * X * X - Bt * Y * Y
@@ -124,9 +124,9 @@ theorem thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thu
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                 Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 
-/-- **Theorem 10 (Universal `∀`-Quantified Root-Free Cubic Padé–Thue Compression Identity
-`U * I₁ * Φ₃(a P̂₁, b Q̂₁) = a³ (U - V)³ (U + V) - (U b³ - V a³) Q̂₁³` across all integers `ℤ`)**: -/
-theorem thm10_universal_root_free_cubic_pade_compression (U V a b : Int) :
+/-- **Theorem 10 (Root-Free Cubic Padé–Thue Compression Identity
+`U * I₁ * Φ₃(a P̂₁, b Q̂₁) = a³ (U - V)³ (U + V) - (U b³ - V a³) Q̂₁³`)**: -/
+theorem thm10_root_free_cubic_pade_compression (U V a b : Int) :
     let Gap := U - V
     let P1  := U + (V + V)
     let Q1  := (U + U) + V
@@ -142,10 +142,10 @@ theorem thm10_universal_root_free_cubic_pade_compression (U V a b : Int) :
              Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   omega
 
-/-- **Theorem 11 (Universal `∀`-Quantified Cross-Floor Padé Wronskian `W_{2,3}` Identity
-`Q̂_{1,2}² P̂_{1,3}³ - P̂_{1,2}² Q̂_{1,3}³ = (U - V)³ (U² + 3UV + V²)` and Universal Right Kernel & Trace
-of `P₃(A, B, A+B)` across all integers `ℤ`)**: -/
-theorem thm11_universal_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
+/-- **Theorem 11 (Cross-Floor Padé Wronskian `W_{2,3}` Identity
+`Q̂_{1,2}² P̂_{1,3}³ - P̂_{1,2}² Q̂_{1,3}³ = (U - V)³ (U² + 3UV + V²)` and Right Kernel & Trace
+of `P₃(A, B, A+B)`)**: -/
+theorem thm11_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
     let C := A + B
     let Gap := U - V
     let P1_2 := U + (V + V + V)
@@ -177,7 +177,7 @@ theorem thm11_universal_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
 
 #print axioms thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych
 #print axioms thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
-#print axioms thm10_universal_root_free_cubic_pade_compression
-#print axioms thm11_universal_cross_floor_wronskian_and_p3_kernel
+#print axioms thm10_root_free_cubic_pade_compression
+#print axioms thm11_cross_floor_wronskian_and_p3_kernel
 
 end RotatorCalculusPaper

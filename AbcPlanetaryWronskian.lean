@@ -3,8 +3,8 @@ namespace RotatorCalculusPaper
 set_option linter.unusedSimpArgs false
 set_option maxHeartbeats 6400000
 
-/-- **Theorem 8 (Universal `∀`-Quantified Bordered `3 × 3` Pillai–`abc` Skeletal Matrix `M₃`,
-Rank-1 Adjugate Factorization, and Ternary Triangle-Defect Identity across All Integers `ℤ`)**: -/
+/-- **Theorem 8 (Bordered `3 × 3` Pillai–`abc` Skeletal Matrix `M₃`,
+Rank-1 Adjugate Factorization, and Ternary Triangle-Defect Identity)**: -/
 theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
     (a1 a2 b1 b2 c1 c2 : Int) :
     let A := a1 * a2
@@ -27,10 +27,10 @@ theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
   have hZero : c1 * c2 - a1 * a2 - b1 * b2 = 0 := by omega
   exact ⟨by rw [hDet, hZero, Int.mul_zero], by omega, by omega, by omega⟩
 
-/-- **Theorem 9 (Universal `∀`-Quantified Algebraic Laws of the Planetary Differential `F₃`,
-Gear-Slip Brahmagupta Law, Conjugate Bézout Partner Matrix `B_{2×3}`, Arbitrary-Floor Shaft-Bézout
-Gauss-Shell Inversion `K_Bezout`, and Lagrange–Vandermonde Shaft-Gap Projectors across all integers `ℤ`)**: -/
-theorem thm9_universal_pillai_abc_differential_bezout_and_pade_laws
+/-- **Theorem 9 (Algebraic Laws of the Planetary Differential `F₃`,
+Gear-Slip Brahmagupta Law, Conjugate Bézout Partner Matrix `B_{2×3}`, Shaft-Bézout
+Gauss-Shell Inversion `K_Bezout`, and Lagrange–Vandermonde Shaft-Gap Projectors)**: -/
+theorem thm9_pillai_abc_differential_bezout_and_pade_laws
     (A B u v a1 a2 b1 b2 c1 c2 At Bt Ct X Y Z Zk Yk wk vk : Int) :
     let C := A + B
     let w := u + v
@@ -59,9 +59,9 @@ theorem thm9_universal_pillai_abc_differential_bezout_and_pade_laws
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 
-/-- **Theorem 12 (Universal `∀`-Quantified Reverse Padé–Bézout Cubic Annihilation Law and
-Explicit Diophantine Upper-Bound Inequalities `Z³ I₁ ≤ B̃ (Y w + Z v)` & `Y³ I₁ ≤ C̃ (Y w + Z v)`)**: -/
-theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
+/-- **Theorem 12 (Reverse Padé–Bézout Cubic Annihilation Law and
+Diophantine Upper-Bound Inequalities `Z³ I₁ ≤ B̃ (Y w + Z v)` & `Y³ I₁ ≤ C̃ (Y w + Z v)`)**: -/
+theorem thm12_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     (Ct Bt Z Y w v : Int) :
     let wm := Z - w
     let vm := Y - v
@@ -118,10 +118,10 @@ theorem thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 
-/-- **Theorem 13 (Universal `∀`-Quantified Integer Mason–Stothers–Bézout Cubic Wronskian Law
+/-- **Theorem 13 (Integer Mason–Stothers–Bézout Cubic Wronskian Law
 `W* = A B* - B A* = k X² Y² Z²`, Derivative Triple `A* + B* = C*`, Three Shaft-Square Minor Laws
 `(Z², Y², X²)`, `3 × 3` Fourth-Power Determinant `-det W_MS = k (X⁴ + Y⁴ + Z⁴)`, and Bilateral Cramer Clash)**: -/
-theorem thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
+theorem thm13_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
     (At Bt Ct X Y Z u0 v0 t w v : Int) :
     let wx := At * X
     let wy := Bt * Y
@@ -190,7 +190,7 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
       (Dcube * Y3 = At * V1 + Ct * V0) ∧
       (Dcube * Z3 = At * (U0 + U1) + Bt * V0)) := by
   dsimp
-  have h13 := thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
+  have h13 := thm13_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
                 At Bt Ct X Y Z u0 v0 t 0 0
   dsimp at h13
   rcases h13 with ⟨_, hMinZ, _, _, hWronsk, _, _, _, _⟩
@@ -247,9 +247,9 @@ theorem thm14_master_pillai_and_abc_bilateral_convergence_chains
     rw [e0, e1, e2] at h1 h2 h3
     exact ⟨by omega, by omega, by omega⟩
 
-/-- **Theorem 15 (Universal `∀`-Quantified Cross-Floor Locking Theorem `k = 2 ↔ k = 3 ⟹ K = 6`
+/-- **Theorem 15 (Cross-Floor Locking Theorem `k = 2 ↔ k = 3 ⟹ K = 6`
 of Genus `g(6) = 10 ≥ 2` and Euler Characteristic Trichotomy `χ(C_k) = k(3 - k)`)**: -/
-theorem thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
+theorem thm15_cross_floor_k2_k3_sixth_power_genus10_lock
     (A B C A2 B2 C2 X2 Y2 Z2 A3 B3 C3 X3 Y3 Z3 k : Int)
     (hABC : A + B - C = 0)
     (hA2 : A2 * (X2 * X2) = A) (hB2 : B2 * (Y2 * Y2) = B) (hC2 : C2 * (Z2 * Z2) = C)
@@ -316,9 +316,9 @@ theorem thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
   rw [hW6]
   omega
 
-/-- **Theorem 16 (Universal `∀`-Quantified Weierstrass Stereographic Embedding of Every Integer Triple
-`A + B = C ∈ ℤ³` into an Arbitrary-Modulus Four-Quadrant Rotator `ℤ_{4Q}` for Any `Q ∈ ℤ`)**: -/
-theorem thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
+/-- **Theorem 16 (Weierstrass Stereographic Embedding of `A + B = C ∈ ℤ³`
+into a Four-Quadrant Rotator `ℤ_{4Q}`)**: -/
+theorem thm16_weierstrass_stereographic_abc_embedding_into_z512_rotator
     (Q A B C u v w phi0 : Int)
     (hABC : A + B - C = 0)
     (hBez : A * v - B * u = 1)
@@ -360,11 +360,11 @@ theorem thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotato
           by omega, by omega, by omega, by omega, by omega⟩
 
 #print axioms thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
-#print axioms thm9_universal_pillai_abc_differential_bezout_and_pade_laws
-#print axioms thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound
-#print axioms thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
+#print axioms thm9_pillai_abc_differential_bezout_and_pade_laws
+#print axioms thm12_reverse_pade_bezout_cubic_annihilation_and_radical_bound
+#print axioms thm13_integer_mason_stothers_cubic_wronskian_and_fourth_power_det
 #print axioms thm14_master_pillai_and_abc_bilateral_convergence_chains
-#print axioms thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock
-#print axioms thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator
+#print axioms thm15_cross_floor_k2_k3_sixth_power_genus10_lock
+#print axioms thm16_weierstrass_stereographic_abc_embedding_into_z512_rotator
 
 end RotatorCalculusPaper

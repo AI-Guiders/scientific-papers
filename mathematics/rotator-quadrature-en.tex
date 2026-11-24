@@ -11,7 +11,7 @@
   linkcolor=blue!70!black,
   citecolor=blue!70!black,
   urlcolor=blue!70!black,
-  pdftitle={Cuboctahedral Rotator Calculus: Discrete Euler Exponential on Z_512, Universal Constant Wronskian, and Closed-Form Quadrature on the Cuboctahedron O_2(3) in Lean 4},
+  pdftitle={Cuboctahedral Rotator Calculus: Discrete Euler Exponential on Z_512, Constant Wronskian, and Closed-Form Quadrature on the Cuboctahedron O_2(3) in Lean 4},
   pdfauthor={Dmitrii A. Karataev}
 }
 
@@ -24,7 +24,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{\textbf{Cuboctahedral Rotator Calculus:\\ Discrete Euler Exponential on $\mathbb{Z}_{512}$, Universal Constant Wronskian, and Closed-Form Quadrature on the Cuboctahedron $O_2(3)$ in Lean~4}}
+\title{\textbf{Cuboctahedral Rotator Calculus:\\ Discrete Euler Exponential on $\mathbb{Z}_{512}$, Constant Wronskian, and Closed-Form Quadrature on the Cuboctahedron $O_2(3)$ in Lean~4}}
 \author{Dmitrii A.~Karataev\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Formal Lean~4 verification and analytical development were conducted in partnership with \emph{Luch} (AI research partner, AI-Guiders).}}
 \date{}
 
@@ -120,13 +120,13 @@ To each $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ we associate the rational 
   R_d(\varphi) := \mathcal{C}_d(\varphi)^2 + \mathcal{S}_d(\varphi)^2.
 \end{equation}
 
-\begin{theorem}[Discrete Euler's Identity, Multi-Turn Periodicity, and Universal Constant Difference Wronskian]
+\begin{theorem}[Discrete Euler's Identity, Multi-Turn Periodicity, and Constant Difference Wronskian]
 \label{thm:main-1}
 For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, and integration horizon $L\in\mathbb{N}$, the piecewise-linear rotator $(\mathcal{C}_Q,\mathcal{S}_Q)$ on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
 \item \textbf{Multi-turn periodicity and Euler's identity $e^{i\pi}+1=0$:}
   $\mathcal{E}_d(\varphi + 4Qk_{\mathrm{turns}}) = \mathcal{E}_d(\varphi)$, the $L^1$ norm is identically constant $|\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| \equiv Q$, the quarter-turn shift $+Q$ acts as exact multiplication by the imaginary unit~$i$: $\mathcal{E}_Q(\varphi + Q) = (-\mathcal{S}_Q(\varphi),\,+\mathcal{C}_Q(\varphi))$, and the half-turn shift $+2Q$ satisfies $\mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) = (0,0)$ for all $\varphi\in\mathbb{Z}$.
-\item \textbf{Universal constant difference Wronskian and pointwise-constant integral extraction:}
+\item \textbf{Constant difference Wronskian and pointwise-constant integral extraction:}
   across all four quadrants and all four corner vertices of the $L^1$ diamond, the one-step difference Wronskian is identically equal to the constant $Q$:
   \begin{equation}
     \label{eq:constant-wronskian-all-512}
@@ -142,9 +142,9 @@ For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, 
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Universal Root-Free Euclidean Weierstrass Lift and Brahmagupta Step Identities]
+\begin{theorem}[Root-Free Euclidean Weierstrass Lift and Brahmagupta Step Identities]
 \label{thm:main-1b}
-For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the rational Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the exact Euclidean circle identity $X^2 + Y^2 = (\mathcal{C}_0^2-\mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R^2$ and the universal Brahmagupta--Weierstrass step decomposition with inner product $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ and Wronskian $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
+For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the rational Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the exact Euclidean circle identity $X^2 + Y^2 = (\mathcal{C}_0^2-\mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R^2$ and the Brahmagupta--Weierstrass step decomposition with inner product $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ and Wronskian $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
 \begin{equation}
   \label{eq:brahmagupta-step}
   R_0 R_1 - \mathcal{I}^2 \;=\; \mathcal{W}^2,\qquad
@@ -153,7 +153,7 @@ For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\
 \end{equation}
 \end{theorem}
 
-\begin{theorem}[Fundamental Theorem of Discrete Calculus and Universal Multiplierless Arithmetic]
+\begin{theorem}[Fundamental Theorem of Discrete Calculus and Multiplierless Arithmetic]
 \label{thm:main-1c}
 For every dimension $d\in\mathbb{N}$, upper limit $L\in\mathbb{N}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, function $f\colon\mathbb{Z}\to\mathbb{Z}$, and integers $Q,x,y\in\mathbb{Z}$ (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
 \begin{equation}
@@ -162,11 +162,11 @@ For every dimension $d\in\mathbb{N}$, upper limit $L\in\mathbb{N}$, turn count $
   \Delta\widehat{\Phi}_{\mathcal{C}}(d,L) \;=\; \mathcal{C}_d(L),\qquad
   \Delta\widehat{\Phi}_{\mathcal{S}}(d,L) \;=\; \mathcal{S}_d(L),
 \end{equation}
-with full-turn vanishing $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{C}}(3,512) = k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,512) = 0$, multi-turn half-wave area $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,256) = k_{\mathrm{turns}}Q_\square(3)^2 = 16,384\,k_{\mathrm{turns}}$, and universal quarter-square multiplierless multiplication $(x+y)^2 - (x-y)^2 = 4xy$.
+with full-turn vanishing $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{C}}(3,512) = k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,512) = 0$, multi-turn half-wave area $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,256) = k_{\mathrm{turns}}Q_\square(3)^2 = 16,384\,k_{\mathrm{turns}}$, and quarter-square multiplierless multiplication $(x+y)^2 - (x-y)^2 = 4xy$.
 \end{theorem}
 
 \begin{proof}[Proof of Theorems~\ref{thm:main-1}--\ref{thm:main-1c}]
-In~\eqref{eq:constant-wronskian-all-512}, expanding $(Q-m)(m+1) - m(Q-m-1) = (Qm + Q - m^2 - m) - (Qm - m^2 - m) = Q$ cancels all quadratic and linear terms in $m$ for arbitrary $Q,m\in\mathbb{Z}$; at the diamond corner $m=Q$, $0\cdot(Q-1) - Q\cdot(-1) = Q$. Inducting on $L\in\mathbb{N}$ gives $\sum_{\varphi=0}^{L-1} g(\varphi) = L\,c_{\mathrm{inv}}$ whenever $g(\varphi)\equiv c_{\mathrm{inv}}$. The polynomial identities of Theorems~\ref{thm:main-1b}--\ref{thm:main-1c} hold universally over $\mathbb{Z}$ (\texttt{omega} in Lean~4).
+In~\eqref{eq:constant-wronskian-all-512}, expanding $(Q-m)(m+1) - m(Q-m-1) = (Qm + Q - m^2 - m) - (Qm - m^2 - m) = Q$ cancels all quadratic and linear terms in $m$ for arbitrary $Q,m\in\mathbb{Z}$; at the diamond corner $m=Q$, $0\cdot(Q-1) - Q\cdot(-1) = Q$. Inducting on $L\in\mathbb{N}$ gives $\sum_{\varphi=0}^{L-1} g(\varphi) = L\,c_{\mathrm{inv}}$ whenever $g(\varphi)\equiv c_{\mathrm{inv}}$. The polynomial identities of Theorems~\ref{thm:main-1b}--\ref{thm:main-1c} hold over $\mathbb{Z}$ (\texttt{omega} in Lean~4).
 \end{proof}
 
 \section{Native Non-Elementary Basis and Closed-Form Evaluation of Fresnel, Jacobi, Dirichlet, Parseval, and Bessel Integrals}
@@ -195,7 +195,7 @@ Define the five canonical ring integrals:
   \mathcal{J}_{0,d}(k) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d\bigl(k\,\mathcal{S}_d(\varphi)\bigr). \label{eq:def-bessel}
 \end{align}
 
-\begin{theorem}[Universal Lemniscate Jacobi Elliptic Triad Invariants and Parametric Multi-Turn Elliptic Integrals]
+\begin{theorem}[Lemniscate Jacobi Elliptic Triad Invariants and Parametric Multi-Turn Elliptic Integrals]
 \label{thm:main-2}
 For all $Q,m,k_{\mathrm{turns}},a,b\in\mathbb{Z}$ and any integration horizon $L\in\mathbb{N}$, the Jacobi elliptic triad on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
 \[
@@ -236,13 +236,13 @@ For any 3D function $F\colon\mathbb{Z}^3\to\mathbb{Z}$, define the natural cente
   \widehat{\mathcal{I}}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0,0,0) \;+\; \sum_{e\in O_2(d)} F(e_x,e_y,e_z).
 \end{equation}
 
-\begin{theorem}[Archimedes Equizonal Partition and Universal Functional 3D Cubature on the Cuboctahedron]
+\begin{theorem}[Archimedes Equizonal Partition and Functional 3D Cubature on the Cuboctahedron]
 \label{thm:main-3}
 For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficients $c_0,c_x,c_y,c_z,c_{xy},c_{xz},c_{yz}\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
 \item \textbf{Archimedes equizonal partition into Simpson weights $(4,16,4)=4\times(1,4,1)$:}
   slicing $O_2(3)$ along $e_x\in\{-1,0,+1\}$ partitions the $12$ vertices into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each; adding the origin weight $|V_{O_2}(3)|=12$ to the equatorial zone $e_x=0$ yields $(4,16,4)$ with total weight $24$.
-\item \textbf{Universal functional additivity, odd-function annihilation, and unified even quadratic/quartic cubature:}
+\item \textbf{Functional additivity, odd-function annihilation, and unified even quadratic/quartic cubature:}
   for all functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$ of arbitrary degree,
   \begin{equation}
     \label{eq:functional-odd-annihilation}
@@ -260,14 +260,14 @@ For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficie
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Wronskian-Cube Rational $\pi(n)$ Brackets, Universal Verlet-Parabola Sine Defect Law, and 3D Euler Norm-Scaling]
+\begin{theorem}[Wronskian-Cube Rational $\pi(n)$ Brackets, Verlet-Parabola Sine Defect Law, and 3D Euler Norm-Scaling]
 \label{thm:main-3b}
 For all $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
 \item \textbf{Parallelogram radius bound and rational $\pi(n)$ brackets:}
   $2 R_Q(\varphi) = Q^2 + (|\mathcal{C}_Q(\varphi)|-|\mathcal{S}_Q(\varphi)|)^2 \ge Q^2$; on the Weierstrass $n$-gon ($s=N_{\mathrm{ring}}(3)/n$), the inscribed and circumscribed estimators satisfy $\pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) = \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)R_3(js)R_3((j+1)s)} > 0$ with strict nested monotonicity $\pi_{\mathrm{in}}(8)<\pi_{\mathrm{in}}(16)<\pi_{\mathrm{in}}(32)<\pi_{\mathrm{out}}(32)<\pi_{\mathrm{out}}(16)<\pi_{\mathrm{out}}(8)$ and Huygens--Snellius value $\pi_3(16)=142/45$.
-\item \textbf{Universal Verlet-parabola rational sine defect law and 3D Euler norm-scaling:}
-  for the Verlet parabola $P(p,q)=2pq-p^2$, the rational sine numerator $\mathrm{Num}(p,q)=4P(p,q)$ and denominator $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ obey the universal identity
+\item \textbf{Verlet-parabola rational sine defect law and 3D Euler norm-scaling:}
+  for the Verlet parabola $P(p,q)=2pq-p^2$, the rational sine numerator $\mathrm{Num}(p,q)=4P(p,q)$ and denominator $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ obey the identity
   \begin{equation}
     \label{eq:verlet-sine-defect}
     \mathrm{Denom}(p,q) - \mathrm{Num}(p,q) \;=\; \bigl(5q^2 - (2pq-p^2)\bigr) - 4(2pq-p^2) \;=\; 5(q-p)^2 \;\ge\; 0,

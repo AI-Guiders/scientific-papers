@@ -167,7 +167,7 @@ theorem discreteIntegral_pointwise_const (N : Nat) (cInv : Int) (g : Int → Int
   | zero => dsimp [discreteIntegral]; omega
   | succ n ih => dsimp [discreteIntegral]; rw [ih, hC (n : Int), Int.add_mul]; omega
 
-/-- **Theorem 1 (Discrete Euler Exponential `e^{iφ}`, Euler's Identity `e^{iπ} + 1 = 0`, Universal Constant Difference Wronskian `W_Q(φ) ≡ Q` Across All Turns `kTurns ∈ ℤ`, Constant Factor Extraction Out of Integrals, Universal Brahmagupta–Weierstrass Lift, and Fundamental Theorem of Discrete Calculus)**: -/
+/-- **Theorem 1 (Discrete Euler Exponential `e^{iφ}`, Euler's Identity `e^{iπ} + 1 = 0`, Constant Difference Wronskian `W_Q(φ) ≡ Q`, Constant Factor Extraction Out of Integrals, Brahmagupta–Weierstrass Lift, and Fundamental Theorem of Discrete Calculus)**: -/
 theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
     (d L : Nat) (f : Int → Int)
     (cSq Q m qm kTurns phi x y x2 y2 xy
@@ -235,7 +235,7 @@ theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
            ⟨by omega, by omega, by omega, by omega, by omega, by omega⟩⟩⟩
   rw [discreteIntegral_const_mul, hWronInt]; rfl
 
-/-- **Theorem 2 (Universal Closed-Form Evaluation of Fresnel, Parametric Jacobi Elliptic, Dirichlet `Si`, Parseval, and Bessel `J₀` Integrals Across Arbitrary Path Lengths `L ∈ ℕ`, Winding Turns `kTurns ∈ ℤ`, and Constant Amplitude Scaling `cSq ∈ ℤ`)**: -/
+/-- **Theorem 2 (Closed-Form Evaluation of Fresnel, Parametric Jacobi Elliptic, Dirichlet `Si`, Parseval, and Bessel `J₀` Integrals)**: -/
 theorem thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
     (L : Nat) (cSq Q m kTurns a b : Int) :
     ((((Q - m) + m = Q) ∧ ((2 * Q - m) + m = 2 * Q)) ∧
@@ -289,7 +289,7 @@ theorem thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
   · rw [discreteIntegral_const_mul]; exact congrArg (fun z => cSq * z) hFresC
   · rw [discreteIntegral_const_mul]; exact congrArg (fun z => cSq * z) hFresS
 
-/-- **Theorem 3 (First-Principles Derivation of Universal Functional 3D Cuboctahedron Cubature, `π(n)` Rational Brackets, Universal Verlet Parabola Rational Sine Defect Law, Universal `O(k²)` / `O(k⁴)` Shell Moments, and Universal 3D Euler-Angle Norm Scaling from the Cuboctahedron `O₂`)**: -/
+/-- **Theorem 3 (3D Cuboctahedron Cubature, `π(n)` Rational Brackets, Verlet Parabola Rational Sine Defect Law, `O(k²)` / `O(k⁴)` Shell Moments, and 3D Euler-Angle Norm Scaling from the Cuboctahedron `O₂`)**: -/
 theorem thm3_continuum_integration_from_cuboctahedron_archimedes_layers
     (F G : Int × Int × Int → Int)
     (c0 cx cy cz cxy cxz cyz qSq diffSq pSq pq xSqXxSq ySqYySq xSqYySq ySqXxSq xyXxYy : Int) :

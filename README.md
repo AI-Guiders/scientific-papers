@@ -17,7 +17,7 @@ In this framework, abstract Computer Science (Boolean Post completeness, 3-SAT p
 
 | Topic & Standalone Lean 4 Module | Standalone Paper Title & Verified Lean 4 Theorems | English PDF & TeX | Russian PDF & TeX |
 | :--- | :--- | :--- | :--- |
-| **1. Core Apparatus** · [`RotatorQuadrature.lean`](RotatorQuadrature.lean) | **Cuboctahedral Rotator Calculus: Discrete Euler Exponential on `ℤ_{512}` & `ℤ_{4Q}`, Universal Constant Wronskian `W ≡ Q`, and Closed-Form Quadrature on `O₂(3)`** (`thm1`, `thm2`, `thm3`) | [PDF](mathematics/rotator-quadrature-en.pdf) · [TeX](mathematics/rotator-quadrature-en.tex) | [PDF](mathematics/rotator-quadrature-ru.pdf) · [TeX](mathematics/rotator-quadrature-ru.tex) |
+| **1. Core Apparatus** · [`RotatorQuadrature.lean`](RotatorQuadrature.lean) | **Cuboctahedral Rotator Calculus: Discrete Euler Exponential on `ℤ_{512}` & `ℤ_{4Q}`, Constant Wronskian `W ≡ Q`, and Closed-Form Quadrature on `O₂(3)`** (`thm1`, `thm2`, `thm3`) | [PDF](mathematics/rotator-quadrature-en.pdf) · [TeX](mathematics/rotator-quadrature-en.tex) | [PDF](mathematics/rotator-quadrature-ru.pdf) · [TeX](mathematics/rotator-quadrature-ru.tex) |
 | **2. Logic, Cohomology & Barriers** · [`LogicCohomology.lean`](LogicCohomology.lean) | **Post Functional Completeness, 3-SAT Phase-Polynomial Reduction, Constructive de Rham Cohomology, and Finite-State Adversary Barriers / Built-In Vernam Pad on `ℤ_{512}`** (`thm4`, `thm5`) | [PDF](mathematics/logic-cohomology-barriers-en.pdf) · [TeX](mathematics/logic-cohomology-barriers-en.tex) | [PDF](mathematics/logic-cohomology-barriers-ru.pdf) · [TeX](mathematics/logic-cohomology-barriers-ru.tex) |
 | **3. Stage-Partition Matrix Transmissions** · [`PillaiDiophantine.lean`](PillaiDiophantine.lean) | **Stage-Partition Matrix Transmissions on the Isotropic Cone: Parabolic `SL₂(ℤ)` Jordan Locks `k ∈ {6, 12, 15, 40}` and Root-Free Integer Padé–Thue–Wronskian Compression** (`thm6`, `thm7`, `thm10`, `thm11`) | [PDF](mathematics/pillai-exponential-diophantine-en.pdf) · [TeX](mathematics/pillai-exponential-diophantine-en.tex) | [PDF](mathematics/pillai-exponential-diophantine-ru.pdf) · [TeX](mathematics/pillai-exponential-diophantine-ru.tex) |
 | **4. Three-Shaft Planetary Differentials (`A + B = C`)** · [`AbcPlanetaryWronskian.lean`](AbcPlanetaryWronskian.lean) | **Integer Kinematics of Three-Shaft Planetary Differentials `A + B = C`: Bézout–Padé Wronskians, Circle-Remainder Degree Reduction, Cross-Floor Genus-10 Lock, and Stereographic `ℤ_{4Q}` Rotator Embedding** (`thm8`, `thm9`, `thm12`–`thm16`) | [PDF](mathematics/abc-planetary-differential-wronskian-en.pdf) · [TeX](mathematics/abc-planetary-differential-wronskian-en.tex) | [PDF](mathematics/abc-planetary-differential-wronskian-ru.pdf) · [TeX](mathematics/abc-planetary-differential-wronskian-ru.tex) |
@@ -67,7 +67,7 @@ Extending the piecewise-linear trigonometric framework studied by Thompson (`arX
   ```text
   E₃(φ + Φ_half) + E₃(φ) = (0, 0)      (e^(iπ) + 1 = 0)
   ```
-- **Universal Constant Difference Wronskian:**  
+- **Constant Difference Wronskian:**  
   The one-step difference Wronskian is **identically constant across all 512 points of the ring**, including the four corner vertices:
   ```text
   W₃(φ) := C₃(φ) * S₃(φ + 1) - S₃(φ) * C₃(φ + 1)
@@ -193,13 +193,13 @@ Expected `#print axioms` output at the end of `RotatorCalculusPaper.lean`:
 'RotatorCalculusPaper.thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych' depends on axioms: [propext]
 'RotatorCalculusPaper.thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower' depends on axioms: [propext]
 'RotatorCalculusPaper.thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding' depends on axioms: [propext]
-'RotatorCalculusPaper.thm9_universal_pillai_abc_differential_bezout_and_pade_laws' depends on axioms: [propext, Quot.sound]
-'RotatorCalculusPaper.thm10_universal_root_free_cubic_pade_compression' depends on axioms: [propext, Quot.sound]
-'RotatorCalculusPaper.thm11_universal_cross_floor_wronskian_and_p3_kernel' depends on axioms: [propext, Quot.sound]
-'RotatorCalculusPaper.thm12_universal_reverse_pade_bezout_cubic_annihilation_and_radical_bound' depends on axioms: [propext, Quot.sound]
-'RotatorCalculusPaper.thm13_universal_integer_mason_stothers_cubic_wronskian_and_fourth_power_det' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm9_pillai_abc_differential_bezout_and_pade_laws' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm10_root_free_cubic_pade_compression' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm11_cross_floor_wronskian_and_p3_kernel' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm12_reverse_pade_bezout_cubic_annihilation_and_radical_bound' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm13_integer_mason_stothers_cubic_wronskian_and_fourth_power_det' depends on axioms: [propext, Quot.sound]
 'RotatorCalculusPaper.thm14_master_pillai_and_abc_bilateral_convergence_chains' depends on axioms: [propext, Quot.sound]
-'RotatorCalculusPaper.thm15_universal_cross_floor_k2_k3_sixth_power_genus10_lock' depends on axioms: [propext, Quot.sound]
-'RotatorCalculusPaper.thm16_universal_weierstrass_stereographic_abc_embedding_into_z512_rotator' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm15_cross_floor_k2_k3_sixth_power_genus10_lock' depends on axioms: [propext, Quot.sound]
+'RotatorCalculusPaper.thm16_weierstrass_stereographic_abc_embedding_into_z512_rotator' depends on axioms: [propext, Quot.sound]
 ```
 (`0 sorryAx`, `0 Classical.choice`).

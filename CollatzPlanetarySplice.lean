@@ -3,8 +3,8 @@ namespace RotatorCalculusPaper
 set_option linter.unusedSimpArgs false
 set_option maxHeartbeats 6400000
 
-/-- **Theorem 18 (Universal Two-Arc Pillai–Wronskian Trajectory Composition & Cycle Chord Law)**: -/
-theorem thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
+/-- **Theorem 18 (Two-Arc Pillai–Wronskian Trajectory Composition & Cycle Chord Law)**: -/
+theorem thm18_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
     (P1 Q1 P2 Q2 n_start n_mid n_final D1 D2 : Int)
     (hArc1 : P1 * n_mid - Q1 * n_start = D1)
     (hArc2 : P2 * n_final - Q2 * n_mid = D2) :
@@ -86,7 +86,7 @@ theorem thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
   · have := Int.mul_nonpos_of_nonneg_of_nonpos (by omega : P1 * P2 - Q1 * Q2 ≥ 0) hLe; omega
   · omega
 
-/-- **Theorem 20 (Universal Planetary Cyclic Drift Shift Law `p_k D_tot^{(k+1)} - q_gear D_tot^{(k)} = P_tot - Q_tot`)**: -/
+/-- **Theorem 20 (Planetary Cyclic Drift Shift Law `p_k D_tot^{(k+1)} - q_gear D_tot^{(k)} = P_tot - Q_tot`)**: -/
 theorem thm20_collatz_dual_drift_tower_and_cyclic_shift_law
     (qGear pk pk1 Premk Qprev Bprev D2k D2k1 nk : Int) :
     let Ptot := pk * Premk
@@ -203,8 +203,8 @@ theorem thm22_collatz_arbitrary_stage_fermat_descent_reduction
     | inl hC0 => omega
     | inr hn1 => omega
 
-/-- **Theorem 23 (Universal Dead-End-Free `q_gear`-Adic Prefix Decomposition `D_{a,b} = P_{pen} + q_gear D_{b-1}`
-and `2 P_{tot}` 2-Adic Construction Modulus for Any Gear Ratio `q_gear ∈ ℤ`)**: -/
+/-- **Theorem 23 (Dead-End-Free `q_gear`-Adic Prefix Decomposition `D_{a,b} = P_{pen} + q_gear D_{b-1}`
+and `2 P_{tot}` 2-Adic Construction Modulus)**: -/
 theorem thm23_collatz_dead_end_free_ternary_prefix_closure
     (qGear Ppen plast Qprev Dprev n n_prime Ptot Dab kb kb_prime : Int) :
     let Qtot := qGear * Qprev
@@ -256,8 +256,8 @@ theorem thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
     simp only [Int.mul_sub, Int.sub_mul, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
   rw [hBez] at hBezId; omega
 
-/-- **Theorem 25 (Universal Planetary Gear-Tooth Meshing `q_gear n_0 + c_tooth = p_0 n_1`
-and Inductive Step-Peeling Law for Arbitrary Gear Ratio `q_gear ∈ ℤ` and Tooth Offset `c_tooth ∈ ℤ`)**: -/
+/-- **Theorem 25 (Planetary Gear-Tooth Meshing `q_gear n_0 + c_tooth = p_0 n_1`
+and Inductive Step-Peeling Law)**: -/
 theorem thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
     (qGear cTooth Qprev p0 Prem Drem n0 n1 : Int) :
     ((qGear * Qprev) * n0 + (cTooth * Qprev + p0 * Drem) = p0 * Prem ↔
@@ -281,7 +281,7 @@ theorem thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
     have hRem0 : Qprev * n1 + Drem - Prem = 0 := by omega
     rw [hRem0, Int.mul_zero] at hFactor; omega
 
-/-- **Theorem 26 (Universal Single-Step Planetary Wronskian Excess Identity
+/-- **Theorem 26 (Single-Step Planetary Wronskian Excess Identity
 `(q_gear n_ref + c_tooth) n_k - p_k n_ref n_{k+1} = c_tooth (n_k - n_ref)` and Bernoulli–Euler Drift Bound)**: -/
 theorem thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_lock
     (qGear cTooth pk nk nk1 nref Ptot Qtot n0PowPrev n0 nfinal Dab Bpow : Int)
@@ -341,7 +341,7 @@ theorem thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservat
   exact ⟨by omega, by omega, by omega⟩
 
 /-- **Theorem 28 (Willis Carrier Differential Balance `z_1(ω_1 - ω_H) + z_2(ω_2 - ω_H) = 0`,
-Universal Centered Coordinate `m_k = (n_k - 1)/2`, and Two-Axle Differential Rotor Duality `S_+ + S_d = P_{tot} - Q_{tot}`)**: -/
+Centered Coordinate `m_k = (n_k - 1)/2`, and Two-Axle Differential Rotor Duality `S_+ + S_d = P_{tot} - Q_{tot}`)**: -/
 theorem thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
     (qHalf pk phalf mk mk1 Ptot Qtot n0 nb m0 mb Dab Sd Splus Pr0 q0 Splus_red z1 z2 w1 w2 wH : Int) :
     let qGear := 2 * qHalf + 1
@@ -457,8 +457,8 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
     (hn0  : n0 + 1 = PR * q0)
     (hMac : pbeta * n1 + 1 = QR * q0)
     (hn1  : n1 + 1 = PR_next * q1) :
-    -- 1. Universal M-screw monoid homomorphism across arbitrary-length screw lists L1, L2
-    --    and arbitrary-horizon stage-exponent telescoping:
+    -- 1. M-screw monoid homomorphism across screw lists L1, L2
+    --    and stage-exponent telescoping:
     (multiScrewP (L1 ++ L2) = multiScrewP L1 * multiScrewP L2 ∧
      multiScrewQ (L1 ++ L2) = multiScrewQ L1 * multiScrewQ L2 ∧
      multiScrewD (L1 ++ L2) = multiScrewQ L2 * multiScrewD L1 + multiScrewP L1 * multiScrewD L2 ∧
@@ -475,9 +475,13 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
        128 * (macroFinalR r0 steps - r0) ∧
      (multiScrewD L1 = multiScrewQ L1 - multiScrewP L1 →
        multiScrewD ((2, 3, 1) :: L1) = multiScrewQ ((2, 3, 1) :: L1) - multiScrewP ((2, 3, 1) :: L1)) ∧
+     multiScrewD ((pbeta, 1, 0) :: L1) = pbeta * multiScrewD L1 ∧
      multiScrewP (L1 ++ [(pbeta, 1, 0)]) = multiScrewP L1 * pbeta ∧
      multiScrewQ (L1 ++ [(pbeta, 1, 0)]) = multiScrewQ L1 ∧
-     multiScrewD (L1 ++ [(pbeta, 1, 0)]) = multiScrewD L1) ∧
+     multiScrewD (L1 ++ [(pbeta, 1, 0)]) = multiScrewD L1 ∧
+     multiScrewD (L1 ++ [(pbeta, 1, 0), (PR, QR, QR - PR)] ++ L2) -
+       multiScrewD (L1 ++ [(PR, QR, QR - PR), (pbeta, 1, 0)] ++ L2) =
+       multiScrewP L1 * ((pbeta - 1) * (QR - PR) * multiScrewQ L2)) ∧
     -- 2. Double SL₂(ℤ) Bézout lock, exclusion of the non-natural 2-adic boundary fixed point n_∞ = -1 ∉ ℕ_{≥ 1},
     --    and macro-screw capture (PR * pbeta) * (n0 - n1) = PR * ((PR * pbeta - QR) * q0 - (pbeta - 1)):
     ((PR ≠ QR → ((PR - QR) * nInf = QR - PR ↔ nInf = -1)) ∧
@@ -555,9 +559,18 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
   refine ⟨⟨hP, hQ, hD, hC, hTel1 steps r0, hTel2 steps r0, by omega,
             by have h1 := hTel1 steps r0; have h2 := hTel2 steps r0; omega,
             by intro hUp; dsimp [multiScrewD, multiScrewQ, multiScrewP]; omega,
+            by dsimp [multiScrewD]; omega,
             by rw [multiScrewP_append]; dsimp [multiScrewP]; simp only [Int.mul_one],
             by rw [multiScrewQ_append]; dsimp [multiScrewQ]; omega,
-            by rw [multiScrewD_append]; dsimp [multiScrewQ, multiScrewD]; omega⟩,
+            by rw [multiScrewD_append]; dsimp [multiScrewQ, multiScrewD]; omega,
+            by
+              rw [multiScrewD_append, multiScrewD_append, multiScrewD_append, multiScrewD_append]
+              rw [multiScrewP_append, multiScrewP_append]
+              dsimp [multiScrewP, multiScrewQ, multiScrewD]
+              simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                         Int.mul_zero, Int.zero_mul, Int.add_zero, Int.zero_add,
+                         Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+              omega⟩,
           ⟨?_, ⟨by omega, by omega⟩, hScrewEq, hCoreFerm, ?_⟩,
           ⟨hCoreLaw, hStepDual, by simp only [Int.sub_mul, Int.one_mul]; omega, ?_⟩, ?_⟩
   · intro hNe
@@ -653,7 +666,7 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
       · have := Int.mul_pos hGt (by omega : q0 > 0); omega
       · omega
 
-#print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
+#print axioms thm18_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
 #print axioms thm20_collatz_dual_drift_tower_and_cyclic_shift_law
 #print axioms thm21_collatz_planetary_stationary_point_uniqueness_and_reachability_criterion

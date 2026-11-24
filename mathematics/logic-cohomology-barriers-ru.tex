@@ -51,7 +51,7 @@
 
 На полюсах $\{0,256\}\subset\mathbb{Z}_{512}$ ($\mathcal{C}_3(0)=+128$, $\mathcal{C}_3(256)=-128$) Канал~1 задаёт $\mathrm{NOT}(\psi)=(\psi+256)\bmod 512$ и чётность $\mathrm{XOR}_3$ по закону $Q_\square(d)^2\mathcal{C}_d(\psi_1+\psi_2+\psi_3)\equiv \mathcal{C}_d(\psi_1)\mathcal{C}_d(\psi_2)\mathcal{C}_d(\psi_3)$, а Канал~2 через дефект $\Delta_{\mathrm{3SAT}}(\psi_1,\psi_2,\psi_3) := Q_\square(d)-(\mathcal{C}_d(\psi_1)+\mathcal{C}_d(\psi_2)+\mathcal{C}_d(\psi_3))$ задаёт $q_{\mathrm{OR}} := \mathrm{tdiv}(\Delta_{\mathrm{3SAT}},512)\in\{0,1\}$ и $q_{\mathrm{AND}} := \mathrm{tdiv}(Q_\square(d)+\sum_{k=1}^3\mathcal{C}_d(\psi_k),512)\in\{0,1\}$.
 
-\begin{theorem}[Функциональная полнота Поста, представление 3-SAT и универсальная склейка остатка $7\to 1$]
+\begin{theorem}[Функциональная полнота Поста, представление 3-SAT и склейка остатка $7\to 1$]
 \label{thm:main-4}
 Для всех $d\in\mathbb{N}$ и всех $p_1,p_2,p_3\in\mathbb{Z}$ дефект $\Delta_{\mathrm{3SAT}} = Q_\square(d) - (\mathcal{C}_d(p_1)+\mathcal{C}_d(p_2)+\mathcal{C}_d(p_3))$ тождественно раскладывается в виде (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}):
 \[
@@ -64,7 +64,7 @@
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Некоммутативность каналов, универсальная кубическая рекуррентность обратного конуса и слепая многоузловая телепортация]
+\begin{theorem}[Некоммутативность каналов, кубическая рекуррентность обратного конуса и слепая многоузловая телепортация]
 \label{thm:main-4b}
 Для всех $T,\psi,a,r_{1,\mathrm{out}},r_{2,\mathrm{out}},P\in\mathbb{Z}$ (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
@@ -98,7 +98,7 @@
 \section{Конструктивные когомологии де~Рама--Стокса--Гаусса--Черна, линейная алгебра без деления и мера без парадокса Банаха--Тарского}
 \label{sec:constructive-foundations}
 
-\begin{theorem}[Универсальное евклидово расщепление связности и конструктивные когомологии де~Рама--Стокса--Гаусса--Черна]
+\begin{theorem}[Евклидово расщепление связности и конструктивные когомологии де~Рама--Стокса--Гаусса--Черна]
 \label{thm:main-5}
 Для всех $d\in\mathbb{N}$, всех разностей фаз $\Delta\varphi\in\mathbb{Z}$, всех $0$-коцепей $(p_0,p_1,p_2,p_3)\in\mathbb{Z}^4$ и всех $1$-коцепей $(e_1,\dots,e_{12})\in\mathbb{Z}^{12}$ на $12$~рёбрах куба (\texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
@@ -108,7 +108,7 @@
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Универсальное обращение нильпотентных и $\mathrm{SL}_2(\mathbb{Z})$ симплектических операторов без деления]
+\begin{theorem}[Обращение нильпотентных и $\mathrm{SL}_2(\mathbb{Z})$ симплектических операторов без деления]
 \label{thm:main-5b}
 Для всех $(s_0,s_1,s_2,s_3)\in\mathbb{Z}^4$ и всех $(u,v,\varphi)\in\mathbb{Z}^3$ (\texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]

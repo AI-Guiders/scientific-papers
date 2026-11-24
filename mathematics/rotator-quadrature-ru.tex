@@ -17,7 +17,7 @@
   linkcolor=blue!70!black,
   citecolor=blue!70!black,
   urlcolor=blue!70!black,
-  pdftitle={Ротаторное исчисление на кубооктаэдре: Дискретная экспонента Эйлера на Z_512, универсальный константный вронскиан и замкнутые квадратуры на кубооктаэдре O_2(3) в Lean 4},
+  pdftitle={Ротаторное исчисление на кубооктаэдре: Дискретная экспонента Эйлера на Z_512, константный вронскиан и замкнутые квадратуры на кубооктаэдре O_2(3) в Lean 4},
   pdfauthor={Каратаев Дмитрий Александрович}
 }
 
@@ -30,7 +30,7 @@
 \newtheorem{definition}[theorem]{Определение}
 \newtheorem{remark}[theorem]{Замечание}
 
-\title{\textbf{Ротаторное исчисление на кубооктаэдре:\\ Дискретная экспонента Эйлера на $\mathbb{Z}_{512}$, универсальный константный вронскиан и замкнутые квадратуры на кубооктаэдре $O_2(3)$ в Lean~4}}
+\title{\textbf{Ротаторное исчисление на кубооктаэдре:\\ Дискретная экспонента Эйлера на $\mathbb{Z}_{512}$, константный вронскиан и замкнутые квадратуры на кубооктаэдре $O_2(3)$ в Lean~4}}
 \author{Д.\,А.~Каратаев\thanks{AI-Guiders Research (\url{https://github.com/AI-Guiders}). Формальная верификация в Lean~4 и аналитическая разработка выполнены при участии ИИ-партнёра \emph{Луч} (\emph{Luch}, AI-Guiders).}}
 \date{}
 
@@ -58,13 +58,13 @@
 \end{equation}
 дискретную экспоненту Эйлера $\mathcal{E}_d(\varphi) := (\mathcal{C}_d(\varphi),\mathcal{S}_d(\varphi))\in\mathbb{Z}^2$, одношаговый разностный вронскиан $\mathcal{W}_d(\varphi) := \mathcal{C}_d(\varphi)\mathcal{S}_d(\varphi+1) - \mathcal{S}_d(\varphi)\mathcal{C}_d(\varphi+1)$ и подъём Брахмагупты--Вейерштрасса $X_d(\varphi) := \mathcal{C}_d(\varphi)^2 - \mathcal{S}_d(\varphi)^2$, $Y_d(\varphi) := \|e\|_2^2\mathcal{C}_d(\varphi)\mathcal{S}_d(\varphi)$, $R_d(\varphi) := \mathcal{C}_d(\varphi)^2 + \mathcal{S}_d(\varphi)^2$. Всюду в настоящей серии статей термин \emph{носитель} (\emph{carrier}) употребляется строго в смысле классической теории моделей А.\,И.~Мальцева (\emph{«Алгебраические системы»}~\cite{Malcev1970}) как основное множество сорта в двусортной алгебраической системе $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$, где \textbf{дискретный $M$-носитель} $\mathcal{M}=\mathbb{Z}_{512}$ есть конечное кольцо фаз на решётке кубооктаэдра с $L^1$-проекциями $(\mathcal{C}_3,\mathcal{S}_3)$, а \textbf{непрерывный $T$-носитель} $\mathcal{T}$ --- континуальный сорт евклидовой окружности $X^2+Y^2=R^2$, поля $\mathbb{Q}\subset\mathbb{R}$ и интегралов Римана.
 
-\begin{theorem}[Дискретное тождество Эйлера, многооборотная периодичность и универсальный константный вронскиан]
+\begin{theorem}[Дискретное тождество Эйлера, многооборотная периодичность и константный вронскиан]
 \label{thm:main-1}
 Для произвольного четверть-периода $Q\in\mathbb{Z}$, внутриквадрантной фазы $m\in\mathbb{Z}$, числа полных оборотов $k_{\mathrm{turns}}\in\mathbb{Z}$ и горизонта интегрирования $L\in\mathbb{N}$ кусочно-линейный ротатор $(\mathcal{C}_Q,\mathcal{S}_Q)$ на $\mathbb{Z}_{4Q}$ удовлетворяет тождествам (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
 \item \textbf{Многооборотная периодичность и тождество Эйлера $e^{i\pi}+1=0$:}
   $\mathcal{E}_d(\varphi + 4Qk_{\mathrm{turns}}) = \mathcal{E}_d(\varphi)$, $L^1$-норма постоянна $|\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| \equiv Q$, сдвиг $+Q$ действует как умножение на~$i$: $\mathcal{E}_Q(\varphi + Q) = (-\mathcal{S}_Q(\varphi), +\mathcal{C}_Q(\varphi))$, а сдвиг $+2Q$ даёт $\mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) = (0,0)$ при всех $\varphi\in\mathbb{Z}$.
-\item \textbf{Универсальный константный вронскиан и вынесение поточечно-постоянных инвариантов за знак интеграла:}
+\item \textbf{Константный вронскиан и вынесение поточечно-постоянных инвариантов за знак интеграла:}
   во всех четырёх квадрантах и угловых вершинах $L^1$-ромба одношаговый разностный вронскиан тождественно равен константе $Q$:
   \[
     \mathcal{W}_Q(\varphi) \;=\; (Q-m)(m+1) - m(Q-m-1) \;\equiv\; Q \qquad (\forall Q,m\in\mathbb{Z}),
@@ -77,7 +77,7 @@
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Универсальный подъём Вейерштрасса и шаговые тождества Брахмагупты]
+\begin{theorem}[Подъём Вейерштрасса и шаговые тождества Брахмагупты]
 \label{thm:main-1b}
 Для любых целочисленных проекций $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$ координаты Вейерштрасса удовлетворяют тождеству евклидовой окружности $X^2 + Y^2 = (\mathcal{C}_0^2-\mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R^2$ и шаговым соотношениям Брахмагупты--Вейерштрасса при $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ и $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
 \[
@@ -101,7 +101,7 @@
 \section{Замкнутое вычисление интегралов Френеля, Якоби, Дирихле, Парсеваля и Бесселя и геометрия поясов Архимеда кубооктаэдра}
 \label{sec:integrals-archimedes}
 
-\begin{theorem}[Универсальные инварианты лемнискатической триады Якоби и параметрические эллиптические интегралы]
+\begin{theorem}[Инварианты лемнискатической триады Якоби и параметрические эллиптические интегралы]
 \label{thm:main-2}
 Для всех $Q,m,k_{\mathrm{turns}},a,b\in\mathbb{Z}$ и любого горизонта интегрирования $L\in\mathbb{N}$ триада Якоби на $\mathbb{Z}_{4Q}$ удовлетворяет (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
 \[
@@ -125,7 +125,7 @@
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Равновеликое разбиение Архимеда и универсальная функциональная 3D-кубатура на кубооктаэдре]
+\begin{theorem}[Равновеликое разбиение Архимеда и функциональная 3D-кубатура на кубооктаэдре]
 \label{thm:main-3}
 При $d=3$ для любых функций $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$ произвольной степени и любых коэффициентов $c_0,c_x,c_y,c_z,c_{xy},c_{xz},c_{yz}\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
@@ -139,12 +139,12 @@
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Рациональные вилки $\pi(n)$, универсальный закон дефекта рационального синуса параболы Верле и масштабирование нормы 3D-поворотов Эйлера]
+\begin{theorem}[Рациональные вилки $\pi(n)$, закон дефекта рационального синуса параболы Верле и масштабирование нормы 3D-поворотов Эйлера]
 \label{thm:main-3b}
 Для всех $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
 \item выполнено $2 R_Q(\varphi) = Q^2 + (|\mathcal{C}_Q(\varphi)|-|\mathcal{S}_Q(\varphi)|)^2 \ge Q^2$, рациональная вилка $\pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) = \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)R_3(js)R_3((j+1)s)} > 0$ строго монотонно сжимается ($\pi_{\mathrm{in}}(8)<\pi_{\mathrm{in}}(16)<\pi_{\mathrm{in}}(32)<\pi_{\mathrm{out}}(32)<\pi_{\mathrm{out}}(16)<\pi_{\mathrm{out}}(8)$, $\pi_3(16)=142/45$);
-\item для параболы Верле $P(p,q)=2pq-p^2$ числитель $\mathrm{Num}(p,q)=4P(p,q)$ и знаменатель $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ рационального синуса удовлетворяют универсальному тождеству $\mathrm{Denom}(p,q) - \mathrm{Num}(p,q) = 5(q-p)^2 \ge 0$, а каждый плоский поворот Вейерштрасса в $3$ координатных плоскостях кубооктаэдра масштабирует квадрат нормы по закону $(Xx-Yy)^2 + (Yx+Xy)^2 = (X^2+Y^2)(x^2+y^2)$.
+\item для параболы Верле $P(p,q)=2pq-p^2$ числитель $\mathrm{Num}(p,q)=4P(p,q)$ и знаменатель $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ рационального синуса удовлетворяют тождеству $\mathrm{Denom}(p,q) - \mathrm{Num}(p,q) = 5(q-p)^2 \ge 0$, а каждый плоский поворот Вейерштрасса в $3$ координатных плоскостях кубооктаэдра масштабирует квадрат нормы по закону $(Xx-Yy)^2 + (Yx+Xy)^2 = (X^2+Y^2)(x^2+y^2)$.
 \end{enumerate}
 \end{theorem}
 

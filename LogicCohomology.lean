@@ -171,7 +171,7 @@ def symplecticVerletInverse (uNext vNext phi : Int) : Int × Int :=
   (vNext, 2 * vNext - uNext + phi)
 
 
-/-- **Theorem 4 (Post Functional Completeness `{NOT, XOR, OR, AND}`, Semantic Isomorphism of 3-SAT Pole Encoding, Universal `7 → 1` Quotient-Remainder Decomposition, Internal Two-Channel Non-Commutativity, Universal Backward-Cone Polynomial Recurrence, and Universal Multi-Hop Syndrome Teleportation)**: -/
+/-- **Theorem 4 (Post Functional Completeness `{NOT, XOR, OR, AND}`, Semantic Isomorphism of 3-SAT Pole Encoding, `7 → 1` Quotient-Remainder Decomposition, Internal Two-Channel Non-Commutativity, Backward-Cone Polynomial Recurrence, and Multi-Hop Syndrome Teleportation)**: -/
 theorem thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality
     (d : Nat) (p1 p2 p3 tStep tSq tCube psi a r1Out r2Out P : Int) :
     -- (i) Exact truth tables across all 2³ = 8 pole octants {0, 256}³ for NOT (+256), pre-rotator XOR (C₃(ψ₁+ψ₂+ψ₃)),
@@ -179,7 +179,7 @@ theorem thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality
     checkPostCompletenessAnd3SatBool 3 = true ∧
     -- (ii) Semantic isomorphism σ: {0,1} ↔ {256,0} across all 2⁶ = 64 signed 3-CNF clause configurations (b₁,b₂,b₃,s₁,s₂,s₃) ∈ {0,1}⁶
     checkSatEncodingSemanticIsomorphismBool 3 = true ∧
-    -- (iii) Universal exact quotient-remainder split Δ = N_ring(d) * q_OR + r_drop for ALL (d ∈ ℕ, p1, p2, p3 ∈ ℤ)
+    -- (iii) Quotient-remainder split Δ = N_ring(d) * q_OR + r_drop
     -- and non-injective 7 -> 1 remainder gluing in forward 3-SAT verification
     (nRing d : Int) * clause3OrDefectQuotient d p1 p2 p3 + clause3SatDroppedRemainder d p1 p2 p3 =
       clause3SatDefect d p1 p2 p3 ∧
@@ -187,13 +187,13 @@ theorem thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality
     -- (iv) Non-distributivity and non-commutativity between Channel 1 (phase addition mod 512) and Channel 2 (post-rotator 512-quotient)
     projC 3 (0 + 0) ≠ projC 3 0 + projC 3 0 ∧
     clause3AndQuotient 3 (0 + 0) 0 0 ≠ (clause3AndQuotient 3 0 0 0 + clause3AndQuotient 3 0 0 0) % 2 ∧
-    -- (v) Universal backward-cone polynomial step identity: 3 V_{O₂}(3, T) + 3 N_shell(3, T+1) = 10(T+1)³ + 15(T+1)² + 11(T+1) + 3 for all T ∈ ℤ,
+    -- (v) Backward-cone polynomial step identity: 3 V_{O₂}(3, T) + 3 N_shell(3, T+1) = 10(T+1)³ + 15(T+1)² + 11(T+1) + 3,
     -- plus 7^T preimage ray branching and tree-like resolution width lower bound
     ((10 * tCube + 15 * tSq + 11 * tStep + 3) +
       3 * (10 * (tSq + 2 * tStep + 1) + 2) =
       10 * (tCube + 3 * tSq + 3 * tStep + 1) + 15 * (tSq + 2 * tStep + 1) + 11 * (tStep + 1) + 3) ∧
     treeLikeResolutionSizeFloor 3 (nSquares 3) < preimageRayBranching 3 3 ∧
-    -- (vi) Universal single-hop and multi-hop blind singlet-swapping identities (A <-> R1 <-> R2 <-> B) for ALL (psi, a, r1Out, r2Out, P ∈ ℤ):
+    -- (vi) Single-hop and multi-hop blind singlet-swapping identities (A <-> R1 <-> R2 <-> B):
     ((a + P) + (psi - a - P) = psi) ∧
     (let r1In := a + P
      let r2In := r1Out + P
@@ -208,31 +208,31 @@ theorem thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality
   · omega
   · omega
 
-/-- **Theorem 5 (Universal Constructive de Rham–Stokes–Gauss–Chern Cohomology `d² ≡ 0`, Division-Free Nilpotent & `SL₂(ℤ)` Symplectic Linear Algebra, Variational `L¹` Saddle Optimization, and Choice-Free Additivity of Cuboctahedral Measure)**: -/
+/-- **Theorem 5 (Constructive de Rham–Stokes–Gauss–Chern Cohomology `d² ≡ 0`, Division-Free Nilpotent & `SL₂(ℤ)` Symplectic Linear Algebra, Variational `L¹` Saddle Optimization, and Choice-Free Additivity of Cuboctahedral Measure)**: -/
 theorem thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski_free_measure
     (d : Nat) (delta Q k pOut devSq cPhi sPhi p0 p1 p2 p3 e1 e2 e3 e4 e5 e6 e7 e8 e9 e10 e11 e12 s0 s1 s2 s3 u v phi : Int) :
-    -- (i) Universal Euclidean quotient-remainder splitting Δφ = N_ring(d) * q + r for ALL (d ∈ ℕ, delta ∈ ℤ),
-    -- and universal variational quadratic form V(k) + I(k) = (2Q - k) + k ≡ 2Q with P(k) = Q² - (k - Q)² ≤ Q² (MPPT at k* = Q) for ALL (Q, k ∈ ℤ)
+    -- (i) Euclidean quotient-remainder splitting Δφ = N_ring(d) * q + r,
+    -- and variational quadratic form V(k) + I(k) = (2Q - k) + k ≡ 2Q with P(k) = Q² - (k - Q)² ≤ Q² (MPPT at k* = Q)
     ((nRing d : Int) * branchQuot d delta + edgeConn d delta = delta ∧
      (2 * Q - k) + k = 2 * Q ∧
      (devSq ≥ 0 → pOut = Q * Q - devSq → pOut ≤ Q * Q)) ∧
-    -- (ii) Universal constructive de Rham-Stokes-Chern theorem for ALL 0-cochains (d ∈ ℕ, p0, p1, p2, p3 ∈ ℤ):
+    -- (ii) Constructive de Rham-Stokes-Chern theorem for 0-cochains:
     -- d₁(d₀φ) ≡ 0 and (d₁r)_f = N_ring(d) * n_f ∈ N_ring(d) ℤ, with unit vortex winding n_f = +1 on (0, 128, 256, -128)
     plaquetteCoboundaryRaw p0 p1 p2 p3 = 0 ∧
     plaquetteConnectionFlux d p0 p1 p2 p3 =
       (nRing d : Int) * plaquetteChernWinding d p0 p1 p2 p3 ∧
     plaquetteChernWinding 3 0 (quarterPeriod 3 : Int) (halfPeriod 3 : Int) (- (quarterPeriod 3 : Int)) = (unitStep : Int) ∧
-    -- (iii) Universal constructive Gauss-Ostrogradsky divergence theorem on the closed 6-face cube surface for ALL 12 edge fluxes (e1..e12 ∈ ℤ): d₂ ∘ d₁ ≡ 0
+    -- (iii) Constructive Gauss-Ostrogradsky divergence theorem on the closed 6-face cube surface: d₂ ∘ d₁ ≡ 0
     cubeClosedSurfaceFluxSum e1 e2 e3 e4 e5 e6 e7 e8 e9 e10 e11 e12 = 0 ∧
-    -- (iv) Universal division-free 4D nilpotent matrix inversion (I₄ + N_nil)⁻¹ = I₄ - N_nil + N_nil² (N_nil³ = 0) for ALL (s0, s1, s2, s3 ∈ ℤ)
-    -- and universal SL₂(ℤ) symplectic Verlet inversion for ALL (u, v, phi ∈ ℤ)
+    -- (iv) Division-free 4D nilpotent matrix inversion (I₄ + N_nil)⁻¹ = I₄ - N_nil + N_nil² (N_nil³ = 0)
+    -- and SL₂(ℤ) symplectic Verlet inversion
     nilpotentInverse24xUnscaled (nilpotentForward2x s0 s1 s2 s3) = (24 * s0, 24 * s1, 24 * s2, 24 * s3) ∧
     nilpotentInverse24x (nilpotentForward2x s0 s1 s2 s3) = (s0, s1, s2, s3) ∧
     symplecticVerletInverse
       (symplecticVerletStep u v phi).1
       (symplecticVerletStep u v phi).2 phi = (u, v) ∧
     -- (v) Choice-free finite additivity of the cuboctahedral ball measure (Banach-Tarski-free partition),
-    -- discrete AC/DC circuit laws, and universal antiphase LC resonance cancellation (-sPhi + sPhi = 0 ∧ cPhi + (-cPhi) = 0) for ALL (cPhi, sPhi ∈ ℤ):
+    -- discrete AC/DC circuit laws, and antiphase LC resonance cancellation (-sPhi + sPhi = 0 ∧ cPhi + (-cPhi) = 0):
     cuboctBallNodes 3 0 + cuboctShellNodes 3 1 + cuboctShellNodes 3 2 + cuboctShellNodes 3 3 = cuboctBallNodes 3 3 ∧
     discreteIntegral (nRing 3) (fun phi => projC 3 phi * projS 3 phi) = 0 ∧
     discreteIntegral (nRing 3) (fun phi => ((Int.natAbs (projS 3 phi) : Int) + projS 3 phi) / 2) =

@@ -29,7 +29,7 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
     (r0 r1 r2 r3 dchi0 dchi1 dchi2 dchi3
      nxp nxm nyp nym nzp nzm dq1 dq2 dq3 dq4 dq5 dq6 dq7 dq8 dq9 dq10 dq11 dq12
      m c phi : Int) :
-    -- 1. Universal 2D Stokes and 3D Gauss coboundary kernel annihilation (ker π ⊆ ker d₁ ∩ ker d₂):
+    -- 1. 2D Stokes and 3D Gauss coboundary kernel annihilation (ker π ⊆ ker d₁ ∩ ker d₂):
     (plaquetteCoboundaryRaw dchi0 dchi1 dchi2 dchi3 = 0 ∧
      ((r0 + (dchi1 - dchi0)) + (r1 + (dchi2 - dchi1)) + (r2 + (dchi3 - dchi2)) + (r3 + (dchi0 - dchi3)) =
        r0 + r1 + r2 + r3) ∧
@@ -44,7 +44,7 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
     ((∀ b : Bool, b ≠ !b) ∧
      (((phi + 256) % 512 + 256) % 512 = phi % 512) ∧
      ((phi + 256) % 512 ≠ phi % 512)) ∧
-    -- 4. Universal constructive Lawvere-Gödel-Tarski diagonal theorem proving the necessity of an external semantic oracle:
+    -- 4. Constructive Lawvere-Gödel-Tarski diagonal theorem proving the necessity of an external semantic oracle:
     (∀ (α β : Type) (eval : α → α → β) (sigma : β → β),
       (∀ b : β, sigma b ≠ b) →
       let oracle : α → β := fun x => sigma (eval x x)
