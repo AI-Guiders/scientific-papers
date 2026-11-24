@@ -6,6 +6,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs}
 \usepackage{enumitem}
+\usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -30,7 +31,7 @@ We formulate the Collatz $3n+1$ problem as a discrete trajectory dynamics proble
 \section{Equation of Motion on $\mathbb{Z}_{2^a}$, $\mathbb{Z}_{3^b}$, and $\mathbb{Z}_{2^a - 3^b}$ and Two-Arc Wronskian}
 \label{sec:two-arc-wronskian}
 
-Throughout this paper, we follow A.\,I.~Mal'cev~\cite{Malcev1973} in defining a \emph{carrier} (\emph{носитель}) as the underlying domain set of a sort in a two-sorted algebraic structure $\langle\mathcal{M},\mathcal{T}\rangle$. Over $a \ge 1$ binary steps of the compressed Collatz operator $T(x) = x/2$ ($x$ even), $T(x) = (3x+1)/2$ ($x$ odd) involving $b \in \{0,\dots,a\}$ odd steps at cumulative binary exponents $0 = s_0 < s_1 < \dots < s_{b-1} < s_b = a$ ($\alpha_k = s_{k+1} - s_k \ge 1$), the trajectory from $n_0 = n_{\mathrm{start}}$ to $n_b = n_{\mathrm{final}} = T^{(a)}(n_0)$ satisfies
+Throughout this paper, we follow A.\,I.~Mal'cev~\cite{Malcev1973} in defining a \emph{carrier} (\emph{nositel'}) as the underlying domain set of a sort in a two-sorted algebraic structure $\langle\mathcal{M},\mathcal{T}\rangle$. Over $a \ge 1$ binary steps of the compressed Collatz operator $T(x) = x/2$ ($x$ even), $T(x) = (3x+1)/2$ ($x$ odd) involving $b \in \{0,\dots,a\}$ odd steps at cumulative binary exponents $0 = s_0 < s_1 < \dots < s_{b-1} < s_b = a$ ($\alpha_k = s_{k+1} - s_k \ge 1$), the trajectory from $n_0 = n_{\mathrm{start}}$ to $n_b = n_{\mathrm{final}} = T^{(a)}(n_0)$ satisfies
 \begin{equation}
   \label{eq:collatz-equation-of-motion}
   2^a \cdot n_b \;-\; 3^b \cdot n_0 \;=\; D_{a,b}, \qquad
@@ -163,7 +164,7 @@ Across any multi-stage planetary cascade engaging $r_0 \ge 0$ step ratios from $
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Arbitrary-length $M$-screw cascade monoid homomorphism, exclusion of the $2$-adic boundary fixed point $n_\infty = -1 \notin \mathbb{N}$, and global convergence under a countable family of contracting screw cascades, \texttt{thm30}]
+\begin{theorem}[Arbitrary-length $M$-screw cascade monoid homomorphism, exclusion of the $2$-adic boundary fixed point $n_\infty = -1 \notin \mathbb{N}$, and global convergence under a countable family of contracting screw cascades, \texttt{thm29} \& \texttt{collatz\_global\_convergence\_from\_local\_descent}]
 \label{thm:countable-multi-screw-cascade}
 For any two multi-screw cascades $\mathcal{L}_1,\mathcal{L}_2$ of arbitrary lengths (\texttt{multiScrewP}, \texttt{multiScrewQ}, \texttt{multiScrewC}, \texttt{multiScrewD} on $\mathrm{List}(\mathbb{Z}\times\mathbb{Z}\times\mathbb{Z})$):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
@@ -184,7 +185,7 @@ For any two multi-screw cascades $\mathcal{L}_1,\mathcal{L}_2$ of arbitrary leng
 \end{theorem}
 
 \section{Formal Verification in Lean~4}
-Theorems~\ref{thm:two-arc-wronskian}--\ref{thm:countable-multi-screw-cascade} (\texttt{thm18}--\texttt{thm30} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Theorems~\ref{thm:two-arc-wronskian}--\ref{thm:countable-multi-screw-cascade} (\texttt{thm18}--\texttt{thm29} and \texttt{collatz\_global\_convergence\_from\_local\_descent}) are formally verified in the standalone module \texttt{CollatzPlanetarySplice.lean} at \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1973}

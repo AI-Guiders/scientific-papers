@@ -10,6 +10,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs}
 \usepackage{enumitem}
+\usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
 
 \newtheorem{theorem}{Теорема}[section]
@@ -167,7 +168,7 @@
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Моноидный гомоморфизм $M$-винтовых каскадов произвольной длины, исключение $2$-адической неподвижной точки $n_\infty = -1 \notin \mathbb{N}$ и глобальная сходимость при покрытии счётным семейством сжимающих винтов, \texttt{thm30}]
+\begin{theorem}[Моноидный гомоморфизм $M$-винтовых каскадов произвольной длины, исключение $2$-адической неподвижной точки $n_\infty = -1 \notin \mathbb{N}$ и глобальная сходимость при покрытии счётным семейством сжимающих винтов, \texttt{thm29} и \texttt{collatz\_global\_convergence\_from\_local\_descent}]
 \label{thm:countable-multi-screw-cascade}
 Для любых двух многовинтовых каскадов $\mathcal{L}_1,\mathcal{L}_2$ произвольной длины (\texttt{multiScrewP}, \texttt{multiScrewQ}, \texttt{multiScrewC}, \texttt{multiScrewD} на $\mathrm{List}(\mathbb{Z}\times\mathbb{Z}\times\mathbb{Z})$):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
@@ -188,7 +189,7 @@
 \end{theorem}
 
 \section{Формальная верификация в Lean~4}
-Теоремы~\ref{thm:two-arc-wronskian}--\ref{thm:countable-multi-screw-cascade} (\texttt{thm18}--\texttt{thm30} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+Теоремы~\ref{thm:two-arc-wronskian}--\ref{thm:countable-multi-screw-cascade} (\texttt{thm18}--\texttt{thm29} и \texttt{collatz\_global\_convergence\_from\_local\_descent}) формально верифицированы в автономном модуле \texttt{CollatzPlanetarySplice.lean} в репозитории \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
 \bibitem{Malcev1970}
