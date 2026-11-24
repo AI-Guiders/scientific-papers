@@ -474,10 +474,36 @@ theorem thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
         · omega
       exact ⟨hMbLt, by omega⟩
 
+/-- Cumulative binary exponent `A_M = ∑_{m=0}^{M-1} (β_m + r_{m+1} + 1)` across an arbitrary list of macro-steps `[(β_0, r_1), ..., (β_{M-1}, r_M)]`. -/
+def macroSumA : List (Int × Int) → Int
+  | [] => 0
+  | (beta, rNext) :: rest => (beta + rNext + 1) + macroSumA rest
+
+/-- Cumulative ternary exponent `B_M = ∑_{m=0}^{M-1} (r_m + 1)` starting from initial trailing-ones count `r_0`. -/
+def macroSumB : Int → List (Int × Int) → Int
+  | _, [] => 0
+  | rCurr, (_, rNext) :: rest => (rCurr + 1) + macroSumB rNext rest
+
+/-- Total even-reset exponent sum `∑_{m=0}^{M-1} β_m` across `M` macro-steps. -/
+def macroSumBeta : List (Int × Int) → Int
+  | [] => 0
+  | (beta, _) :: rest => beta + macroSumBeta rest
+
+/-- Final trailing-ones count `r_M` after `M` macro-steps starting from `r_0`. -/
+def macroFinalR : Int → List (Int × Int) → Int
+  | rCurr, [] => rCurr
+  | _, (_, rNext) :: rest => macroFinalR rNext rest
+
+/-- Cumulative Catalan descent drift `∑_{m=0}^{M-1} (2 β_m - 1 - r_m)` across `M` macro-steps. -/
+def macroCatalanDrift : Int → List (Int × Int) → Int
+  | _, [] => 0
+  | rCurr, (beta, rNext) :: rest => (2 * beta - 1 - rCurr) + macroCatalanDrift rNext rest
+
 /-- **Theorem 29 (Unified Macro-Step & Odd-Core Dynamics: Double `SL₂(ℤ)` Bézout Lock, Core-Free Macro Gap Jump,
-Unconditional Core Descent `q_1 < q_0` at `r_0 = 0`, and Two-Macro-Step Tail Compensation)**: -/
+Unconditional Core Descent `q_1 < q_0` at `r_0 = 0`, and Arbitrary-Horizon `M`-Macro-Step Telescoping Tail Cancellation)**: -/
 theorem thm29_collatz_trailing_ones_burn_macro_step
-    (Pr0 Pr1 Qr1 Pr1_next pbeta0 pbeta1 Pr2 Qr2 q0 q1 q2 n0 n1 m0 m1 : Int)
+    (steps : List (Int × Int))
+    (r0 betaM Pr0 Pr1 Qr1 Pr1_next pbeta0 pbeta1 Pr2 Qr2 q0 q1 q2 n0 n1 m0 m1 : Int)
     (hn0  : n0 + 1 = Pr1 * q0)
     (hMac : pbeta0 * n1 + 1 = Qr1 * q0)
     (hn1  : n1 + 1 = Pr1_next * q1) :
@@ -495,12 +521,19 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
        (pbeta0 * Pr1_next) * (q0 - q1) =
          pbeta0 * (Pr1_next - 2) * q0 + (pbeta0 - 2) * (2 * q0 - 1) + (q0 - 1) ∧
        (pbeta0 ≥ 2 → Pr1_next ≥ 2 → q0 ≥ 2 → q1 < q0))) ∧
-    -- 4. Two-macro-step odd-core tail compensation q_0 -> q_1 -> q_2:
-    ((pbeta1 * Pr2) * q2 - Qr2 * q1 = pbeta1 - 1 →
+    -- 4. Two-macro-step odd-core composition and Arbitrary-Horizon M-Macro-Step Telescoping Tail Cancellation:
+    -- Across ANY list of M macro-steps `steps`, ALL intermediate trailing-ones counts r_1, ..., r_{M-1} cancel identically
+    -- from A_M - B_M = (∑ β_m) + r_M - r_0, while 2 A_M - 3 B_M = ∑ (2 β_m - 1 - r_m) + 2 r_M - 2 r_0
+    -- (with step increment Δu_m = 2 β_m - 1 - r_m ≥ +1 at r_m = 0 and ≥ 0 at r_m = 1 for all β_m ≥ 1):
+    (((pbeta1 * Pr2) * q2 - Qr2 * q1 = pbeta1 - 1 →
       let Pcomp := (pbeta0 * Pr1_next) * (pbeta1 * Pr2)
       let Qcomp := Qr1 * Qr2
       let Dcomp := Qr2 * (pbeta0 - 1) + (pbeta0 * Pr1_next) * (pbeta1 - 1)
-      Pcomp * q2 - Qcomp * q0 = Dcomp ∧ Pcomp * (q0 - q2) = (Pcomp - Qcomp) * q0 - Dcomp) := by
+      Pcomp * q2 - Qcomp * q0 = Dcomp ∧ Pcomp * (q0 - q2) = (Pcomp - Qcomp) * q0 - Dcomp) ∧
+     (macroSumA steps - macroSumB r0 steps = macroSumBeta steps + macroFinalR r0 steps - r0) ∧
+     (2 * macroSumA steps - 3 * macroSumB r0 steps =
+       macroCatalanDrift r0 steps + 2 * macroFinalR r0 steps - 2 * r0) ∧
+     (betaM ≥ 1 → 2 * betaM - 1 - 0 ≥ 1 ∧ 2 * betaM - 1 - 1 ≥ 0)) := by
   have h1 : (Pr1 * pbeta0) * n1 + Pr1 = Pr1 * (pbeta0 * n1 + 1) := by
     simp only [Int.mul_add, Int.mul_one, Int.mul_assoc]
   rw [hMac] at h1
@@ -547,25 +580,51 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
         Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
       omega
     · omega
-  · intro hStep1
-    dsimp
-    have hElim : ((pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q2 - (Qr1 * Qr2) * q0) -
-                 (Qr2 * (pbeta0 - 1) + (pbeta0 * Pr1_next) * (pbeta1 - 1)) =
-                 (pbeta0 * Pr1_next) * ((pbeta1 * Pr2) * q2 - Qr2 * q1 - (pbeta1 - 1)) +
-                 Qr2 * ((pbeta0 * Pr1_next) * q1 - Qr1 * q0 - (pbeta0 - 1)) := by
-      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
-                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
-    have e0 : (pbeta0 * Pr1_next) * q1 - Qr1 * q0 - (pbeta0 - 1) = 0 := by omega
-    have e1 : (pbeta1 * Pr2) * q2 - Qr2 * q1 - (pbeta1 - 1) = 0 := by omega
-    rw [e0, e1] at hElim
-    simp only [Int.mul_zero, Int.add_zero] at hElim
-    have hComp2 : (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * (q0 - q2) =
-                  (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q0 - (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q2 := by
-      simp only [Int.mul_sub]
-    have hComp3 : ((pbeta0 * Pr1_next) * (pbeta1 * Pr2) - Qr1 * Qr2) * q0 =
-                  (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q0 - (Qr1 * Qr2) * q0 := by
-      simp only [Int.sub_mul]
-    exact ⟨by omega, by omega⟩
+  · refine ⟨?_, ?_, ?_, by intro _; exact ⟨by omega, by omega⟩⟩
+    · intro hStep1
+      dsimp
+      have hElim : ((pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q2 - (Qr1 * Qr2) * q0) -
+                   (Qr2 * (pbeta0 - 1) + (pbeta0 * Pr1_next) * (pbeta1 - 1)) =
+                   (pbeta0 * Pr1_next) * ((pbeta1 * Pr2) * q2 - Qr2 * q1 - (pbeta1 - 1)) +
+                   Qr2 * ((pbeta0 * Pr1_next) * q1 - Qr1 * q0 - (pbeta0 - 1)) := by
+        simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
+                   Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+      have e0 : (pbeta0 * Pr1_next) * q1 - Qr1 * q0 - (pbeta0 - 1) = 0 := by omega
+      have e1 : (pbeta1 * Pr2) * q2 - Qr2 * q1 - (pbeta1 - 1) = 0 := by omega
+      rw [e0, e1] at hElim
+      simp only [Int.mul_zero, Int.add_zero] at hElim
+      have hComp2 : (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * (q0 - q2) =
+                    (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q0 - (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q2 := by
+        simp only [Int.mul_sub]
+      have hComp3 : ((pbeta0 * Pr1_next) * (pbeta1 * Pr2) - Qr1 * Qr2) * q0 =
+                    (pbeta0 * Pr1_next) * (pbeta1 * Pr2) * q0 - (Qr1 * Qr2) * q0 := by
+        simp only [Int.sub_mul]
+      exact ⟨by omega, by omega⟩
+    · have hTel1 : ∀ (st : List (Int × Int)) (rInit : Int),
+          macroSumA st - macroSumB rInit st = macroSumBeta st + macroFinalR rInit st - rInit := by
+        intro st
+        induction st with
+        | nil => intro rInit; dsimp [macroSumA, macroSumB, macroSumBeta, macroFinalR]; omega
+        | cons hd tl ih =>
+          intro rInit
+          rcases hd with ⟨b, rN⟩
+          dsimp [macroSumA, macroSumB, macroSumBeta, macroFinalR]
+          have hRec := ih rN
+          omega
+      exact hTel1 steps r0
+    · have hTel2 : ∀ (st : List (Int × Int)) (rInit : Int),
+          2 * macroSumA st - 3 * macroSumB rInit st =
+          macroCatalanDrift rInit st + 2 * macroFinalR rInit st - 2 * rInit := by
+        intro st
+        induction st with
+        | nil => intro rInit; dsimp [macroSumA, macroSumB, macroCatalanDrift, macroFinalR]; omega
+        | cons hd tl ih =>
+          intro rInit
+          rcases hd with ⟨b, rN⟩
+          dsimp [macroSumA, macroSumB, macroCatalanDrift, macroFinalR]
+          have hRec := ih rN
+          omega
+      exact hTel2 steps r0
 
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
