@@ -38,7 +38,7 @@
 \maketitle
 
 \begin{abstract}
-В первой статье серии строится точное, свободное от полюсов проективное дифференциальное, вариационное и интегральное исчисление в однородных координатах над числовыми полями $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$, параметризованное циклическим фазовым кольцом $\mathbb{Z}_{4Q}$. В классическом анализе универсальная тригонометрическая подстановка Вейерштрасса имеет полюс в точке полуоборота, тогда как в кусочно-линейной $L^1$-тригонометрии производные терпят разрыв в четырёх вершинах алмаза, а прямое умножение вычетов по составному модулю $4Q$ содержит делители нуля. Показано, что представление дискретной экспоненты Эйлера на замкнутом $L^1$-алмазе с последующим проективным подъёмом Вейерштрасса в однородные координаты над $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$ одновременно устраняет оба препятствия: знаменатель Вейерштрасса строго положителен во всех фазах и отделён от нуля, а одношаговый разностный вронскиан тождественно равен четверть-периоду $Q$ во всех точках кольца, включая угловые вершины. На этой основе построена индуктивная $C^\infty$-башня высших разностных производных со строго положительными знаменателями всех порядков, точной формулой Тейлора--Ньютона без остаточного члена и вариационной производной Эйлера--Лагранжа на моноидах составных траекторий. В качестве следствий получены замкнутые целочисленные значения интегралов дифракции Френеля, лемнискатических эллиптических интегралов Якоби, интегрального синуса Дирихле, интеграла энергии Парсеваля и интеграла Бесселя, а также точная $13$-точечная трёхмерная кубатурная формула Симпсона на кубооктаэдре $O_2(3)$. Все определения и теоремы формально верифицированы в системе доказательства теорем \textbf{Lean~4} без неконструктивных аксиом (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+В первой статье серии строится точное, свободное от полюсов проективное разностное, вариационное и интегральное исчисление в однородных координатах над числовыми полями $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$, параметризованное циклическим фазовым кольцом $\mathbb{Z}_{4Q}$. В классическом анализе универсальная тригонометрическая подстановка Вейерштрасса имеет полюс в точке полуоборота, тогда как в кусочно-линейной $L^1$-тригонометрии производные терпят разрыв в четырёх вершинах алмаза, а прямое умножение вычетов по составному модулю $4Q$ содержит делители нуля. Показано, что представление дискретной экспоненты Эйлера на замкнутом $L^1$-алмазе с последующим проективным подъёмом Вейерштрасса в однородные координаты над $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$ одновременно устраняет оба препятствия: знаменатель Вейерштрасса строго положителен во всех фазах и отделён от нуля, а одношаговый разностный вронскиан тождественно равен четверть-периоду $Q$ во всех точках кольца, включая угловые вершины. На этой основе построена индуктивная башня высших разностных производных $D^n f$ всех порядков $n \in \mathbb{N}$ со строго положительными знаменателями (дискретный алгебраический аналог бесконечной дифференцируемости без полюсов), точной формулой Тейлора--Ньютона без остаточного члена и вариационной производной Эйлера--Лагранжа на моноидах составных траекторий. В качестве следствий получены замкнутые целочисленные значения дискретных кольцевых сумм (интегралов) типа Френеля, Якоби, Дирихле, Парсеваля и Бесселя на $\mathbb{Z}_{512}$, а также точная $13$-точечная трёхмерная кубатурная формула Симпсона на кубооктаэдре $O_2(3)$ радиуса $\sqrt{2} \in \mathbb{Q}(\sqrt{2})$. Все определения и теоремы формально верифицированы в системе доказательства теорем \textbf{Lean~4} без неконструктивных аксиом (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 \end{abstract}
 
 \section{Введение и исторический обзор}
@@ -101,21 +101,21 @@
   \label{eq:cuboct-shell-def}
   O_2(d) \;=\; \bigl\{\,e = (e_x, e_y, e_z) \in \{-1, 0, +1\}^3 \;\big|\; e_x^2 + e_y^2 + e_z^2 = d - 1\,\bigr\},
 \end{equation}
-комбинаторные инварианты которой при $d = 3$ имеют вид:
+комбинаторные инварианты которой (число треугольных граней $N_{\mathrm{tri}}(d)$, квадратных граней $N_{\mathrm{sq}}(d)$, вершин $|V_{O_2}(d)|$, степеней граней и квадрат евклидовой длины вершины $|e|_2^2$) при $d = 3$ имеют вид:
 \begin{align}
-  |{\triangle}(d)| &= 2^d = 8, \label{eq:cuboct-triangles} \\
-  |\square(d)| &= 2d = 6, \label{eq:cuboct-squares} \\
+  N_{\mathrm{tri}}(d) &= 2^d = 8, \label{eq:cuboct-triangles} \\
+  N_{\mathrm{sq}}(d) &= 2d = 6, \label{eq:cuboct-squares} \\
   |V_{O_2}(d)| &= 2d(d-1) = 12, \label{eq:cuboct-vertices} \\
   d_{\mathrm{in}}(\square) &= 4, \label{eq:cuboct-din} \\
   d_{\mathrm{out}}(E)(d) &= 2^d - d = 5, \label{eq:cuboct-dout} \\
-  \|e\|_2^2 &= d - 1 = 2. \label{eq:cuboct-norm2}
+  |e|_2^2 &= e_x^2 + e_y^2 + e_z^2 = d - 1 = 2. \label{eq:cuboct-norm2}
 \end{align}
-Соответствующее фазовое кольцо $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ при $d = 3$ определяется параметрами:
+Поскольку евклидов радиус каждой вершины $e \in O_2(3)$ равен $|e|_2 = \sqrt{2}$, нормированные направляющие векторы вершин $e / |e|_2 = \frac{1}{\sqrt{2}}(e_x, e_y, e_z)$ и лемнискатический модуль $k = 1/|e|_2 = \frac{\sqrt{2}}{2}$ принадлежат квадратичному полю $\mathbb{Q}(\sqrt{2})$, тогда как плоские вращения Вейерштрасса действуют в поле Гаусса $\mathbb{Q}(i)$. Соответствующее фазовое кольцо $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ при $d = 3$ определяется параметрами:
 \begin{align}
-  Q_\square(d) &= 2^{|{\triangle}(d)| - 1} = 128, \label{eq:ring-quarter} \\
+  Q_\square(d) &= 2^{N_{\mathrm{tri}}(d) - 1} = 128, \label{eq:ring-quarter} \\
   \Phi_{\mathrm{half}}(d) &= 2\,Q_\square(d) = 256, \label{eq:ring-half} \\
   N_{\mathrm{ring}}(d) &= 4\,Q_\square(d) = 512, \label{eq:ring-full} \\
-  K_P(d) &= \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64. \label{eq:ring-bisector}
+  K_P(d) &= \frac{N_{\mathrm{ring}}(d)}{N_{\mathrm{tri}}(d)} = 64. \label{eq:ring-bisector}
 \end{align}
 Все определения и теоремы настоящей статьи формализованы в модуле \texttt{RotatorQuadrature.lean} системы \textbf{Lean~4}~\cite{Moura2021}.
 
@@ -284,28 +284,27 @@
 Приравнивание вещественных и мнимых частей даёт~\eqref{eq:brahmagupta-step-2} и~\eqref{eq:brahmagupta-step-3}.
 \end{proof}
 
-\begin{theorem}[Основная теорема дискретного анализа Ньютона--Лейбница и четверть-квадратное умножение]
+\begin{theorem}[Основная теорема дискретного анализа Ньютона--Лейбница для первообразных сумм]
 \label{thm:main-1c}
 Для любой функции $f\colon \mathbb{Z} \to \mathbb{Z}$ с первообразной суммой
 \begin{equation}
   \label{eq:antiderivative-sum-def}
-  \widehat{\Phi}_f(L) \;:=\; \sum_{\varphi=0}^{L-1} f(\varphi)
+  \Phi_f(L) \;:=\; \sum_{\varphi=0}^{L-1} f(\varphi)
 \end{equation}
-и для любых $d, L \in \mathbb{N}$, числа оборотов $k_{\mathrm{turns}} \in \mathbb{Z}$ и $x, y \in \mathbb{Z}$ выполняются тождества (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+и для любых $d, L \in \mathbb{N}$ и числа оборотов $k_{\mathrm{turns}} \in \mathbb{Z}$ выполняются тождества (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
 \begin{align}
-  \Delta\widehat{\Phi}_f(L) &= \sum_{\varphi=0}^{L} f(\varphi) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L), \label{eq:newton-leibniz-general} \\
-  \Delta\widehat{\Phi}_{\mathcal{C}}(d, L) &= \mathcal{C}_d(L), \label{eq:newton-leibniz-c} \\
-  \Delta\widehat{\Phi}_{\mathcal{S}}(d, L) &= \mathcal{S}_d(L), \label{eq:newton-leibniz-s} \\
-  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{C}}(3, 512) &= k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3, 512) \;=\; 0, \label{eq:full-turn-zero} \\
-  k_{\mathrm{turns}}\,\widehat{\Phi}_{\mathcal{S}}(3, 256) &= 16\,384\,k_{\mathrm{turns}}, \label{eq:half-wave-area} \\
-  (x + y)^2 - (x - y)^2 &= 4xy. \label{eq:quarter-square-mul}
+  \Delta\Phi_f(L) &= \sum_{\varphi=0}^{L} f(\varphi) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L), \label{eq:newton-leibniz-general} \\
+  \Delta\Phi_{\mathcal{C}}(d, L) &= \mathcal{C}_d(L), \label{eq:newton-leibniz-c} \\
+  \Delta\Phi_{\mathcal{S}}(d, L) &= \mathcal{S}_d(L), \label{eq:newton-leibniz-s} \\
+  k_{\mathrm{turns}}\,\Phi_{\mathcal{C}}(3, 512) &= k_{\mathrm{turns}}\,\Phi_{\mathcal{S}}(3, 512) \;=\; 0, \label{eq:full-turn-zero} \\
+  k_{\mathrm{turns}}\,\Phi_{\mathcal{S}}(3, 256) &= 16\,384\,k_{\mathrm{turns}}. \label{eq:half-wave-area}
 \end{align}
 \end{theorem}
 
 \begin{proof}
 Из рекуррентного определения суммы~\eqref{eq:antiderivative-sum-def} имеем
 \begin{equation*}
-  \Delta\widehat{\Phi}_f(L) \;=\; \widehat{\Phi}_f(L + 1) - \widehat{\Phi}_f(L) \;=\; \biggl(\sum_{\varphi=0}^{L-1} f(\varphi) + f(L)\biggr) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L),
+  \Delta\Phi_f(L) \;=\; \Phi_f(L + 1) - \Phi_f(L) \;=\; \biggl(\sum_{\varphi=0}^{L-1} f(\varphi) + f(L)\biggr) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L),
 \end{equation*}
 что доказывает~\eqref{eq:newton-leibniz-general}--\eqref{eq:newton-leibniz-s}. На полном периоде $N_{\mathrm{ring}}(3) = 512 = 4Q$ ($Q = 128$) разбиение диапазона суммирования на $256$ антиподальных пар $(\varphi,\, \varphi + 256)$ для $\varphi \in [0, 255]$ даёт
 \begin{equation*}
@@ -317,12 +316,22 @@
 \end{equation*}
 откуда сумма по полуволне равна
 \begin{equation*}
-  \widehat{\Phi}_{\mathcal{S}}(3, 256) \;=\; \sum_{m=0}^{Q-1} Q \;=\; Q^2 \;=\; 128^2 \;=\; 16\,384,
+  \Phi_{\mathcal{S}}(3, 256) \;=\; \sum_{m=0}^{Q-1} Q \;=\; Q^2 \;=\; 128^2 \;=\; 16\,384,
 \end{equation*}
-что даёт~\eqref{eq:half-wave-area}. Наконец, раскрытие квадратов $(x^2 + 2xy + y^2) - (x^2 - 2xy + y^2) = 4xy$ доказывает~\eqref{eq:quarter-square-mul}.
+что доказывает~\eqref{eq:half-wave-area}.
 \end{proof}
 
-\begin{theorem}[Однородная проективная арифметика полей $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$, вложение $L^1$-алмаза в $\mathbb{Q}(i)^\times$ и $C^\infty$-башня производных и вариаций]
+\begin{remark}[Четверть-квадратное умножение]
+\label{rem:quarter-square}
+Вместе с Теоремой~\ref{thm:main-1c} в состав \texttt{thm1} включено тождество четверть-квадратного умножения
+\begin{equation}
+  \label{eq:quarter-square-mul}
+  (x + y)^2 - (x - y)^2 \;=\; 4xy \qquad (\forall x, y \in \mathbb{Z}),
+\end{equation}
+сводящее билинейные произведения координат Вейерштрасса и вронскиана к разности квадратов сумм и разностей.
+\end{remark}
+
+\begin{theorem}[Однородная проективная арифметика полей $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$, вложение $L^1$-алмаза в $\mathbb{Q}(i)^\times$ и башня разностных производных всех порядков]
 \label{thm:main-34-field}
 В отличие от кольца вычетов $\mathbb{Z}_{4Q}$ по составному модулю $4Q$ (имеющего делители нуля), однородные тройки $(X, Y, R) \in \mathbb{Z}^3$ ($R \ge 1$) и $(a, b, D) \in \mathbb{Z}^3$ ($D \ge 1$) задают точную проективную арифметику в числовых полях $\mathbb{Q}(i)$ и $\mathbb{Q}(\sqrt{2})$, а каждая точка $(C, S) = (\mathcal{C}_Q(\varphi), \mathcal{S}_Q(\varphi))$ на $L^1$-алмазе $|C| + |S| = Q \ge 1$ и её подъём Вейерштрасса $(X_T, Y_T, R_T) = (C^2 - S^2, 2CS, C^2 + S^2)$ вкладываются в мультипликативную группу $\mathbb{Q}(i)^\times$ ненулевых обратимых элементов поля $\mathbb{Q}(i)$ (\texttt{thm34}, \texttt{thm35}, \texttt{thm38}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
@@ -393,8 +402,8 @@
   \end{equation}
   причём при $P_1, Q_2 \ge 1$ стационарность $\delta\mathcal{S} = 0$ равносильна $D_w' = D_w$.
 
-\item \textbf{Индуктивная $C^\infty$-башня высших производных $D^n f$, точный ряд Тейлора--Ньютона и отсутствие полюсов во всех порядках (\texttt{thm38}):}
-  башня производных
+\item \textbf{Индуктивная башня высших разностных производных $D^n f$ всех порядков $n \in \mathbb{N}$ (дискретный алгебраический аналог класса $C^\infty$) и точный ряд Тейлора--Ньютона (\texttt{thm38}):}
+  термин «дискретная $C^\infty$-башня» употребляется здесь строго как алгебраический аналог бесконечной дифференцируемости на решётке $\mathbb{Z}$ (существование конечных разностей всех порядков $n \in \mathbb{N}$ без обращения знаменателей в нуль, в отличие от топологической гладкости на континуальных многообразиях). Индуктивная башня производных
   \begin{equation}
     \label{eq:field-deriv-n-def}
     (D^0 f)(x) \;:=\; f(x),
@@ -473,10 +482,10 @@
 доказывает~\eqref{eq:c-infinity-denom-pos}.
 \end{proof}
 
-\section{Замкнутое вычисление интегралов Френеля, Якоби, Дирихле, Парсеваля и Бесселя}
+\section{Замкнутое вычисление дискретных кольцевых сумм (интегралов) типа Френеля, Якоби, Дирихле, Парсеваля и Бесселя}
 \label{sec:integrals-archimedes}
 
-В дифференциальной алгебре Лиувилля интегралы дифракции Френеля, эллиптические интегралы, интегральный синус Дирихле и интегралы Бесселя не выражаются в замкнутом виде через элементарную круговую экспоненту. На фазовом кольце $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ эти семейства замыкаются двумя операторами:
+В континуальной дифференциальной алгебре Лиувилля несобственные интегралы дифракции Френеля, эллиптические интегралы, интегральный синус Дирихле и интегралы Бесселя не выражаются в элементарных функциях. На конечном фазовом кольце $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ их дискретные кольцевые аналоги (конечные суммы Римана по полному периоду или квадранту кольца) вычисляются в замкнутом целочисленном виде с помощью двух операторов:
 \begin{enumerate}[leftmargin=*]
 \item Двухтактовая симплектическая разностная рекуррентность Верле
   \begin{equation}
@@ -488,8 +497,8 @@
     \label{eq:verlet-parabola}
     \varphi(t) \;=\; \varphi_0 + \omega_0 t + \Phi_{\mathrm{accel}}\,\frac{t(t-1)}{2},
   \end{equation}
-  которое порождает элементарный круговой базис Лиувилля при нулевом ускорении ($\Phi_{\mathrm{accel}} = 0$) и квадратично-фазовый базис Френеля--Эйри при постоянном ненулевом ускорении ($\Phi_{\mathrm{accel}} \ne 0$).
-\item На двух сцепленных кольцах при лемнискатическом модуле Гаусса $k^2 = 1/\|e\|_2^2 = 1/2$ триада эллиптических функций Якоби определяется равенствами:
+  которое порождает элементарный круговой базис Лиувилля при нулевом ускорении ($\Phi_{\mathrm{accel}} = 0$) и квадратично-фазовый базис типа Френеля--Эйри при постоянном ненулевом ускорении ($\Phi_{\mathrm{accel}} \ne 0$).
+\item На двух сцепленных кольцах при лемнискатическом модуле Гаусса $k^2 = 1/|e|_2^2 = 1/2$ ($k = \sqrt{2}/2 \in \mathbb{Q}(\sqrt{2})$) дискретная триада типа Якоби определяется равенствами:
   \begin{align}
     \mathrm{sn}_Q(\varphi) &:= \mathcal{S}_Q(\varphi), \label{eq:jacobi-sn} \\
     \mathrm{cn}_Q(\varphi) &:= \mathcal{C}_Q(\varphi), \label{eq:jacobi-cn} \\
@@ -497,7 +506,7 @@
   \end{align}
 \end{enumerate}
 
-Определим пять канонических кольцевых интегралов:
+Определим пять канонических дискретных кольцевых сумм (кольцевых аналогов классических интегралов Френеля, Якоби, Дирихле, Парсеваля и Бесселя):
 \begin{align}
   \mathcal{C}_{\mathrm{Fresnel}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d(\varphi^2), \label{eq:def-fresnel-c} \\
   \mathcal{S}_{\mathrm{Fresnel}}(d) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{S}_d(\varphi^2), \label{eq:def-fresnel-s} \\
@@ -508,9 +517,9 @@
 \end{align}
 где $\mathrm{tdiv}(a, b)$ обозначает целочисленное деление с усечением к нулю.
 
-\begin{theorem}[Инварианты лемнискатической триады Якоби и параметрические эллиптические интегралы]
+\begin{theorem}[Инварианты дискретной лемнискатической триады типа Якоби и параметрические кольцевые суммы]
 \label{thm:main-2}
-Для всех $Q, m, k_{\mathrm{turns}}, a, b \in \mathbb{Z}$ и любого горизонта интегрирования $L \in \mathbb{N}$ триада Якоби~\eqref{eq:jacobi-sn}--\eqref{eq:jacobi-dn} на $\mathbb{Z}_{4Q}$ удовлетворяет поточечным законам сохранения (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+Для всех $Q, m, k_{\mathrm{turns}}, a, b \in \mathbb{Z}$ и любого горизонта суммирования $L \in \mathbb{N}$ дискретная триада типа Якоби~\eqref{eq:jacobi-sn}--\eqref{eq:jacobi-dn} на $\mathbb{Z}_{4Q}$ удовлетворяет поточечным законам сохранения (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
 \begin{align}
   |\mathrm{sn}_Q(\varphi)| + |\mathrm{cn}_Q(\varphi)| &= m + (Q - m) \;\equiv\; Q, \label{eq:jacobi-inv-1} \\
   2\,\mathrm{dn}_Q(\varphi) + |\mathrm{sn}_Q(\varphi)| &= (2Q - m) + m \;\equiv\; 2Q, \label{eq:jacobi-inv-2}
@@ -540,23 +549,23 @@
 что доказывает~\eqref{eq:parametric-elliptic-quad}.
 \end{proof}
 
-\begin{theorem}[Замкнутые интегралы дифракции Френеля, Дирихле, Парсеваля и Бесселя]
+\begin{theorem}[Замкнутые дискретные кольцевые суммы типа Френеля, Дирихле, Парсеваля и Бесселя]
 \label{thm:main-2b}
-При $d = 3$ для любых $c_{\mathrm{sq}}, k_{\mathrm{turns}} \in \mathbb{Z}$ выполняются точные замкнутые равенства (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+При $d = 3$ для любых $c_{\mathrm{sq}}, k_{\mathrm{turns}} \in \mathbb{Z}$ дискретные кольцевые суммы~\eqref{eq:def-fresnel-c}--\eqref{eq:def-bessel} принимают следующие точные значения (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Интегралы дифракции Френеля:}
+\item \textbf{Кольцевые суммы с квадратичной фазой типа Френеля:}
   \begin{equation}
     \label{eq:fresnel-closed}
     \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{C}_3(\varphi^2) \;=\; \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\,\mathcal{S}_3(\varphi^2) \;=\; 2048\,c_{\mathrm{sq}},
   \end{equation}
   где вся ненулевая сумма сосредоточена на $32$ точках биссектрисы стационарной фазы $\psi = K_P(3) = 64$.
-\item \textbf{Интегральный синус Дирихле и интеграл энергии Парсеваля:}
+\item \textbf{Дискретная сумма типа интегрального синуса Дирихле и кольцевая сумма энергии Парсеваля:}
   \begin{align}
     \mathrm{Si}_3(128) &= \mathrm{Si}_3(256) \;=\; 128, \label{eq:dirichlet-closed} \\
     6\,k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{Parseval}}(3) &= k_{\mathrm{turns}}\,N_{\mathrm{ring}}(3)\bigl(2\,Q_\square(3)^2 + 1\bigr) \;=\; 16\,777\,728\,k_{\mathrm{turns}}, \label{eq:parseval-closed}
   \end{align}
   откуда $\mathcal{I}_{\mathrm{Parseval}}(3) = 2\,796\,288$.
-\item \textbf{Дискретный интеграл Бесселя и его точный корень:}
+\item \textbf{Дискретная кольцевая сумма типа Бесселя и её точный корень:}
   \begin{align}
     \mathcal{J}_{0,3}(0) &= 65\,536, \label{eq:bessel-k0} \\
     \mathcal{J}_{0,3}(1) &= 32\,768, \label{eq:bessel-k1} \\
@@ -607,10 +616,31 @@
 \section{Трёхмерная кубатура Римана на кубооктаэдре и рациональные вилки для \texorpdfstring{$\pi$}{pi}}
 \label{sec:continuum-emergence}
 
+\begin{remark}[Замкнутость связки $\mathbb{Q}(\sqrt{2}) \leftrightarrow O_2(3)$ и точная проекция на единичную сферу $S^2$]
+\label{rem:q-sqrt2-cuboctahedron-closure}
+В силу~\eqref{eq:cuboct-norm2} каждая из $12$ вершин кубооктаэдра $e = (e_x, e_y, e_z) \in O_2(3)$ имеет квадрат евклидовой нормы $e_x^2 + e_y^2 + e_z^2 = 2$ и лежит на сфере радиуса $|e|_2 = \sqrt{2}$. В однородной проективной арифметике поля $\mathbb{Q}(\sqrt{2})$ из Теоремы~\ref{thm:main-34-field}(iii) радиальная проекция вершины $e \in O_2(3)$ на единичную сферу $S^2$ и лемнискатический модуль $k = 1/\sqrt{2}$ записываются без выхода в $\mathbb{R}$ целочисленными тройками $(a, b, D) \in \mathbb{Z}^3$, представляющими $(a + b\sqrt{2})/D$:
+\begin{equation}
+  \label{eq:unit-sphere-sqrt2-triple}
+  \hat{e}_i \;=\; \frac{e_i}{\sqrt{2}} \;=\; \frac{0 + e_i\sqrt{2}}{2} \;\longleftrightarrow\; (0,\, e_i,\, 2) \;\in\; \mathbb{Z}^3
+  \qquad (i \in \{x, y, z\}).
+\end{equation}
+Возведение каждой компоненты в квадрат по правилу умножения~\eqref{eq:sqrt2-field-mul} в поле $\mathbb{Q}(\sqrt{2})$ даёт
+\begin{equation}
+  \label{eq:unit-sphere-sqrt2-square}
+  (0,\, e_i,\, 2) \otimes_{\sqrt{2}} (0,\, e_i,\, 2) \;=\; \bigl(0\cdot 0 + 2\,e_i^2,\; 0\cdot e_i + e_i\cdot 0,\; 2\cdot 2\bigr) \;=\; \bigl(2\,e_i^2,\; 0,\; 4\bigr),
+\end{equation}
+откуда сумма квадратов трёх направляющих косинусов при общем знаменателе $D = 4$ тождественно равна проективной единице на $S^2$:
+\begin{equation}
+  \label{eq:unit-sphere-sqrt2-norm1}
+  \bigl(2(e_x^2 + e_y^2 + e_z^2),\; 0,\; 4\bigr) \;=\; (4,\; 0,\; 4) \;\sim\; (1,\; 0,\; 1).
+\end{equation}
+Таким образом, нормировка векторов оболочки $O_2(3)$ на единичную сферу $S^2$ замкнута в однородной арифметике поля $\mathbb{Q}(\sqrt{2})$, а трёхмерная полиномиальная кубатура на кубе $[-1, 1]^3$ вычисляется непосредственно на целочисленных вершинах $O_2(3) \subset \mathbb{Z}^3$.
+\end{remark}
+
 Для любой трёхмерной функции $F\colon \mathbb{Z}^3 \to \mathbb{Z}$ определим $13$-точечный кубатурный оператор «центр плюс оболочка» на кубооктаэдре $O_2(d)$, приписывающий началу координат $(0, 0, 0)$ вес $|V_{O_2}(d)| = 12$ наравне с суммой по $12$ вершинам оболочки $O_2(d)$:
 \begin{equation}
   \label{eq:cuboct-3d-integrator}
-  \widehat{\mathcal{I}}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0, 0, 0) \;+\; \sum_{e \in O_2(d)} F(e_x, e_y, e_z).
+  \mathcal{I}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0, 0, 0) \;+\; \sum_{e \in O_2(d)} F(e_x, e_y, e_z).
 \end{equation}
 
 \begin{theorem}[Равновеликое разбиение на пояса и функциональная 3D-кубатура на кубооктаэдре]
@@ -630,24 +660,24 @@
   \end{equation}
 
 \item \textbf{Аддитивность и аннигиляция нечётных функций произвольного порядка:}
-  функционал $\widehat{\mathcal{I}}_{O_2(3)}$ линеен и тождественно обнуляет любую центрально-нечётную и любую отражательно-нечётную функцию:
+  функционал $\mathcal{I}_{O_2(3)}$ линеен и тождественно обнуляет любую центрально-нечётную и любую отражательно-нечётную функцию:
   \begin{align}
-    \widehat{\mathcal{I}}_{O_2(3)}(F + G) &= \widehat{\mathcal{I}}_{O_2(3)}(F) + \widehat{\mathcal{I}}_{O_2(3)}(G), \label{eq:functional-additivity} \\
-    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(\mathbf{e}) - F(-\mathbf{e})\bigr) &= 0, \label{eq:functional-central-odd} \\
-    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(e_x, e_y, e_z) - F(-e_x, e_y, e_z)\bigr) &= 0. \label{eq:functional-axis-odd}
+    \mathcal{I}_{O_2(3)}(F + G) &= \mathcal{I}_{O_2(3)}(F) + \mathcal{I}_{O_2(3)}(G), \label{eq:functional-additivity} \\
+    \mathcal{I}_{O_2(3)}\bigl(F(\mathbf{e}) - F(-\mathbf{e})\bigr) &= 0, \label{eq:functional-central-odd} \\
+    \mathcal{I}_{O_2(3)}\bigl(F(e_x, e_y, e_z) - F(-e_x, e_y, e_z)\bigr) &= 0. \label{eq:functional-axis-odd}
   \end{align}
 
 \item \textbf{Точная трёхмерная кубатура Римана и законы изотропии 2-го и 4-го моментов:}
   на любой чётной квадратичной и биквадратной форме (с учётом $e_i^4 = e_i^2$ на $O_2(3)$) оператор~\eqref{eq:cuboct-3d-integrator} равен
   \begin{equation}
     \label{eq:unified-even-cubature}
-    \widehat{\mathcal{I}}_{O_2(3)}\!\bigl(c_0 + c_x e_x^2 + c_y e_y^2 + c_z e_z^2 + c_{xy} e_x^2 e_y^2 + c_{xz} e_x^2 e_z^2 + c_{yz} e_y^2 e_z^2\bigr)
+    \mathcal{I}_{O_2(3)}\!\bigl(c_0 + c_x e_x^2 + c_y e_y^2 + c_z e_z^2 + c_{xy} e_x^2 e_y^2 + c_{xz} e_x^2 e_z^2 + c_{yz} e_y^2 e_z^2\bigr)
     \;=\; 24\,c_0 + 8(c_x + c_y + c_z) + 4(c_{xy} + c_{xz} + c_{yz}),
   \end{equation}
   воспроизводя точный трёхмерный континуальный интеграл Римана для любого кубического многочлена $P(x, y, z)$:
   \begin{equation}
     \label{eq:riemann-3d-exact}
-    \widehat{\mathcal{I}}_{O_2(3)}(P) \;=\; 3\iiint_{[-1,1]^3} P(x, y, z)\,\mathrm{d}x\,\mathrm{d}y\,\mathrm{d}z \;=\; 24\,c_0 + 8(c_x + c_y + c_z),
+    \mathcal{I}_{O_2(3)}(P) \;=\; 3\iiint_{[-1,1]^3} P(x, y, z)\,\mathrm{d}x\,\mathrm{d}y\,\mathrm{d}z \;=\; 24\,c_0 + 8(c_x + c_y + c_z),
   \end{equation}
   а также сферическую изотропию второго момента и закон четвёртого момента для любого волнового вектора $\mathbf{k} = (k_1, k_2, k_3) \in \mathbb{Z}^3$:
   \begin{align}
@@ -670,19 +700,19 @@
 
 \emph{Пункт~(ii).} Линейность~\eqref{eq:functional-additivity} следует из почленного сложения конечных сумм в~\eqref{eq:cuboct-3d-integrator}. Поскольку инверсия $\mathbf{e} \mapsto -\mathbf{e}$ и отражение $e_x \mapsto -e_x$ являются биекциями множества $O_2(3)$ на себя и оставляют начало координат $(0, 0, 0)$ неподвижным, суммы разностей $F(\mathbf{e}) - F(-\mathbf{e})$ и $F(e_x, e_y, e_z) - F(-e_x, e_y, e_z)$ попарно сокращаются, давая~\eqref{eq:functional-central-odd} и~\eqref{eq:functional-axis-odd}.
 
-\emph{Пункт~(iii).} Вычислим действие оператора $\widehat{\mathcal{I}}_{O_2(3)}$ на базисных чётных мономах:
+\emph{Пункт~(iii).} Вычислим действие оператора $\mathcal{I}_{O_2(3)}$ на базисных чётных мономах:
 \begin{itemize}[leftmargin=*]
 \item На константе $1$:
   \begin{equation*}
-    \widehat{\mathcal{I}}_{O_2(3)}(1) \;=\; 12\cdot 1 + 12\cdot 1 \;=\; 24.
+    \mathcal{I}_{O_2(3)}(1) \;=\; 12\cdot 1 + 12\cdot 1 \;=\; 24.
   \end{equation*}
 \item На квадрате координаты $e_i^2 \in \{0, 1\}$ ($i \in \{x, y, z\}$), который равен $0$ в центре и в $4$ вершинах экваториального пояса $e_i = 0$ и равен $1$ в $8$ вершинах поясов $e_i = \pm 1$:
   \begin{equation*}
-    \widehat{\mathcal{I}}_{O_2(3)}(e_i^2) \;=\; 12\cdot 0 + 8\cdot 1 \;=\; 8.
+    \mathcal{I}_{O_2(3)}(e_i^2) \;=\; 12\cdot 0 + 8\cdot 1 \;=\; 8.
   \end{equation*}
 \item На попарном произведении $e_i^2 e_j^2$ ($i \ne j$), которое равно $1$ ровно на $4$ вершинах, лежащих в координатной плоскости $(i, j)$:
   \begin{equation*}
-    \widehat{\mathcal{I}}_{O_2(3)}(e_i^2 e_j^2) \;=\; 12\cdot 0 + 4\cdot 1 \;=\; 4.
+    \mathcal{I}_{O_2(3)}(e_i^2 e_j^2) \;=\; 12\cdot 0 + 4\cdot 1 \;=\; 4.
   \end{equation*}
 \end{itemize}
 По линейности~\eqref{eq:functional-additivity} это даёт формулу~\eqref{eq:unified-even-cubature}. Сравнивая её с континуальными интегралами Римана по кубу $[-1, 1]^3$ объёма $8$:
@@ -736,7 +766,7 @@
 \begin{proof}
 Докажем пункты~(i) и~(ii).
 
-\emph{Пункт~(i).} Подставляя $Q = |\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)|$ в тождество параллелограмма, получаем~\eqref{eq:parallelogram-radius-bound}. На каждом звене $n$-угольника с шагом $s$ элемент описанного тангенса равен $W_s / I_s$, а элемент вписанной хорды синуса равен $(W_s I_s)/(R_0 R_1)$. Вычитая второе из первого и подставляя шаговое тождество Брахмагупты $R_0 R_1 - I_s^2 = W_s^2$ из Теоремы~\ref{thm:main-1b}~\eqref{eq:brahmagupta-step-1}, находим:
+\emph{Пункт~(i).} Подставляя $Q = |\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)|$ в тождество параллелограмма, получаем~\eqref{eq:parallelogram-radius-bound}. На каждом $j$-м звене $n$-угольника с шагом $s$ положим для краткости $R_0 := R_3(js)$, $R_1 := R_3((j+1)s)$, $I_s := I_s(js)$ и $W_s := W_s(js)$. Тогда элемент описанного тангенса равен $W_s / I_s$, а элемент вписанной хорды синуса равен $(W_s I_s)/(R_0 R_1)$. Вычитая второе из первого и подставляя шаговое тождество Брахмагупты $R_0 R_1 - I_s^2 = W_s^2$ из Теоремы~\ref{thm:main-1b}~\eqref{eq:brahmagupta-step-1}, находим:
 \begin{equation*}
   \frac{W_s}{I_s} - \frac{W_s I_s}{R_0 R_1} \;=\; \frac{W_s(R_0 R_1 - I_s^2)}{I_s R_0 R_1} \;=\; \frac{W_s^3}{I_s R_0 R_1} \;>\; 0.
 \end{equation*}
