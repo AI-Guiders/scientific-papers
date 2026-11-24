@@ -488,14 +488,24 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
      (pbeta ≥ 2 → PR_next ≥ 2 → q0 ≥ 1 →
        (pbeta * PR_next ≥ QR → q1 < q0 + 2) ∧
        (q1 ≥ q0 + 2 → pbeta * PR_next < QR))) ∧
-    -- 4. Closed-form M-step recurrence solution & Dual-Core Drift Conservation D_core + E_core = (U_M - Q_core) * q0:
+    -- 4. Closed-form M-step recurrence solution, Dual-Core Drift Conservation D_core + E_core = (U_M - Q_core) * q0,
+    --    and Cycle Envelope Squeeze Theorem (3^{B_M} < 2^{A_M} ≤ U_M and (U_M - 2^{A_M}) D_core = (2^{A_M} - 3^{B_M}) E_core):
     (nFinal + 1 = pbeta * n1 →
      multiScrewP L1 * n1 - multiScrewQ L1 * q0 = multiScrewD L1 →
      multiScrewP L2 * q0 - multiScrewP L1 * n1 = nMid →
      multiScrewP L1 = nInf * pbeta →
       multiScrewD L1 + nMid = (multiScrewP L2 - multiScrewQ L1) * q0 ∧
       nInf * (n0 - nFinal) = (nInf * PR - multiScrewQ L1) * q0 - multiScrewD L1 ∧
-      nInf * (n0 - nFinal) = (nInf * PR - multiScrewP L2) * q0 + nMid) := by
+      nInf * (n0 - nFinal) = (nInf * PR - multiScrewP L2) * q0 + nMid ∧
+      (nFinal = n0 →
+        (nInf * PR - multiScrewQ L1) * q0 = multiScrewD L1 ∧
+        (multiScrewP L2 - nInf * PR) * q0 = nMid ∧
+        (multiScrewP L2 - nInf * PR) * multiScrewD L1 =
+          (nInf * PR - multiScrewQ L1) * nMid ∧
+        (q0 ≥ 1 → multiScrewD L1 > 0 → nMid ≥ 0 →
+          multiScrewQ L1 < nInf * PR ∧
+          nInf * PR ≤ multiScrewP L2 ∧
+          (nInf * PR = multiScrewP L2 ↔ nMid = 0)))) := by
   have hP := multiScrewP_append L1 L2
   have hQ := multiScrewQ_append L1 L2
   have hD := multiScrewD_append L1 L2
@@ -604,7 +614,35 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
     have hFerm2 : nInf * (n0 - nFinal) = (nInf * PR - multiScrewP L2) * q0 + nMid := by
       have : (nInf * PR - multiScrewP L2) * q0 = (nInf * PR) * q0 - multiScrewP L2 * q0 := by simp only [Int.sub_mul]
       omega
-    exact ⟨hDualSum, hFerm1, hFerm2⟩
+    refine ⟨hDualSum, hFerm1, hFerm2, ?_⟩
+    intro hCyc
+    have hZeroLhs : nInf * (n0 - nFinal) = 0 := by rw [hCyc, Int.sub_self, Int.mul_zero]
+    have hCyc1 : (nInf * PR - multiScrewQ L1) * q0 = multiScrewD L1 := by omega
+    have hCyc2 : (multiScrewP L2 - nInf * PR) * q0 = nMid := by
+      have : (multiScrewP L2 - nInf * PR) * q0 + (nInf * PR - multiScrewP L2) * q0 = 0 := by
+        simp only [Int.sub_mul]; omega
+      omega
+    have hCross : (multiScrewP L2 - nInf * PR) * multiScrewD L1 = (nInf * PR - multiScrewQ L1) * nMid := by
+      rw [← hCyc1, ← hCyc2]
+      simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
+    refine ⟨hCyc1, hCyc2, hCross, ?_⟩
+    intro hq0 hDpos hEge
+    have hLow : multiScrewQ L1 < nInf * PR := by
+      by_cases hLe : nInf * PR - multiScrewQ L1 ≤ 0
+      · have := Int.mul_nonpos_of_nonpos_of_nonneg hLe (by omega : q0 ≥ 0); omega
+      · omega
+    have hHigh : nInf * PR ≤ multiScrewP L2 := by
+      by_cases hLt : multiScrewP L2 - nInf * PR < 0
+      · have := Int.mul_neg_of_neg_of_pos hLt (by omega : q0 > 0); omega
+      · omega
+    refine ⟨hLow, hHigh, ?_⟩
+    constructor
+    · intro hEq; have : multiScrewP L2 - nInf * PR = 0 := by omega
+      rw [this, Int.zero_mul] at hCyc2; omega
+    · intro hE0
+      by_cases hGt : multiScrewP L2 - nInf * PR > 0
+      · have := Int.mul_pos hGt (by omega : q0 > 0); omega
+      · omega
 
 #print axioms thm18_universal_arbitrary_modulus_rotator_and_two_arc_trajectory_wronskian
 #print axioms thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum

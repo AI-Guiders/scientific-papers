@@ -160,7 +160,7 @@ Across any multi-stage planetary cascade engaging $r_0 \ge 0$ step ratios from $
     A_M - B_M \;\equiv\; \Bigl(\sum_{m=0}^{M-1}\beta_m\Bigr) + r_M - r_0, \qquad
     2 A_M - 3 B_M \;\equiv\; \sum_{m=0}^{M-1}\bigl(2\beta_m - 1 - r_m\bigr) + 2 r_M - 2 r_0,
   \]
-  where the step increment $\Delta u_m = 2\beta_m - 1 - r_m$ satisfies $\Delta u_m \ge +1$ at $r_m = 0$ and $\Delta u_m \ge 0$ at $r_m = 1$ for all $\beta_m \ge 1$.
+  and in the $\mathbb{Z}_{4Q}$ rotator logarithm coordinates ($128 A_M - 203 B_M \equiv 53(2 A_M - 3 B_M) - 22(2 B_M - A_M) \equiv 128(r_M - r_0) + \sum_{m=0}^{M-1}(128\beta_m - 75 R_m)$), where $\Delta u_m = 2\beta_m - 1 - r_m \ge +1$ at $r_m = 0$ and $\Delta u_m \ge 0$ at $r_m = 1$ for all $\beta_m \ge 1$.
 \end{enumerate}
 \end{theorem}
 
@@ -178,7 +178,7 @@ For any two multi-screw cascades $\mathcal{L}_1,\mathcal{L}_2$ of arbitrary leng
     \mathcal{D}_{\mathrm{core}}^{(M)} + \mathcal{E}_{\mathrm{core}}^{(M)} \;\equiv\; \bigl(U_M - 3^{B_M}\bigr) q_0, \qquad
     2^{A_M - R_0}(n_0 - n_M) \;\equiv\; \bigl(2^{A_M} - 3^{B_M}\bigr) q_0 - \mathcal{D}_{\mathrm{core}}^{(M)} \;\equiv\; \bigl(2^{A_M} - U_M\bigr) q_0 + \mathcal{E}_{\mathrm{core}}^{(M)},
   \]
-  so the purely multiplicative inequality $2^{A_M} > U_M$ unconditionally forces $(2^{A_M} - 3^{B_M}) n_0 > D_{\mathrm{tot}}$ and $n_M < n_0$ for all $q_0 \ge 1$;
+  so the purely multiplicative inequality $2^{A_M} > U_M$ unconditionally forces $(2^{A_M} - 3^{B_M}) n_0 > D_{\mathrm{tot}}$ and $n_M < n_0$ for all $q_0 \ge 1$. Furthermore, for any closed cycle $n_M = n_0$ ($q_M = q_0 \ge 1,\ R_M = R_0$), $(2^{A_M} - 3^{B_M}) q_0 = \mathcal{D}_{\mathrm{core}}^{(M)} > 0$ and $(U_M - 2^{A_M}) q_0 = \mathcal{E}_{\mathrm{core}}^{(M)} \ge 0$ eliminate $q_0$ via $(U_M - 2^{A_M})\mathcal{D}_{\mathrm{core}}^{(M)} \equiv (2^{A_M} - 3^{B_M})\mathcal{E}_{\mathrm{core}}^{(M)}$ and trap the cycle exponents inside the multiplicative envelope gap $3^{B_M} < 2^{A_M} \le U_M$, with $2^{A_M} = U_M \iff \mathcal{E}_{\mathrm{core}}^{(M)} = 0$ ($q_0 = \dots = q_{M-1} = 1$, the trivial root $n_0 = 1$);
 \item \textbf{Constructive global convergence under a countable contracting screw cover (\texttt{0 Classical.choice}):}
   whenever a countable family of multi-screw cascades $\mathcal{F}_{\mathrm{desc}} \subset (\mathbb{N}_{\ge 1}^2)^{<\infty}$ covers $\mathbb{N}_{>1}$ by assigning to every $n > 1$ a finite contracting screw word $\mathbf{w}(n)$ of length $k = M(n) \ge 1$ ($C_{\mathrm{tot}}(\mathbf{w}(n))n > D_{\mathrm{tot}}(\mathbf{w}(n))$ with $1 \le \mathrm{iter}\,k\,n < n$), constructive Fermat induction guarantees $\forall n \ge 1,\ \exists K,\ \mathrm{iter}\,K\,n = 1$.
 \end{enumerate}

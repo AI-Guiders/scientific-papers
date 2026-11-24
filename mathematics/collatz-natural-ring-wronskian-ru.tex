@@ -164,7 +164,7 @@
     A_M - B_M \;\equiv\; \Bigl(\sum_{m=0}^{M-1}\beta_m\Bigr) + r_M - r_0, \qquad
     2 A_M - 3 B_M \;\equiv\; \sum_{m=0}^{M-1}\bigl(2\beta_m - 1 - r_m\bigr) + 2 r_M - 2 r_0,
   \]
-  где приращение $\Delta u_m = 2\beta_m - 1 - r_m$ удовлетворяет $\Delta u_m \ge +1$ при $r_m = 0$ и $\Delta u_m \ge 0$ при $r_m = 1$ для всех $\beta_m \ge 1$.
+  и в ротаторных логарифмических координатах $\mathbb{Z}_{4Q}$ ($128 A_M - 203 B_M \equiv 53(2 A_M - 3 B_M) - 22(2 B_M - A_M) \equiv 128(r_M - r_0) + \sum_{m=0}^{M-1}(128\beta_m - 75 R_m)$), где $\Delta u_m = 2\beta_m - 1 - r_m \ge +1$ при $r_m = 0$ и $\Delta u_m \ge 0$ при $r_m = 1$ для всех $\beta_m \ge 1$.
 \end{enumerate}
 \end{theorem}
 
@@ -182,7 +182,7 @@
     \mathcal{D}_{\mathrm{core}}^{(M)} + \mathcal{E}_{\mathrm{core}}^{(M)} \;\equiv\; \bigl(U_M - 3^{B_M}\bigr) q_0, \qquad
     2^{A_M - R_0}(n_0 - n_M) \;\equiv\; \bigl(2^{A_M} - 3^{B_M}\bigr) q_0 - \mathcal{D}_{\mathrm{core}}^{(M)} \;\equiv\; \bigl(2^{A_M} - U_M\bigr) q_0 + \mathcal{E}_{\mathrm{core}}^{(M)},
   \]
-  откуда чисто мультипликативное условие $2^{A_M} > U_M$ безусловно влечёт $(2^{A_M} - 3^{B_M}) n_0 > D_{\mathrm{tot}}$ и $n_M < n_0$ при всех $q_0 \ge 1$;
+  откуда чисто мультипликативное условие $2^{A_M} > U_M$ безусловно влечёт $(2^{A_M} - 3^{B_M}) n_0 > D_{\mathrm{tot}}$ и $n_M < n_0$ при всех $q_0 \ge 1$. В частности, на любом замкнутом цикле $n_M = n_0$ ($q_M = q_0 \ge 1,\ R_M = R_0$) равенства $(2^{A_M} - 3^{B_M}) q_0 = \mathcal{D}_{\mathrm{core}}^{(M)} > 0$ и $(U_M - 2^{A_M}) q_0 = \mathcal{E}_{\mathrm{core}}^{(M)} \ge 0$ исключают $q_0$ через пропорцию $(U_M - 2^{A_M})\mathcal{D}_{\mathrm{core}}^{(M)} \equiv (2^{A_M} - 3^{B_M})\mathcal{E}_{\mathrm{core}}^{(M)}$ и запирают показатели цикла в мультипликативную щель $3^{B_M} < 2^{A_M} \le U_M$, причём $2^{A_M} = U_M \iff \mathcal{E}_{\mathrm{core}}^{(M)} = 0$ ($q_0 = \dots = q_{M-1} = 1$, стационарный корень $n_0 = 1$);
 \item \textbf{Конструктивная глобальная сходимость при покрытии счётным семейством сжимающих многовинтовых каскадов (\texttt{0 Classical.choice}):}
   если счётное семейство многовинтовых каскадов $\mathcal{F}_{\mathrm{desc}} \subset (\mathbb{N}_{\ge 1}^2)^{<\infty}$ покрывает $\mathbb{N}_{>1}$, сопоставляя каждому $n > 1$ конечное сжимающее слово $\mathbf{w}(n)$ длины $k = M(n) \ge 1$ ($C_{\mathrm{tot}}(\mathbf{w}(n))n > D_{\mathrm{tot}}(\mathbf{w}(n))$ при $1 \le \mathrm{iter}\,k\,n < n$), то конструктивная индукция Ферма гарантирует $\forall n \ge 1,\ \exists K,\ \mathrm{iter}\,K\,n = 1$.
 \end{enumerate}
