@@ -43,21 +43,16 @@ theorem thm8_unified_3x3_pillai_abc_skeletal_matrix_and_radical_floor_embedding
   exact ⟨hDet0, by omega, by omega, by omega⟩
 
 /-- **Theorem 9 (Universal `∀`-Quantified Algebraic Laws of the Planetary Differential `F₃`,
-Gear-Slip Brahmagupta Law, Three-Level Descent & Hankel–Wronskian Identity, Conjugate Bézout
-Partner Matrix `B_{2×3}`, Shaft-Bézout Gauss-Shell Cube Inversion `K_Bezout`, Lagrange–Vandermonde
-Shaft-Gap Projectors, Three-Channel `3 × 3` Padé Trace Law, and Root-Free Cramer Lower-Bound Law
-across all integers `ℤ`)**: -/
+Gear-Slip Brahmagupta Law, Conjugate Bézout Partner Matrix `B_{2×3}`, Arbitrary-Floor Shaft-Bézout
+Gauss-Shell Inversion `K_Bezout`, and Lagrange–Vandermonde Shaft-Gap Projectors across all integers `ℤ`)**: -/
 theorem thm9_universal_pillai_abc_differential_bezout_and_pade_laws
-    (A B u v a1 a2 b1 b2 c1 c2 At Bt Ct X Y Z wShaft vShaft : Int) :
+    (A B u v a1 a2 b1 b2 c1 c2 At Bt Ct X Y Z Zk Yk wk vk : Int) :
     let C := A + B
     let w := u + v
     -- 1. Unimodular 2x3 conjugate Bézout partner matrix minors equality:
     (A * w - C * u = A * v - B * u) ∧
     (C * v - B * w = A * v - B * u) ∧
-    -- 2. Ternary triangle-defect law of the 3x3 matrix M_3:
-    ((a1 + b1) * (c2 - (a2 + b2)) + c2 * (c1 - (a1 + b1)) =
-      (c1 * c2 - a1 * a2 - b1 * b2) - (a1 * b2 + a2 * b1)) ∧
-    -- 3. Planetary differential 2D gear-slip Brahmagupta law & 3D orthogonal frame F_3 law:
+    -- 2. Planetary differential 2D gear-slip Brahmagupta law & 3D orthogonal frame F_3 law:
     ((a1 * a2 + b1 * b2) * (a1 * a2 + b1 * b2) + (a1 * b2 - a2 * b1) * (a1 * b2 - a2 * b1) =
       (a1 * a1 + b1 * b1) * (a2 * a2 + b2 * b2)) ∧
     ((b1 * c2 + b2 * c1) * (b1 * c2 + b2 * c1) +
@@ -65,35 +60,21 @@ theorem thm9_universal_pillai_abc_differential_bezout_and_pade_laws
      (a1 * b2 - a2 * b1) * (a1 * b2 - a2 * b1) +
      (a1 * a2 + b1 * b2 - c1 * c2) * (a1 * a2 + b1 * b2 - c1 * c2) =
       (a1 * a1 + b1 * b1 + c1 * c1) * (a2 * a2 + b2 * b2 + c2 * c2)) ∧
-    -- 4. Three-level recursive descent & Hankel-Wronskian square law:
-    (let C0 := At * X * X - Bt * Y * Y
-     let C1 := At * X - Bt * Y
-     let C2 := At - Bt
-     (C0 - (X + Y) * C1 + X * Y * C2 = 0) ∧
-     (C1 * C1 - C0 * C2 = At * Bt * (X - Y) * (X - Y))) ∧
-    -- 5. Three Lagrange-Vandermonde shaft-gap projectors on the cubic floor:
+    -- 3. Three Lagrange-Vandermonde shaft-gap projectors:
     (let S1 := At * X + Bt * Y - Ct * Z
      let S2 := At * X * X + Bt * Y * Y - Ct * Z * Z
      let S3 := At * X * X * X + Bt * Y * Y * Y - Ct * Z * Z * Z
      (S1 * Y * Z - S2 * (Y + Z) + S3 = At * X * (X - Y) * (X - Z)) ∧
      (S1 * Z * X - S2 * (Z + X) + S3 = Bt * Y * (Y - X) * (Y - Z)) ∧
      (S2 * (X + Y) - S1 * X * Y - S3 = Ct * Z * (Z - X) * (Z - Y))) ∧
-    -- 6. Shaft-Bézout Gauss-shell cube inversion matrix K_Bezout:
-    (let gapA  := Ct * Z * Z * Z - Bt * Y * Y * Y
-     let gapAp := Ct * wShaft * wShaft * wShaft - Bt * vShaft * vShaft * vShaft
-     let phiB  := (Z * vShaft) * (Z * vShaft) * (Z * vShaft) - (Y * wShaft) * (Y * wShaft) * (Y * wShaft)
-     (wShaft * wShaft * wShaft * gapA - Z * Z * Z * gapAp = Bt * phiB) ∧
-     (vShaft * vShaft * vShaft * gapA - Y * Y * Y * gapAp = Ct * phiB)) ∧
-    -- 7. Trace law of the three-channel 3x3 cubic Padé-Thue matrix P_3(A, B, A+B):
-    (A * A * (B + C) + B * B * (A + C) + C * C * (A - B) = A * C * (A + C)) ∧
-    -- 8. Root-free Padé-Thue Cramer lower-bound identity at N=0..1 for any (U, V, a, b):
-    (let P1 := C + (B + B)
-     let Q1 := (C + C) + B
-     let I0 := u - v
-     let I1 := u * P1 - v * Q1
-     Q1 * I0 - I1 = u * A) := by
+    -- 4. Arbitrary-floor Shaft-Bézout Gauss-shell inversion matrix K_Bezout for any shaft powers (Zk, Yk, wk, vk ∈ ℤ):
+    (let gapA  := Ct * Zk - Bt * Yk
+     let gapAp := Ct * wk - Bt * vk
+     let phiB  := Zk * vk - Yk * wk
+     (wk * gapA - Zk * gapAp = Bt * phiB) ∧
+     (vk * gapA - Yk * gapAp = Ct * phiB)) := by
   dsimp
-  refine ⟨?_, ?_, ?_, ?_, ?_, ⟨?_, ?_⟩, ⟨?_, ?_, ?_⟩, ⟨?_, ?_⟩, ?_, ?_⟩ <;>
+  refine ⟨?_, ?_, ?_, ?_, ⟨?_, ?_, ?_⟩, ⟨?_, ?_⟩⟩ <;>
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 

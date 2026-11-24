@@ -110,9 +110,13 @@ Writing the backward-rotor drift as $D_{\mathrm{tot}} = 3^{b-1} + 2^{\alpha_0} D
 \section{Pure-Binary Dual-Drift Conservation, Plus--Minus Rotor Duality, and Odd-Core Dynamics}
 \label{sec:dual-drift-and-odd-cores}
 
-\begin{theorem}[Universal single-step Wronskian excess identity and $2^a$-free Bernoulli--Euler drift bound, \texttt{thm26}]
+\begin{theorem}[Universal single-step planetary Wronskian excess identity and $2^a$-free Bernoulli--Euler drift bound, \texttt{thm26}]
 \label{thm:bernoulli-euler-drift-bound}
-For any odd Collatz step $2^{\alpha_k} n_{k+1} = 3 n_k + 1$ and any reference height $n_{\mathrm{ref}} \in \mathbb{Z}$, the step Wronskian satisfies $(3 n_{\mathrm{ref}} + 1) n_k - 2^{\alpha_k} n_{\mathrm{ref}} n_{k+1} \equiv n_k - n_{\mathrm{ref}}$. Along any $b$-step non-descending arc ($n_k \ge n_0$ for $0 \le k < b$, so $2^a n_0^{b-1} n_b \le (3 n_0 + 1)^b$), the drift polynomial $D_{a,b}$ is bounded from above independently of $2^a$:
+For any affine planetary gear step $p_k n_{k+1} = q_{\mathrm{gear}} n_k + c_{\mathrm{tooth}}$ ($q_{\mathrm{gear}},c_{\mathrm{tooth}}\in\mathbb{Z}$) and any reference height $n_{\mathrm{ref}} \in \mathbb{Z}$, the step Wronskian cancels $q_{\mathrm{gear}}$ identically:
+\[
+  (q_{\mathrm{gear}} n_{\mathrm{ref}} + c_{\mathrm{tooth}})\, n_k \;-\; p_k\, n_{\mathrm{ref}}\, n_{k+1} \;\equiv\; c_{\mathrm{tooth}}\,(n_k - n_{\mathrm{ref}}).
+\]
+In particular, for $q_{\mathrm{gear}}=3,\ c_{\mathrm{tooth}}=1$, along any $b$-step non-descending arc ($n_k \ge n_0$ for $0 \le k < b$, so $2^a n_0^{b-1} n_b \le (3 n_0 + 1)^b$), the drift polynomial $D_{a,b}$ is bounded from above independently of $2^a$:
 \begin{equation}
   \label{eq:bernoulli-euler-drift-bound}
   n_0^{b-1}\,D_{a,b} \;\le\; \bigl(3\,n_0 + 1\bigr)^b \;-\; \bigl(3\,n_0\bigr)^b, \qquad
@@ -131,12 +135,12 @@ Specializing Theorem~\ref{thm:bernoulli-euler-drift-bound} to the stationary roo
 where $F_{a,b} = \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}$ and $\Delta\mathcal{E}_{a,b} = \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}(n_k - n_0)$, constraining $(F_{a,b} - (4^b - 2^a)) n_0 + \Delta\mathcal{E}_{a,b} \le F_{a,b}$ on any non-descending arc.
 \end{theorem}
 
-\begin{theorem}[Centered $(2,3)$-radix expansion, Plus--Minus rotor duality $S_+ + S_d \equiv 2^a - 3^b$, and gap squeeze, \texttt{thm28}]
+\begin{theorem}[Willis planetary carrier balance, universal centered coordinate for odd gear $q_{\mathrm{gear}}=2q_{\mathrm{half}}+1$, and Plus--Minus rotor duality $S_+ + S_d \equiv P_{\mathrm{tot}} - Q_{\mathrm{tot}}$, \texttt{thm28}]
 \label{thm:plus-minus-rotor-duality}
-In the centered coordinate $m_k = (n_k - 1)/2 \ge 0$ ($n_k = 2 m_k + 1$, shifting the root $n^* = 1$ to $m^* = 0$), the odd step is $2^{\alpha_k} m_{k+1} - 3 m_k = -d_k$, where the centered gear digits $d_k := 2^{\alpha_k - 1} - 2 \in \{-1, 0, +2, +6, \dots\}$ vanish identically at the stationary gear $\alpha_k = 2$. Defining the Minus-Rotor digit sum $S_d := 3^b m_0 - 2^a m_b = \sum_{k=0}^{b-1} 3^{b-1-k} d_k 2^{s_k}$ and the strictly positive Plus-Rotor macro-sum $S_+ := 2^a(m_b + 1) - 3^b(m_0 + 1) = \sum_{m=0}^{M-1} 3^{b - B_{m+1}} 2^{A_m + r_m}(2^{\beta_m} - 1) > 0$ yields:
+In the Theory of Machines and Mechanisms, Willis's kinematic equation for a planetary differential with sun gear teeth $z_1$, ring gear teeth $z_2$, and carrier angular velocity $\omega_H$ satisfies $z_1(\omega_1 - \omega_H) + z_2(\omega_2 - \omega_H) \equiv (z_1\omega_1 + z_2\omega_2) - (z_1+z_2)\omega_H$. In the centered coordinate $m_k = (n_k - 1)/2 \ge 0$ ($n_k = 2 m_k + 1$, shifting the root $n^* = 1$ to $m^* = 0$), any odd gear step $p_k n_{k+1} = q_{\mathrm{gear}} n_k + 1$ ($p_k = 2p_{\mathrm{half}},\ q_{\mathrm{gear}} = 2q_{\mathrm{half}}+1$) reduces to $p_k m_{k+1} - q_{\mathrm{gear}} m_k = (q_{\mathrm{half}}+1) - p_{\mathrm{half}}$, vanishing identically at the neutral stationary gear $p_{\mathrm{half}} = q_{\mathrm{half}}+1$ ($p_k = q_{\mathrm{gear}}+1 = 4$ at $q_{\mathrm{gear}}=3$). Defining the Minus-Rotor digit sum $S_d := Q_{\mathrm{tot}} m_0 - P_{\mathrm{tot}} m_b$ and the Plus-Rotor macro-sum $S_+ := P_{\mathrm{tot}}(m_b + 1) - Q_{\mathrm{tot}}(m_0 + 1)$ for any $P_{\mathrm{tot}},Q_{\mathrm{tot}}\in\mathbb{Z}$ ($P_{\mathrm{tot}}=2^a,\ Q_{\mathrm{tot}}=3^b$) yields the two-axle differential balance:
 \begin{equation}
   \label{eq:plus-minus-rotor-duality}
-  S_+ \;+\; S_d \;\equiv\; 2^a - 3^b, \qquad
+  S_+ \;+\; S_d \;\equiv\; P_{\mathrm{tot}} - Q_{\mathrm{tot}}, \qquad
   S_+ \;-\; S_d \;\equiv\; D_{a,b}, \qquad
   \Delta_b \;:=\; m_0 - \frac{S_d}{3^b} \;=\; \frac{2^a}{3^b}\,m_b \;\ge\; 0,
 \end{equation}

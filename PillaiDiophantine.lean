@@ -33,24 +33,25 @@ theorem thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_tript
                 Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 
 /-- **Theorem 7 (Universal `∀`-Quantified Three-Level Recursive Descent Invariant, Hankel–Wronskian Square Law,
-and Padé–Thue Cramer Lower-Bound Law across All Integers `ℤ`)**: -/
+and Arbitrary-Floor `kShift ∈ ℤ` Padé–Thue Cramer Lower-Bound Law across All Integers `ℤ`)**: -/
 theorem thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
-    (At Bt X Y A B u v : Int) :
+    (kShift At Bt X Y A B u v : Int) :
     let C0 := At * X * X - Bt * Y * Y
     let C1 := At * X - Bt * Y
     let C2 := At - Bt
     let C  := A + B
-    let P1 := C + (B + B)
-    let Q1 := (C + C) + B
-    let I0 := u - v
-    let I1 := u * P1 - v * Q1
+    let P1k := C + kShift * B
+    let Q1k := kShift * C + B
+    let I0  := u - v
+    let I1k := u * P1k - v * Q1k
     (C0 - (X + Y) * C1 + X * Y * C2 = 0) ∧
     (C1 * C1 - C0 * C2 = At * Bt * (X - Y) * (X - Y)) ∧
-    (Q1 * I0 - I1 = u * A) := by
+    (Q1k - P1k = (kShift - 1) * A) ∧
+    (Q1k * I0 - I1k = (kShift - 1) * u * A) := by
   dsimp
-  refine ⟨?_, ?_, ?_⟩ <;>
+  refine ⟨?_, ?_, ?_, ?_⟩ <;>
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
-                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
+                Int.mul_one, Int.one_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
 
 /-- **Theorem 10 (Universal `∀`-Quantified Root-Free Cubic Padé–Thue Compression Identity
 `U * I₁ * Φ₃(a P̂₁, b Q̂₁) = a³ (U - V)³ (U + V) - (U b³ - V a³) Q̂₁³` across all integers `ℤ`)**: -/

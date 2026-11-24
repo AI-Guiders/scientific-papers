@@ -143,21 +143,21 @@ theorem thm19_collatz_catalan_sl2_basis_drift_bounds_and_positive_wronskian_sum
       omega
     · omega
 
-/-- **Theorem 20 (Collatz Cyclic Drift Shift Law `2^{α_k} D_tot^{(k+1)} - 3 D_tot^{(k)} = 2^a - 3^b`
-and Dual Residual-Drift Tower `2^{α_{k+1}} D_2^{(k+1)} - 3 D_2^{(k)} = 2^{a - α_k} - 3^{b-1}`)**: -/
+/-- **Theorem 20 (Universal Planetary Cyclic Drift Shift Law `p_k D_tot^{(k+1)} - q_gear D_tot^{(k)} = P_tot - Q_tot`
+and Dual Residual-Drift Tower `p_{k+1} D_2^{(k+1)} - q_gear D_2^{(k)} = P_{rem,k} - Q_{prev}` for Arbitrary Gear Ratio `q_gear ∈ ℤ`)**: -/
 theorem thm20_collatz_dual_drift_tower_and_cyclic_shift_law
-    (pk pk1 Premk Qprev Bprev D2k D2k1 nk : Int) :
+    (qGear pk pk1 Premk Qprev Bprev D2k D2k1 nk : Int) :
     let Ptot := pk * Premk
-    let Qtot := 3 * Qprev
+    let Qtot := qGear * Qprev
     let Ctot := Ptot - Qtot
     let Dtot_k  := Qprev + pk * D2k
-    let Dtot_k1 := Premk + 3 * D2k
-    (pk * Dtot_k1 - 3 * Dtot_k = Ctot) ∧
-    (Dtot_k1 = Qprev + pk1 * D2k1 → pk1 * D2k1 - 3 * D2k = Premk - Qprev) ∧
+    let Dtot_k1 := Premk + qGear * D2k
+    (pk * Dtot_k1 - qGear * Dtot_k = Ctot) ∧
+    (Dtot_k1 = Qprev + pk1 * D2k1 → pk1 * D2k1 - qGear * D2k = Premk - Qprev) ∧
     (Ctot * nk = Dtot_k → pk * (D2k - (Qprev - Bprev)) ≥ 0 →
       Ctot * nk ≥ Qprev + pk * (Qprev - Bprev)) := by
   dsimp
-  have hShift : pk * (Premk + 3 * D2k) - 3 * (Qprev + pk * D2k) = pk * Premk - 3 * Qprev := by
+  have hShift : pk * (Premk + qGear * D2k) - qGear * (Qprev + pk * D2k) = pk * Premk - qGear * Qprev := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
     omega
   refine ⟨hShift, by omega, ?_⟩
@@ -166,26 +166,26 @@ theorem thm20_collatz_dual_drift_tower_and_cyclic_shift_law
     simp only [Int.mul_sub]
   omega
 
-/-- **Theorem 21 (Uniqueness of the Planetary Gear Stationary Point `(2^α - 3) n* = 1 ⟹ (2^α = 4 ∧ n* = 1)`
-and Exact Differential Closure Criterion `3^b n_start + D_{a,b} = 2^a` for Reaching `n_final = 1`)**: -/
+/-- **Theorem 21 (Uniqueness of the Planetary Gear Stationary Point `(p_k - q_gear) n* = 1 ⟹ (p_k = q_gear + 1 ∧ n* = 1)`
+for Any Gear Ratio `q_gear ∈ ℤ` and Exact Differential Closure Criterion `Q n_start + D_{a,b} = P` for Reaching `n_final = 1`)**: -/
 theorem thm21_collatz_planetary_stationary_point_uniqueness_and_reachability_criterion
-    (pk nStar P Q n_start n_final Dab : Int) :
-    (nStar ≥ 1 → (pk - 3) * nStar = 1 → pk = 4 ∧ nStar = 1) ∧
+    (qGear pk nStar P Q n_start n_final Dab : Int) :
+    (nStar ≥ 1 → (pk - qGear) * nStar = 1 → pk = qGear + 1 ∧ nStar = 1) ∧
     (P * n_final - Q * n_start = Dab →
       P * (n_final - 1) = (Q * n_start + Dab) - P ∧
       (n_final = 1 → Q * n_start + Dab = P) ∧
       (P ≠ 0 → Q * n_start + Dab = P → n_final = 1)) := by
   refine ⟨?_, ?_⟩
   · intro hN hStat
-    have hPos : pk - 3 ≥ 1 := by
-      by_cases h : pk - 3 ≤ 0
-      · have hMul : (pk - 3) * nStar ≤ 0 := Int.mul_nonpos_of_nonpos_of_nonneg h (by omega)
+    have hPos : pk - qGear ≥ 1 := by
+      by_cases h : pk - qGear ≤ 0
+      · have hMul : (pk - qGear) * nStar ≤ 0 := Int.mul_nonpos_of_nonpos_of_nonneg h (by omega)
         omega
       · omega
-    have hLe : nStar ≤ (pk - 3) * nStar := by
-      have hDiff : (pk - 3) * nStar - nStar = (pk - 4) * nStar := by
-        simp only [Int.sub_mul]; omega
-      have hGe0 : (pk - 4) * nStar ≥ 0 := Int.mul_nonneg (by omega) (by omega)
+    have hLe : nStar ≤ (pk - qGear) * nStar := by
+      have hDiff : (pk - qGear) * nStar - nStar = (pk - qGear - 1) * nStar := by
+        simp only [Int.sub_mul, Int.one_mul]
+      have hGe0 : (pk - qGear - 1) * nStar ≥ 0 := Int.mul_nonneg (by omega) (by omega)
       omega
     have hN1 : nStar = 1 := by omega
     rw [hN1, Int.mul_one] at hStat
@@ -246,21 +246,21 @@ theorem thm22_collatz_arbitrary_stage_fermat_descent_reduction
   have hGt : (P - Q) * n > Dab := by omega
   exact ⟨hGt, hEquiv.mp hGt⟩
 
-/-- **Theorem 23 (Dead-End-Free Ternary Prefix Decomposition `D_{a,b} = 2^{s_{b-1}} + 3 D_{b-1}` in `ℤ_{3^b}^×`
-and `2^{a+1}` 2-Adic Construction Modulus)**: -/
+/-- **Theorem 23 (Universal Dead-End-Free `q_gear`-Adic Prefix Decomposition `D_{a,b} = P_{pen} + q_gear D_{b-1}`
+and `2 P_{tot}` 2-Adic Construction Modulus for Any Gear Ratio `q_gear ∈ ℤ`)**: -/
 theorem thm23_collatz_dead_end_free_ternary_prefix_closure
-    (Ppen plast Qprev Dprev n n_prime Ptot Dab kb kb_prime : Int) :
-    let Qtot := 3 * Qprev
-    let Dtot := Ppen + 3 * Dprev
-    (Dtot - Ppen = 3 * Dprev) ∧
-    (Qtot * n + Dtot = Ppen * plast ↔ Ppen * (plast - 1) = 3 * (Qprev * n + Dprev)) ∧
+    (qGear Ppen plast Qprev Dprev n n_prime Ptot Dab kb kb_prime : Int) :
+    let Qtot := qGear * Qprev
+    let Dtot := Ppen + qGear * Dprev
+    (Dtot - Ppen = qGear * Dprev) ∧
+    (Qtot * n + Dtot = Ppen * plast ↔ Ppen * (plast - 1) = qGear * (Qprev * n + Dprev)) ∧
     (Qtot * n + Dab = Ptot * (2 * kb + 1) →
      Qtot * n_prime + Dab = Ptot * (2 * kb_prime + 1) →
       Qtot * n + Dab = (2 * Ptot) * kb + Ptot ∧
       Qtot * (n - n_prime) = (2 * Ptot) * (kb - kb_prime)) := by
   dsimp
-  have hId : (3 * Qprev * n + (Ppen + 3 * Dprev) - Ppen * plast) =
-             (3 * (Qprev * n + Dprev) - Ppen * (plast - 1)) := by
+  have hId : (qGear * Qprev * n + (Ppen + qGear * Dprev) - Ppen * plast) =
+             (qGear * (Qprev * n + Dprev) - Ppen * (plast - 1)) := by
     simp only [Int.mul_add, Int.mul_sub, Int.mul_one, Int.mul_assoc]; omega
   refine ⟨by omega, ⟨fun h => by omega, fun h => by omega⟩, ?_⟩
   intro h1 h2
@@ -268,13 +268,13 @@ theorem thm23_collatz_dead_end_free_ternary_prefix_closure
     simp only [Int.mul_add, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   have hExpand2 : Ptot * (2 * kb_prime + 1) = (2 * Ptot) * kb_prime + Ptot := by
     simp only [Int.mul_add, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
-  have hDiff : (3 * Qprev) * (n - n_prime) - (2 * Ptot) * (kb - kb_prime) =
-               ((3 * Qprev) * n - (2 * Ptot) * kb) - ((3 * Qprev) * n_prime - (2 * Ptot) * kb_prime) := by
+  have hDiff : (qGear * Qprev) * (n - n_prime) - (2 * Ptot) * (kb - kb_prime) =
+               ((qGear * Qprev) * n - (2 * Ptot) * kb) - ((qGear * Qprev) * n_prime - (2 * Ptot) * kb_prime) := by
     simp only [Int.mul_sub]; omega
   exact ⟨by omega, by omega⟩
 
-/-- **Theorem 24 (Counter-Rotating Forward-Backward Planetary Gear Splice in `ℤ_{2^{a_1}} × ℤ_{3^{b_2}}`,
-Bézout Meeting-Point Reconstruction, and Pure-Ternary Sikorsky Chord Law)**: -/
+/-- **Theorem 24 (Counter-Rotating Forward-Backward Planetary Gear Splice in `ℤ_{P_1} × ℤ_{Q_2}`,
+Bézout Meeting-Point Reconstruction, and Pure-Driven Sikorsky Chord Law)**: -/
 theorem thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
     (P1 Q1 D1 P2 Q2 D2 n_start n_mid u v : Int)
     (hFwd : P1 * n_mid = Q1 * n_start + D1)
@@ -304,21 +304,22 @@ theorem thm24_collatz_counter_rotating_forward_backward_splice_and_bezout_lock
   rw [hBez] at hBezId
   omega
 
-/-- **Theorem 25 (Automatic 2-adic / 3-adic Gear-Tooth Meshing and Inductive Step-Peeling Law)**: -/
+/-- **Theorem 25 (Universal Planetary Gear-Tooth Meshing `q_gear n_0 + c_tooth = p_0 n_1`
+and Inductive Step-Peeling Law for Arbitrary Gear Ratio `q_gear ∈ ℤ` and Tooth Offset `c_tooth ∈ ℤ`)**: -/
 theorem thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
-    (Qprev p0 Prem Drem n0 n1 kP kD : Int) :
-    ((3 * Qprev) * n0 + (Qprev + p0 * Drem) = p0 * Prem ↔
-      Qprev * (3 * n0 + 1) = p0 * (Prem - Drem)) ∧
+    (qGear cTooth Qprev p0 Prem Drem n0 n1 kP kD : Int) :
+    ((qGear * Qprev) * n0 + (cTooth * Qprev + p0 * Drem) = p0 * Prem ↔
+      Qprev * (qGear * n0 + cTooth) = p0 * (Prem - Drem)) ∧
     (Prem = 2 * kP → Drem = 2 * kD + 1 → (Prem - Drem) - 2 * (kP - kD - 1) = 1) ∧
-    (p0 ≠ 0 → 3 * n0 + 1 = p0 * n1 →
-      ((3 * Qprev) * n0 + (Qprev + p0 * Drem) = p0 * Prem ↔ Qprev * n1 + Drem = Prem)) := by
-  have hId1 : ((3 * Qprev) * n0 + (Qprev + p0 * Drem) - p0 * Prem) =
-              (Qprev * (3 * n0 + 1) - p0 * (Prem - Drem)) := by
+    (p0 ≠ 0 → qGear * n0 + cTooth = p0 * n1 →
+      ((qGear * Qprev) * n0 + (cTooth * Qprev + p0 * Drem) = p0 * Prem ↔ Qprev * n1 + Drem = Prem)) := by
+  have hId1 : ((qGear * Qprev) * n0 + (cTooth * Qprev + p0 * Drem) - p0 * Prem) =
+              (Qprev * (qGear * n0 + cTooth) - p0 * (Prem - Drem)) := by
     simp only [Int.mul_add, Int.mul_sub, Int.mul_one, Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
   refine ⟨⟨fun h => by omega, fun h => by omega⟩, by intro hP hD; omega, ?_⟩
   intro hp0 hStep
-  have hId2 : ((3 * Qprev) * n0 + (Qprev + p0 * Drem) - p0 * Prem) =
-              (Qprev * (3 * n0 + 1) - p0 * (Prem - Drem)) := hId1
+  have hId2 : ((qGear * Qprev) * n0 + (cTooth * Qprev + p0 * Drem) - p0 * Prem) =
+              (Qprev * (qGear * n0 + cTooth) - p0 * (Prem - Drem)) := hId1
   rw [hStep] at hId2
   have hFactor : Qprev * (p0 * n1) - p0 * (Prem - Drem) =
                  p0 * (Qprev * n1 + Drem - Prem) := by
@@ -334,15 +335,16 @@ theorem thm25_collatz_automatic_2adic_3adic_gear_tooth_meshing_and_step_peeling
     rw [hRem0, Int.mul_zero] at hFactor
     omega
 
-/-- **Theorem 26 (Universal Single-Step Wronskian Excess Identity `(3 n_ref + 1) n_k - 2^{α_k} n_ref n_{k+1} = n_k - n_ref`
-for Arbitrary Reference Height `n_ref` and `2^a`-Free Bernoulli–Euler Drift Bound)**: -/
+/-- **Theorem 26 (Universal Single-Step Planetary Wronskian Excess Identity
+`(q_gear n_ref + c_tooth) n_k - p_k n_ref n_{k+1} = c_tooth (n_k - n_ref)` for Any Gear Ratio `q_gear ∈ ℤ`,
+Tooth Offset `c_tooth ∈ ℤ`, and Reference Height `n_ref ∈ ℤ`, plus `P_tot`-Free Bernoulli–Euler Drift Bound)**: -/
 theorem thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_lock
-    (pk nk nk1 nref Ptot Qtot n0PowPrev n0 nfinal Dab Bpow : Int)
-    (hStep : pk * nk1 = 3 * nk + 1) :
-    ((3 * nref + 1) * nk - pk * nref * nk1 = nk - nref ∧
-     pk * nref * nk1 - (3 * nref + 1) * nk = nref - nk ∧
-     (nk ≥ nref → pk * nref * nk1 ≤ (3 * nref + 1) * nk) ∧
-     (nk ≤ nref → pk * nref * nk1 ≥ (3 * nref + 1) * nk)) ∧
+    (qGear cTooth pk nk nk1 nref Ptot Qtot n0PowPrev n0 nfinal Dab Bpow : Int)
+    (hStep : pk * nk1 = qGear * nk + cTooth) :
+    ((qGear * nref + cTooth) * nk - pk * nref * nk1 = cTooth * (nk - nref) ∧
+     pk * nref * nk1 - (qGear * nref + cTooth) * nk = cTooth * (nref - nk) ∧
+     (cTooth = 1 → nk ≥ nref → pk * nref * nk1 ≤ (qGear * nref + 1) * nk) ∧
+     (cTooth = 1 → nk ≤ nref → pk * nref * nk1 ≥ (qGear * nref + 1) * nk)) ∧
     (Ptot * nfinal = Qtot * n0 + Dab →
      Ptot * n0PowPrev * nfinal ≤ Bpow →
       n0PowPrev * Dab ≤ Bpow - Qtot * (n0PowPrev * n0) ∧
@@ -351,10 +353,13 @@ theorem thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_l
   have hProd : pk * nref * nk1 = nref * (pk * nk1) := by
     simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   rw [hStep] at hProd
-  have hWronsk : (3 * nref + 1) * nk - nref * (3 * nk + 1) = nk - nref := by
-    simp only [Int.mul_add, Int.add_mul, Int.one_mul, Int.mul_one,
+  have hWronsk : (qGear * nref + cTooth) * nk - nref * (qGear * nk + cTooth) = cTooth * (nk - nref) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
-  refine ⟨⟨by omega, by omega, by intro _; omega, by intro _; omega⟩, ?_⟩
+  have hWronsk2 : nref * (qGear * nk + cTooth) - (qGear * nref + cTooth) * nk = cTooth * (nref - nk) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+  refine ⟨⟨by omega, by omega, by intro hc _; subst hc; omega, by intro hc _; subst hc; omega⟩, ?_⟩
   intro hTraj hBern
   have hSub : Ptot * n0PowPrev * nfinal = n0PowPrev * (Ptot * nfinal) := by
     simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
@@ -373,8 +378,8 @@ theorem thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_l
     omega
   · omega
 
-/-- **Theorem 27 (Pure-Binary 3-Free Balance Over the Stationary Root `n_ref = n* = 1`,
-Dual-Drift Conservation Law `D_{a,b} + E_{a,b} = (4^b - 3^b) n_0`, and `F_{a,b}` Non-Descending Ceiling)**: -/
+/-- **Theorem 27 (Pure-Binary Balance Over the Stationary Root `n_ref = n* = 1`,
+Dual-Drift Conservation Law `D_{a,b} + E_{a,b} = (F_{tot} - Q_{tot}) n_0`, and `F_{a,b}` Non-Descending Ceiling)**: -/
 theorem thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservation
     (Ptot Qtot Ftot n0 nb Dab Eab Fab DeltaE : Int)
     (hD : Ptot * nb - Qtot * n0 = Dab)
@@ -396,16 +401,21 @@ theorem thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservat
     simp only [Int.mul_sub, Int.sub_mul, Int.one_mul, Int.mul_comm, Int.mul_left_comm]; omega
   exact ⟨by omega, by intro _ _; omega⟩
 
-/-- **Theorem 28 (Centered Coordinate `m_k = (n_k - 1)/2`, Finite `(2,3)`-Radix Representation,
-Plus-Minus Rotor Duality `S_+ + S_d = 2^a - 3^b`, Two-Rotor Gap Squeeze, and Core-Reduced Descent)**: -/
+/-- **Theorem 28 (Universal Centered Coordinate `m_k = (n_k - 1)/2` for Odd Gear `q_gear = 2 q_half + 1`,
+Willis Carrier Differential Balance `z_1(\omega_1 - \omega_H) + z_2(\omega_2 - \omega_H) = 0`,
+Two-Axle Differential Rotor Duality `S_+ + S_d = P_{tot} - Q_{tot}`, and Core-Reduced Descent)**: -/
 theorem thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
-    (pk phalf mk mk1 Ptot Qtot n0 nb m0 mb Dab Sd Splus Pr0 q0 Splus_red : Int) :
+    (qHalf pk phalf mk mk1 Ptot Qtot n0 nb m0 mb Dab Sd Splus Pr0 q0 Splus_red z1 z2 w1 w2 wH : Int) :
+    let qGear := 2 * qHalf + 1
     let nk  := 2 * mk + 1
     let nk1 := 2 * mk1 + 1
-    -- 1. Centered single-step law around origin m* = 0 (vanishing at stationary gear α_k = 2, p_half = 2):
-    (pk = 2 * phalf → pk * nk1 = 3 * nk + 1 →
-      pk * mk1 - 3 * mk = 2 - phalf ∧ (phalf = 2 → pk * mk1 = 3 * mk)) ∧
-    -- 2. Finite centered (2,3)-radix representation, Two-Rotor gap squeeze, and Plus-Minus Rotor Duality:
+    -- 0. Willis carrier planetary differential equation: z₁(ω₁ - ω_H) + z₂(ω₂ - ω_H) = z₁ω₁ + z₂ω₂ - (z₁+z₂)ω_H
+    (z1 * (w1 - wH) + z2 * (w2 - wH) = (z1 * w1 + z2 * w2) - (z1 + z2) * wH) ∧
+    -- 1. Universal centered single-step law around origin m* = 0 for ANY odd gear q_gear = 2 q_half + 1
+    -- (vanishing at stationary gear p_half = q_half + 1, i.e. p_k = q_gear + 1):
+    (pk = 2 * phalf → pk * nk1 = qGear * nk + 1 →
+      pk * mk1 - qGear * mk = (qHalf + 1) - phalf ∧ (phalf = qHalf + 1 → pk * mk1 = qGear * mk)) ∧
+    -- 2. Two-axle differential rotor duality S_+ + S_d = P_tot - Q_tot, gap squeeze, and core-reduced descent:
     (n0 = 2 * m0 + 1 → nb = 2 * mb + 1 →
      Ptot * nb - Qtot * n0 = Dab →
      Sd = Qtot * m0 - Ptot * mb →
@@ -416,11 +426,13 @@ theorem thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
         Ptot * (m0 - mb) = Pr0 * ((Ptot - Qtot) * q0 - Splus_red) ∧
         (Ptot > 0 → Pr0 > 0 → (Ptot - Qtot) * q0 > Splus_red → mb < m0 ∧ nb < n0))) := by
   dsimp
-  have hStepCentered : (2 * phalf) * (2 * mk1 + 1) - (3 * (2 * mk + 1) + 1) =
-                       2 * ((2 * phalf) * mk1 - 3 * mk - (2 - phalf)) := by
-    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one,
+  have hWillis : z1 * (w1 - wH) + z2 * (w2 - wH) = (z1 * w1 + z2 * w2) - (z1 + z2) * wH := by
+    simp only [Int.mul_sub, Int.add_mul]; omega
+  have hStepCentered : (2 * phalf) * (2 * mk1 + 1) - ((2 * qHalf + 1) * (2 * mk + 1) + 1) =
+                       2 * ((2 * phalf) * mk1 - (2 * qHalf + 1) * mk - ((qHalf + 1) - phalf)) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
-  refine ⟨?_, ?_⟩
+  refine ⟨hWillis, ?_, ?_⟩
   · intro hpk hStep
     rw [hpk] at hStep ⊢
     exact ⟨by omega, by intro _; omega⟩

@@ -114,9 +114,13 @@
 \section{Закон сохранения двух дрейфов, двойственность Плюс- и Минус-Винтов и динамика нечётных ядер}
 \label{sec:dual-drift-and-odd-cores}
 
-\begin{theorem}[Универсальное тождество Вронскиана превышения одного шага и оценка Бернулли--Эйлера без $2^a$, \texttt{thm26}]
+\begin{theorem}[Универсальное тождество планетарного вронскиана одного шага и оценка Бернулли--Эйлера без $2^a$, \texttt{thm26}]
 \label{thm:bernoulli-euler-drift-bound}
-Для каждого нечётного шага Коллатца $2^{\alpha_k} n_{k+1} = 3 n_k + 1$ и любой опорной высоты $n_{\mathrm{ref}} \in \mathbb{Z}$ вронскиан шага удовлетворяет тождеству $(3 n_{\mathrm{ref}} + 1) n_k - 2^{\alpha_k} n_{\mathrm{ref}} n_{k+1} \equiv n_k - n_{\mathrm{ref}}$. Вдоль любой $b$-шаговой дуги без предшествующего спуска ($n_k \ge n_0$ при $0 \le k < b$, откуда $2^a n_0^{b-1} n_b \le (3 n_0 + 1)^b$) полином дрейфа $D_{a,b}$ ограничен сверху независимо от $2^a$:
+Для произвольного аффинного планетарного шага $p_k n_{k+1} = q_{\mathrm{gear}} n_k + c_{\mathrm{tooth}}$ ($q_{\mathrm{gear}},c_{\mathrm{tooth}}\in\mathbb{Z}$) и любой опорной высоты $n_{\mathrm{ref}} \in \mathbb{Z}$ вронскиан шага тождественно сокращает $q_{\mathrm{gear}}$:
+\[
+  (q_{\mathrm{gear}} n_{\mathrm{ref}} + c_{\mathrm{tooth}})\, n_k \;-\; p_k\, n_{\mathrm{ref}}\, n_{k+1} \;\equiv\; c_{\mathrm{tooth}}\,(n_k - n_{\mathrm{ref}}).
+\]
+В частности, при $q_{\mathrm{gear}}=3,\ c_{\mathrm{tooth}}=1$ вдоль любой $b$-шаговой дуги без предшествующего спуска ($n_k \ge n_0$ при $0 \le k < b$, откуда $2^a n_0^{b-1} n_b \le (3 n_0 + 1)^b$) полином дрейфа $D_{a,b}$ ограничен сверху независимо от $2^a$:
 \begin{equation}
   \label{eq:bernoulli-euler-drift-bound}
   n_0^{b-1}\,D_{a,b} \;\le\; \bigl(3\,n_0 + 1\bigr)^b \;-\; \bigl(3\,n_0\bigr)^b, \qquad
@@ -135,12 +139,12 @@
 где $F_{a,b} = \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}$ и $\Delta\mathcal{E}_{a,b} = \sum_{k=0}^{b-1} 4^{b-1-k} 2^{s_k}(n_k - n_0)$, что на любой дуге без спуска накладывает потолок $(F_{a,b} - (4^b - 2^a)) n_0 + \Delta\mathcal{E}_{a,b} \le F_{a,b}$.
 \end{theorem}
 
-\begin{theorem}[Центрированное $(2,3)$-разложение, двойственность Плюс- и Минус-Винтов $S_+ + S_d \equiv 2^a - 3^b$ и сжатие зазора, \texttt{thm28}]
+\begin{theorem}[Планетарный баланс водила Виллиса, универсальная центрированная координата для $q_{\mathrm{gear}}=2q_{\mathrm{half}}+1$ и двойственность двух полуосей $S_+ + S_d \equiv P_{\mathrm{tot}} - Q_{\mathrm{tot}}$, \texttt{thm28}]
 \label{thm:plus-minus-rotor-duality}
-В центрированной координате $m_k = (n_k - 1)/2 \ge 0$ ($n_k = 2 m_k + 1$, корень $n^* = 1$ в $m^* = 0$) нечётный шаг имеет вид $2^{\alpha_k} m_{k+1} - 3 m_k = -d_k$, где цифры передач $d_k := 2^{\alpha_k - 1} - 2 \in \{-1, 0, +2, +6, \dots\}$ обращаются в нуль на стационарной передаче $\alpha_k = 2$. Сумма цифр Минус-Винта $S_d := 3^b m_0 - 2^a m_b = \sum_{k=0}^{b-1} 3^{b-1-k} d_k 2^{s_k}$ и строго положительная сумма Плюс-Винта $S_+ := 2^a(m_b + 1) - 3^b(m_0 + 1) = \sum_{m=0}^{M-1} 3^{b - B_{m+1}} 2^{A_m + r_m}(2^{\beta_m} - 1) > 0$ удовлетворяют:
+Согласно кинематической формуле Виллиса для планетарного дифференциала с солнечной шестернёй $z_1$, коронной шестернёй $z_2$ и угловой скоростью водила $\omega_H$, выполнено $z_1(\omega_1 - \omega_H) + z_2(\omega_2 - \omega_H) \equiv (z_1\omega_1 + z_2\omega_2) - (z_1+z_2)\omega_H$. В центрированной координате $m_k = (n_k - 1)/2 \ge 0$ ($n_k = 2 m_k + 1$, корень $n^* = 1$ в $m^* = 0$) любой нечётный шаг $p_k n_{k+1} = q_{\mathrm{gear}} n_k + 1$ ($p_k = 2p_{\mathrm{half}},\ q_{\mathrm{gear}} = 2q_{\mathrm{half}}+1$) имеет вид $p_k m_{k+1} - q_{\mathrm{gear}} m_k = (q_{\mathrm{half}}+1) - p_{\mathrm{half}}$ и обращается в нуль на нейтральной стационарной передаче $p_{\mathrm{half}} = q_{\mathrm{half}}+1$ ($p_k = q_{\mathrm{gear}}+1 = 4$ при $q_{\mathrm{gear}}=3$). Сумма Минус-Винта $S_d := Q_{\mathrm{tot}} m_0 - P_{\mathrm{tot}} m_b$ и сумма Плюс-Винта $S_+ := P_{\mathrm{tot}}(m_b + 1) - Q_{\mathrm{tot}}(m_0 + 1)$ для любых $P_{\mathrm{tot}},Q_{\mathrm{tot}}\in\mathbb{Z}$ ($P_{\mathrm{tot}}=2^a,\ Q_{\mathrm{tot}}=3^b$) удовлетворяют балансу двухпоточного дифференциала:
 \begin{equation}
   \label{eq:plus-minus-rotor-duality}
-  S_+ \;+\; S_d \;\equiv\; 2^a - 3^b, \qquad
+  S_+ \;+\; S_d \;\equiv\; P_{\mathrm{tot}} - Q_{\mathrm{tot}}, \qquad
   S_+ \;-\; S_d \;\equiv\; D_{a,b}, \qquad
   \Delta_b \;:=\; m_0 - \frac{S_d}{3^b} \;=\; \frac{2^a}{3^b}\,m_b \;\ge\; 0,
 \end{equation}
