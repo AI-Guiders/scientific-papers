@@ -217,16 +217,30 @@ theorem collatz_global_convergence_from_local_descent
     obtain ⟨k2, hk2Eq1⟩ := ih (iter k1 m) hk1Lt hk1Ge1
     refine ⟨k1 + k2, ?_⟩; rw [hAdd, hk2Eq1]
 
-/-- **Theorem 22 (Arbitrary-Stage Fermat Infinite-Descent Reduction `(2^a - 3^b) n > D_{a,b} ↔ n_final < n`
-and Universal Pillai-Envelope Descent Criterion)**: -/
+/-- **Theorem 22 (Arbitrary-Stage Fermat Infinite-Descent Reduction `(P - Q) n > D_{a,b} ↔ n_final < n`,
+Symmetric Group `S_b` Adjacent-Transposition Monotonicity, and the Two-Policemen Permutation Squeeze
+`Q(n + 1) - P_b ≤ P n_final ≤ Q(n + P_{a-b}) - P` Around the Stationary Cycle `(4, 2, 1)`)**: -/
 theorem thm22_collatz_arbitrary_stage_fermat_descent_reduction
-    (P Q n n_final Dab Denv : Int)
+    (P Q Pb Pab wk pk pk1 Drest n n_final Dab Denv : Int)
     (hP : P > 0)
     (hTraj : P * n_final - Q * n = Dab) :
     let C := P - Q
+    let Dorig := Drest + wk * pk
+    let Dswap := Drest + wk * pk1
+    let Dmin  := Q - Pb
+    let Dmax  := Pab * (Q - Pb)
     (P * (n - n_final) = C * n - Dab) ∧
     (C * n > Dab ↔ n_final < n) ∧
-    (Dab ≤ Denv → C * n > Denv → C * n > Dab ∧ n_final < n) := by
+    (Dab ≤ Denv → C * n > Denv → C * n > Dab ∧ n_final < n) ∧
+    -- 1. Symmetric group S_b adjacent transposition law: swapping (α_k, α_{k+1}) shifts drift by w_k (2^{α_{k+1}} - 2^{α_k})
+    (Dswap - Dorig = wk * (pk1 - pk) ∧ (wk > 0 → (pk < pk1 ↔ Dorig < Dswap))) ∧
+    -- 2. Two-Policemen permutation squeeze (D_min ≤ D_{a,b} ≤ D_max with P = P_{a-b} * P_b):
+    (P = Pab * Pb → Dmin ≤ Dab → Dab ≤ Dmax →
+      Q * (n + 1) - Pb ≤ P * n_final ∧
+      P * n_final ≤ Q * (n + Pab) - P ∧
+      P * (n - n_final) ≥ P * (n + 1) - Q * (n + Pab)) ∧
+    -- 3. Stationary cycle squeeze at α_k ≡ 2 (D_min = D_max = P - Q = 4^b - 3^b): both policemen collapse to n = 1
+    (C > 0 → n_final = n → P - Q ≤ Dab → Dab ≤ P - Q → n = 1) := by
   dsimp
   have hId : P * (n - n_final) - ((P - Q) * n - Dab) = Dab - (P * n_final - Q * n) := by
     simp only [Int.mul_sub, Int.sub_mul]; omega
@@ -241,10 +255,46 @@ theorem thm22_collatz_arbitrary_stage_fermat_descent_reduction
     · intro hLt
       have hPos : P * (n - n_final) > 0 := Int.mul_pos hP (by omega)
       omega
-  refine ⟨by omega, hEquiv, ?_⟩
-  intro hEnv hGtEnv
-  have hGt : (P - Q) * n > Dab := by omega
-  exact ⟨hGt, hEquiv.mp hGt⟩
+  have hSwapId : (Drest + wk * pk1) - (Drest + wk * pk) = wk * (pk1 - pk) := by
+    simp only [Int.mul_sub]; omega
+  refine ⟨by omega, hEquiv, ?_, ⟨hSwapId, ?_⟩, ?_, ?_⟩
+  · intro hEnv hGtEnv
+    have hGt : (P - Q) * n > Dab := by omega
+    exact ⟨hGt, hEquiv.mp hGt⟩
+  · intro hWkPos
+    constructor
+    · intro hLt
+      have : wk * (pk1 - pk) > 0 := Int.mul_pos hWkPos (by omega)
+      omega
+    · intro hDLt
+      have : wk * (pk1 - pk) > 0 := by omega
+      by_cases hLe : pk1 - pk ≤ 0
+      · have : wk * (pk1 - pk) ≤ 0 := Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+        omega
+      · omega
+  · intro hPprod hDmin hDmax
+    have hL : (P * n_final) - (Q * (n + 1) - Pb) = (P * n_final - Q * n) - (Q - Pb) := by
+      simp only [Int.mul_add, Int.mul_one]; omega
+    have hR : (Q * (n + Pab) - P) - (P * n_final) =
+              (Pab * (Q - Pb) - (P * n_final - Q * n)) + (Pab * Pb - P) + (Q * Pab - Pab * Q) := by
+      simp only [Int.mul_add, Int.mul_sub]; omega
+    have hCommQP : Q * Pab = Pab * Q := Int.mul_comm Q Pab
+    have hDescSq : P * (n - n_final) - (P * (n + 1) - Q * (n + Pab)) =
+                   (Q * (n + Pab) - P) - (P * n_final) := by
+      simp only [Int.mul_sub, Int.mul_add, Int.mul_one]; omega
+    exact ⟨by omega, by omega, by omega⟩
+  · intro hCpos hCyc hGe hLe
+    have hDabEq : Dab = P - Q := by omega
+    have hCyc1 : (P - Q) * (n - 1) = (P - Q) * n - (P - Q) := by
+      simp only [Int.mul_sub, Int.mul_one]
+    have hCyc2 : (P - Q) * n - (P - Q) = (P * n_final - Q * n) - (P - Q) - P * (n_final - n) := by
+      simp only [Int.mul_sub, Int.sub_mul]; omega
+    have hSub0 : n_final - n = 0 := by omega
+    rw [hSub0, Int.mul_zero] at hCyc2
+    have hProd0 : (P - Q) * (n - 1) = 0 := by omega
+    cases Int.mul_eq_zero.mp hProd0 with
+    | inl hC0 => omega
+    | inr hn1 => omega
 
 /-- **Theorem 23 (Universal Dead-End-Free `q_gear`-Adic Prefix Decomposition `D_{a,b} = P_{pen} + q_gear D_{b-1}`
 and `2 P_{tot}` 2-Adic Construction Modulus for Any Gear Ratio `q_gear ∈ ℤ`)**: -/
@@ -379,27 +429,59 @@ theorem thm26_collatz_step_wronskian_excess_identity_and_bernoulli_euler_cycle_l
   · omega
 
 /-- **Theorem 27 (Pure-Binary Balance Over the Stationary Root `n_ref = n* = 1`,
-Dual-Drift Conservation Law `D_{a,b} + E_{a,b} = (F_{tot} - Q_{tot}) n_0`, and `F_{a,b}` Non-Descending Ceiling)**: -/
+Dual-Drift Conservation Law `D_{a,b} + E_{a,b} = (F_{tot} - Q_{tot}) n_0`, Upper-Ceiling Screw Duality `(U_d, U_+)`,
+and Endpoint-Free Top–Bottom Screw Closure `S_+ + U_d = (F_{tot} - Q_{tot}) m_0 + (P_{tot} - Q_{tot})`)**: -/
 theorem thm27_collatz_pure_binary_stationary_excess_law_and_dual_drift_conservation
-    (Ptot Qtot Ftot n0 nb Dab Eab Fab DeltaE : Int)
+    (Ptot Qtot Ftot n0 nb m0 mb Dab Eab Fab DeltaE : Int)
     (hD : Ptot * nb - Qtot * n0 = Dab)
     (hE : Ftot * n0 - Ptot * nb = Eab) :
+    let Ud    := Ftot * m0 - Ptot * mb
+    let Uplus := Ptot * (mb + 1) - Ftot * (m0 + 1)
+    let Splus := Ptot * (mb + 1) - Qtot * (m0 + 1)
     (Dab + Eab = (Ftot - Qtot) * n0 ∧
      Ptot * (n0 - nb) = Eab - (Ftot - Ptot) * n0 ∧
      (Dab > 0 → Eab ≥ 0 → Dab ≤ (Ftot - Qtot) * n0 ∧ Eab < (Ftot - Qtot) * n0)) ∧
+    (n0 = 2 * m0 + 1 → nb = 2 * mb + 1 →
+      Ud + Uplus = Ptot - Ftot ∧
+      Ud - Uplus = Eab ∧
+      Splus + Ud = (Ftot - Qtot) * m0 + (Ptot - Qtot) ∧
+      Ptot * (m0 - mb) = Uplus * m0 + Ud * (m0 + 1) ∧
+      Ptot * (m0 - mb) = Ud * n0 - Eab * m0) ∧
     (Eab = (n0 - 1) * Fab + DeltaE →
       Ptot * (n0 - nb) = (Fab - (Ftot - Ptot)) * n0 - Fab + DeltaE ∧
       (Ptot * (n0 - nb) ≤ 0 → DeltaE ≥ 0 → (Fab - (Ftot - Ptot)) * n0 + DeltaE ≤ Fab)) := by
+  dsimp
   have hSum : (Ptot * nb - Qtot * n0) + (Ftot * n0 - Ptot * nb) = (Ftot - Qtot) * n0 := by
     simp only [Int.sub_mul]; omega
   have hDesc1 : Ptot * (n0 - nb) - (Ftot * n0 - Ptot * nb - (Ftot - Ptot) * n0) = 0 := by
     simp only [Int.mul_sub, Int.sub_mul]; omega
-  refine ⟨⟨by omega, by omega, by intro _ _; exact ⟨by omega, by omega⟩⟩, ?_⟩
-  intro hEsplit
-  have hId : Ptot * (n0 - nb) - ((Fab - (Ftot - Ptot)) * n0 - Fab + DeltaE) =
-             (Ftot * n0 - Ptot * nb) - ((n0 - 1) * Fab + DeltaE) := by
-    simp only [Int.mul_sub, Int.sub_mul, Int.one_mul, Int.mul_comm, Int.mul_left_comm]; omega
-  exact ⟨by omega, by intro _ _; omega⟩
+  refine ⟨⟨by omega, by omega, by intro _ _; exact ⟨by omega, by omega⟩⟩, ?_, ?_⟩
+  · intro hn0 hnb
+    have h2m0 : 2 * m0 + 1 = m0 + m0 + 1 := by omega
+    have h2mb : 2 * mb + 1 = mb + mb + 1 := by omega
+    have hUsum : (Ftot * m0 - Ptot * mb) + (Ptot * (mb + 1) - Ftot * (m0 + 1)) = Ptot - Ftot := by
+      simp only [Int.mul_add, Int.mul_one]; omega
+    have hUdiff : (Ftot * m0 - Ptot * mb) - (Ptot * (mb + 1) - Ftot * (m0 + 1)) =
+                  Ftot * (m0 + m0 + 1) - Ptot * (mb + mb + 1) := by
+      simp only [Int.mul_add, Int.mul_one]; omega
+    rw [← h2m0, ← h2mb, ← hn0, ← hnb, hE] at hUdiff
+    have hTopBot : (Ptot * (mb + 1) - Qtot * (m0 + 1)) + (Ftot * m0 - Ptot * mb) -
+                   ((Ftot - Qtot) * m0 + (Ptot - Qtot)) = 0 := by
+      simp only [Int.mul_add, Int.sub_mul, Int.mul_one]; omega
+    have hUcross : Ptot * (m0 - mb) - ((Ptot * (mb + 1) - Ftot * (m0 + 1)) * m0 + (Ftot * m0 - Ptot * mb) * (m0 + 1)) = 0 := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hUmirror : ((Ptot * (mb + 1) - Ftot * (m0 + 1)) * m0 + (Ftot * m0 - Ptot * mb) * (m0 + 1)) -
+                    ((Ftot * m0 - Ptot * mb) * (m0 + m0 + 1) - ((Ftot * m0 - Ptot * mb) - (Ptot * (mb + 1) - Ftot * (m0 + 1))) * m0) = 0 := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    rw [← h2m0, ← hn0, hUdiff] at hUmirror
+    exact ⟨by omega, by omega, by omega, by omega, by omega⟩
+  · intro hEsplit
+    have hId : Ptot * (n0 - nb) - ((Fab - (Ftot - Ptot)) * n0 - Fab + DeltaE) =
+               (Ftot * n0 - Ptot * nb) - ((n0 - 1) * Fab + DeltaE) := by
+      simp only [Int.mul_sub, Int.sub_mul, Int.one_mul, Int.mul_comm, Int.mul_left_comm]; omega
+    exact ⟨by omega, by intro _ _; omega⟩
 
 /-- **Theorem 28 (Universal Centered Coordinate `m_k = (n_k - 1)/2` for Odd Gear `q_gear = 2 q_half + 1`,
 Willis Carrier Differential Balance `z_1(\omega_1 - \omega_H) + z_2(\omega_2 - \omega_H) = 0`,
@@ -420,7 +502,13 @@ theorem thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
      Ptot * nb - Qtot * n0 = Dab →
      Sd = Qtot * m0 - Ptot * mb →
      Splus = Ptot * (mb + 1) - Qtot * (m0 + 1) →
-      (Splus + Sd = Ptot - Qtot ∧ Splus - Sd = Dab ∧ 2 * Sd = Ptot - Qtot - Dab ∧ 2 * Splus = Dab + (Ptot - Qtot)) ∧
+      (Splus + Sd = Ptot - Qtot ∧
+       Splus - Sd = Dab ∧
+       2 * Sd = Ptot - Qtot - Dab ∧
+       2 * Splus = Dab + (Ptot - Qtot) ∧
+       Ptot * (m0 - mb) = Splus * m0 + Sd * (m0 + 1) ∧
+       Ptot * (n0 - nb) = Splus * (n0 - 1) + Sd * (n0 + 1) ∧
+       Ptot * (m0 - mb) = Splus * n0 - Dab * (m0 + 1)) ∧
       (Ptot > 0 → (mb ≥ 0 → Qtot * m0 - Sd ≥ 0) ∧ (Qtot * m0 - Sd = 0 ↔ mb = 0)) ∧
       (m0 + 1 = Pr0 * q0 → Splus = Pr0 * Splus_red →
         Ptot * (m0 - mb) = Pr0 * ((Ptot - Qtot) * q0 - Splus_red) ∧
@@ -445,9 +533,24 @@ theorem thm28_collatz_centered_stationary_coordinate_and_gear_deviation_law
                  Ptot * (mb + mb + 1) - Qtot * (m0 + m0 + 1) := by
       simp only [Int.mul_add, Int.mul_one]; omega
     rw [← h2m0, ← h2mb, ← hn0, ← hnb, hTraj] at hDiff
+    have hCrossM : Ptot * (m0 - mb) - ((Ptot * (mb + 1) - Qtot * (m0 + 1)) * m0 + (Qtot * m0 - Ptot * mb) * (m0 + 1)) = 0 := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    rw [← hSplus, ← hSd] at hCrossM
+    have hCrossN : Ptot * (n0 - nb) - (Splus * (n0 - 1) + Sd * (n0 + 1)) =
+                   (Ptot * (m0 - mb) - (Splus * m0 + Sd * (m0 + 1))) +
+                   (Ptot * (m0 - mb) - (Splus * m0 + Sd * (m0 + 1))) := by
+      rw [hn0, hnb, h2m0, h2mb]
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    have hDiffS : Splus - Sd = Dab := by omega
+    have hMirror : (Splus * m0 + Sd * (m0 + 1)) - (Splus * (m0 + m0 + 1) - (Splus - Sd) * (m0 + 1)) = 0 := by
+      simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
+    rw [← h2m0, ← hn0, hDiffS] at hMirror
     have hDesc : Ptot * (m0 - mb) - ((Ptot - Qtot) * (m0 + 1) - (Ptot * (mb + 1) - Qtot * (m0 + 1))) = 0 := by
       simp only [Int.mul_sub, Int.sub_mul, Int.mul_add, Int.mul_one]; omega
-    refine ⟨⟨by omega, by omega, by omega, by omega⟩, ?_, ?_⟩
+    refine ⟨⟨by omega, by omega, by omega, by omega, by omega, by omega, by omega⟩, ?_, ?_⟩
     · intro hPpos
       have hGap : Qtot * m0 - Sd = Ptot * mb := by omega
       refine ⟨by intro hmb; have := Int.mul_nonneg (by omega : Ptot ≥ 0) hmb; omega, ?_⟩
@@ -507,16 +610,26 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
     (hn0  : n0 + 1 = Pr1 * q0)
     (hMac : pbeta0 * n1 + 1 = Qr1 * q0)
     (hn1  : n1 + 1 = Pr1_next * q1) :
-    -- 1. Minimal-drift macro-step law, double SL₂(ℤ) Bézout lock (= +1), and homogeneous core difference:
+    -- 1. Plus-Screw minimal-drift macro-step law ((P_{r1} p_{beta0}) n_1 - Q_{r1} n_0 = Q_{r1} - P_{r1}),
+    --    Minus-Screw pure-descent macro-step law (F_k (n_k - 1) = Q_k (n_0 - 1) ↔ F_k n_k - Q_k n_0 = F_k - Q_k, with F_k > Q_k ∧ n_0 > 1 → n_k < n_0),
+    --    double SL₂(ℤ) Bézout lock (= +1), and homogeneous core difference:
     ((Pr1 * pbeta0) * n1 - Qr1 * n0 = Qr1 - Pr1 ∧
      Pr1 * q0 - n0 = 1 ∧
      Qr1 * q0 - pbeta0 * n1 = 1 ∧
-     pbeta0 * n1 - n0 = (Qr1 - Pr1) * q0) ∧
+     pbeta0 * n1 - n0 = (Qr1 - Pr1) * q0 ∧
+     (Pr2 * (n1 - 1) = Qr2 * (n0 - 1) ↔ Pr2 * n1 - Qr2 * n0 = Pr2 - Qr2) ∧
+     (Pr2 > 0 → Pr2 > Qr2 → n0 > 1 → Pr2 * (n1 - 1) = Qr2 * (n0 - 1) → n1 < n0)) ∧
     -- 2. Core-free macro-step gap jump (q_0 cancels identically!):
     (m0 = Pr0 * q0 - 1 → n1 = 2 * m1 + 1 →
       Qr1 * m0 - (2 * Pr0 * pbeta0) * m1 = Pr0 * (pbeta0 + 1) - Qr1) ∧
-    -- 3. Odd-core transition law q_0 -> q_1 and unconditional strict descent q_1 < q_0 at r_0 = 0 (Q_r1 = 3):
+    -- 3. Odd-core transition law q_0 -> q_1, universal pre-paid hailstone division criterion
+    --    ((p_beta0 * P_{r1,next} - Q_{r1}) q_0 > p_beta0 - 1 ↔ q_1 < q_0),
+    --    updraft Bezout lock at beta_0 = 1 (2 P_{r1,next} q_1 - Q_{r1} q_0 = 1),
+    --    and unconditional strict descent q_1 < q_0 at r_0 = 0 (Q_r1 = 3):
     ((pbeta0 * Pr1_next) * q1 - Qr1 * q0 = pbeta0 - 1 ∧
+     (pbeta0 * Pr1_next) * (q0 - q1) = (pbeta0 * Pr1_next - Qr1) * q0 - (pbeta0 - 1) ∧
+     (pbeta0 * Pr1_next > 0 → ((pbeta0 * Pr1_next - Qr1) * q0 > pbeta0 - 1 ↔ q1 < q0)) ∧
+     (pbeta0 = 2 → (2 * Pr1_next) * q1 - Qr1 * q0 = 1) ∧
      (Qr1 = 3 →
        (pbeta0 * Pr1_next) * (q0 - q1) =
          pbeta0 * (Pr1_next - 2) * q0 + (pbeta0 - 2) * (2 * q0 - 1) + (q0 - 1) ∧
@@ -552,7 +665,37 @@ theorem thm29_collatz_trailing_ones_burn_macro_step
     simp only [Int.mul_add, Int.mul_one]; omega
   rw [hMac] at hCore2
   have hCoreLaw : (pbeta0 * Pr1_next) * q1 - Qr1 * q0 = pbeta0 - 1 := by omega
-  refine ⟨⟨by omega, by omega, by omega, by omega⟩, ?_, ⟨hCoreLaw, ?_⟩, ?_⟩
+  have hPrepaid : (pbeta0 * Pr1_next) * (q0 - q1) - ((pbeta0 * Pr1_next - Qr1) * q0 - (pbeta0 - 1)) =
+                  (pbeta0 - 1) - ((pbeta0 * Pr1_next) * q1 - Qr1 * q0) := by
+    simp only [Int.mul_sub, Int.sub_mul]; omega
+  have hPrepaidIff : pbeta0 * Pr1_next > 0 → ((pbeta0 * Pr1_next - Qr1) * q0 > pbeta0 - 1 ↔ q1 < q0) := by
+    intro hPos
+    constructor
+    · intro hGt
+      have hProdPos : (pbeta0 * Pr1_next) * (q0 - q1) > 0 := by omega
+      by_cases hLe : q0 - q1 ≤ 0
+      · have hNonpos : (pbeta0 * Pr1_next) * (q0 - q1) ≤ 0 :=
+          Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+        omega
+      · omega
+    · intro hLt
+      have hProdPos : (pbeta0 * Pr1_next) * (q0 - q1) > 0 := Int.mul_pos hPos (by omega)
+      omega
+  have hMinusId : (Pr2 * (n1 - 1) - Qr2 * (n0 - 1)) - ((Pr2 * n1 - Qr2 * n0) - (Pr2 - Qr2)) = 0 := by
+    simp only [Int.mul_sub, Int.mul_one]; omega
+  have hMinusDesc : Pr2 > 0 → Pr2 > Qr2 → n0 > 1 → Pr2 * (n1 - 1) = Qr2 * (n0 - 1) → n1 < n0 := by
+    intro hPpos hPGtQ hn0Gt1 hMinusEq
+    have hDiffId : Pr2 * (n0 - n1) = (Pr2 - Qr2) * (n0 - 1) := by
+      have : Pr2 * (n0 - n1) - ((Pr2 - Qr2) * (n0 - 1)) = Qr2 * (n0 - 1) - Pr2 * (n1 - 1) := by
+        simp only [Int.mul_sub, Int.sub_mul, Int.mul_one]; omega
+      omega
+    have hRhsPos : (Pr2 - Qr2) * (n0 - 1) > 0 := Int.mul_pos (by omega) (by omega)
+    by_cases hLe : n0 - n1 ≤ 0
+    · have hNonpos : Pr2 * (n0 - n1) ≤ 0 := Int.mul_nonpos_of_nonneg_of_nonpos (by omega) hLe
+      omega
+    · omega
+  refine ⟨⟨by omega, by omega, by omega, by omega, ⟨fun _ => by omega, fun _ => by omega⟩, hMinusDesc⟩, ?_,
+          ⟨hCoreLaw, by omega, hPrepaidIff, by intro hp2; subst hp2; omega, ?_⟩, ?_⟩
   · intro hm0 hn1m1
     have hCancel : (Qr1 * (Pr0 * q0 - 1) - (2 * Pr0 * pbeta0) * m1) - (Pr0 * (pbeta0 + 1) - Qr1) =
                    Pr0 * ((Qr1 * q0) - (pbeta0 * (2 * m1 + 1) + 1)) := by
