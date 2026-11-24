@@ -58,40 +58,93 @@
 \end{equation}
 дискретную экспоненту Эйлера $\mathcal{E}_d(\varphi) := (\mathcal{C}_d(\varphi),\mathcal{S}_d(\varphi))\in\mathbb{Z}^2$, одношаговый разностный вронскиан $\mathcal{W}_d(\varphi) := \mathcal{C}_d(\varphi)\mathcal{S}_d(\varphi+1) - \mathcal{S}_d(\varphi)\mathcal{C}_d(\varphi+1)$ и подъём Брахмагупты--Вейерштрасса $X_d(\varphi) := \mathcal{C}_d(\varphi)^2 - \mathcal{S}_d(\varphi)^2$, $Y_d(\varphi) := \|e\|_2^2\mathcal{C}_d(\varphi)\mathcal{S}_d(\varphi)$, $R_d(\varphi) := \mathcal{C}_d(\varphi)^2 + \mathcal{S}_d(\varphi)^2$. Всюду в настоящей серии статей термин \emph{носитель} (\emph{carrier}) употребляется строго в смысле классической теории моделей А.\,И.~Мальцева (\emph{«Алгебраические системы»}~\cite{Malcev1970}) как основное множество сорта в двусортной алгебраической системе $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$, где \textbf{дискретный $M$-носитель} $\mathcal{M}=\mathbb{Z}_{512}$ есть конечное кольцо фаз на решётке кубооктаэдра с $L^1$-проекциями $(\mathcal{C}_3,\mathcal{S}_3)$, а \textbf{непрерывный $T$-носитель} $\mathcal{T}$ --- континуальный сорт евклидовой окружности $X^2+Y^2=R^2$, поля $\mathbb{Q}\subset\mathbb{R}$ и интегралов Римана.
 
-\begin{theorem}[Дискретное тождество Эйлера, универсальный константный вронскиан, подъём Вейерштрасса и формула Ньютона--Лейбница]
+\begin{theorem}[Дискретное тождество Эйлера, многооборотная периодичность и универсальный константный вронскиан]
 \label{thm:main-1}
-При $d=3$ во всех $N_{\mathrm{ring}}(d)=512$ точках $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ выполнены точные тождества (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item $|\mathcal{C}_d(\varphi)| + |\mathcal{S}_d(\varphi)| \equiv Q_\square(d) = 128$, $\mathcal{E}_d(\varphi + Q_\square(d)) = (-\mathcal{S}_d(\varphi), +\mathcal{C}_d(\varphi)) = i\cdot\mathcal{E}_d(\varphi)$, $\mathcal{E}_d(\varphi + \Phi_{\mathrm{half}}(d)) + \mathcal{E}_d(\varphi) = (0,0)$, и во всех $512$ узлах (включая вершины излома)
+Для произвольного четверть-периода $Q\in\mathbb{Z}$, внутриквадрантной фазы $m\in\mathbb{Z}$, числа полных оборотов $k_{\mathrm{turns}}\in\mathbb{Z}$ и горизонта интегрирования $L\in\mathbb{N}$ кусочно-линейный ротатор $(\mathcal{C}_Q,\mathcal{S}_Q)$ на $\mathbb{Z}_{4Q}$ удовлетворяет тождествам (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Многооборотная периодичность и тождество Эйлера $e^{i\pi}+1=0$:}
+  $\mathcal{E}_d(\varphi + 4Qk_{\mathrm{turns}}) = \mathcal{E}_d(\varphi)$, $L^1$-норма постоянна $|\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| \equiv Q$, сдвиг $+Q$ действует как умножение на~$i$: $\mathcal{E}_Q(\varphi + Q) = (-\mathcal{S}_Q(\varphi), +\mathcal{C}_Q(\varphi))$, а сдвиг $+2Q$ даёт $\mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) = (0,0)$ при всех $\varphi\in\mathbb{Z}$.
+\item \textbf{Универсальный константный вронскиан и вынесение поточечно-постоянных инвариантов за знак интеграла:}
+  во всех четырёх квадрантах и угловых вершинах $L^1$-ромба одношаговый разностный вронскиан тождественно равен константе $Q$:
   \[
-    \bigl\langle \mathcal{E}_d\bigl(\varphi+Q_\square(d)\bigr),\,\Delta\mathcal{E}_d(\varphi)\bigr\rangle \;=\; \mathcal{W}_d(\varphi) \;\equiv\; Q_\square(d) \;=\; 128;
+    \mathcal{W}_Q(\varphi) \;=\; (Q-m)(m+1) - m(Q-m-1) \;\equiv\; Q \qquad (\forall Q,m\in\mathbb{Z}),
   \]
-\item $X_d(\varphi)^2 + Y_d(\varphi)^2 = R_d(\varphi)^2$, $X_d(\varphi)Y_d(\varphi+1) - Y_d(\varphi)X_d(\varphi+1) = \|e\|_2^2 Q_\square(d)\mathcal{I}_d(\varphi)$ и $X_d(\varphi)X_d(\varphi+1) + Y_d(\varphi)Y_d(\varphi+1) = \mathcal{I}_d(\varphi)^2 - Q_\square(d)^2$ при $\mathcal{I}_d(\varphi) = \mathcal{C}_d(\varphi)\mathcal{C}_d(\varphi+1) + \mathcal{S}_d(\varphi)\mathcal{S}_d(\varphi+1)$;
-\item первообразные $\widehat{\Phi}_{\mathcal{C}}(d,\Phi) = \sum_{\varphi=0}^{\Phi-1}\mathcal{C}_d(\varphi)$ и $\widehat{\Phi}_{\mathcal{S}}(d,\Phi) = \sum_{\varphi=0}^{\Phi-1}\mathcal{S}_d(\varphi)$ удовлетворяют $\Delta\widehat{\Phi}_{\mathcal{C}} = \mathcal{C}_d$, $\Delta\widehat{\Phi}_{\mathcal{S}} = \mathcal{S}_d$ и дают точную площадь полуволны $\widehat{\Phi}_{\mathcal{S}}(3,256) = 128^2 = 16\,384$.
+  вследствие чего любой поточечно-постоянный инвариант $g(\varphi)\equiv c_{\mathrm{inv}}$ (включая $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q$ и $\mathcal{W}_Q(\varphi)\equiv Q$) напрямую выносится за знак дискретного интеграла на произвольном интервале длины $L\in\mathbb{N}$:
+  \[
+    \sum_{\varphi=0}^{L-1} g(\varphi) \;=\; c_{\mathrm{inv}}\sum_{\varphi=0}^{L-1} 1 \;=\; L\cdot c_{\mathrm{inv}},\qquad
+    \sum_{\varphi=0}^{L-1} c_{\mathrm{sq}}\,f(\varphi) \;=\; c_{\mathrm{sq}}\sum_{\varphi=0}^{L-1} f(\varphi).
+  \]
 \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Универсальный подъём Вейерштрасса и шаговые тождества Брахмагупты]
+\label{thm:main-1b}
+Для любых целочисленных проекций $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$ координаты Вейерштрасса удовлетворяют тождеству евклидовой окружности $X^2 + Y^2 = (\mathcal{C}_0^2-\mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R^2$ и шаговым соотношениям Брахмагупты--Вейерштрасса при $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ и $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
+\[
+  R_0 R_1 - \mathcal{I}^2 \;=\; \mathcal{W}^2,\qquad
+  X_0 Y_1 - Y_0 X_1 \;=\; 2\,\mathcal{W}\,\mathcal{I},\qquad
+  X_0 X_1 + Y_0 Y_1 \;=\; \mathcal{I}^2 - \mathcal{W}^2.
+\]
+\end{theorem}
+
+\begin{theorem}[Основная теорема дискретного анализа (Ньютона--Лейбница) и арифметика без умножителей]
+\label{thm:main-1c}
+Для любых $d,L\in\mathbb{N}$, числа оборотов $k_{\mathrm{turns}}\in\mathbb{Z}$, функции $f\colon\mathbb{Z}\to\mathbb{Z}$ и $Q,x,y\in\mathbb{Z}$ (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+\[
+  \sum_{\varphi=0}^{L} f(\varphi) - \sum_{\varphi=0}^{L-1} f(\varphi) = f(L),\qquad
+  \Delta\widehat{\Phi}_{\mathcal{C}}(d,L) = \mathcal{C}_d(L),\qquad
+  \Delta\widehat{\Phi}_{\mathcal{S}}(d,L) = \mathcal{S}_d(L),
+\]
+причём $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{C}}(3,512) = k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,512) = 0$, площадь $k_{\mathrm{turns}}$ полуволн равна $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,256) = 16\,384\,k_{\mathrm{turns}}$, и выполнено четверть-квадратное умножение $(x+y)^2 - (x-y)^2 = 4xy$.
 \end{theorem}
 
 \section{Замкнутое вычисление интегралов Френеля, Якоби, Дирихле, Парсеваля и Бесселя и геометрия поясов Архимеда кубооктаэдра}
 \label{sec:integrals-archimedes}
 
-\begin{theorem}[Замкнутые значения интегралов Френеля, Якоби, Дирихле, Парсеваля и Бесселя]
+\begin{theorem}[Универсальные инварианты лемнискатической триады Якоби и параметрические эллиптические интегралы]
 \label{thm:main-2}
-При $d=3$ на кольце $\mathbb{Z}_{512}$ выполнены точные интегральные соотношения (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item для лемнискатической триады Якоби ($k^2 = 1/2$) $|\mathrm{sn}_3(\varphi)|+|\mathrm{cn}_3(\varphi)|=128$, $2\,\mathrm{dn}_3(\varphi)+|\mathrm{sn}_3(\varphi)|=256$, полный эллиптический интеграл $\mathcal{I}_{\mathrm{ell}}(3;2,3) = 163\,840$, неполный по квадранту --- $16\,384$;
-\item полные интегралы дифракции Френеля совпадают и равны $\mathcal{C}_{\mathrm{Fresnel}}(3) = \mathcal{S}_{\mathrm{Fresnel}}(3) = 32\times 64 = 2048$ (выживание $32$ точек оболочки $\varphi = 8(2k+1)$ на биссектрисе $\varphi^2\equiv 64\pmod{512}$);
-\item интегральный синус Дирихле $\mathrm{Si}_3(128) = \mathrm{Si}_3(256) = 128$, интеграл Парсеваля $\mathcal{I}_{\mathrm{Parseval}}(3) = \frac{512\times 32\,769}{6} = 2\,796\,288$;
+Для всех $Q,m,k_{\mathrm{turns}},a,b\in\mathbb{Z}$ и любого горизонта интегрирования $L\in\mathbb{N}$ триада Якоби на $\mathbb{Z}_{4Q}$ удовлетворяет (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+\[
+  |\mathrm{sn}_Q(\varphi)| + |\mathrm{cn}_Q(\varphi)| = m + (Q-m) \equiv Q,\qquad
+  2\,\mathrm{dn}_Q(\varphi) + |\mathrm{sn}_Q(\varphi)| = (2Q-m) + m \equiv 2Q,
+\]
+откуда вынесением константы за знак интеграла получаем $\sum_{\varphi=0}^{L-1}(|\mathrm{sn}_Q|+|\mathrm{cn}_Q|) = L Q$ и $\sum_{\varphi=0}^{L-1}(2\,\mathrm{dn}_Q+|\mathrm{sn}_Q|) = 2 L Q$, а при $d=3$ ($Q_\square(3)=128$) для любых весов $a,b\in\mathbb{Z}$:
+\[
+  k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{ell}}(3;\,a,b) = 32\,768\,k_{\mathrm{turns}}(a+b),\qquad
+  \sum_{\varphi=0}^{127}\bigl(a\,\mathcal{C}_3(\varphi) + b\,\mathcal{S}_3(\varphi)\bigr) = 8256\,a + 8128\,b.
+\]
+\end{theorem}
+
+\begin{theorem}[Замкнутые интегралы дифракции Френеля, Дирихле, Парсеваля и Бесселя]
+\label{thm:main-2b}
+При $d=3$ для любых $c_{\mathrm{sq}},k_{\mathrm{turns}}\in\mathbb{Z}$ (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item интегралы Френеля равны $\sum_{\varphi=0}^{511} c_{\mathrm{sq}}\mathcal{C}_3(\varphi^2) = \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\mathcal{S}_3(\varphi^2) = 2048\,c_{\mathrm{sq}}$ (стационарная фаза на биссектрисе $\psi = K_P(3) = 64$);
+\item интегральный синус Дирихле $\mathrm{Si}_3(128) = \mathrm{Si}_3(256) = 128$, а интеграл энергии Парсеваля за $k_{\mathrm{turns}}$ оборотов удовлетворяет $6\,k_{\mathrm{turns}}\mathcal{I}_{\mathrm{Parseval}}(3) = 16\,777\,728\,k_{\mathrm{turns}}$ ($\mathcal{I}_{\mathrm{Parseval}}(3) = 2\,796\,288$);
 \item дискретный интеграл Бесселя $\mathcal{J}_{0,3}(0) = 65\,536$, $\mathcal{J}_{0,3}(1) = 32\,768$, и точный корень $\mathcal{J}_{0,3}(4) = 0$.
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Геометрический вывод континуального интеграла Римана, весов Симпсона $(1,4,1)/6$, тождества куба вронскиана для $\pi(n)$ и 3D-ротатора Эйлера из кубооктаэдра]
+\begin{theorem}[Равновеликое разбиение Архимеда и универсальная функциональная 3D-кубатура на кубооктаэдре]
 \label{thm:main-3}
-При $d=3$ на оболочке кубооктаэдра $O_2(3)$ и кольце $\mathbb{Z}_{512}$ выполнены соотношения (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item проекция $12$ вершин $O_2(3)$ на любую ось $e_x\in\{-1,0,+1\}$ образует три равновеликих пояса Архимеда $(4,4,4)$, которые в сумме с центральным узлом веса $12$ в операторе $\widehat{\mathcal{I}}_{O_2(3)}(F) = 12 F(0,0,0) + \sum_{e\in O_2(3)} F(e)$ собираются в веса $(4,16,4) = 4\times(1,4,1)$ и воспроизводят континуальный интеграл Римана $\frac{1}{24}\widehat{\mathcal{I}}_{O_2(3)}(x^p) = \frac{1}{2}\int_{-1}^{+1}x^p\,\mathrm{d}x$ ($0\le p\le 3$) и $\frac{1}{24}\widehat{\mathcal{I}}_{O_2(3)}(x^2+y^2+z^2) = 1$;
-\item рациональная вилка $\pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) = \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)R_d(js)R_d((j+1)s)} > 0$ сжимается в $4$ раза при каждом удвоении $n\mapsto 2n$, а рациональный оператор синуса $\sin_{\mathrm{rat}}(3;p,q) = \frac{4p(2q-p)}{5q^2-p(2q-p)}$ на долях прямого угла $\{1/9,1/3,1/2,2/3,1\}$ возвращает $\frac{17}{97},\frac{1}{2},\frac{12}{17},\frac{32}{37},1$;
-\item моменты кубооктаэдра равны $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^2 = 8|\mathbf{k}|^2$ и $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^4 = 12|\mathbf{k}|^4 - 4\sum_{i=1}^3 k_i^4$, а трёхмерный ротатор Эйлера $\mathcal{R}_{\mathrm{Euler}}(\varphi_1,\varphi_2,\varphi_3)$ сохраняет сферическую норму в чистых целых числах.
+При $d=3$ для любых функций $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$ произвольной степени и любых коэффициентов $c_0,c_x,c_y,c_z,c_{xy},c_{xz},c_{yz}\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item проекция $12$ вершин $O_2(3)$ на любую ось $e_x\in\{-1,0,+1\}$ образует три пояса Архимеда $(4,4,4)$, которые в сумме с центральным узлом веса $12$ в операторе $\widehat{\mathcal{I}}_{O_2(3)}(F) = 12 F(0,0,0) + \sum_{e\in O_2(3)} F(e)$ собираются в веса Симпсона $(4,16,4) = 4\times(1,4,1)$;
+\item функционал $\widehat{\mathcal{I}}_{O_2(3)}$ аддитивен ($\widehat{\mathcal{I}}_{O_2(3)}(F+G) = \widehat{\mathcal{I}}_{O_2(3)}(F) + \widehat{\mathcal{I}}_{O_2(3)}(G)$), тождественно обнуляет любую центрально-нечётную функцию $F(\mathbf{e})-F(-\mathbf{e})$ и любую отражательно-нечётную функцию $F(e_x,e_y,e_z)-F(-e_x,e_y,e_z)$ произвольного порядка, а на любой чётной квадратичной/биквадратной форме ($e_i^4=e_i^2$ на $O_2(3)$) даёт
+  \[
+    \widehat{\mathcal{I}}_{O_2(3)}\!\bigl(c_0 + c_x e_x^2 + c_y e_y^2 + c_z e_z^2 + c_{xy} e_x^2 e_y^2 + c_{xz} e_x^2 e_z^2 + c_{yz} e_y^2 e_z^2\bigr)
+    \;=\; 24\,c_0 + 8(c_x+c_y+c_z) + 4(c_{xy}+c_{xz}+c_{yz}),
+  \]
+  одновременно воспроизводя точный 3D континуальный интеграл Римана $3\iiint_{[-1,1]^3} P\,\mathrm{d}V = 24c_0+8(c_x+c_y+c_z)$ для любого кубического полинома $P$, сферическую изотропию 2-го момента $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^2 = 8|\mathbf{k}|^2$ и закон 4-го момента $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^4 = 8\sum k_i^4 + 24\sum_{i<j}k_i^2 k_j^2 = 12|\mathbf{k}|^4 - 4\sum k_i^4$.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Рациональные вилки $\pi(n)$, универсальный закон дефекта рационального синуса параболы Верле и масштабирование нормы 3D-поворотов Эйлера]
+\label{thm:main-3b}
+Для всех $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item выполнено $2 R_Q(\varphi) = Q^2 + (|\mathcal{C}_Q(\varphi)|-|\mathcal{S}_Q(\varphi)|)^2 \ge Q^2$, рациональная вилка $\pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) = \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)R_3(js)R_3((j+1)s)} > 0$ строго монотонно сжимается ($\pi_{\mathrm{in}}(8)<\pi_{\mathrm{in}}(16)<\pi_{\mathrm{in}}(32)<\pi_{\mathrm{out}}(32)<\pi_{\mathrm{out}}(16)<\pi_{\mathrm{out}}(8)$, $\pi_3(16)=142/45$);
+\item для параболы Верле $P(p,q)=2pq-p^2$ числитель $\mathrm{Num}(p,q)=4P(p,q)$ и знаменатель $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ рационального синуса удовлетворяют универсальному тождеству $\mathrm{Denom}(p,q) - \mathrm{Num}(p,q) = 5(q-p)^2 \ge 0$, а каждый плоский поворот Вейерштрасса в $3$ координатных плоскостях кубооктаэдра масштабирует квадрат нормы по закону $(Xx-Yy)^2 + (Yx+Xy)^2 = (X^2+Y^2)(x^2+y^2)$.
 \end{enumerate}
 \end{theorem}
 

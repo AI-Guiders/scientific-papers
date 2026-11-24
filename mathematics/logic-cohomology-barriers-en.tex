@@ -64,18 +64,36 @@ On the antipodal poles $\{0,\Phi_{\mathrm{half}}(d)\}=\{0,256\}\subset\mathbb{Z}
   \end{equation}
 \end{enumerate}
 
-\begin{theorem}[Post Functional Completeness \{\texttt{NOT}, \texttt{XOR}, \texttt{OR}, \texttt{AND}\}, 3-SAT Representation, $7\to 1$ Remainder Gluing, and Two-Channel Non-Commutativity on $\mathbb{Z}_{512}$]
+\begin{theorem}[Post Functional Completeness, 3-SAT Representation, and Universal $7\to 1$ Quotient-Remainder Gluing]
 \label{thm:main-4}
-For $d=3$, the following exact relations hold across the pole octants $\{0,256\}^3\subset\mathbb{Z}_{512}^3$ (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Post functional completeness and equivalence of 3-SAT satisfiability to zero Channel~2 quotients:}
-  across all $2^3=8$ states in $\{0,256\}^3$, the multiplicative parity identity~\eqref{eq:pre-rotator-xor} holds, $q_{\mathrm{AND}}$ equals~$1$ uniquely at $(0,0,0)$ and~$0$ on the other $7$~octants, while the defect quotient $q_{\mathrm{OR}}$ equals~$0$ on all $7$~satisfying octants of a 3-SAT clause $(l_1\lor l_2\lor l_3)$ and equals~$1$ ($\Delta_{\mathrm{3SAT}}=512$) uniquely on the falsifying octant $(256,256,256)$. Consequently, by the polynomial equivalence between Turing machines and cellular automata ($\mathbf{P}_{\mathrm{TM}}\equiv\mathbf{P}_{\mathrm{CA}}$, Cook--Levin), every Boolean circuit decomposes into Channel~1 and Channel~2, and a 3-SAT formula of $M$ clauses is satisfiable if and only if $\sum_{m=1}^M q_{\mathrm{OR}}(\psi_{m,1},\psi_{m,2},\psi_{m,3}) = 0$.
-\item \textbf{Non-injective $7\to 1$ remainder gluing in forward verification ($\mathbf{NP}$):}
-  the forward quotient operator $q_{\mathrm{OR}}=\mathrm{tdiv}(\Delta_{\mathrm{3SAT}},512)$ discards the three-valued remainder $r\in\{-256,0,+256\}$ and maps $\mathrm{count3SatSatisfyingOctants}(3)=2^3-1=7$ distinct input octants onto the single output $q_{\mathrm{OR}}=0$ ($1\to 7$ preimage branching per clause under inversion).
-\item \textbf{Identical annihilation of the Channel~2 linear gradient on Channel~1 parity constraints and channel non-commutativity:}
-  across the four 3-SAT clauses encoding a single Channel~1 parity equation ($x_1\oplus x_2\oplus x_3=0$), the sum of linear projections $\mathcal{C}_3$ vanishes identically on all $8$~octants ($\mathrm{xor4LinearGradientSum}(3,\psi_1,\psi_2,\psi_3)\equiv 0$), while the rotator $\mathcal{C}_3$ and the Channel~2 threshold quotient $q_{\mathrm{AND}}$ are non-linear and non-distributive with respect to Channel~1 phase addition.
-\item \textbf{Single-point depth-$T$ inverse cone underdetermination:}
-  when reconstructing a state at depth $T$ steps from a single observation node $\mathbf{x}_0$, the $T$-th coordination shell of the cuboctahedron contains $\mathrm{cuboctShellNodes}(3,T)=10T^2+2$ equidistant nodes, the cumulative cone volume $\mathcal{V}_{O_2}(3,T)=\mathrm{cuboctBallNodes}(3,T)$ obeys the exact cubic law $3\,\mathcal{V}_{O_2}(3,T)=10T^3+15T^2+11T+3$ ($\mathcal{V}_{O_2}(3,3)=3\cdot 7^2=147$), the Channel~2 gluing $7\to 1$ induces $\mathrm{preimageRayBranching}(3,T)=7^T$ indistinguishable preimages along each ray ($7^3=343$ at $T=3$), and balanced 4-clause parity loops ($\mathrm{xor4LinearGradientSum}\equiv 0$) form zero-gradient cloaked kernels invisible to linear probing at $\mathbf{x}_0$.
+For all $d\in\mathbb{N}$ and all $p_1,p_2,p_3\in\mathbb{Z}$, the defect $\Delta_{\mathrm{3SAT}} = Q_\square(d) - (\mathcal{C}_d(p_1)+\mathcal{C}_d(p_2)+\mathcal{C}_d(p_3))$ decomposes identically as (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}):
+\[
+  \Delta_{\mathrm{3SAT}}(d;p_1,p_2,p_3) \;=\; N_{\mathrm{ring}}(d)\,q_{\mathrm{OR}}(d;p_1,p_2,p_3) \;+\; r_{\mathrm{drop}}(d;p_1,p_2,p_3).
+\]
+At $d=3$ across the $2^3=8$ pole octants $\{0,256\}^3\subset\mathbb{Z}_{512}^3$:
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item the multiplicative parity identity~\eqref{eq:pre-rotator-xor} holds, $q_{\mathrm{AND}}$ equals~$1$ uniquely at $(0,0,0)$, and $q_{\mathrm{OR}}$ equals~$0$ on all $7$~satisfying octants of a 3-SAT clause and equals~$1$ uniquely on $(256,256,256)$, so an $M$-clause 3-SAT formula is satisfiable if and only if $\sum_{m=1}^M q_{\mathrm{OR}}(\psi_{m,1},\psi_{m,2},\psi_{m,3}) = 0$;
+\item forward verification discards $r_{\mathrm{drop}}\in\{-256,0,+256\}$ and glues $\mathrm{count3SatSatisfyingOctants}(3)=2^3-1=7$ satisfying octants onto $q_{\mathrm{OR}}=0$ ($1\to 7$ preimage branching per clause).
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Channel Non-Commutativity, Universal Backward-Cone Cubic Volume Recurrence, and Blind Multi-Hop Syndrome Teleportation]
+\label{thm:main-4b}
+For all $T,\psi,a,r_{1,\mathrm{out}},r_{2,\mathrm{out}},P\in\mathbb{Z}$ (\texttt{thm4\_boolean\_post\_completeness\_3sat\_reduction\_and\_channel\_orthogonality}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Channel~1 / Channel~2 non-commutativity and parity gradient annihilation:}
+  across the four 3-SAT clauses encoding $x_1\oplus x_2\oplus x_3=0$, the linear projection sum vanishes identically ($\mathrm{xor4LinearGradientSum}\equiv 0$), while $\mathcal{C}_3$ and $q_{\mathrm{AND}}$ are non-distributive over Channel~1 phase addition;
+\item \textbf{Universal backward-cone cubic recurrence:}
+  adding the $(T+1)$-th cuboctahedral shell $N_{\mathrm{shell}}(3,T+1) = 10(T+1)^2+2$ to $3\mathcal{V}_{O_2}(3,T) = 10T^3+15T^2+11T+3$ satisfies
+  \[
+    (10T^3+15T^2+11T+3) + 3\bigl(10(T+1)^2+2\bigr) \;=\; 10(T+1)^3 + 15(T+1)^2 + 11(T+1) + 3,
+  \]
+  with ray preimage branching $7^3 = 343 > 2^{6-3} = 8$ at $T=3$;
+\item \textbf{Universal multi-hop blind singlet-swapping identity ($A\leftrightarrow R_1\leftrightarrow R_2\leftrightarrow B$):}
+  for antipodal link partners $r_{1,\mathrm{in}} = a+P$, $r_{2,\mathrm{in}} = r_{1,\mathrm{out}}+P$, $b = r_{2,\mathrm{out}}+P$ and blind syndromes $\sigma_A = \psi-a-P$, $\sigma_{R_1} = r_{1,\mathrm{in}}-r_{1,\mathrm{out}}-P$, $\sigma_{R_2} = r_{2,\mathrm{in}}-r_{2,\mathrm{out}}-P$, the endpoint sum cancels all intermediate keys identically:
+  \[
+    b + \sigma_{R_2} + \sigma_{R_1} + \sigma_A \;=\; \psi.
+  \]
 \end{enumerate}
 \end{theorem}
 
@@ -101,24 +119,38 @@ Classical complexity-based cryptography models an adversary as an abstract Turin
 \section{Constructive de~Rham--Stokes--Gauss--Chern Cohomology, Division-Free Linear Algebra, and Choice-Free Measure Additivity}
 \label{sec:constructive-foundations}
 
-\begin{theorem}[Constructive de~Rham--Stokes--Gauss--Chern Cohomology, Division-Free Nilpotent and Symplectic Inversion, and Banach--Tarski-Free Measure Additivity]
+\begin{theorem}[Universal Euclidean Connection Splitting and Constructive de~Rham--Stokes--Gauss--Chern Cohomology]
 \label{thm:main-5}
-For $d=3$ on $\mathbb{Z}_{512}$ and the cuboctahedral complex~$O_2(3)$, the following exact constructive identities hold (\texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Euclidean connection splitting $\Delta\varphi = 512\,q + r$ and variational maximum on the $L^1$ diamond face:}
-  for all $\Delta\varphi\in[-512,512]$, Euclidean floor division $q = \mathrm{branchQuot}(3,\Delta\varphi) = \lfloor(\Delta\varphi+255)/512\rfloor$, $r = \mathrm{edgeConn}(3,\Delta\varphi)\in(-256,256]$ satisfies $512\,q + r \equiv \Delta\varphi$; moreover, along $\varphi = 256 - k$ ($k\in[0,128]$), the conjugate projections $V(k) = |\mathcal{C}_3(256-k)| = 128-k$ and $I(k) = \mathcal{S}_3(256-k) = k$ obey $V(k)+I(k)\equiv 128 = Q_\square(3)$, while their quadratic product $P(k) = V(k)I(k) = (128-k)k$ attains its unique maximum $P_{\max} = K_P(3)^2 = 64^2 = 4\,096$ at $k^* = K_P(3) = 64$.
-\item \textbf{Constructive Stokes theorem ($d_1\circ d_0\equiv 0$) and integer Chern class quantization:}
-  for any $0$-cochain $\varphi = (\varphi_0,\varphi_1,\varphi_2,\varphi_3)\in\mathbb{Z}^4$ around a closed $4$-cycle face~$f$, the raw coboundary vanishes identically ($(d_1(d_0\varphi))_f \equiv 0$), so that the connection circulation $(d_1 r)_f = \sum_{e\in\partial f}\mathrm{edgeConn}(3,(d_0\varphi)_e)$ is strictly an integer multiple of the ring period:
+For all $d\in\mathbb{N}$, all phase differences $\Delta\varphi\in\mathbb{Z}$, all $0$-cochains $(p_0,p_1,p_2,p_3)\in\mathbb{Z}^4$, and all $1$-cochains $(e_1,\dots,e_{12})\in\mathbb{Z}^{12}$ on the $12$~edges of a cube (\texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Universal Euclidean quotient-remainder splitting:}
+  $q = \mathrm{branchQuot}(d,\Delta\varphi)$ and $r = \mathrm{edgeConn}(d,\Delta\varphi)$ satisfy $N_{\mathrm{ring}}(d)\,q + r \equiv \Delta\varphi$ for all $d\in\mathbb{N}$ and $\Delta\varphi\in\mathbb{Z}$;
+\item \textbf{Universal Stokes theorem ($d_1\circ d_0\equiv 0$) and integer Chern class quantization:}
+  around every closed $4$-cycle face~$f$, $(d_1(d_0 p))_f = (p_1-p_0)+(p_2-p_1)+(p_3-p_2)+(p_0-p_3) \equiv 0$, and the connection circulation is strictly an integer multiple of $N_{\mathrm{ring}}(d)$:
   \[
-    (d_1 r)_f \;=\; 512\,n_f \;\in\; 512\,\mathbb{Z},\qquad
-    n_f := -\sum_{e\in\partial f} q_e \in \mathbb{Z}.
+    (d_1 r)_f \;=\; N_{\mathrm{ring}}(d)\,n_f \;\in\; N_{\mathrm{ring}}(d)\,\mathbb{Z},\qquad
+    n_f := -\sum_{e\in\partial f} q_e \in \mathbb{Z};
   \]
-\item \textbf{Constructive Gauss--Ostrogradsky divergence theorem ($d_2\circ d_1\equiv 0$ on the closed cube surface $\partial\square^3$):}
-  for any integer $1$-cochain $(e_1,\dots,e_{12})\in\mathbb{Z}^{12}$ on the $12$~edges of a cube, the sum of oriented face fluxes $(d_1 e)_f$ over all $|\square(3)|=6$ boundary faces vanishes identically ($\mathrm{cubeClosedSurfaceFluxSum}\equiv 0$).
-\item \textbf{Division-free linear algebra ($\mathrm{SL}_2(\mathbb{Z})$ and nilpotent Neumann inversion):}
-  the symplectic Verlet map $(u,v)\mapsto(2u-v+\Phi,u)$ ($\det = +1\in\mathrm{SL}_2(\mathbb{Z})$) inverts in place via $(u',v')\mapsto(v',2v'-u'+\Phi)$, while the 4D nilpotent operator $\mathcal{M} = I_4 + N_{\mathrm{nil}}$ ($N_{\mathrm{nil}}^3 = 0$, $\det(2\mathcal{M}) = 24$) inverts exactly via the finite 3-term Neumann polynomial $\mathcal{M}^{-1} = I_4 - N_{\mathrm{nil}} + N_{\mathrm{nil}}^2$.
-\item \textbf{Choice-free, Banach--Tarski-free finite additivity of cuboctahedral measure:}
-  partitioning the cuboctahedral ball $\mathcal{B}_{O_2}(3,T)$ into the central node and disjoint coordination shells $\mathrm{cuboctShellNodes}(3,k) = 10k^2+2$ strictly preserves integer volume $1 + \sum_{k=1}^T(10k^2+2) = \mathcal{V}_{O_2}(3,T)$, with $12\times(4^2+5^2) = 492 > 256 = \Phi_{\mathrm{half}}(3)$.
+\item \textbf{Universal Gauss--Ostrogradsky divergence theorem ($d_2\circ d_1\equiv 0$ on $\partial\square^3$):}
+  the sum of oriented face fluxes $(d_1 e)_f$ over all $6$~boundary faces of the cube vanishes identically for all $(e_1,\dots,e_{12})\in\mathbb{Z}^{12}$ ($\mathrm{cubeClosedSurfaceFluxSum}\equiv 0$).
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Universal Division-Free Nilpotent Neumann Inversion and $\mathrm{SL}_2(\mathbb{Z})$ Symplectic Verlet Inversion]
+\label{thm:main-5b}
+For all $(s_0,s_1,s_2,s_3)\in\mathbb{Z}^4$ and all $(u,v,\varphi)\in\mathbb{Z}^3$ (\texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item the 4D nilpotent operator $2\mathcal{M}(s_0,s_1,s_2,s_3) = (2s_0+s_1,\,2s_1+2s_2,\,2s_2,\,2s_3)$ ($N_{\mathrm{nil}}^3 = 0$, $\det(2\mathcal{M})=24$) is inverted identically by the 3-term Neumann polynomial $12(I_4 - N_{\mathrm{nil}} + N_{\mathrm{nil}}^2)(2\mathcal{M}\,s) = (24s_0,24s_1,24s_2,24s_3)$;
+\item the symplectic Verlet step $(u',v') = (2u-v+\varphi,\,u)$ ($\det = +1\in\mathrm{SL}_2(\mathbb{Z})$) is inverted identically in place by $(v',\,2v'-u'+\varphi) = (u,v)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Variational $L^1$ Saddle Optimization, Choice-Free Measure Additivity, and AC/DC Circuit Laws]
+\label{thm:main-5c}
+For all $Q,k,\mathcal{C}_\varphi,\mathcal{S}_\varphi\in\mathbb{Z}$ (\texttt{thm5\_constructive\_de\_rham\_cohomology\_nilpotent\_algebra\_and\_banach\_tarski\_free\_measure}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item the conjugate projections $V = 2Q-k$ and $I = k$ satisfy $V+I \equiv 2Q$, and $P = Q^2 - (k-Q)^2 \le Q^2$ attains its unique maximum $Q^2$ at $k^* = Q$;
+\item partitioning the cuboctahedral ball $\mathcal{B}_{O_2}(3,3)$ into the origin and disjoint shells $10k^2+2$ preserves integer measure $1 + 12 + 42 + 92 = 147$ without the Axiom of Choice, while on $\mathbb{Z}_{512}$ reactive power vanishes ($\sum\mathcal{C}_3\mathcal{S}_3 = 0$), half-wave rectification equals $Q_\square(3)^2 = 16\,384$, full-wave Graetz rectification equals $2Q_\square(3)^2 = 32\,768$, and antiphase LC currents cancel identically ($-\mathcal{S}_\varphi + \mathcal{S}_\varphi = 0$, $\mathcal{C}_\varphi + (-\mathcal{C}_\varphi) = 0$).
 \end{enumerate}
 \end{theorem}
 

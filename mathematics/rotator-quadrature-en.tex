@@ -120,49 +120,53 @@ To each $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ we associate the rational 
   R_d(\varphi) := \mathcal{C}_d(\varphi)^2 + \mathcal{S}_d(\varphi)^2.
 \end{equation}
 
-\begin{theorem}[Discrete Euler's Identity, Universal Constant Wronskian, Weierstrass Lift, and Fundamental Theorem of Discrete Calculus]
+\begin{theorem}[Discrete Euler's Identity, Multi-Turn Periodicity, and Universal Constant Difference Wronskian]
 \label{thm:main-1}
-For $d=3$, the following exact identities hold across all $N_{\mathrm{ring}}(d)=512$ points $\varphi\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Generation of $\{0,1,i,\pi,e\}$ and Euler's identity $e^{i\pi}+1=0$:}
-  \begin{itemize}[noitemsep]
-  \item the $L^1$ norm is constant: $|\mathcal{C}_d(\varphi)| + |\mathcal{S}_d(\varphi)| \equiv Q_\square(d)$, with $\mathcal{E}_d(0) = (Q_\square(d),0)$ representing unity~$1$;
-  \item a quarter-period shift $+Q_\square(d)$ acts across all $512$ points as exact multiplication by the imaginary unit~$i$:
-    \[
-      \mathcal{E}_d\bigl(\varphi + Q_\square(d)\bigr) \;=\; \bigl(-\mathcal{S}_d(\varphi),\; +\mathcal{C}_d(\varphi)\bigr) \;=\; i\cdot\mathcal{E}_d(\varphi);
-    \]
-  \item a half-period shift $+2Q_\square(d)=+\Phi_{\mathrm{half}}(d)$ ($\pi$) satisfies Euler's identity $e^{i(\varphi+\pi)}+e^{i\varphi}=0$ identically across the ring:
-    \[
-      \mathcal{E}_d\bigl(\varphi + \Phi_{\mathrm{half}}(d)\bigr) + \mathcal{E}_d(\varphi) \;=\; (0,0),
-      \qquad
-      \mathcal{E}_d\bigl(\Phi_{\mathrm{half}}(d)\bigr) + \mathcal{E}_d(0) \;=\; (0,0);
-    \]
-  \item the inner product of $i\mathcal{E}_d(\varphi)=\mathcal{E}_d(\varphi+Q_\square(d))$ with the difference derivative $\Delta\mathcal{E}_d(\varphi)$ coincides with the Wronskian $\mathcal{W}_d(\varphi)$ and is \textbf{identically equal to the constant $Q_\square(d)$ at all $512$ points of the ring (including the four corner vertices)}:
-    \begin{equation}
-      \label{eq:constant-wronskian-all-512}
-      \bigl\langle \mathcal{E}_d\bigl(\varphi+Q_\square(d)\bigr),\,\Delta\mathcal{E}_d(\varphi)\bigr\rangle
-      \;=\; \mathcal{W}_d(\varphi) \;\equiv\; Q_\square(d) \quad (=128),\qquad
-      \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{W}_d(\varphi) = N_{\mathrm{ring}}(d)\,Q_\square(d).
-    \end{equation}
-  \end{itemize}
-\item \textbf{Root-free Euclidean Weierstrass $512$-gon and arc-step differential:}
-  at all $N_{\mathrm{ring}}(d)$ points, $X_d(\varphi)^2 + Y_d(\varphi)^2 = R_d(\varphi)^2$, and the one-step Euclidean cross and dot products are governed by $\mathcal{I}_d(\varphi) := \mathcal{C}_d(\varphi)\mathcal{C}_d(\varphi+1) + \mathcal{S}_d(\varphi)\mathcal{S}_d(\varphi+1)$:
+For any quarter-period $Q\in\mathbb{Z}$, intra-quadrant phase $m\in\mathbb{Z}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, and integration horizon $L\in\mathbb{N}$, the piecewise-linear rotator $(\mathcal{C}_Q,\mathcal{S}_Q)$ on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Multi-turn periodicity and Euler's identity $e^{i\pi}+1=0$:}
+  $\mathcal{E}_d(\varphi + 4Qk_{\mathrm{turns}}) = \mathcal{E}_d(\varphi)$, the $L^1$ norm is identically constant $|\mathcal{C}_Q(\varphi)| + |\mathcal{S}_Q(\varphi)| \equiv Q$, the quarter-turn shift $+Q$ acts as exact multiplication by the imaginary unit~$i$: $\mathcal{E}_Q(\varphi + Q) = (-\mathcal{S}_Q(\varphi),\,+\mathcal{C}_Q(\varphi))$, and the half-turn shift $+2Q$ satisfies $\mathcal{E}_Q(\varphi + 2Q) + \mathcal{E}_Q(\varphi) = (0,0)$ for all $\varphi\in\mathbb{Z}$.
+\item \textbf{Universal constant difference Wronskian and pointwise-constant integral extraction:}
+  across all four quadrants and all four corner vertices of the $L^1$ diamond, the one-step difference Wronskian is identically equal to the constant $Q$:
   \begin{equation}
-    \label{eq:brahmagupta-step}
-    X_d(\varphi)Y_d(\varphi+1) - Y_d(\varphi)X_d(\varphi+1) \;=\; \|e\|_2^2\,Q_\square(d)\,\mathcal{I}_d(\varphi),\qquad
-    X_d(\varphi)X_d(\varphi+1) + Y_d(\varphi)Y_d(\varphi+1) \;=\; \mathcal{I}_d(\varphi)^2 - Q_\square(d)^2.
+    \label{eq:constant-wronskian-all-512}
+    \mathcal{W}_Q(\varphi) \;=\; (Q-m)(m+1) - m(Q-m-1) \;\equiv\; Q
+    \qquad (\forall Q,m\in\mathbb{Z}).
   \end{equation}
-\item \textbf{Fundamental Theorem of Discrete Calculus (Newton--Leibniz):}
-  the piecewise-quadratic antiderivatives $\widehat{\Phi}_{\mathcal{C}}(d,\Phi) := \sum_{\varphi=0}^{\Phi-1}\mathcal{C}_d(\varphi)$ and $\widehat{\Phi}_{\mathcal{S}}(d,\Phi) := \sum_{\varphi=0}^{\Phi-1}\mathcal{S}_d(\varphi)$ satisfy $\Delta\widehat{\Phi}_{\mathcal{C}}(d,\varphi) = \mathcal{C}_d(\varphi)$, $\Delta\widehat{\Phi}_{\mathcal{S}}(d,\varphi) = \mathcal{S}_d(\varphi)$, vanish over the full period $N_{\mathrm{ring}}(d)$, and yield the exact half-wave area $\widehat{\Phi}_{\mathcal{S}}(d,\Phi_{\mathrm{half}}(d)) = Q_\square(d)^2 = 16,384$.
+  Consequently, for any pointwise-constant invariant $g(\varphi)\equiv c_{\mathrm{inv}}$ (including $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q$ and $\mathcal{W}_Q(\varphi)\equiv Q$), the constant factors directly out of the discrete integral over any horizon $L\in\mathbb{N}$:
+  \[
+    \sum_{\varphi=0}^{L-1} g(\varphi) \;=\; c_{\mathrm{inv}}\sum_{\varphi=0}^{L-1} 1 \;=\; L\cdot c_{\mathrm{inv}},
+    \qquad
+    \sum_{\varphi=0}^{L-1} c_{\mathrm{sq}}\,f(\varphi) \;=\; c_{\mathrm{sq}}\sum_{\varphi=0}^{L-1} f(\varphi).
+  \]
 \end{enumerate}
 \end{theorem}
 
-\begin{proof}
-In the first quadrant $\varphi\in[0,Q_\square(d))$, $\mathcal{C}_d(\varphi)=Q_\square(d)-\varphi$ and $\mathcal{S}_d(\varphi)=\varphi$, so
-\[
-  \mathcal{W}_d(\varphi) = (Q_\square(d)-\varphi)(\varphi+1) - \varphi(Q_\square(d)-\varphi-1) = Q_\square(d),
-\]
-as the quadratic terms $-\varphi^2+\varphi^2$ and linear terms cancel identically. By determinant invariance under the quarter-turn rotation $(x,y)\mapsto(-y,x)$, $\mathcal{W}_d(\varphi)\equiv Q_\square(d)$ holds across all four quadrants. Dividing by $\mathcal{C}_d(\varphi)\mathcal{C}_d(\varphi+1)$ yields the exact discrete tangent difference $\Delta\mathcal{T}_d(\varphi) = Q_\square(d)/(\mathcal{C}_d(\varphi)\mathcal{C}_d(\varphi+1))$, turning rational trigonometric sums into telescoping Newton--Leibniz sums. The complete formal proof is checked by kernel reduction (\texttt{rfl}) in Lean~4.
+\begin{theorem}[Universal Root-Free Euclidean Weierstrass Lift and Brahmagupta Step Identities]
+\label{thm:main-1b}
+For all integer rotator projections $\mathcal{C}_0,\mathcal{S}_0,\mathcal{C}_1,\mathcal{S}_1\in\mathbb{Z}$, the rational Weierstrass coordinates~\eqref{eq:weierstrass-lift} satisfy the exact Euclidean circle identity $X^2 + Y^2 = (\mathcal{C}_0^2-\mathcal{S}_0^2)^2 + (2\mathcal{C}_0\mathcal{S}_0)^2 = (\mathcal{C}_0^2+\mathcal{S}_0^2)^2 = R^2$ and the universal Brahmagupta--Weierstrass step decomposition with inner product $\mathcal{I} = \mathcal{C}_0\mathcal{C}_1 + \mathcal{S}_0\mathcal{S}_1$ and Wronskian $\mathcal{W} = \mathcal{C}_0\mathcal{S}_1 - \mathcal{S}_0\mathcal{C}_1$:
+\begin{equation}
+  \label{eq:brahmagupta-step}
+  R_0 R_1 - \mathcal{I}^2 \;=\; \mathcal{W}^2,\qquad
+  X_0 Y_1 - Y_0 X_1 \;=\; 2\,\mathcal{W}\,\mathcal{I},\qquad
+  X_0 X_1 + Y_0 Y_1 \;=\; \mathcal{I}^2 - \mathcal{W}^2.
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem of Discrete Calculus and Universal Multiplierless Arithmetic]
+\label{thm:main-1c}
+For every dimension $d\in\mathbb{N}$, upper limit $L\in\mathbb{N}$, turn count $k_{\mathrm{turns}}\in\mathbb{Z}$, function $f\colon\mathbb{Z}\to\mathbb{Z}$, and integers $Q,x,y\in\mathbb{Z}$ (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}):
+\begin{equation}
+  \label{eq:newton-leibniz-universal}
+  \sum_{\varphi=0}^{L} f(\varphi) - \sum_{\varphi=0}^{L-1} f(\varphi) \;=\; f(L),\qquad
+  \Delta\widehat{\Phi}_{\mathcal{C}}(d,L) \;=\; \mathcal{C}_d(L),\qquad
+  \Delta\widehat{\Phi}_{\mathcal{S}}(d,L) \;=\; \mathcal{S}_d(L),
+\end{equation}
+with full-turn vanishing $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{C}}(3,512) = k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,512) = 0$, multi-turn half-wave area $k_{\mathrm{turns}}\widehat{\Phi}_{\mathcal{S}}(3,256) = k_{\mathrm{turns}}Q_\square(3)^2 = 16,384\,k_{\mathrm{turns}}$, and universal quarter-square multiplierless multiplication $(x+y)^2 - (x-y)^2 = 4xy$.
+\end{theorem}
+
+\begin{proof}[Proof of Theorems~\ref{thm:main-1}--\ref{thm:main-1c}]
+In~\eqref{eq:constant-wronskian-all-512}, expanding $(Q-m)(m+1) - m(Q-m-1) = (Qm + Q - m^2 - m) - (Qm - m^2 - m) = Q$ cancels all quadratic and linear terms in $m$ for arbitrary $Q,m\in\mathbb{Z}$; at the diamond corner $m=Q$, $0\cdot(Q-1) - Q\cdot(-1) = Q$. Inducting on $L\in\mathbb{N}$ gives $\sum_{\varphi=0}^{L-1} g(\varphi) = L\,c_{\mathrm{inv}}$ whenever $g(\varphi)\equiv c_{\mathrm{inv}}$. The polynomial identities of Theorems~\ref{thm:main-1b}--\ref{thm:main-1c} hold universally over $\mathbb{Z}$ (\texttt{omega} in Lean~4).
 \end{proof}
 
 \section{Native Non-Elementary Basis and Closed-Form Evaluation of Fresnel, Jacobi, Dirichlet, Parseval, and Bessel Integrals}
@@ -191,40 +195,36 @@ Define the five canonical ring integrals:
   \mathcal{J}_{0,d}(k) &:= \sum_{\varphi=0}^{N_{\mathrm{ring}}(d)-1}\mathcal{C}_d\bigl(k\,\mathcal{S}_d(\varphi)\bigr). \label{eq:def-bessel}
 \end{align}
 
-\begin{theorem}[Closed-Form Fresnel, Jacobi Elliptic, Dirichlet, Parseval, and Bessel Integrals]
+\begin{theorem}[Universal Lemniscate Jacobi Elliptic Triad Invariants and Parametric Multi-Turn Elliptic Integrals]
 \label{thm:main-2}
-For $d=3$, the following exact integral evaluations hold on $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Lemniscate Jacobi elliptic triad and elliptic integrals:}
-  across all $N_{\mathrm{ring}}(d)$ points, $|\mathrm{sn}_d(\varphi)|+|\mathrm{cn}_d(\varphi)|=Q_\square(d)$ and $2\,\mathrm{dn}_d(\varphi)+|\mathrm{sn}_d(\varphi)|=\Phi_{\mathrm{half}}(d)$, with complete elliptic integral $\mathcal{I}_{\mathrm{ell}}(d;\|e\|_2^2,d) = \Phi_{\mathrm{half}}(d)\,Q_\square(d)\,d_{\mathrm{out}}(E)(d) = 163,840$ and first-quadrant incomplete integral $Q_\square(d)^2 = 16,384$.
-\item \textbf{Exact stationary-phase evaluation of the Fresnel diffraction integrals:}
-  both complete Fresnel integrals coincide and equal
-  \begin{equation}
-    \label{eq:fresnel-2048}
-    \mathcal{C}_{\mathrm{Fresnel}}(d) \;=\; \mathcal{S}_{\mathrm{Fresnel}}(d) \;=\; d_{\mathrm{in}}(\square)\cdot N_{\mathrm{ring}}(d) \;=\; 2048,
-  \end{equation}
-  concentrated at the stationary-phase bisector $\psi = K_P(d) = 64$ ($\pi/4$), where $\mathcal{C}_d(K_P(d)) = \mathcal{S}_d(K_P(d)) = K_P(d)$.
+For all $Q,m,k_{\mathrm{turns}},a,b\in\mathbb{Z}$ and any integration horizon $L\in\mathbb{N}$, the Jacobi elliptic triad on $\mathbb{Z}_{4Q}$ satisfies (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+\[
+  |\mathrm{sn}_Q(\varphi)| + |\mathrm{cn}_Q(\varphi)| \;=\; m + (Q-m) \;\equiv\; Q,\qquad
+  2\,\mathrm{dn}_Q(\varphi) + |\mathrm{sn}_Q(\varphi)| \;=\; (2Q-m) + m \;\equiv\; 2Q,
+\]
+so factoring the pointwise-constant invariants out of the integral yields $\sum_{\varphi=0}^{L-1}(|\mathrm{sn}_Q|+|\mathrm{cn}_Q|) = L Q$ and $\sum_{\varphi=0}^{L-1}(2\,\mathrm{dn}_Q+|\mathrm{sn}_Q|) = 2 L Q$, while for $d=3$ ($Q_\square(3)=128$) and any linear weights $a,b\in\mathbb{Z}$:
+\begin{equation}
+  \label{eq:parametric-elliptic}
+  k_{\mathrm{turns}}\,\mathcal{I}_{\mathrm{ell}}(3;\,a,b) \;=\; 32,768\,k_{\mathrm{turns}}(a+b),\qquad
+  \sum_{\varphi=0}^{127}\bigl(a\,\mathcal{C}_3(\varphi) + b\,\mathcal{S}_3(\varphi)\bigr) \;=\; 8256\,a + 8128\,b.
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[Closed-Form Fresnel Diffraction, Dirichlet, Parseval, and Bessel Integrals]
+\label{thm:main-2b}
+For $d=3$ and any amplitude factor $c_{\mathrm{sq}}\in\mathbb{Z}$ and turn count $k_{\mathrm{turns}}\in\mathbb{Z}$ (\texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Fresnel diffraction integrals:}
+  $\sum_{\varphi=0}^{511} c_{\mathrm{sq}}\mathcal{C}_3(\varphi^2) = \sum_{\varphi=0}^{511} c_{\mathrm{sq}}\mathcal{S}_3(\varphi^2) = 2048\,c_{\mathrm{sq}}$, concentrated at the stationary-phase bisector $\psi = K_P(3) = 64$.
 \item \textbf{Dirichlet sine integral and Parseval energy integral:}
-  \[
-    \mathrm{Si}_d\bigl(Q_\square(d)\bigr) = \mathrm{Si}_d\bigl(\Phi_{\mathrm{half}}(d)\bigr) = Q_\square(d) = 128,
-  \]
-  \[
-    |\square(d)|\cdot\mathcal{I}_{\mathrm{Parseval}}(d) \;=\; N_{\mathrm{ring}}(d)\,\bigl(\|e\|_2^2\,Q_\square(d)^2 + 1\bigr)
-    \quad\Longrightarrow\quad
-    \mathcal{I}_{\mathrm{Parseval}}(3) = \frac{512\times 32,769}{6} = 2,796,288,
-  \]
-  where $2\cdot 128^2+1 = 32,769 = 3\times 10,923$ is divisible by $d=3$.
-\item \textbf{Discrete Bessel integral $\mathcal{J}_{0,d}(k)$ and its exact root:}
-  \[
-    \mathcal{J}_{0,d}(0) = N_{\mathrm{ring}}(d)\,Q_\square(d) = 65,536,\qquad
-    \mathcal{J}_{0,d}(1) = \Phi_{\mathrm{half}}(d)\,Q_\square(d) = 32,768,\qquad
-    \mathcal{J}_{0,d}\bigl(d_{\mathrm{in}}(\square)\bigr) = \mathcal{J}_{0,3}(4) = 0.
-  \]
+  $\mathrm{Si}_3(128) = \mathrm{Si}_3(256) = 128$, and $6\,k_{\mathrm{turns}}\mathcal{I}_{\mathrm{Parseval}}(3) = k_{\mathrm{turns}}N_{\mathrm{ring}}(3)(2Q_\square(3)^2+1) = 16,777,728\,k_{\mathrm{turns}}$ ($\mathcal{I}_{\mathrm{Parseval}}(3) = 2,796,288$).
+\item \textbf{Discrete Bessel integral and its exact root:}
+  $\mathcal{J}_{0,3}(0) = 65,536$, $\mathcal{J}_{0,3}(1) = 32,768$, and $\mathcal{J}_{0,3}(d_{\mathrm{in}}(\square)) = \mathcal{J}_{0,3}(4) = 0$.
 \end{enumerate}
 \end{theorem}
 
-\begin{proof}
-Partition $\varphi\in\{0,\dots,511\}$ by $2$-adic valuation: for the $256$ odd $\varphi=2k+1$, the $128$ values $\varphi=2(2k+1)$, and the $64$ values $\varphi=4(2k+1)$, the quadratic images $\varphi^2\bmod 512$ are invariant under the half-period shift $+256$ and cancel to zero by Euler's identity $\mathcal{E}_3(\psi+256)=-\mathcal{E}_3(\psi)$; for the $32$ multiples $\varphi=16k$, $16$ land at $\psi=0$ ($+128$) and $16$ at $\psi=256$ ($-128$), summing to zero. Only the $32$ elements $\varphi=8(2k+1)$ survive, and for every one of them $(2k+1)^2\equiv 1\pmod 8$ implies $\varphi^2\equiv 64 = K_P(3)\pmod{512}$, giving $32\times 64 = 2048$.
+\begin{proof}[Proof of Theorems~\ref{thm:main-2}--\ref{thm:main-2b}]
+In Theorem~\ref{thm:main-2}, $m+(Q-m)\equiv Q$ and $(2Q-m)+m\equiv 2Q$ are pointwise constants in $m$, so Theorem~\ref{thm:main-1} extracts them out of $\sum_{\varphi=0}^{L-1}$. For Theorem~\ref{thm:main-2b}(i), partitioning $\varphi\in\{0,\dots,511\}$ by $2$-adic valuation cancels all cosets via Euler's identity $\mathcal{E}_3(\psi+256)=-\mathcal{E}_3(\psi)$ except the $32$ elements $\varphi=8(2k+1)$, which satisfy $\varphi^2\equiv 64\pmod{512}$ and yield $32\times 64 = 2048$.
 \end{proof}
 
 \section{Emergence of the Continuum Circle, \texorpdfstring{$\pi$}{pi}, and the Riemann Integral from 512-gon Rectification and the Archimedes Equizonal Partition of the Cuboctahedron}
@@ -236,40 +236,43 @@ For any 3D function $F\colon\mathbb{Z}^3\to\mathbb{Z}$, define the natural cente
   \widehat{\mathcal{I}}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0,0,0) \;+\; \sum_{e\in O_2(d)} F(e_x,e_y,e_z).
 \end{equation}
 
-\begin{theorem}[Geometric Derivation of the Continuum Riemann Integral and Simpson's Weights $(1,4,1)/6$ from the Archimedes Equizonal Partition of the Cuboctahedron]
+\begin{theorem}[Archimedes Equizonal Partition and Universal Functional 3D Cubature on the Cuboctahedron]
 \label{thm:main-3}
-For $d=3$, the following relations hold on the cuboctahedral shell $O_2(d)$ and phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Archimedes equizonal partition of $O_2(d)$:}
-  slicing the $12$ vertices of $O_2(d)=\mathrm{cubicOrbit3D}(d-1)$ along any coordinate axis $e_x\in\{-1,0,+1\}$ partitions the shell into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each:
-  \[
-    \mathrm{cuboctLayerCount}(d,-1) = \mathrm{cuboctLayerCount}(d,0) = \mathrm{cuboctLayerCount}(d,+1) = d_{\mathrm{in}}(\square) = 4.
-  \]
-  Combining the equatorial zone $e_x=0$ ($4$ vertices) with the central node weight $|V_{O_2}(d)|=12$ in~\eqref{eq:cuboct-3d-integrator} by direct addition 4 + 12 = 16 assembles the slice weights $(-1:0:+1)$ into $(4,\,16,\,4) = 4\times(1,4,1)$ with total weight $\|e\|_2^2\,|V_{O_2}(d)| = d_{\mathrm{in}}(\square)\,|\square(d)| = 24 = 4\times 6$.
-\item \textbf{Exact agreement with the 1D and 3D continuum Riemann integral $\iiint_{[-1,1]^d} F(x,y,z)\,\mathrm{d}V$:}
-  for all degrees $0\le p\le d$ and 3D quadratic/cubic forms, the cuboctahedron operator~\eqref{eq:cuboct-3d-integrator} reproduces the exact continuum integral:
-  \[
-    \frac{1}{\|e\|_2^2\,|V_{O_2}(d)|}\,\widehat{\mathcal{I}}_{O_2(d)}(x^p) \;=\; \frac{1}{2}\int_{-1}^{+1} x^p\,\mathrm{d}x \quad (0\le p\le 3),
-    \qquad
-    \frac{1}{\|e\|_2^2\,|V_{O_2}(d)|}\,\widehat{\mathcal{I}}_{O_2(d)}(x^2+y^2+z^2) \;=\; \frac{1}{2^3}\iiint_{[-1,1]^3}(x^2+y^2+z^2)\,\mathrm{d}V = 1.
-  \]
-\item \textbf{Remainder-free Pochhammer falling-factorial integration and $512$-gon radius bound:}
-  for falling factorials $m^{\underline{k}} = m(m-1)\cdots(m-k+1)$, $d_{\mathrm{in}}(\square)\sum_{m=0}^{|V_{O_2}(d)|} m^{\underline{d}} = (|V_{O_2}(d)|+1)^{\underline{d_{\mathrm{in}}(\square)}}$, the Weierstrass radius satisfies $\|e\|_2^2\,R_d(\varphi) \ge Q_\square(d)^2$ at all $512$ points, and the $512$-gon perimeter defect denominator equals $|\square(d)|\,N_{\mathrm{ring}}(d)^2 = 1,572,864$.
-\item \textbf{$\pi(n)$ as a monotone rational function of polygon side count $n$, the Wronskian-cube identity, and calculator-free rational trigonometry:}
-  on the Weierstrass $n$-gon with step $s = N_{\mathrm{ring}}(d)/n$, the inscribed and circumscribed rational estimators $\pi_{\mathrm{in}}(n)$ and $\pi_{\mathrm{out}}(n)$ obey the exact \emph{Wronskian-cube bracket identity}
+For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficients $c_0,c_x,c_y,c_z,c_{xy},c_{xz},c_{yz}\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Archimedes equizonal partition into Simpson weights $(4,16,4)=4\times(1,4,1)$:}
+  slicing $O_2(3)$ along $e_x\in\{-1,0,+1\}$ partitions the $12$ vertices into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each; adding the origin weight $|V_{O_2}(3)|=12$ to the equatorial zone $e_x=0$ yields $(4,16,4)$ with total weight $24$.
+\item \textbf{Universal functional additivity, odd-function annihilation, and unified even quadratic/quartic cubature:}
+  for all functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$ of arbitrary degree,
   \begin{equation}
-    \label{eq:wronskian-cube-pi-gap}
-    \pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) \;=\; \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)\,R_d(js)\,R_d((j+1)s)} \;>\; 0,
+    \label{eq:functional-odd-annihilation}
+    \widehat{\mathcal{I}}_{O_2(3)}(F+G) = \widehat{\mathcal{I}}_{O_2(3)}(F) + \widehat{\mathcal{I}}_{O_2(3)}(G),\quad
+    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(\mathbf{e}) - F(-\mathbf{e})\bigr) = 0,\quad
+    \widehat{\mathcal{I}}_{O_2(3)}\bigl(F(e_x,e_y,e_z) - F(-e_x,e_y,e_z)\bigr) = 0,
   \end{equation}
-  so under every polygon doubling $n\mapsto 2n$ the bracket width contracts by $2^d/\|e\|_2^2 = d_{\mathrm{in}}(\square) = 4$, while the Verlet-parabola rational sine operator $\sin_{\mathrm{rat}}(d;\,p,q) = \frac{d_{\mathrm{in}}(\square)\,p(\|e\|_2^2 q - p)}{d_{\mathrm{out}}(E)(d)\,q^2 - p(\|e\|_2^2 q - p)}$ at $p/q\in\{1/d^2,\,1/d,\,1/\|e\|_2^2,\,\|e\|_2^2/d,\,1\}$ ($10^\circ,30^\circ,45^\circ,60^\circ,90^\circ$) returns $\frac{17}{97},\,\frac{1}{2},\,\frac{12}{17},\,\frac{32}{37},\,1$.
-\item \textbf{Exact $O(|\mathbf{k}|^2)$ spherical isotropy, the $O(|\mathbf{k}|^4)$ fourth-moment anisotropy law, and the root-free 3D Euler-angle rotator $(\varphi_1,\varphi_2,\varphi_3)$ on the cuboctahedron:}
-  for any wavevector $\mathbf{k}=(k_1,k_2,k_3)$,
+  and on every even quadratic/quartic polynomial ($e_i^4 = e_i^2$ on $O_2(3)$):
   \begin{equation}
-    \label{eq:cuboct-second-fourth-moments}
-    \sum_{e\in O_2(d)} (\mathbf{k}\cdot e)^2 \;=\; 8\,|\mathbf{k}|^2,\qquad
-    \sum_{e\in O_2(d)} (\mathbf{k}\cdot e)^4 \;=\; 12\,|\mathbf{k}|^4 - 4\sum_{i=1}^3 k_i^4,
+    \label{eq:unified-even-cubature}
+    \widehat{\mathcal{I}}_{O_2(3)}\!\bigl(c_0 + c_x e_x^2 + c_y e_y^2 + c_z e_z^2 + c_{xy} e_x^2 e_y^2 + c_{xz} e_x^2 e_z^2 + c_{yz} e_y^2 e_z^2\bigr)
+    \;=\; 24\,c_0 + 8(c_x+c_y+c_z) + 4(c_{xy}+c_{xz}+c_{yz}),
   \end{equation}
-  while composing three planar Weierstrass Pythagorean rotations $\mathcal{R}_{\mathrm{Euler}}(\varphi_1,\varphi_2,\varphi_3)$ across Euler angles $(\varphi_1,\varphi_2,\varphi_3)\in\mathbb{Z}_{N_{\mathrm{ring}}(d)}^3$ preserves the spherical norm $\|\mathcal{R}_{\mathrm{Euler}}(\varphi_1,\varphi_2,\varphi_3)\mathbf{v}\|_2^2 = \bigl(R_d(\varphi_1)R_d(\varphi_2)R_d(\varphi_3)\bigr)^2\|\mathbf{v}\|_2^2$ and tilts $(1,1,0)$ at $\varphi_2 = K_P(d)=64$ onto $(0,1,1)$.
+  simultaneously reproducing the exact 3D continuum Riemann integral $3\iiint_{[-1,1]^3} P\,\mathrm{d}V = 24c_0 + 8(c_x+c_y+c_z)$ for every cubic polynomial $P$, the $O(|\mathbf{k}|^2)$ spherical isotropy $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^2 = 8|\mathbf{k}|^2$, and the $O(|\mathbf{k}|^4)$ fourth-moment law $\sum_{e\in O_2(3)}(\mathbf{k}\cdot e)^4 = 8\sum k_i^4 + 24\sum_{i<j}k_i^2 k_j^2 = 12|\mathbf{k}|^4 - 4\sum k_i^4$.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Wronskian-Cube Rational $\pi(n)$ Brackets, Universal Verlet-Parabola Sine Defect Law, and 3D Euler Norm-Scaling]
+\label{thm:main-3b}
+For all $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Parallelogram radius bound and rational $\pi(n)$ brackets:}
+  $2 R_Q(\varphi) = Q^2 + (|\mathcal{C}_Q(\varphi)|-|\mathcal{S}_Q(\varphi)|)^2 \ge Q^2$; on the Weierstrass $n$-gon ($s=N_{\mathrm{ring}}(3)/n$), the inscribed and circumscribed estimators satisfy $\pi_{\mathrm{out}}(n) - \pi_{\mathrm{in}}(n) = \sum_{j=0}^{n/2-1}\frac{W_s(js)^3}{I_s(js)R_3(js)R_3((j+1)s)} > 0$ with strict nested monotonicity $\pi_{\mathrm{in}}(8)<\pi_{\mathrm{in}}(16)<\pi_{\mathrm{in}}(32)<\pi_{\mathrm{out}}(32)<\pi_{\mathrm{out}}(16)<\pi_{\mathrm{out}}(8)$ and Huygens--Snellius value $\pi_3(16)=142/45$.
+\item \textbf{Universal Verlet-parabola rational sine defect law and 3D Euler norm-scaling:}
+  for the Verlet parabola $P(p,q)=2pq-p^2$, the rational sine numerator $\mathrm{Num}(p,q)=4P(p,q)$ and denominator $\mathrm{Denom}(p,q)=5q^2-P(p,q)$ obey the universal identity
+  \begin{equation}
+    \label{eq:verlet-sine-defect}
+    \mathrm{Denom}(p,q) - \mathrm{Num}(p,q) \;=\; \bigl(5q^2 - (2pq-p^2)\bigr) - 4(2pq-p^2) \;=\; 5(q-p)^2 \;\ge\; 0,
+  \end{equation}
+  while every planar Weierstrass rotation across the $3$ cuboctahedron coordinate planes scales squared Euclidean norms identically via $(Xx-Yy)^2 + (Yx+Xy)^2 = (X^2+Y^2)(x^2+y^2)$.
 \end{enumerate}
 \end{theorem}
 
