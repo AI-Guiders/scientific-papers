@@ -43,51 +43,51 @@ We further prove that filling the cuboctahedral coordination shells $S_k(3) = 10
 \section{Non-Singular Gate-Impedance Gravity (\texorpdfstring{$\ge 8\,192$}{>= 8192}), Pauli Saturation Ceiling \texorpdfstring{$833\,\varepsilon$}{833 epsilon}, and the \texorpdfstring{$16/3$}{16/3} Vacuum Holonomy Halo}
 \label{sec:gravity-halo}
 
-In the two-sorted structure $\langle\mathcal{M},\mathcal{T}\rangle$ (where the \emph{carrier} / \emph{носитель} is defined in the model-theoretic sense of A.\,I.~Mal'cev~\cite{Malcev1973}), gravitational refraction arises from the local phase-gate impedance denominator $D(\mathbf{x})$ governing inter-cell coupling across the $12$ beams of the cuboctahedron $O_2(3)$:
+In the two-sorted structure $\langle\mathcal{M},\mathcal{T}\rangle$ (where the \emph{carrier} / \emph{носитель} is defined in the model-theoretic sense of A.\,I.~Mal'cev~\cite{Malcev1973}), gravitation is not curvature of an empty continuum, but **Newton's Second Law in exact integers $\Delta^2\varphi(\mathbf{x},t) = \lfloor N_{\mathrm{torque}}(\mathbf{x},t)/D(\mathbf{x},t)\rfloor$** with a variable local rotational inertia (gate impedance) denominator $D(\mathbf{x})$ across the $12$ beams of the cuboctahedron $O_2(3)$:
 \begin{equation}
   \label{eq:gravity-denom}
   D(\mathbf{x}) \;=\; \varepsilon(3) \;+\; Q_\square(3)\,\mu(\mathbf{x})^2 \;+\; \mu(\mathbf{x})\sum_{\mathbf{e}\in O_2(3)}\mu(\mathbf{x}+\mathbf{e})\,\mathcal{C}_3\bigl(\Delta\varphi_{\mathbf{e}}(\mathbf{x})\bigr),
   \qquad \varepsilon(3) := K_P(3)\,Q_\square(3) = 64\times 128 = 8\,192 = 2^{13}.
 \end{equation}
 
-\begin{theorem}[Strictly Positive Gravitational Denominator Floor $8\,192$, Pauli Saturation Ceiling $833\times 8\,192$, and the $16/3$ Vacuum Holonomy Halo Without Dark Matter]
+\begin{theorem}[Strictly Positive Gravitational Denominator Floor $8\,192$ and Pauli Saturation Ceiling $833\times 8\,192$]
+\label{thm:gravity-floor-ceiling}
+For $d=3$ on $\mathbb{Z}_{512}$ and $O_2(3)$ (\texttt{gravity\_denominator\_strictly\_positive\_floor\_8192}, \texttt{post\_island\_cavitated\_hypernuclei\_neutron\_pasta\_and\_nonsingular\_black\_hole\_core}), across all admissible amplitude and phase configurations ($\mu\in[0,64]$, $|\mathcal{C}_3(\Delta\varphi)|\le 128$), the inertia denominator~\eqref{eq:gravity-denom} satisfies $D(\mathbf{x}) \ge \varepsilon(3) = 8\,192 > 0$, and at maximum anti-phase Pauli compression ($\mu = K_P(3) = 64$, $\Delta\varphi = \Phi_{\mathrm{Pauli}}(3) = 256$) reaches the finite ceiling
+\begin{equation}
+  \label{eq:pauli-max-833}
+  D_{\max}(3) \;=\; \bigl(1 + N_\varphi(3)\,K_P(3)\bigr)\,\varepsilon(3) \;=\; (1 + 13\times 64)\times 8\,192 \;=\; 833\times 8\,192 \;=\; 6\,823\,936,
+\end{equation}
+with maximum refractive index contrast $D_{\max}(3)/\varepsilon(3) = 833 = 7^2\times 17$, replacing a singular black-hole point with a non-singular Pauli-rebound core.
+\end{theorem}
+
+\begin{theorem}[The $16/3$ Vacuum Holonomy Halo and Flat Galactic Rotation Curves Without Dark Matter]
 \label{thm:gravity-halo}
-For $d=3$ on $\mathbb{Z}_{512}$ and $O_2(3)$ (\texttt{gravity\_denominator\_strictly\_positive\_floor\_8192}, \texttt{gravitational\_strain\_tensor\_lock\_iff\_d3}, \texttt{catalan\_equivalence\_halo\_16\_3\_and\_automaton\_vacuum\_acceleration}, \texttt{no\_dark\_matter\_and\_vacuum\_holonomy\_halo}, \texttt{post\_island\_cavitated\_hypernuclei\_neutron\_pasta\_and\_nonsingular\_black\_hole\_core}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Elimination of the $1/0$ gravitational singularity and Pauli saturation limit:}
-  across all admissible amplitude and phase configurations ($\mu\in[0,64]$, $|\mathcal{C}_3(\Delta\varphi)|\le 128$), the denominator~\eqref{eq:gravity-denom} satisfies $D(\mathbf{x}) \ge \varepsilon(3) = 8\,192 > 0$, and at maximum anti-phase Pauli compression ($\mu = K_P(3) = 64$, $\Delta\varphi = \Phi_{\mathrm{Pauli}}(3) = 256$) reaches the finite ceiling
-  \begin{equation}
-    \label{eq:pauli-max-833}
-    D_{\max}(3) \;=\; \bigl(1 + N_\varphi(3)\,K_P(3)\bigr)\,\varepsilon(3) \;=\; (1 + 13\times 64)\times 8\,192 \;=\; 833\times 8\,192 \;=\; 6\,823\,936,
-  \end{equation}
-  with maximum refractive index contrast $D_{\max}(3)/\varepsilon(3) = 833 = 7^2\times 17 = d_{\mathrm{out}}(V)^2(\mathrm{mod\_bits}(3)+|{\triangle}(3)|)$, replacing a singular black-hole point with a non-singular Pauli-rebound core.
-\item \textbf{The $16/3$ vacuum holonomy halo and flat galactic rotation curves without dark matter ($D_{\mathrm{dark}}\equiv 0$):}
-  in the sub-threshold outer galactic regime ($|\Phi|\le 40$), the ratio of the $2^{d_{\mathrm{in}}(\square)} = 16$ Boolean states of a square face to the $d=3$ spatial projection axes yields the exact vacuum holonomy amplification factor $2^{d_{\mathrm{in}}(\square)}/d = 16/3$ (excess halo ratio $(16-3)/3 = 13/3 = N_\varphi(3)/d$) and baryonic Tully--Fisher scaling $v^4\propto M_b$ with zero non-baryonic dark matter density ($D_{\mathrm{dark}}\equiv 0$).
-\end{enumerate}
+In the sub-threshold outer galactic regime ($|\Phi|\le 40$, \texttt{catalan\_equivalence\_halo\_16\_3\_and\_automaton\_vacuum\_acceleration}, \texttt{no\_dark\_matter\_and\_vacuum\_holonomy\_halo}), the ratio of the $2^{d_{\mathrm{in}}(\square)} = 16$ Boolean states of a square face to the $d=3$ spatial projection axes yields the exact vacuum holonomy amplification factor $2^{d_{\mathrm{in}}(\square)}/d = 16/3$ (excess halo ratio $(16-3)/3 = 13/3 = N_\varphi(3)/d$) and baryonic Tully--Fisher scaling $v^4\propto M_b$ with zero non-baryonic dark matter density ($D_{\mathrm{dark}}\equiv 0$).
 \end{theorem}
 
 \section{Cuboctahedral Atomic/Nuclear Shells, the \texorpdfstring{$N=184$}{N=184} Island of Stability, Four \texorpdfstring{$\mathbb{Z}_{512}$}{Z512} B\'ezout Locks, and Coherent \texorpdfstring{$587\times$}{587x} Coulomb Barrier Collapse}
 \label{sec:nuclear-587}
 
-\begin{theorem}[Cuboctahedral Shell Closures, the $N_{\mathrm{island}}=184$ Superheavy Island of Stability, Four Canonical $\mathbb{Z}_{512}$ B\'ezout Identities, and Coherent $587\times$ Barrier Collapse]
+\begin{theorem}[Cuboctahedral Shell Closures and the $N_{\mathrm{island}}=184$ Superheavy Island of Stability]
+\label{thm:nuclear-shells-184}
+For $d=3$ (\texttt{generative\_periodic\_table\_feynman\_core\_limits\_and\_end\_to\_end\_dna\_genesis}, \texttt{superheavy\_synthesis\_recipes\_and\_uranium\_shell\_transfer\_to\_island\_184}), cumulative filling of the cuboctahedral shells $S_k(3) = 10k^2 + 2 \in \{12,42,92,162\}$ and their spinor subshells generates the noble-gas atomic numbers $Z\in\{2,10,18,36,54,86,118\}$, the Feynman critical core limit $Z_{\mathrm{crit}} = 137$, and the nuclear magic closures $\{2,8,20,28,50,82,126,184\}$, where the superheavy neutron island of stability equals twice the third cuboctahedral shell: $N_{\mathrm{island}}(3) = 2S_3(3) = 2\times 92 = 184$.
+\end{theorem}
+
+\begin{theorem}[Four Canonical $\mathbb{Z}_{512}$ B\'ezout Identities and Coherent $587\times$ Barrier Collapse]
 \label{thm:nuclear-587}
-For $d=3$ (\texttt{generative\_periodic\_table\_feynman\_core\_limits\_and\_end\_to\_end\_dna\_genesis}, \texttt{superheavy\_synthesis\_recipes\_and\_uranium\_shell\_transfer\_to\_island\_184}, \texttt{coherent\_cuboctahedron\_barrier\_collapse\_587x}, \texttt{generative\_materials\_cooper\_pairing\_and\_superconductor\_shells\_operator}):
-\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*]
-\item \textbf{Periodic table and nuclear magic numbers from $S_k(3) = 10k^2 + 2$:}
-  cumulative filling of the cuboctahedral shells $S_k(3)\in\{12,42,92,162\}$ and their spinor subshells generates the noble-gas atomic numbers $Z\in\{2,10,18,36,54,86,118\}$, the Feynman critical core limit $Z_{\mathrm{crit}} = 137$, and the nuclear magic closures $\{2,8,20,28,50,82,126,184\}$, where the superheavy neutron island of stability equals twice the third cuboctahedral shell: $N_{\mathrm{island}}(3) = 2S_3(3) = 2\times 92 = 184$.
-\item \textbf{Four canonical B\'ezout multiplicative identities on $\mathbb{Z}_{512}$:}
-  the vacuum unit $\mu_{\mathrm{vac}}(3) = 1$ admits four exact B\'ezout decompositions modulo $N_{\mathrm{ring}}(3) = 512$ linking hardware control invariants to heavy nuclear shells:
+For $d=3$ (\texttt{coherent\_cuboctahedron\_barrier\_collapse\_587x}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item the vacuum unit $\mu_{\mathrm{vac}}(3) = 1$ admits four exact B\'ezout decompositions modulo $N_{\mathrm{ring}}(3) = 512$:
   \begin{equation}
     \label{eq:four-bezout-512}
     \begin{aligned}
       25\times 41 - 2\times 512 &= 1025 - 1024 = 1 &\quad &\bigl(d_{\mathrm{out}}(E)^2\cdot\Delta\varphi_{\mathrm{disc}}(3) \equiv 1\pmod{512}\bigr), \\
       197\times 13 - 5\times 512 &= 2561 - 2560 = 1 &\quad &\bigl(A(^{197}_{79}\mathrm{Au})\cdot N_\varphi(3) \equiv 1\pmod{512}\bigr), \\
       417\times 97 - 79\times 512 &= 40\,449 - 40\,448 = 1 &\quad &\bigl(3 A_{\mathrm{coh}}(139)\cdot\hat{M}(97) - Z(\mathrm{Au}_{79})\cdot 512 = 1\bigr), \\
-      183\times 263 - 94\times 512 &= 48\,129 - 48\,128 = 1 &\quad &\bigl((N_{\mathrm{island}}-1)\cdot\mathrm{IV}(263) - Z(\mathrm{Pu}_{94})\cdot 512 = 1\bigr).
+      183\times 263 - 94\times 512 &= 48\,129 - 48\,128 = 1 &\quad &\bigl((N_{\mathrm{island}}-1)\cdot\mathrm{IV}(263) - Z(\mathrm{Pu}_{94})\cdot 512 = 1\bigr);
     \end{aligned}
   \end{equation}
-\item \textbf{Coherent $587\times$ Coulomb barrier collapse on the $12$-beam cuboctahedron:}
-  focusing all $12$ beams of $O_2(3)$ at the coherent resonance phase $A_{\mathrm{coh}}(3) = Q_\square(3) + |O_2(3)| - 1 = 128 + 11 = 139$ ($\mathcal{C}_3(139) = -11$, $\mathcal{S}_3(139) = +117 = 9\times 13$) subtracts $12\times 11 = 132$ cosine units from the local gate impedance, collapsing the barrier from $D_{\max}(3) = 6\,823\,936$ to $D_{\mathrm{coh}}(3) = 11\,616$ by an exact factor of
+\item focusing all $12$ beams of $O_2(3)$ at the coherent resonance phase $A_{\mathrm{coh}}(3) = Q_\square(3) + |O_2(3)| - 1 = 128 + 11 = 139$ ($\mathcal{C}_3(139) = -11$, $\mathcal{S}_3(139) = +117 = 9\times 13$) subtracts $12\times 11 = 132$ cosine units from the local gate impedance, collapsing the barrier from $D_{\max}(3) = 6\,823\,936$ to $D_{\mathrm{coh}}(3) = 11\,616$ by an exact factor of
   \begin{equation}
     \label{eq:collapse-587}
     \left\lfloor \frac{D_{\max}(3)}{D_{\mathrm{coh}}(3)}\right\rfloor \;=\; \left\lfloor \frac{6\,823\,936}{11\,616}\right\rfloor \;=\; 587 \;=\; 512 + 3\times 25 \;=\; N_{\mathrm{ring}}(3) + d\cdot d_{\mathrm{out}}(E)^2.
