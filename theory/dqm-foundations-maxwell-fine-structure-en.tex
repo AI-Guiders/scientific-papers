@@ -183,6 +183,25 @@ Shell closures ($S_k=10k^2+2$, $\mathcal{C}_{13}$) generate the Periodic Table; 
 \end{tabular}
 \end{table}
 
+\begin{theorem}[Scale Cancellation $A = K\cdot h_L$, Integer Voronoi Hausdorff Dimension $D_H = 3$ of the Bulk Carrier, and Sub-Cubic Natural Fractal Cascades $D_H = \ln N_{\mathrm{sub}}/\ln K < 3$]
+\label{thm:scale-cancellation-fractals}
+Under coarse-graining to any coherent macro-floor with edge step $A = K\cdot h_L$ ($K\in\mathbb{N}$, \texttt{scale\_invariance\_of\_holonomy\_and\_gate\_operators}, \texttt{scale\_cancellation\_voronoi\_hausdorff\_and\_fractal\_subcascades}, and \texttt{cross\_floor\_shell\_closure\_isomorphism\_operator}):
+\begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
+\item \textbf{Exact $K^2$ cancellation in Newton's Second Law and action invariance $s_{\mathrm{floor}}(K) = s_0$:}
+  under floor rescaling $(\mu,\Sigma\mu)\mapsto(K\mu,K\Sigma\mu)$ and $(\zeta_r,\zeta_i)\mapsto(K^2\zeta_r,K^2\zeta_i)$, both the torque numerator and the inertia denominator in $\Delta^2\varphi = \lfloor N_{\mathrm{torque}}/D(\mathbf{x})\rfloor$ are homogeneous of degree~$2$ in~$K$ ($N_{\mathrm{torque}}^{(K)}\cdot D^{(1)} \equiv N_{\mathrm{torque}}^{(1)}\cdot D^{(K)}$), while the conjugate momentum step $\Delta p(K) = p_0/K$ preserves the elementary action quantum $s_{\mathrm{floor}}(K) = \Delta p(K)\cdot(K h_L) = s_0 = \hbar/2$ and the 9-bit ring $\mathbb{Z}_{512}$ across all scale floors $K$;
+\item \textbf{Space-filling Voronoi self-similarity of the vacuum carrier ($D_H = d = 3$):}
+  a macro Wigner--Seitz rhombic dodecahedron of edge $A = K\cdot h_L$ contains $N_{\mathrm{pack}}(d,K) = V_{\mathrm{WS}}(K h_L)/dV = K^d$ elementary cells, satisfying exact multiplicative self-similarity $N_{\mathrm{pack}}(d,K_1 K_2) = N_{\mathrm{pack}}(d,K_1)\,N_{\mathrm{pack}}(d,K_2)$ with integer Moran--Hausdorff similarity dimension $D_H^{(\mathrm{bulk})} = \ln(K^3)/\ln K = 3$ and 3D Hausdorff measure $\mathcal{H}^3 = K^3\ell_P^3/\sqrt{2}$, preserving Gauss's law and $1/R^2$ force laws in vacuum;
+\item \textbf{Origin of natural fractals as sub-cubic selection sub-cascades ($1 < N_{\mathrm{sub}} < K^3 \implies 0 < D_H = \ln N_{\mathrm{sub}}/\ln K < 3$):}
+  whenever the local automaton rules (single-tick light cone $A_1$, Heisenberg threshold $\Delta\varphi_{\mathrm{disc}}=41$, Pauli exclusion $\Phi_{\mathrm{Pauli}}=256$, and Channel-2 quotient division) restrict active sub-nodes at scale factor~$K$ to $N_{\mathrm{sub}} < K^3$ (leaving a non-empty excised void complement $K^3 - N_{\mathrm{sub}} > 0$), iterated nesting across $m$ floors yields a porous discrete fractal with $N_{\mathrm{sub}}^m < K^{3m}$ active nodes and fractional Moran--Hausdorff dimension $D_H = \ln N_{\mathrm{sub}}/\ln K < 3$:
+  \begin{itemize}[noitemsep]
+  \item \emph{Channel-2 / 3-SAT Sierpi\'nski--Post octant sponge ($K = 2$):} $N_{\mathrm{sub}} = d_{\mathrm{out}}(V) = 2^3 - 1 = 7 < 8 = 2^3$ ($1$ falsifying vortex octant excised), yielding $D_H = \ln 7/\ln 2 \approx 2.807355$;
+  \item \emph{Cuboctahedral Menger-like causal cluster $\mathcal{C}_{13}$ inside the $3\times 3\times 3$ Moore cube ($K = d = 3$):} single-tick causality retains $N_{\mathrm{sub}} = N_\varphi(3) = 13 < 27 = 3^3$ nodes ($27 - 13 = 14 = Z(\mathrm{Si})$ non-lightlike nodes excised), yielding $D_H = \ln 13/\ln 3 \approx 2.334718$ (and $D_H = \ln 12/\ln 3 \approx 2.261860$ for the surface shell $O_2(3)$);
+  \item \emph{Hierarchical clustering of bound matter on the fine-structure ladder ($K = \lfloor\alpha_{\mathrm{fs}}^{-1}\rfloor = 137$):} coherent shell closures $N_{\mathrm{sub}}\in\{N_\varphi=13,\,S_2=42,\,B_3=147\} \ll 137^3 = 2\,571\,353$ occupy a porous fractal subset ($D_H = \ln N_{\mathrm{sub}}/\ln 137 \in [0.522, 0.999] < 3$);
+  \item \emph{Biological vascular and bronchial branching networks (\texttt{allometryExponentRatioOp}):} 4-fold cuboctahedral square-face branching $k = d_{\mathrm{in}}(\square) = 4$ in $d = 3$ spatial dimensions yields Kleiber's $3/4$ metabolic fractal scaling exponent $(d_{\mathrm{in}}(\square)-\mu_{\mathrm{vac}})/d_{\mathrm{in}}(\square) = 3/4$.
+  \end{itemize}
+\end{enumerate}
+\end{theorem}
+
 \section{Formal Verification in Lean~4}
 All theorems above are formally verified in \texttt{lean/MtCarrier/} (\url{https://github.com/AI-Guiders/discrete-quantum-mechanics} and \url{https://github.com/AI-Guiders/scientific-papers}, \texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
