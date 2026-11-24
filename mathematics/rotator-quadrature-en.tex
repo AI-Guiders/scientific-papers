@@ -34,7 +34,7 @@
 \begin{abstract}
 We construct an exact, pole-free $C^\infty$ projective differential, variational, and integral calculus over the fields $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$ parameterized by a cyclic residue register $\mathbb{Z}_{4Q}$ ($N_{\mathrm{ring}} = 4\,Q_\square = 512$ at $Q_\square = 2^{|\triangle|-1} = 128$ on the three-dimensional cuboctahedral shell $O_2(3)\subset\{-1,0,+1\}^3$ with $|V_{O_2}|=12$ vertices, $|\square|=6$ square faces, and $|\triangle|=8$ triangular faces). In classical analysis, the Weierstrass substitution $t = \tan(\theta/2) = S/C$ suffers from a pole $t\to\infty$ at $\theta=\pi$ ($C=0$), while in $L^1$ ``taxicab trigonometry'' (Krause 1986; Thompson, \texttt{arXiv:1205.3814}) piecewise derivatives break down at the four diamond corners and naive modulo-$4Q$ residue multiplication has zero divisors. We resolve both obstacles simultaneously by keeping the rotator pair $\mathcal{E}_Q(\varphi) = (\mathcal{C}_Q(\varphi),\mathcal{S}_Q(\varphi))$ homogeneous on the closed $L^1$-diamond $|\mathcal{C}_Q(\varphi)|+|\mathcal{S}_Q(\varphi)|\equiv Q\ge 1$ and lifting it via $\pi_{M\to T}(C,S) = (C^2-S^2 : 2CS : C^2+S^2)$ into projective coordinates over $\mathbb{Q}(i)$ and $\mathbb{Q}(\sqrt{2})$. Because $2(\mathcal{C}_Q^2+\mathcal{S}_Q^2) = (\mathcal{C}_Q+\mathcal{S}_Q)^2 + (\mathcal{C}_Q-\mathcal{S}_Q)^2 \ge Q^2 \ge 1$, the Weierstrass denominator $R_Q(\varphi) = \mathcal{C}_Q(\varphi)^2+\mathcal{S}_Q(\varphi)^2 \ge 1$ never vanishes (\texttt{thm34}), eliminating zero divisors and the $\theta=\pi$ pole, while at the four diamond corners the derivative jump multiplies a vanishing coordinate so that the one-step difference Wronskian $\mathcal{W}_Q(\varphi)=\mathcal{C}_Q(\varphi)\Delta\mathcal{S}_Q(\varphi)-\mathcal{S}_Q(\varphi)\Delta\mathcal{C}_Q(\varphi)\equiv Q$ is identically constant across all $4Q$ points (\texttt{thm1}).
 
-From this projective field structure, all differential, variational, and integral laws follow directly: (1)~the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies the projective quotient-derivative Wronskian law $f(x+1)g(x)-f(x)g(x+1) = -\mathcal{W}(f,g)(x)$, the variational Euler--Lagrange derivative $\delta\mathcal{S}/\delta D_w = P_1 Q_2$ on trajectory monoids (\texttt{thm35}), and the inductive $C^\infty$ higher-derivative tower $D^n f$ (\texttt{thm38}) with pole-free denominators $\prod_{j=0}^n R_Q(\varphi+j)\ge 1$ for all $n\in\mathbb{N}$ and exact remainder-free Taylor--Newton series; (2)~the two-tick symplectic Verlet recurrence and two-ring coupling at the cuboctahedron modulus $k^2 = 1/\|e\|_2^2 = 1/2$ yield closed-form integer evaluations of the Fresnel diffraction integrals ($2048$), lemniscate Jacobi elliptic integrals, the Dirichlet sine integral ($128$), Parseval energy ($2,796,288$), and the zero-order Bessel integral ($\mathcal{J}_{0,3}(0)=65,536$, $\mathcal{J}_{0,3}(4)=0$, \texttt{thm2}); and (3)~slicing the $12$ vertices of $O_2(3)$ along any axis yields the Archimedes equizonal partition $(4,4,4)$, which with the origin weight $12$ forms Simpson's weights $(4,16,4)=4\times(1,4,1)$ and reproduces the exact 3D continuum Riemann integral $\iiint_{[-1,1]^3} F\,\mathrm{d}V$ in $13$ points (\texttt{thm3}). All theorems (\texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}) are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
+From this projective field structure, all differential, variational, and integral laws follow directly: (1)~the difference derivative $(Df)(x)=f(x+1)-f(x)$ satisfies the projective quotient-derivative Wronskian law $f(x+1)g(x)-f(x)g(x+1) = -\mathcal{W}(f,g)(x)$, the variational Euler--Lagrange derivative $\delta\mathcal{S}/\delta D_w = P_1 Q_2$ on trajectory monoids (\texttt{thm35}), and the inductive $C^\infty$ higher-derivative tower $D^n f$ (\texttt{thm38}) with pole-free denominators $\prod_{j=0}^n R_Q(\varphi+j)\ge 1$ for all $n\in\mathbb{N}$ and exact remainder-free Taylor--Newton series; (2)~the two-tick symplectic Verlet recurrence and two-ring coupling at the cuboctahedron modulus $k^2 = 1/\|e\|_2^2 = 1/2$ yield closed-form integer evaluations of the Fresnel diffraction integrals ($2048$), lemniscate Jacobi elliptic integrals, the Dirichlet sine integral ($128$), Parseval energy ($2,796,288$), and the zero-order Bessel integral ($\mathcal{J}_{0,3}(0)=65,536$, $\mathcal{J}_{0,3}(4)=0$, \texttt{thm2}); and (3)~slicing the $12$ vertices of $O_2(3)$ along any axis yields the equizonal partition $(4,4,4)$, which with the origin weight $12$ forms Simpson's weights $(4,16,4)=4\times(1,4,1)$ and reproduces the exact 3D continuum Riemann integral $\iiint_{[-1,1]^3} F\,\mathrm{d}V$ in $13$ points (\texttt{thm3}). All theorems (\texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, \texttt{thm38}) are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \medskip\noindent
 \textbf{Keywords:} piecewise-linear trigonometry, Euler's identity, difference Wronskian, Weierstrass substitution, cuboctahedron, Fresnel integrals, lemniscate Jacobi elliptic functions, formal verification, Lean~4.
@@ -43,17 +43,22 @@ From this projective field structure, all differential, variational, and integra
 \textbf{MSC 2020:} 26A06, 33E05, 39A12, 65D30, 68V20.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction and Historical Context}
 \label{sec:intro}
 
-Piecewise-linear trigonometry in the $L^1$ metric (``taxicab trigonometry'' on the diamond $|x|+|y|=R$) was developed by Krause~\cite{Krause1986} and Thompson~\cite{Thompson2011,Thompson2012}. In~\cite{Thompson2012} (\texttt{arXiv:1205.3814}), Thompson investigated the piecewise derivatives of the $L^1$ sine, cosine, tangent, and secant functions. However, three structural obstacles remained unresolved in~\cite{Thompson2012}:
-\begin{enumerate}[leftmargin=*,noitemsep]
-\item the piecewise-constant derivatives of the $L^1$ sine and cosine are undefined at the four corner extrema and lose the classical Euclidean differential coupling $(\sin\theta)'=\cos\theta$, $(\cos\theta)'=-\sin\theta$;
-\item representing the piecewise branches across quadrants required complex powers $i^{k-2}$ branched by the parity of the quadrant index $k$;
-\item integral calculus, the lift to the Euclidean ($L^2$) circle, and the evaluation of classical non-elementary integrals (Fresnel, Jacobi elliptic, Bessel, Dirichlet) were left open.
+The components of the calculus developed in this paper have deep roots in four classical mathematical traditions that evolved independently and were never synthesized into a single computational framework:
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,noitemsep]
+\item \textbf{Projective parameterization of genus-0 curves vs.\ the affine Weierstrass pole (Diophantus, Brahmagupta 628, Pl\"ucker, Weierstrass):}
+  in standard analysis, the universal trigonometric substitution $t = \tan(\theta/2) = S/C \mapsto \bigl((1-t^2)/(1+t^2),\,2t/(1+t^2)\bigr)$ is written in a single affine coordinate $t\in\mathbb{Q}\cup\{\infty\}$ and therefore suffers from a pole $t\to\infty$ at $\theta=\pi$ ($C=0$), requiring two coordinate charts. In projective algebraic geometry, by contrast, the homogeneous map $\mathbb{P}^1(\mathbb{Q})\to S^1(\mathbb{Q})$, $(C : S)\mapsto (C^2-S^2 : 2CS : C^2+S^2)$, is regular everywhere because $C^2+S^2$ is anisotropic over $\mathbb{Q}$. Yet projective equivalence classes $(C : S)\sim(\lambda C : \lambda S)$ lacked a canonical finite cyclic clock section with a uniform step $\varphi\mapsto\varphi+1$;
+\item \textbf{Exact calculus of finite differences and remainder-free Taylor--Newton series (Gregory 1670, Newton 1687, Taylor 1715, Boole 1860~\cite{Boole1860}):}
+  the difference derivative $(Df)(x)=f(x+1)-f(x)$, the quotient rule $D(f/g) = -\mathcal{W}(f,g)/(g\,g_{+1})$, Pochhammer falling factorials $x^{\underline{n}}$, and exact finite Taylor--Newton expansions were fully established by Newton, Taylor (\emph{Methodus Incrementorum}, 1715), and Boole (\emph{A Treatise on the Calculus of Finite Differences}, 1860~\cite{Boole1860}). In the 20th century, however, scientific computing abandoned exact projective difference algebra in favor of IEEE~754 floating-point approximations (`Float64`) with truncation and rounding drift;
+\item \textbf{Piecewise-linear $L^1$ ``taxicab trigonometry'' (Minkowski, Krause 1986~\cite{Krause1986}, Thompson 2011--2012~\cite{Thompson2011,Thompson2012}):}
+  parameterizing the $L^1$-diamond $|C|+|S|=Q$ by arc length provided a natural cyclic phase register $\varphi\in\mathbb{Z}_{4Q}$, but in~\cite{Thompson2012} (\texttt{arXiv:1205.3814}) three obstacles remained unresolved: (a)~piecewise derivatives broke down at the four diamond corners and lost Euclidean coupling; (b)~quadrant transitions required branched powers $i^{k-2}$; and (c)~integral calculus, the lift to the Euclidean circle, and classical non-elementary integrals (Fresnel, Jacobi elliptic, Bessel, Dirichlet) were left open;
+\item \textbf{Invariant 3D cubature on the cuboctahedron $O_2(3)$ (Stroud 1971~\cite{Stroud1971}, Sobolev 1974~\cite{Sobolev1974}) and Mal'cev's algebraic systems (1970~\cite{Malcev1973}):}
+  spherical and polyhedral cubature theory~\cite{Sobolev1974,Stroud1971} established isotropic 3D integration on the $12$ vertices of the cuboctahedron plus the origin, but treated the weights in continuum floating-point arithmetic rather than linking $O_2(3)$ to the quadratic field $\mathbb{Q}(\sqrt{2})$ and the $\mathbb{Z}_{4Q}$ rotator carrier in the model-theoretic sense of Mal'cev~\cite{Malcev1973}.
 \end{enumerate}
 
-In this paper (Part~I of a four-part series), we resolve these obstacles by formulating the rotator over the three-dimensional Archimedean cuboctahedral shell $O_2(d) = \{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2 = d-1\}$ ($d=3$) and the associated modular integer phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$:
+In this paper (Part~I of the mathematical series), we unite these four traditions by choosing the closed $L^1$-diamond $|C(\varphi)|+|S(\varphi)|=Q\ge 1$ on $\mathbb{Z}_{4Q}$ as the canonical global gauge section of the projective line $\mathbb{P}^1(\mathbb{Q})$ over the three-dimensional cuboctahedral shell $O_2(d) = \{e=(e_x,e_y,e_z)\in\{-1,0,+1\}^3 \mid e_x^2+e_y^2+e_z^2 = d-1\}$ ($d=3$) and phase ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$:
 \[
   |{\triangle}(d)| = 2^d = 8,\qquad
   |\square(d)| = 2d = 6,\qquad
@@ -70,7 +75,7 @@ In this paper (Part~I of a four-part series), we resolve these obstacles by form
   N_{\mathrm{ring}}(d) = 4\,Q_\square(d) = 512,\qquad
   K_P(d) = \frac{N_{\mathrm{ring}}(d)}{|{\triangle}(d)|} = 64.
 \]
-All definitions and theorems below correspond to Theorems~1--3 (\texttt{thm1}--\texttt{thm3}) in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorQuadrature.lean}.
+All definitions and theorems below correspond to \texttt{thm1}, \texttt{thm2}, \texttt{thm3}, \texttt{thm34}, \texttt{thm35}, and \texttt{thm38} in the self-contained \textbf{Lean~4}~\cite{Moura2021} module \texttt{RotatorQuadrature.lean}.
 
 \begin{definition}[Model-Theoretic Two-Sorted Algebraic System $\langle\mathcal{M},\mathcal{T}\rangle$ in the Sense of Mal'cev~\cite{Malcev1973}]
 \label{def:malcev-carriers}
@@ -246,7 +251,7 @@ For $d=3$ and any amplitude factor $c_{\mathrm{sq}}\in\mathbb{Z}$ and turn count
 In Theorem~\ref{thm:main-2}, $m+(Q-m)\equiv Q$ and $(2Q-m)+m\equiv 2Q$ are pointwise constants in $m$, so Theorem~\ref{thm:main-1} extracts them out of $\sum_{\varphi=0}^{L-1}$. For Theorem~\ref{thm:main-2b}(i), partitioning $\varphi\in\{0,\dots,511\}$ by $2$-adic valuation cancels all cosets via Euler's identity $\mathcal{E}_3(\psi+256)=-\mathcal{E}_3(\psi)$ except the $32$ elements $\varphi=8(2k+1)$, which satisfy $\varphi^2\equiv 64\pmod{512}$ and yield $32\times 64 = 2048$.
 \end{proof}
 
-\section{Emergence of the Continuum Circle, \texorpdfstring{$\pi$}{pi}, and the Riemann Integral from 512-gon Rectification and the Archimedes Equizonal Partition of the Cuboctahedron}
+\section{Emergence of the Continuum Circle, \texorpdfstring{$\pi$}{pi}, and the Riemann Integral from 512-gon Rectification and the Equizonal Partition of the Cuboctahedron}
 \label{sec:continuum-emergence}
 
 For any 3D function $F\colon\mathbb{Z}^3\to\mathbb{Z}$, define the natural center-plus-shell integrator on the cuboctahedron ball $B_1(d)=\{0\}\cup O_2(d)$, weighting the origin $(0,0,0)$ by $|V_{O_2}(d)|=12$ equally against the sum over the $12$ vertices of $O_2(d)$:
@@ -255,11 +260,11 @@ For any 3D function $F\colon\mathbb{Z}^3\to\mathbb{Z}$, define the natural cente
   \widehat{\mathcal{I}}_{O_2(d)}(F) \;:=\; |V_{O_2}(d)|\cdot F(0,0,0) \;+\; \sum_{e\in O_2(d)} F(e_x,e_y,e_z).
 \end{equation}
 
-\begin{theorem}[Archimedes Equizonal Partition and Functional 3D Cubature on the Cuboctahedron]
+\begin{theorem}[Equizonal Partition and Functional 3D Cubature on the Cuboctahedron]
 \label{thm:main-3}
 For $d=3$, any functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$, and any coefficients $c_0,c_x,c_y,c_z,c_{xy},c_{xz},c_{yz}\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}):
 \begin{enumerate}[label=\textbf{(\roman*)},leftmargin=*,noitemsep]
-\item \textbf{Archimedes equizonal partition into Simpson weights $(4,16,4)=4\times(1,4,1)$:}
+\item \textbf{Equizonal partition into Simpson weights $(4,16,4)=4\times(1,4,1)$:}
   slicing $O_2(3)$ along $e_x\in\{-1,0,+1\}$ partitions the $12$ vertices into three equal zones of $d_{\mathrm{in}}(\square)=4$ vertices each; adding the origin weight $|V_{O_2}(3)|=12$ to the equatorial zone $e_x=0$ yields $(4,16,4)$ with total weight $24$.
 \item \textbf{Functional additivity, odd-function annihilation, and unified even quadratic/quartic cubature:}
   for all functions $F,G\colon\mathbb{Z}^3\to\mathbb{Z}$ of arbitrary degree,
@@ -301,8 +306,12 @@ For all $Q,p,q,X,Y,x,y\in\mathbb{Z}$ (\texttt{thm3\_continuum\_integration\_from
 The formalization of Theorems~\ref{thm:main-1}--\ref{thm:main-3b} (\texttt{thm1\_constant\_wronskian\_weierstrass\_lift\_and\_newton\_leibniz}, \texttt{thm2\_closed\_form\_fresnel\_jacobi\_dirichlet\_parseval\_bessel\_integrals}, \texttt{thm3\_continuum\_integration\_from\_cuboctahedron\_archimedes\_layers}, \texttt{thm34\_rotator\_projective\_field\_invertibility\_zero\_divisor\_freedom\_and\_q\_i\_sqrt2\_fields}, \texttt{thm35\_general\_field\_derivative\_operator\_quotient\_wronskian\_and\_variational\_euler\_lagrange}, and \texttt{thm38\_c\_infinity\_higher\_derivatives\_taylor\_newton\_expansion\_and\_pole\_free\_quotients}) resides in \texttt{RotatorQuadrature.lean} in \url{https://github.com/AI-Guiders/scientific-papers} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 
 \begin{thebibliography}{9}
+\bibitem{Boole1860}
+G.~Boole, \emph{A Treatise on the Calculus of Finite Differences}, Macmillan and Co., Cambridge--London, 1860.
 \bibitem{Malcev1973}
 A.\,I.~Mal'cev, \emph{Algebraic Systems}, Die Grundlehren der mathematischen Wissenschaften, vol.~192, Springer-Verlag, Berlin--Heidelberg--New York, 1973 (Russian original: \emph{Алгебраические системы}, Nauka, Moscow, 1970).
+\bibitem{Sobolev1974}
+S.\,L.~Sobolev, \emph{Introduction to the Theory of Cubature Formulae}, Nauka, Moscow, 1974 (English transl.: \emph{Cubature Formulas and Modern Analysis}, Gordon and Breach, 1992).
 \bibitem{Krause1986}
 E.\,F.~Krause, \emph{Taxicab Geometry: An Adventure in Non-Euclidean Geometry}, Dover Publications, New York, 1986.
 \bibitem{Thompson2011}
