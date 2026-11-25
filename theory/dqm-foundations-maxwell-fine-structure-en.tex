@@ -37,22 +37,39 @@ In this foundational paper of Discrete Quantum Mechanics (DQM), we construct a l
 We prove that unit symplectic Jacobian, time-reversal symmetry, and global clock-shift invariance uniquely fix the two-step Verlet evolution law on the $72$-bit cell register $B_2(3) = 72$, while second-moment isotropy and planar $4$-cycle closure in the Moore cube uniquely select the $12$-vertex cuboctahedron $O_2(3)$ ($13$-node causal core $B_1(3)$). Euclidean division of phase differences modulo $512$ splits the dynamics into a wave remainder and a corpuscular carry, deriving Born's rule $P(\mu) = \mu^2/512$ deterministically, discrete Maxwell--Faraday--Gauss electrodynamics, the Heisenberg deadband $\Delta\varphi_{\mathrm{disc}}(3) = 41$ (sub-threshold zero-Landauer-heat corridor and $T$-measurement projection blindness $64\times 81 = 72^2 = 5,184$), the explicit Lie commutator structure constants of the Standard Model gauge algebra $\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)$ of dimension $1 + 3 + 8 = 12$ on the clique complex $\mathcal{C}_{13}$, and the four-loop derivation of the inverse fine-structure constant in the field $\mathbb{Q}(\sqrt{2})$ free of transcendental $\pi$: $\alpha_{\mathrm{fs}}^{-1}(3) = 137.035\,999\,187\dots$ ($0.47\,\text{std.\ dev.}$ from CODATA-2022). All theorems are formally verified in \textbf{Lean~4} (\texttt{0 sorryAx}, \texttt{0 Classical.choice}).
 \end{abstract}
 
-\section{Physical Problem Statement: Why a Medium Without External Memory Must Be Discrete, Three-Dimensional, and Governed by the Cuboctahedron \texorpdfstring{$O_2(3)$}{O2(3)} and Verlet Dynamics}
+\section{Proof of the Absence of External Memory in Physical Nature and Derivation of Three Spatial Dimensions, the Cuboctahedron \texorpdfstring{$O_2(3)$}{O2(3)}, and Verlet Dynamics}
 \label{sec:axioms-uniqueness}
 
-In classical theoretical physics, spacetime is traditionally introduced as a pre-existing smooth continuum $\mathbb{R}^{d,1}$ over which differential field equations and empirical coupling constants are specified. That construction implicitly relies on an \emph{external-observer idealization}: it assumes that the state of an arbitrarily small volume element can be recorded with infinite real-number precision on an external storage medium located outside the physical system itself.
+In classical theoretical physics, spacetime is traditionally introduced as a pre-existing smooth continuum $\mathbb{R}^{d,1}$ at every point of which fields are specified by real numbers of infinite binary precision. We now show that such a continuum representation implicitly requires an infinite external memory outside physical nature, and we prove rigorously why physical nature cannot possess any external memory.
 
-Dropping this idealization leads to a foundational physical question: \emph{how must a medium be structured if it computes its own evolution step by step without accessing any external memory outside its own boundaries?}
-
-Because every measuring instrument and every observer is a physical subsystem embedded inside the same medium, the absence of external memory entails a direct four-step chain of physical deductions:
-\begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=*]
-\item \textbf{Discreteness at the elementary-cell level and the two-sorted structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ in the sense of A.\,I.~Mal'cev~\cite{Malcev1973}.}
-  A particle (excitation) occupies an entire elementary cell volume and cannot occupy it partially. In a medium without external memory, the single-turn residue state of each node $\mathbf{x}\in\mathbb{Z}^d$ at tick $t\in\mathbb{Z}$ is encoded in a finite binary word of fixed width $\mathrm{mod\_bits}(d)$ on a cyclic residue ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, where
+\begin{theorem}[Absence of External Memory in Physical Nature and Finiteness of the Indivisible Elementary Cell Register]
+\label{thm:no-external-memory}
+Let $\mathfrak{U}$ be the totality of physical nature (the closed system of all physically interacting subsystems), and let the elementary cell volume be physically indivisible (a particle occupies an entire elementary cell volume and cannot occupy it partially). Then (\texttt{internal\_\allowbreak observer\_\allowbreak no\_\allowbreak outside\_\allowbreak lattice\_\allowbreak and\_\allowbreak sat\_\allowbreak semantic\_\allowbreak isomorphism\_\allowbreak operator}, \texttt{thm17\_\allowbreak model\_\allowbreak theoretic\_\allowbreak termination\_\allowbreak kernel\_\allowbreak annihilation\_\allowbreak and\_\allowbreak godel\_\allowbreak tarski\_\allowbreak oracle\_\allowbreak necessity}):
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
+\item \textbf{Absence of external memory in physical nature:}
+  there exists no storage medium $E_{\mathrm{ext}} \notin \mathfrak{U}$ external to $\mathfrak{U}$ capable of recording, storing, or transmitting the state of any physical cell $S \in \mathfrak{U}$. Every degree of freedom in a hypothetical external kernel $\ker\pi$ outside the carrier identically annihilates in all physical fluxes and observables:
+  \begin{equation}
+    \label{eq:no-ext-memory-kernel}
+    d_1\bigl(r + d_0(\delta\chi)\bigr) \;\equiv\; d_1(r),
+    \qquad
+    d_2\bigl(n + d_1(\delta q)\bigr) \;\equiv\; d_2(n).
+  \end{equation}
+\item \textbf{Finiteness of the single-turn local cell register:}
+  because an indivisible elementary volume contains no infinite sequence of independent sub-cells and no external memory exists outside the medium, the single-turn state of each elementary cell $\mathbf{x} \in \mathbb{Z}^d$ at tick $t \in \mathbb{Z}$ cannot be encoded by an infinite-precision real number ($\aleph_0$ bits), and must instead be encoded by a finite binary word of fixed width $\mathrm{mod\_bits}(d)$ on a cyclic residue ring $\mathbb{Z}_{N_{\mathrm{ring}}(d)}$, where
   \begin{equation}
     \label{eq:nring-power-of-two}
     N_{\mathrm{ring}}(d) \;=\; 2^{\mathrm{mod\_bits}(d)}.
   \end{equation}
-  Following A.\,I.~Mal'cev's theory of algebraic systems~\cite{Malcev1973}, the structure is specified by two sorts (\textbf{carriers}):
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+In part~(1), any information transfer between a physical cell $S \in \mathfrak{U}$ and a memory register $E$ is a physical causal interaction; by the interaction-closure of $\mathfrak{U}$, every object physically interacting with $S$ belongs to nature itself ($E \in \mathfrak{U}$) and occupies its own local cells, whereas any non-interacting external degree of freedom in $\ker\pi$ yields identically zero contribution~\eqref{eq:no-ext-memory-kernel} to all observable fluxes by nilpotency $d_1\circ d_0 \equiv 0$ and $d_2\circ d_1 \equiv 0$. In part~(2), storing an arbitrary real number $x \in \mathbb{R}$ requires an actual infinity of independent binary digits ($\aleph_0$ bits), yet by the indivisibility of the elementary volume a particle occupies the entire elementary volume as a whole (so no infinite hierarchy of independent sub-cells exists inside the cell) and no external memory exists outside by part~(1). Therefore, the single-turn cell register is finite of the form~\eqref{eq:nring-power-of-two}.
+\end{proof}
+
+The proven absence of external memory and indivisibility of the elementary cell volume entail a four-step chain of physical deductions:
+\begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=*]
+\item \textbf{The two-sorted carrier structure $\langle\mathcal{M},\mathcal{T};\,\pi_{M\to T},\,\iota_{T\to M}\rangle$ in the sense of A.\,I.~Mal'cev~\cite{Malcev1973}:}
   \begin{itemize}[leftmargin=*]
   \item the \textbf{discrete $M$-carrier} $\mathcal{M}$ is the infinite countable inductive family of integer phase rings $\mathbb{Z}_{4Q}$ across all quarter-period scales $Q$, all winding quotients $q\in\mathbb{Z}$, and all lattice nodes $\mathbb{Z}^d$ (with single-turn cell residue register $\mathbb{Z}_{512}$ at scale $K=1$, $Q_\square(3)=128$);
   \item the \textbf{continuous $T$-carrier} $\mathcal{T}$ is the continuum sort of macroscopic fields, trajectories, and Riemann integrals, linked to $\mathcal{M}$ by the projective Weierstrass lift $\pi_{M\to T}$ and linear retraction $\iota_{T\to M}$.
