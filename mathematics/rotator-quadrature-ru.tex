@@ -433,7 +433,7 @@
     2\,f_2(x+h) &= 2\,f_2(x) + 2h\,Df_2(x) + h(h-1)\,D^2f_2(x), \label{eq:taylor-newton-quad} \\
     6\,f_3(x+h) &= 6\,f_3(x) + 6h\,Df_3(x) + 3h(h-1)\,D^2f_3(x) + h(h-1)(h-2)\,D^3f_3(x), \label{eq:taylor-newton-cubic}
   \end{align}
-  и при $g(x) \ge 1$ задаёт замкнутую проективную формулу $n$-й производной отношения $D^n(f/g)(x) = N_n(x) / G_n(x)$ во всех порядках $n \in \mathbb{N}$ (\texttt{thm38}, \texttt{thm39}):
+  и задаёт замкнутую проективную формулу $n$-й производной отношения $D^n(f/g)(x) = N_n(x) / G_n(x)$ во всех порядках $n \in \mathbb{N}$ (\texttt{thm38}, \texttt{thm39}), где для однородного знаменателя Вейерштрасса $g(t) = R_3(t) = \mathcal{C}_3(t)^2 + \mathcal{S}_3(t)^2$ безусловно (для всех $n \in \mathbb{N}$ и $x \in \mathbb{Z}$) выполняется $1 \le g(t)$ и $1 \le G_n(x)$:
   \begin{align}
     N_0(x) &:= f(x), \qquad G_0(x) \;:=\; g(x), \label{eq:quotient-deriv-n-base} \\
     N_{n+1}(x) &:= N_n(x+1)\,g(x) - N_n(x)\,g(x+n+1), \label{eq:quotient-deriv-n-numer} \\
