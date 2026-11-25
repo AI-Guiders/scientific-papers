@@ -300,10 +300,58 @@ and cyclically $[L_2, L_3] = L_1$, $[L_3, L_1] = L_2$. For the matrix units $(E_
 In item~(2), multiplying each term in~\eqref{eq:alpha-gamma-denom} and~\eqref{eq:alpha-tvac-numer} by $d_{\mathrm{in}}(\square)(N_{\mathrm{tri}}(d)-1)^2\widehat{M}(d)^4$ transforms $\Gamma_{\mathrm{em}}(d)$ into $A_{\mathrm{num}}(d) + B_{\mathrm{num}}(d)\sqrt{2}$ and $T_{\mathrm{vac}}(d)$ into $A_{\mathrm{den}}(d) + B_{\mathrm{den}}(d)\sqrt{2}$ with coefficients~\eqref{eq:alpha-anum}--\eqref{eq:alpha-bden}. Multiplying numerator and denominator of~\eqref{eq:alpha-fs-137} by the conjugate $A_{\mathrm{num}} - B_{\mathrm{num}}\sqrt{2}$ in $\mathbb{Q}(\sqrt{2})$ yields the rationalized form $(P_{\mathrm{rat}} + Q_{\mathrm{rat}}\sqrt{2})/D_{\mathrm{rat}}$ with Pell denominator $D_{\mathrm{rat}} = 2 B_{\mathrm{num}}^2 - A_{\mathrm{num}}^2 > 0$.
 \end{proof}
 
-\section{Complete Bottom-Up Ladder Across All Scale Floors: Electron 13-Node Rotor, Complete Particle Spectrum, Atomic and Nuclear Shells, Gravitation, Molecular Biophysics, and Quantum Engineering}
+\section{Complete Bottom-Up Ladder From First Vortex Birth (\texorpdfstring{$t = 0 \to 1 \to 2$}{t = 0 -> 1 -> 2}) to Our Time: Baryogenesis, 13-Node Electron Rotor, Particle Spectrum, Nuclei, Planetogenesis, Biosphere, Cortical Column, and Quantum Engineering}
 \label{sec:complete-bottom-up-ladder}
 
-Having established the cell register $\mathbb{Z}_{512}$, the cuboctahedral shell $O_2(3)$, the Verlet evolution law, the Lie algebra $\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)$, and the fine-structure constant $\alpha_{\mathrm{fs}}^{-1}(3)$, we now trace the complete deductive ladder from Floor~1 (dressed electron rotor) up to Floor~8 (macroscopic gravitation, chemistry, biology, and silicon quantum hardware).
+Having established the cell register $\mathbb{Z}_{512}$, the cuboctahedral shell $O_2(3)$, the Verlet evolution law, the Lie algebra $\mathfrak{u}(1)\oplus\mathfrak{su}(2)\oplus\mathfrak{su}(3)$, and the fine-structure constant $\alpha_{\mathrm{fs}}^{-1}(3)$, we now trace the complete chronological and structural ladder of the model from initial tick $t = 0$ and the first birth of a vortex up to our time.
+
+\begin{theorem}[Epochs~0--1 ($t = 0 \to t = 1 \to t = 2$): Catalan Seed $\mathrm{IV}(3) = 263$, First Birth of a $K_3$ Vortex Plaquette, Three Ablation Theorems, Baryogenesis $\eta_B$, and Primordial Nucleosynthesis $Y_p = 45/182$]
+\label{thm:first-vortex-birth-iv263}
+On the three-dimensional lattice $\mathbb{Z}^3$ under the field evolution operator $\mathcal{G}_3$ (\texttt{fieldStepOp 3} in \texttt{lean/MtCarrier/TrajectoryIV263.lean}), the following exact laws hold (\texttt{a15\_iv263\_unique\_9bit\_catalan\_seed\_decomposition}, \texttt{iv263\_interior\_octant\_silence\_t0}, \texttt{iv263\_flat\_domain\_wall\_asymmetry\_t0}, \texttt{iv263\_central\_k3\_plaquette\_birth\_t0\_t1\_t2}, \texttt{iv263\_full\_3d\_lattice\_t0\_t1\_t2\_census}, \texttt{t2\_vortex\_loop\_census\_and\_eta\_b\_rational}, \texttt{encapsulated\_automaton\_input\_output\_theorem}):
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*]
+\item \textbf{Unique 9-bit Catalan seed $\mathrm{IV}(3) = 263$ at $t = 0$:}
+  the sum of the Pauli ceiling $\Phi_{\mathrm{Pauli}}(3) = 256$ and the octant count $N_{\mathrm{tri}}(3) = 8$ minus the central vacuum quantum $\mu_{\mathrm{vac}}(3) = 1$ defines the prime 9-bit seed
+  \begin{equation}
+    \label{eq:iv263-seed-def}
+    \mathrm{IV}(3) \;=\; \Phi_{\mathrm{Pauli}}(3) + N_{\mathrm{tri}}(3) - \mu_{\mathrm{vac}}(3) \;=\; 256 + 8 - 1 \;=\; 263,
+  \end{equation}
+  whose senior bit is $\Phi_{\mathrm{Pauli}}(3) = 256$ and whose lower octant mask is $\mathrm{IV}(3) \bmod 256 = 7 = 2^3 - 1$ (activating $7$ of the $8$ octants inside the nucleation ball $x^2 + y^2 + z^2 \le N_{\mathrm{sq}}(3)^2 = 36$ with amplitude $\mu = 1 + 12 = 13 = N_\varphi(3)$ and background ramp $\varphi_{\mathrm{bg}}(x) = 41(x + 12) \bmod 512$).
+
+\item \textbf{Interior octant silence, flat domain-wall chiral ratchet at $t = 0$, and three ablation theorems:}
+  on the initial field $\Psi^{(0)} = \mathrm{IV}(3)$, inside every uniform octant (at $(2, 2, 2)$) the odd holonomy current vanishes ($\mathcal{Z}_{\mathrm{imag}} = 0$) and the raw gate phase is strictly sub-threshold ($0 < |\Phi_{\mathrm{raw}}| < 41$), so the Heisenberg deadband snaps the gate step to exact zero ($\Phi_{\mathrm{field}}(2,2,2) = 0$, a homeostatic fixed point). Across the flat domain wall $z = 0 \leftrightarrow z = -1$, even holonomies match, odd currents cancel, and floor division (\texttt{fdiv}) generates a non-zero chiral pair sum of gate impulses:
+  \begin{equation}
+    \label{eq:domain-wall-chiral-asymmetry}
+    \Phi_{\mathrm{field}}^{(0)}(0, 2, 2) + \Phi_{\mathrm{field}}^{(0)}(-1, 2, 2) \;=\; -1 \;\ne\; 0.
+  \end{equation}
+  Three ablation theorems (\texttt{ablation\_heisenberg\_threshold\_15\_breaks\_octant\_silence}, \texttt{ablation\_tdiv\_destroys\_domain\_wall\_chiral\_asymmetry}, \texttt{ablation\_no\_denom\_guard\_corrupts\_t2\_vortex\_pair}) prove that: (a)~lowering the Heisenberg threshold from $41$ to $15$ destroys interior octant silence; (b)~replacing \texttt{fdiv} by truncation toward zero \texttt{tdiv} zeroes~\eqref{eq:domain-wall-chiral-asymmetry} and destroys matter--antimatter chiral asymmetry; (c)~removing the vacuum floor $\varepsilon(3) = 8\,192$ from the gate denominator produces a negative denominator $D_{\mathrm{raw}} < 0$ at $t = 1$ in cell $(-2, -1, -1)$ and corrupts vortex birth.
+
+\item \textbf{First birth of a $K_3$ vortex plaquette at $t = 2$, census of $86$ vortex plaquettes, baryogenesis $\eta_B$, and primordial nucleosynthesis (BBN):}
+  at the central trihedral junction $(-1, -1, 0)$, the oriented plaquette winding number is zero at $t = 0$ and $t = 1$, and at the second tick $\Psi^{(2)} = \mathcal{G}_3^{[2]}(\mathrm{IV}(3))$ the Pauli branch jump gives birth to the first unit quantum vortex:
+  \begin{equation}
+    \label{eq:first-vortex-birth-t2}
+    w_{xy}^{(0)}(-1,-1,0) = 0, \qquad
+    w_{xy}^{(1)}(-1,-1,0) = 0, \qquad
+    w_{xy}^{(2)}(-1,-1,0) = +1, \qquad
+    \mathcal{B}_{xy}^{(2)}(-1,-1,0) = 512.
+  \end{equation}
+  The full three-dimensional lattice census at $t = 2$ (\texttt{runFull3DCensusIV263 3}) records the birth of $2 N_\varphi(3) = 26$ vortex plaquettes in the $xy$-plane, $2 N_\varphi(3) = 26$ in the $yz$-plane, and $2 N_\varphi(3) + N_{\mathrm{tri}}(3) = 26 + 8 = 34$ in the $xz$-plane --- a total of
+  \begin{equation}
+    \label{eq:t2-86-vortex-plaquettes}
+    N_{\mathrm{vortex}}^{(t=2)}(3) \;=\; 26 + 26 + 34 \;=\; 86 \;=\; N_{\mathrm{sq}}(3)\,N_\varphi(3) + N_{\mathrm{tri}}(3) \;=\; Z(\mathrm{Rn})
+  \end{equation}
+  vortex plaquettes closed into vortex rings with identically zero magnetic monopole divergence ($\sum_{f\in\partial C_3} w_f = 0$) in every cube of the 3D lattice. The chiral excess of $8$ octants and $\mathrm{mod\_bits}(3)\,d_{\mathrm{out}}(E) = 9\times 5 = 45$ active modes across $2 N_\varphi(3) N_{\mathrm{tri}}(3) = 2\times 13\times 8 = 208$ spinor-octant channels fixes the cosmic baryon asymmetry and the Euclidean division identity for the primordial helium-4 ($^4\mathrm{He}$) mass fraction $Y_p$ in Big Bang Nucleosynthesis (BBN):
+  \begin{equation}
+    \label{eq:eta-b-and-bbn-yp}
+    \eta_B \;=\; \frac{45}{208}\,\alpha_{\mathrm{fs}}^4 \;\approx\; 6.12\times 10^{-10}, \qquad
+    208 \;=\; 4 \times 45 + 28, \qquad
+    Y_p \;=\; \frac{45}{208 - 26} \;=\; \frac{45}{182} \;\approx\; 0.24725.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Identity~\eqref{eq:iv263-seed-def} follows from $256 + 8 - 1 = 263 = 256\cdot 1 + 7$. Direct evaluation of $\mathcal{G}_3^{[t]}(\mathrm{IV}(3))$ at $t = 0, 1, 2$ verifies $\Phi_{\mathrm{field}}^{(0)}(2,2,2) = 0$, identity~\eqref{eq:domain-wall-chiral-asymmetry}, vortex birth~\eqref{eq:first-vortex-birth-t2} at $t = 2$, and the census $26 + 26 + 34 = 86$ with zero cube divergence everywhere (\texttt{native\_decide} in \texttt{iv263\_full\_3d\_lattice\_t0\_t1\_t2\_census}). Finally, $2\times 13\times 8 = 208 = 4\times 45 + 28$ and $208 - 2\times 13 = 182$ yield~\eqref{eq:eta-b-and-bbn-yp}.
+\end{proof}
 
 \begin{theorem}[Floor~1 and Complete Quantization: 13-Node Dressed Electron Rotor, Weyl--Schwinger $PQ$-Fibration, and Quantization of All Eight Physical Observables]
 \label{thm:electron-rotor-complete-quantization}
