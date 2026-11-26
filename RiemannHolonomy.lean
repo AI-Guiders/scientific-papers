@@ -903,7 +903,7 @@ theorem minkowski_cascade_sum_factorization (R : List Int) (u v : Int) :
       simp [Int.mul_add, Int.sub_mul]
       omega
     rw [hStep]
-    simp [Int.mul_assoc]
+    simp [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
 
 /-- Exact difference factorization `P_R(U, V) - Q_R(U, V) = Π_-(R) * (U - V)` across any cascade `R`. -/
 theorem minkowski_cascade_diff_factorization (R : List Int) (u v : Int) :
@@ -920,7 +920,7 @@ theorem minkowski_cascade_diff_factorization (R : List Int) (u v : Int) :
       simp [Int.mul_sub, Int.sub_mul]
       omega
     rw [hStep]
-    simp [Int.mul_assoc]
+    simp [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
 
 /-- **Theorem 10A (Exact Pointwise Minkowski Light-Cone & SL₂(ℤ) Stage-Wronskian Factorization):**
     For `U = cayleyNumNormSq c0 s0 delta` and `V = cayleyDenNormSq c0 s0 delta`:
