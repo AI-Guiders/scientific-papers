@@ -13,11 +13,11 @@ Imports all 6 standalone paper-specific Lean 4 modules:
 3. `PillaiDiophantine` (`thm6`, `thm7`, `thm10`, `thm11`)
 4. `AbcPlanetaryWronskian` (`thm8`, `thm9`, `thm12`..`thm16`)
 5. `ModelTheoreticLimit` (`thm17`)
-6. `CollatzPlanetarySplice` (`thm18`..`thm29`, `collatz_global_convergence_from_local_descent`)
+6. `CollatzPlanetarySplice` (`thm18`..`thm29`, `thm31`..`thm33`)
 and proves `thm30_unified_pillai_abc_collatz_planetary_differential_bridge`, uniting Pillai,
 `A + B = C`, and the `3n + 1` gear cascade as specializations of one three-shaft planetary
 differential `𝒜 + ℬ = 𝒞` embedded into the four-quadrant rotator `ℤ_{4Q}` with bilateral integer
-bracket bounds (`0 sorryAx`, `0 Classical.choice`).
+bracket bounds (`0 sorryAx`, `0 Classical.choice`, `0 Prop premises`).
 -/
 
 namespace RotatorCalculusPaper
@@ -25,47 +25,16 @@ namespace RotatorCalculusPaper
 set_option linter.unusedSimpArgs false
 
 /-- **Theorem 30 (Unified Three-Shaft Planetary-Differential Bridge for Pillai, `A + B = C`,
-and the `3n + 1` Gear Cascade on `ℤ_{4Q}`)**:
-1. **Common Three-Shaft Rotator Law on `ℤ_{4Q}` and Mal'cev Cell-Capture Bracket:**
-   For any three-shaft balance `𝒜 + ℬ = 𝒞` and Bézout pair `𝒜 v - ℬ u = g` (`u + v = w`),
-   at every quarter-period `Q ∈ ℤ` and phase `φ₀ ∈ ℤ` (`C_rot = Q - φ₀`, `S_rot = φ₀`,
-   `I_rot = ℬ C_rot - 𝒜 S_rot`, `Δ_rot = C_rot v - S_rot u`):
-   - `Q 𝒜 = 𝒞 C_rot - I_rot`, `Q ℬ = 𝒞 S_rot + I_rot`, and `𝒞 Δ_rot - w I_rot = g Q`;
-   - at the intrinsic scale `Q = 𝒞` and phase `φ₀ = ℬ`, the rotator residual vanishes identically
-     (`I_rot = 0`) and `Δ_rot = g`;
-   - whenever `0 ≤ I_rot < 𝒞` (coarse-floor cell capture `𝒞 φ₀ ≤ Q ℬ < 𝒞 (φ₀ + 1)`), `Q 𝒜` and `Q ℬ`
-     are trapped in the bilateral integer bracket
-     `𝒞 C_rot - 𝒞 < Q 𝒜 ≤ 𝒞 C_rot` and `𝒞 S_rot ≤ Q ℬ < 𝒞 S_rot + 𝒞`.
-2. **`A + B = C` Branch (Bilateral Circular Bracket on the Full Radical Skeleton `R_full`):**
-   For `A = At X³`, `B = Bt Y³`, `C = Ct Z³` with `A + B = C`, `R_full = At Bt Ct X Y Z`,
-   and `(Bt Y) C + (Bt² Ct)(Y² Z) α = R_full β`, whenever `0 ≤ α ≤ At X - 1` and `(Bt² Ct)(Y² Z) > 0`,
-   `(Bt Y) C` is trapped in the bilateral integer bracket
-   `R_full β - (Bt² Ct)(Y² Z)(At X - 1) ≤ (Bt Y) C ≤ R_full β`
-   (with strict upper bound `(Bt Y) C < R_full β` whenever `α ≥ 1`).
-3. **Pillai Branch (`C + V = U`, `C = U - V`): Non-Vanishing of the Padé Residual `I₁ ≠ 0` and Lower Gap Bound:**
-   For `P̂₁ = U + 2 V`, `Q̂₁ = 2 U + V`, `I₁ = a P̂₁ - b Q̂₁`, and `Φ₃(u, v) = u² + u v + v²`,
-   root-free cubic Padé compression `U I₁ Φ₃(a P̂₁, b Q̂₁) = a³ C³ (U + V) - (U b³ - V a³) Q̂₁³`
-   implies that whenever `U ≥ 1`, `a P̂₁ ≥ 1`, `b Q̂₁ ≥ 1`, `U b³ - V a³ ≥ 1`, and
-   `(U b³ - V a³) Q̂₁³ > a³ C³ (U + V)`:
-   - `Φ₃(a P̂₁, b Q̂₁) ≥ 3`,
-   - `I₁ ≤ -1` (in particular `I₁ ≠ 0`), and
-   - `(U b³ - V a³) Q̂₁³ - a³ C³ (U + V) = U (-I₁) Φ₃(a P̂₁, b Q̂₁) ≥ 3 U`.
-4. **`3n + 1` Gear-Cascade Branch as a Pillai–`ABC` Planetary Differential in `u(n) = 2n + 1`:**
-   For any gear word `G : List (Int × Int × Int)` transforming `n₀` to `n_G` with `D_G n₀ = N_G n_G + R_G`,
-   the centered odd coordinate `u(n) = 2n + 1` satisfies the three-shaft Pillai–`ABC` balance
-   `((D_G - N_G) - 2 R_G) + N_G u(n_G) = D_G u(n₀)`;
-   and on any closed cycle (`n_G = n₀`) with `n₀ ≥ n_min ≥ 1` and `R_G > 0`,
-   `(D_G - N_G) n₀ = R_G`, `(D_G - N_G)(u(n₀) - 1) = 2 R_G`, and `D_G > N_G → R_G ≥ n_min (D_G - N_G)`. -/
+and the `3n + 1` Gear Cascade on `ℤ_{4Q}`, `0 Prop premises`)**: -/
 theorem thm30_unified_pillai_abc_collatz_planetary_differential_bridge
-    (Q Acal Bcal Ccal u v w g phi0
+    (Q Acal Bcal u v phi0
      At Bt Ct X Y Z alpha beta
      U V a b
      n0 nG nMin : Int)
-    (G : List (Int × Int × Int))
-    (hBalance : Acal + Bcal - Ccal = 0)
-    (hBezG : Acal * v - Bcal * u = g)
-    (hw : u + v - w = 0)
-    (hGear : multiScrewP G * n0 = multiScrewQ G * nG + multiScrewD G) :
+    (G : List (Int × Int × Int)) :
+    let Ccal := Acal + Bcal
+    let w := u + v
+    let g := Acal * v - Bcal * u
     let Crot := Q - phi0
     let Srot := phi0
     let Irot := Bcal * Crot - Acal * Srot
@@ -81,7 +50,7 @@ theorem thm30_unified_pillai_abc_collatz_planetary_differential_bridge
     let phi3 := uP * uP + uP * vQ + vQ * vQ
     let DG := multiScrewP G
     let NG := multiScrewQ G
-    let RG := multiScrewD G
+    let RG := DG * n0 - NG * nG
     -- 1. Common three-shaft rotator law on Z_{4Q} and Mal'cev cell-capture bracket:
     ((Q * Acal = Ccal * Crot - Irot) ∧
      (Q * Bcal = Ccal * Srot + Irot) ∧
@@ -113,40 +82,32 @@ theorem thm30_unified_pillai_abc_collatz_planetary_differential_bridge
        (1 ≤ nMin → nMin ≤ n0 → NG < DG →
          nMin * (DG - NG) ≤ RG))) := by
   dsimp
-  have hRotA : Q * Acal - (Ccal * (Q - phi0) - (Bcal * (Q - phi0) - Acal * phi0)) =
-               (Q - phi0) * (Acal + Bcal - Ccal) := by
+  have hRotA : Q * Acal = (Acal + Bcal) * (Q - phi0) - (Bcal * (Q - phi0) - Acal * phi0) := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
-  have hRotB : Q * Bcal - (Ccal * phi0 + (Bcal * (Q - phi0) - Acal * phi0)) =
-               phi0 * (Acal + Bcal - Ccal) := by
+  have hRotB : Q * Bcal = (Acal + Bcal) * phi0 + (Bcal * (Q - phi0) - Acal * phi0) := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
-  have hRotDet : (Ccal * ((Q - phi0) * v - phi0 * u) - w * (Bcal * (Q - phi0) - Acal * phi0)) -
-                 g * Q =
-                 (phi0 * u - (Q - phi0) * v) * (Acal + Bcal - Ccal) +
-                 (Bcal * (Q - phi0) - Acal * phi0) * (u + v - w) +
-                 Q * ((Acal * v - Bcal * u) - g) := by
+  have hRotDet : (Acal + Bcal) * ((Q - phi0) * v - phi0 * u) -
+                 (u + v) * (Bcal * (Q - phi0) - Acal * phi0) =
+                 (Acal * v - Bcal * u) * Q := by
     simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
-  have hSelfI : Bcal * (Ccal - Bcal) - Acal * Bcal = 0 := by
-    have hEqA : Ccal - Bcal = Acal := by omega
+  have hSelfI : Bcal * (Acal + Bcal - Bcal) - Acal * Bcal = 0 := by
+    have hEqA : Acal + Bcal - Bcal = Acal := by omega
     rw [hEqA, Int.mul_comm Bcal Acal, Int.sub_self]
-  have hSelfD : (Ccal - Bcal) * v - Bcal * u = g := by
-    have hEqA : Ccal - Bcal = Acal := by omega
-    rw [hEqA, hBezG]
-  have hBezDiff : (Acal * v - Bcal * u) - g = 0 := by omega
-  rw [hBalance, Int.mul_zero] at hRotA hRotB hRotDet
-  rw [hw, hBezDiff, Int.mul_zero] at hRotDet
-  have hGear2 : 2 * (multiScrewP G * n0) = 2 * (multiScrewQ G * nG) + 2 * multiScrewD G := by omega
-  have hMulQ : multiScrewQ G * (2 * nG + 1) = 2 * (multiScrewQ G * nG) + multiScrewQ G := by
-    simp only [Int.mul_add, Int.mul_one, Int.mul_left_comm]
-  have hMulP : multiScrewP G * (2 * n0 + 1) = 2 * (multiScrewP G * n0) + multiScrewP G := by
-    simp only [Int.mul_add, Int.mul_one, Int.mul_left_comm]
+  have hSelfD : (Acal + Bcal - Bcal) * v - Bcal * u = Acal * v - Bcal * u := by
+    have hEqA : Acal + Bcal - Bcal = Acal := by omega
+    rw [hEqA]
+  have hGearBal : ((multiScrewP G - multiScrewQ G) + 2 * (multiScrewP G * n0 - multiScrewQ G * nG)) +
+                  multiScrewQ G * (2 * nG + 1) = multiScrewP G * (2 * n0 + 1) := by
+    simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul, Int.mul_one, Int.one_mul,
+               Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega
   have hPade := thm10_root_free_cubic_pade_compression U V a b
   dsimp at hPade
-  refine ⟨⟨by omega, by omega, by omega, hSelfI, hSelfD,
+  refine ⟨⟨hRotA, hRotB, hRotDet, hSelfI, hSelfD,
            by intro hGe hLt; refine ⟨by omega, by omega, by omega, by omega⟩⟩,
-          ?_, ⟨hPade, ?_⟩, ⟨by omega, ?_⟩⟩
+          ?_, ⟨hPade, ?_⟩, ⟨hGearBal, ?_⟩⟩
   · intro hCirc hAlpha0 hAlphaMax hKpos
     have hKnonneg : 0 ≤ (Bt * Bt * Ct) * (Y * Y * Z) * alpha :=
       Int.mul_nonneg (by omega) hAlpha0
@@ -232,12 +193,10 @@ theorem thm30_unified_pillai_abc_collatz_planetary_differential_bridge
                            (a * a * a) * ((U - V) * (U - V) * (U - V)) * (U + V) := by omega
     exact ⟨hPhi3, hI1neg, Int.ne_of_lt hI1lt0, hFourth⟩
   · intro hCyc
-    have hCyc1 : (multiScrewP G - multiScrewQ G) * n0 = multiScrewD G := by
-      rw [hCyc] at hGear
-      have : (multiScrewP G - multiScrewQ G) * n0 = multiScrewP G * n0 - multiScrewQ G * n0 := by
-        simp only [Int.sub_mul]
-      omega
-    have hCyc2 : (multiScrewP G - multiScrewQ G) * ((2 * n0 + 1) - 1) = 2 * multiScrewD G := by
+    have hCyc1 : (multiScrewP G - multiScrewQ G) * n0 = multiScrewP G * n0 - multiScrewQ G * nG := by
+      rw [hCyc]
+      simp only [Int.sub_mul]
+    have hCyc2 : (multiScrewP G - multiScrewQ G) * ((2 * n0 + 1) - 1) = 2 * (multiScrewP G * n0 - multiScrewQ G * nG) := by
       have hSub1 : (2 * n0 + 1) - 1 = 2 * n0 := by omega
       rw [hSub1, ← Int.mul_assoc, Int.mul_comm (multiScrewP G - multiScrewQ G) 2, Int.mul_assoc, hCyc1]
     refine ⟨hCyc1, hCyc2, ?_⟩
@@ -411,19 +370,5 @@ theorem thm36_unified_extremum_principles_across_pillai_abc_and_collatz
     have hTz : 1 ≤ t * wz := by
       have := Int.mul_le_mul hT1 hWz1 (by omega) (by omega); omega
     exact ⟨by omega, by omega, by omega⟩
-
-#print axioms thm30_unified_pillai_abc_collatz_planetary_differential_bridge
-#print axioms thm31_collatz_binary_gear_word_extremal_drift_envelope_and_cycle_squeeze
-#print axioms thm32_collatz_countable_core_stage_monoid_dual_drift_and_cycle_gap
-#print axioms thm33_collatz_boundary_fixed_point_reflection_cycle_ratio_and_qmin_collapse
-#print axioms thm10c_pillai_arbitrary_floor_closed_cubic_residual_and_annihilation_condition
-#print axioms thm12b_abc_countable_pade_tower_cubic_annihilation_and_adjacent_floor_escape
-#print axioms thm14b_abc_hankel_vandermonde_floor_defect_trichotomy_and_bilateral_bezout_bracket
-#print axioms thm14c_abc_three_shaft_minor_closure_and_joint_beta_gamma_brackets
-#print axioms thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_i_sqrt2_fields
-#print axioms thm35_general_field_derivative_operator_quotient_wronskian_and_variational_euler_lagrange
-#print axioms thm36_unified_extremum_principles_across_pillai_abc_and_collatz
-#print axioms thm37_collatz_resonant_gap_elimination_orbital_shift_and_qmin_qmax_sandwich
-#print axioms thm38_c_infinity_higher_derivatives_taylor_newton_expansion_and_pole_free_quotients
 
 end RotatorCalculusPaper

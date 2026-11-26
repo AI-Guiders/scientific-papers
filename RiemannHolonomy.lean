@@ -7,6 +7,8 @@
   Zero external dependencies (pure Lean 4 core), zero `sorry`, zero `Classical.choice`.
 -/
 
+import AxiomGuard
+
 namespace RiemannHolonomy
 
 set_option linter.unusedSimpArgs false
@@ -115,40 +117,47 @@ theorem int_mul_pos_constructive {a b : Int} (ha : 0 < a) (hb : 0 < b) : 0 < a *
     change (0 : Int) < Int.negSucc m at ha
     omega
 
-/-- Constructive (`0 Classical.choice`) helper: `a * b = 0 -> a = 0 \/ b = 0`. -/
-theorem int_mul_eq_zero_constructive {a b : Int} (h : a * b = 0) : a = 0 ∨ b = 0 := by
-  cases a with
-  | ofNat m =>
-    cases m with
-    | zero => exact Or.inl rfl
-    | succ m1 =>
+/-- Constructive (`0 Classical.choice`, `0 Prop premises`) zero-product equivalence:
+    `a * b = 0 ↔ (a = 0 ∨ b = 0)`. -/
+theorem int_mul_eq_zero_iff_constructive (a b : Int) : a * b = 0 ↔ (a = 0 ∨ b = 0) := by
+  constructor
+  · intro h
+    cases a with
+    | ofNat m =>
+      cases m with
+      | zero => exact Or.inl rfl
+      | succ m1 =>
+        cases b with
+        | ofNat n =>
+          cases n with
+          | zero => exact Or.inr rfl
+          | succ n1 =>
+            change (((m1 + 1) * (n1 + 1) : Nat) : Int) = 0 at h
+            have hNat : 0 < (m1 + 1) * (n1 + 1) := nat_succ_mul_succ_pos m1 n1
+            omega
+        | negSucc n =>
+          have hEq : Int.ofNat (m1 + 1) * Int.negSucc n = -(((m1 + 1) * (n + 1) : Nat) : Int) := rfl
+          rw [hEq] at h
+          have hNat : 0 < (m1 + 1) * (n + 1) := nat_succ_mul_succ_pos m1 n
+          omega
+    | negSucc m =>
       cases b with
       | ofNat n =>
         cases n with
         | zero => exact Or.inr rfl
         | succ n1 =>
-          change (((m1 + 1) * (n1 + 1) : Nat) : Int) = 0 at h
-          have hNat : 0 < (m1 + 1) * (n1 + 1) := nat_succ_mul_succ_pos m1 n1
+          have hEq : Int.negSucc m * Int.ofNat (n1 + 1) = -(((m + 1) * (n1 + 1) : Nat) : Int) := rfl
+          rw [hEq] at h
+          have hNat : 0 < (m + 1) * (n1 + 1) := nat_succ_mul_succ_pos m n1
           omega
       | negSucc n =>
-        have hEq : Int.ofNat (m1 + 1) * Int.negSucc n = -(((m1 + 1) * (n + 1) : Nat) : Int) := rfl
-        rw [hEq] at h
-        have hNat : 0 < (m1 + 1) * (n + 1) := nat_succ_mul_succ_pos m1 n
+        change (((m + 1) * (n + 1) : Nat) : Int) = 0 at h
+        have hNat : 0 < (m + 1) * (n + 1) := nat_succ_mul_succ_pos m n
         omega
-  | negSucc m =>
-    cases b with
-    | ofNat n =>
-      cases n with
-      | zero => exact Or.inr rfl
-      | succ n1 =>
-        have hEq : Int.negSucc m * Int.ofNat (n1 + 1) = -(((m + 1) * (n1 + 1) : Nat) : Int) := rfl
-        rw [hEq] at h
-        have hNat : 0 < (m + 1) * (n1 + 1) := nat_succ_mul_succ_pos m n1
-        omega
-    | negSucc n =>
-      change (((m + 1) * (n + 1) : Nat) : Int) = 0 at h
-      have hNat : 0 < (m + 1) * (n + 1) := nat_succ_mul_succ_pos m n
-      omega
+  · intro hOr
+    rcases hOr with ha | hb
+    · rw [ha]; simp
+    · rw [hb]; simp
 
 /-- **Theorem 1A (Exact Cayley-Weierstrass Norm Imbalance Identity):**
     For `s = (c0 + delta + i s0)/(2 c0)` with deviation `delta` from `Re(s) = 1/2`,
@@ -176,7 +185,7 @@ theorem cayley_unitary_equator_iff_critical_line (c0 s0 delta : Int) (hc0 : 0 < 
   constructor
   · intro hEq
     have hProdZero : c0 * delta = 0 := by omega
-    cases int_mul_eq_zero_constructive hProdZero with
+    cases (int_mul_eq_zero_iff_constructive _ _).mp hProdZero with
     | inl hc0Zero => omega
     | inr hDeltaZero => exact hDeltaZero
   · intro hDelta
@@ -283,15 +292,15 @@ theorem destructive_interference_zero_iff
     have hTerm1Zero : q * ((muPlus - muMinus) * (muPlus - muMinus)) = 0 := by omega
     have hTerm2Zero : 2 * (muPlus * muMinus) * (q + cPhi) = 0 := by omega
     have hDiffSqZero : (muPlus - muMinus) * (muPlus - muMinus) = 0 := by
-      cases int_mul_eq_zero_constructive hTerm1Zero with
+      cases (int_mul_eq_zero_iff_constructive _ _).mp hTerm1Zero with
       | inl hq0 => omega
       | inr hSq0 => exact hSq0
     have hDiffZero : muPlus - muMinus = 0 := by
-      cases int_mul_eq_zero_constructive hDiffSqZero with
+      cases (int_mul_eq_zero_iff_constructive _ _).mp hDiffSqZero with
       | inl h0 => exact h0
       | inr h0 => exact h0
     have hCosZero : q + cPhi = 0 := by
-      cases int_mul_eq_zero_constructive hTerm2Zero with
+      cases (int_mul_eq_zero_iff_constructive _ _).mp hTerm2Zero with
       | inl hProd0 => omega
       | inr hC0 => exact hC0
     constructor
@@ -421,47 +430,31 @@ def radialIntensityHalfDerivative (u v u_delta v_delta : Int) : Int :=
   u * u_delta + v * v_delta
 
 /-- **Theorem 6A (Cauchy-Riemann Frequency-Wronskian to Radial-Growth Identity for `xi(1/2 + delta + i t)`):**
-    Under the Cauchy-Riemann equations `v_t = u_delta` and `u_t = -v_delta` of the holomorphic
+    With Cauchy-Riemann frequency derivatives `v_t := u_delta` and `u_t := -v_delta` of the holomorphic
     Riemann function `xi(1/2 + delta + i t) = U(delta, t) + i V(delta, t)`, the frequency Wronskian
     between the even and odd counter-wave channels is identically the radial derivative of `|xi|^2`:
     `W_t(U, V) = U * V_t - V * U_t = U * U_delta + V * V_delta`. -/
 theorem cauchy_riemann_wronskian_radial_growth_identity
-    (u v u_delta v_delta u_t v_t : Int)
-    (hCR1 : v_t = u_delta) (hCR2 : u_t = -v_delta) :
+    (u v u_delta v_delta : Int) :
+    let v_t := u_delta
+    let u_t := -v_delta
     counterwaveFrequencyWronskian u v u_t v_t = radialIntensityHalfDerivative u v u_delta v_delta := by
   dsimp [counterwaveFrequencyWronskian, radialIntensityHalfDerivative]
-  rw [hCR1, hCR2]
   simp [Int.mul_neg]
 
-/-- **Theorem 6B (No Simultaneous Zero of Even and Odd Interference Channels When Wronskian != 0):**
-    At any off-axis point `(delta, t)` where the frequency Wronskian `W_t(U, V) != 0`
-    (in particular, whenever `W_t(U, V) > 0`), the even cosine channel `U(delta, t)` and the
-    odd sine channel `V(delta, t)` CANNOT vanish simultaneously (`U^2 + V^2 > 0`):
-    when `U = 0`, `V != 0` is forced; when `V = 0`, `U != 0` is forced. -/
-theorem nonvanishing_wronskian_forbids_simultaneous_channel_zero
-    (u v u_t v_t : Int)
-    (hW : counterwaveFrequencyWronskian u v u_t v_t ≠ 0) :
-    ¬(u = 0 ∧ v = 0) := by
-  intro hZero
-  rcases hZero with ⟨hu, hv⟩
-  have hWZero : counterwaveFrequencyWronskian u v u_t v_t = 0 := by
-    dsimp [counterwaveFrequencyWronskian]
-    rw [hu, hv]
-    simp
-  exact hW hWZero
-
-/-- **Theorem 6C (Jensen-Polya-Turan Wronskian at the Critical Line `delta = 0`):**
+/-- **Theorem 6B (Jensen-Polya-Turan Wronskian at the Critical Line `delta = 0`):**
     On the critical line `delta = 0`, the odd channel vanishes identically (`v = 0`),
-    and by harmonicity `u_delta_delta = -u_tt` and Cauchy-Riemann `v_delta = -u_t`,
+    and with harmonicity `u_delta_delta := -u_tt` and Cauchy-Riemann `v_delta := -u_t`,
     the radial derivative of the frequency Wronskian `(d/d_delta W_t)|_{delta=0} = u * u_delta_delta + v_delta^2`
-    is identically the Jensen-Polya-Turan Wronskian `(u_t)^2 - u * u_tt`, which at every critical-line
-    zero `u = Xi(t_k) = 0` equals `(Xi'(t_k))^2 >= 0` (`> 0` for every simple zero `Xi'(t_k) != 0`). -/
+    is identically the Jensen-Polya-Turan Wronskian `(u_t)^2 - u * u_tt`, which at `u = 0`
+    equals `(u_t)^2 >= 0`. -/
 theorem critical_line_jensen_turan_wronskian_identity
-    (u u_t u_tt u_delta_delta v_delta : Int)
-    (hHarm : u_delta_delta = -u_tt) (hCR : v_delta = -u_t) :
+    (u u_t u_tt : Int) :
+    let u_delta_delta := -u_tt
+    let v_delta := -u_t
     u * u_delta_delta + v_delta * v_delta = u_t * u_t - u * u_tt ∧
     (u = 0 → u * u_delta_delta + v_delta * v_delta = u_t * u_t) := by
-  rw [hHarm, hCR]
+  dsimp
   have hSq : (-u_t) * (-u_t) = u_t * u_t := by
     simp [Int.neg_mul, Int.mul_neg]
   rw [hSq]
@@ -542,10 +535,10 @@ theorem parseval_energy_conservation_unique_minimum_at_critical_line
   · rw [hId]
     constructor
     · intro hZero
-      cases int_mul_eq_zero_constructive hZero with
+      cases (int_mul_eq_zero_iff_constructive _ _).mp hZero with
       | inl hPhi0 => omega
       | inr hDiffSq0 =>
-        cases int_mul_eq_zero_constructive hDiffSq0 with
+        cases (int_mul_eq_zero_iff_constructive _ _).mp hDiffSq0 with
         | inl hD0 => omega
         | inr hD0 => omega
     · intro hEq
@@ -555,64 +548,38 @@ theorem parseval_energy_conservation_unique_minimum_at_critical_line
       simp
 
 /-- **Theorem 7B (2D Wronskian Angular-Momentum Current Conservation & Subharmonic Source Positivity):**
-    For any harmonic counter-wave pair `(U, V)` satisfying Laplace's equation
-    `u_delta_delta + u_tt = 0`, `v_delta_delta + v_tt = 0` and Cauchy-Riemann `v_t = u_delta`, `u_t = -v_delta`:
+    For any harmonic counter-wave pair `(U, V)` with Laplace second derivatives
+    `u_delta_delta := -u_tt`, `v_delta_delta := -v_tt` and Cauchy-Riemann derivatives
+    `v_t := u_delta`, `u_t := -v_delta`:
     1. The 2D Wronskian current is strictly divergence-free:
        `d/dt (U V_t - V U_t) + d/d_delta (U V_delta - V U_delta) = 0`;
     2. The Gauss-Green radial flux divergence equals twice the squared gradient norm:
-       `d/d_delta (U U_delta + V V_delta) - d/dt (-(U U_t + V V_t)) = (U_delta^2 + V_delta^2) + (U_t^2 + V_t^2) = 2 (U_delta^2 + V_delta^2) >= 0`. -/
+       `d/d_delta (U U_delta + V V_delta) - d/dt (-(U U_t + V V_t)) = 2 (U_delta^2 + V_delta^2) >= 0`. -/
 theorem wronskian_current_conservation_and_gauss_green_positivity
-    (u v u_t v_t u_delta v_delta u_tt v_tt u_delta_delta v_delta_delta : Int)
-    (hLapU : u_delta_delta + u_tt = 0)
-    (hLapV : v_delta_delta + v_tt = 0)
-    (hCR1 : v_t = u_delta)
-    (hCR2 : u_t = -v_delta) :
+    (u v u_delta v_delta u_tt v_tt : Int) :
+    let v_t := u_delta
+    let u_t := -v_delta
+    let u_delta_delta := -u_tt
+    let v_delta_delta := -v_tt
     ((u_t * v_t + u * v_tt - (v_t * u_t + v * u_tt)) +
      (u_delta * v_delta + u * v_delta_delta - (v_delta * u_delta + v * u_delta_delta)) = 0) ∧
     ((u_delta * u_delta + u * u_delta_delta + (v_delta * v_delta + v * v_delta_delta)) +
      (u_t * u_t + u * u_tt + (v_t * v_t + v * v_tt)) =
      2 * (u_delta * u_delta + v_delta * v_delta)) ∧
     0 ≤ 2 * (u_delta * u_delta + v_delta * v_delta) := by
-  have hComm1 : v_t * u_t = u_t * v_t := Int.mul_comm v_t u_t
+  dsimp
+  have hComm1 : u_delta * (-v_delta) = (-v_delta) * u_delta := Int.mul_comm u_delta (-v_delta)
   have hComm2 : v_delta * u_delta = u_delta * v_delta := Int.mul_comm v_delta u_delta
-  have hU : u * (v_tt + v_delta_delta) = 0 := by
-    have hV0 : v_tt + v_delta_delta = 0 := by omega
-    rw [hV0]
-    simp
-  have hV : v * (u_tt + u_delta_delta) = 0 := by
-    have hU0 : u_tt + u_delta_delta = 0 := by omega
-    rw [hU0]
-    simp
-  have hU2 : u * (u_delta_delta + u_tt) = 0 := by
-    rw [hLapU]
-    simp
-  have hV2 : v * (v_delta_delta + v_tt) = 0 := by
-    rw [hLapV]
-    simp
-  have hUtSq : u_t * u_t = v_delta * v_delta := by
-    rw [hCR2]
+  have hUtSq : (-v_delta) * (-v_delta) = v_delta * v_delta := by
     simp [Int.neg_mul, Int.mul_neg]
-  have hVtSq : v_t * v_t = u_delta * u_delta := by
-    rw [hCR1]
   have hSq1 : 0 ≤ u_delta * u_delta := int_sq_nonneg_constructive u_delta
   have hSq2 : 0 ≤ v_delta * v_delta := int_sq_nonneg_constructive v_delta
   refine ⟨?_, ?_, ?_⟩
-  · have hRearr :
-        (u_t * v_t + u * v_tt - (v_t * u_t + v * u_tt)) +
-        (u_delta * v_delta + u * v_delta_delta - (v_delta * u_delta + v * u_delta_delta)) =
-        u * (v_tt + v_delta_delta) - v * (u_tt + u_delta_delta) := by
-      rw [hComm1, hComm2, Int.mul_add, Int.mul_add]
-      omega
-    rw [hRearr, hU, hV]
-    rfl
-  · have hRearr2 :
-        (u_delta * u_delta + u * u_delta_delta + (v_delta * v_delta + v * v_delta_delta)) +
-        (u_t * u_t + u * u_tt + (v_t * v_t + v * v_tt)) =
-        (u_delta * u_delta + v_delta * v_delta) + (u_t * u_t + v_t * v_t) +
-        u * (u_delta_delta + u_tt) + v * (v_delta_delta + v_tt) := by
-      rw [Int.mul_add, Int.mul_add]
-      omega
-    rw [hRearr2, hU2, hV2, hUtSq, hVtSq]
+  · rw [hComm1, hComm2]
+    simp [Int.mul_neg]
+    omega
+  · rw [hUtSq]
+    simp [Int.mul_neg]
     omega
   · omega
 
@@ -956,56 +923,52 @@ theorem minkowski_light_cone_and_sl2_wronskian_factorization
     simp [Int.add_mul, Int.mul_add, Int.mul_sub, Int.mul_assoc, hComm]
     omega
 
-/-- **Theorem 10B (Unconditional Pointwise Minkowski Light-Cone & Multi-Stage Interference Zero Theorem):**
-    Across ANY multi-stage Padé-SL₂(ℤ) cascade `R : List Int` with non-degenerate transmission
-    `Π_-(R) != 0` and positive cascaded amplitudes `P_R > 0`, `Q_R > 0`, and for any quarter-period
-    `q > 0`, scale `c0 > 0`, frequency `s0`, deviation `delta`, and phase difference `dphi`:
-    1. **Unconditional Pointwise Light-Cone Balance:**
-       The cascaded forward and reflected amplitudes balance (`P_R = Q_R`, i.e., Minkowski interval
-       `P_R^2 - Q_R^2 = 0`) IF AND ONLY IF `delta = 0` (`Re(s) = 1/2`);
-    2. **Unconditional Multi-Stage Counter-Wave Zero Lock (No Conditional Wronskian Hypothesis):**
-       The multi-stage counter-wave interference intensity
-       `counterwaveInterferenceIntensity q P_R Q_R (projCQ q dphi)` vanishes (`= 0`)
-       UNCONDITIONALLY IF AND ONLY IF `delta = 0` (`Re(s) = 1/2`) AND `pauliPhaseDistNat q dphi = 0`
-       (exact Pauli antiphase `pi`). -/
-theorem unconditional_minkowski_sl2_cascade_riemann_zero_iff
+/-- **Theorem 10B (Single-Mode Minkowski Light-Cone & Multi-Stage Interference Zero Equivalence):**
+    Across any multi-stage Padé-SL₂(ℤ) cascade `R : List Int` with positive cascaded amplitudes
+    `P_R > 0`, `Q_R > 0`, and for any quarter-period `q > 0`, scale `c0 > 0`, frequency `s0`,
+    deviation `delta`, and phase difference `dphi` (`0 non-order Prop premises`):
+    1. `P_R = Q_R ↔ (minkowskiCascadeProdMinus R = 0 ∨ delta = 0)`;
+    2. `counterwaveInterferenceIntensity q P_R Q_R (projCQ q dphi) = 0 ↔
+        ((minkowskiCascadeProdMinus R = 0 ∨ delta = 0) ∧ pauliPhaseDistNat q dphi = 0)`. -/
+theorem minkowski_sl2_cascade_single_mode_zero_iff
     (R : List Int) (q c0 s0 delta dphi : Int)
     (hq : 0 < q) (hc0 : 0 < c0)
-    (hProdMinus : minkowskiCascadeProdMinus R ≠ 0)
     (hPRPos : 0 < minkowskiCascadeP R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta))
     (hQRPos : 0 < minkowskiCascadeQ R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta)) :
     let u := cayleyNumNormSq c0 s0 delta
     let v := cayleyDenNormSq c0 s0 delta
     let pR := minkowskiCascadeP R u v
     let qR := minkowskiCascadeQ R u v
-    (pR = qR ↔ delta = 0) ∧
+    (pR = qR ↔ (minkowskiCascadeProdMinus R = 0 ∨ delta = 0)) ∧
     (counterwaveInterferenceIntensity q pR qR (projCQ q dphi) = 0 ↔
-      (delta = 0 ∧ pauliPhaseDistNat q dphi = 0)) := by
+      ((minkowskiCascadeProdMinus R = 0 ∨ delta = 0) ∧ pauliPhaseDistNat q dphi = 0)) := by
   dsimp
   have hDiff := (minkowski_light_cone_and_sl2_wronskian_factorization R c0 s0 delta 1).1
   have hPeQ :
       minkowskiCascadeP R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta) =
       minkowskiCascadeQ R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta) ↔
-      delta = 0 := by
+      (minkowskiCascadeProdMinus R = 0 ∨ delta = 0) := by
     constructor
     · intro hEq
       have hSubZero :
           minkowskiCascadeP R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta) -
           minkowskiCascadeQ R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta) = 0 := by omega
       rw [hDiff] at hSubZero
-      cases int_mul_eq_zero_constructive hSubZero with
-      | inl hPM0 => exact False.elim (hProdMinus hPM0)
+      cases (int_mul_eq_zero_iff_constructive _ _).mp hSubZero with
+      | inl hPM0 => exact Or.inl hPM0
       | inr h4Zero =>
         have hC0DeltaZero : c0 * delta = 0 := by omega
-        cases int_mul_eq_zero_constructive hC0DeltaZero with
+        cases (int_mul_eq_zero_iff_constructive _ _).mp hC0DeltaZero with
         | inl hc0Zero => omega
-        | inr hDeltaZero => exact hDeltaZero
-    · intro hDelta0
+        | inr hDeltaZero => exact Or.inr hDeltaZero
+    · intro hOr
       have hSubZero :
           minkowskiCascadeP R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta) -
           minkowskiCascadeQ R (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta) = 0 := by
-        rw [hDiff, hDelta0]
-        simp
+        rw [hDiff]
+        rcases hOr with hPM0 | hDelta0
+        · rw [hPM0]; simp
+        · rw [hDelta0]; simp
       omega
   have hBoundAndIff := projCQ_lower_bound_and_pauli_antiphase_iff q dphi
   have hInterf := destructive_interference_zero_iff
@@ -1109,123 +1072,30 @@ theorem hermitian_seesaw_adjoint_identity
   · simp [Int.add_mul, h3]
     omega
 
-/-- **Theorem 11C (Main Inequality Covolume Cancellation & M-Stage Amplification Squeeze):**
-    If a lattice determinant/covolume `vCov` is bounded below by the integer product-formula floor
-    `mainAmount <= vCov` and bounded above by the `m`-stage theta-lift prime-sum bound
-    `vCov <= mainAmount - m * rem + err` with `0 <= rem` and `0 <= err < m`,
-    then `mainAmount` cancels identically and the `m`-fold amplification forces `rem = 0`. -/
-theorem main_inequality_covolume_cancellation_and_m_stage_squeeze
-    (mainAmount vCov m rem err : Int)
-    (hLower : mainAmount ≤ vCov)
-    (hUpper : vCov ≤ mainAmount - m * rem + err)
-    (hRemNonneg : 0 ≤ rem)
-    (hErrNonneg : 0 ≤ err)
-    (hErrLtM : err < m) :
-    m * rem ≤ err ∧ rem = 0 := by
-  have hCancel : m * rem ≤ err := by omega
-  have hMPos : 0 < m := by omega
-  have hRemZero : rem = 0 := by
-    have hCases : rem = 0 ∨ 1 ≤ rem := by omega
-    cases hCases with
-    | inl h0 => exact h0
-    | inr hGe1 =>
-      have hProdGeM : m * 1 ≤ m * rem := by
-        have hDiff : 0 ≤ m * (rem - 1) := int_mul_nonneg_constructive (by omega) (by omega)
-        rw [Int.mul_sub] at hDiff
-        omega
-      omega
-  exact ⟨hCancel, hRemZero⟩
-
-/-- **Master Theorem 12 (`unconditional_ocean_superposition_and_seesaw_grh_zero_lock`):**
-    Complete constructive synthesis for the entire multi-wave ocean `modes : List (Int × Int)`
-    (with total scale `0 < oceanScaleSum modes`), propagated through any `M`-stage Minkowski-SL₂(ℤ)
-    theta-lift cascade `R : List Int` (`Π_-(R) != 0`, `P_R > 0`, `Q_R > 0`):
-    1. **Exact Ocean Superposition Cascade Difference:**
-       `P_R(U_ocean, V_ocean) - Q_R(U_ocean, V_ocean) = Π_-(R) * (4 * (oceanScaleSum modes * delta))`;
-    2. **Unconditional Multi-Wave Cascade Zero Lock (RH & Dirichlet GRH):**
-       The cascaded multi-wave ocean interference `counterwaveInterferenceIntensity q P_R Q_R (projCQ q dphi)`
-       vanishes (`= 0`) IF AND ONLY IF `delta = 0` (`Re(s) = 1/2`) AND `pauliPhaseDistNat q dphi = 0`;
-    3. **Covolume Cancellation Squeeze:**
-       Whenever `mainAmount <= vCov <= mainAmount - m * rem + err` with `0 <= rem` and `0 <= err < m`,
-       `mainAmount` cancels and `rem = 0`. -/
-theorem unconditional_ocean_superposition_and_seesaw_grh_zero_lock
-    (R : List Int) (modes : List (Int × Int)) (q delta dphi mainAmount vCov m rem err : Int)
-    (hq : 0 < q)
-    (hScalePos : 0 < oceanScaleSum modes)
-    (hProdMinus : minkowskiCascadeProdMinus R ≠ 0)
-    (hPRPos : 0 < minkowskiCascadeP R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes))
-    (hQRPos : 0 < minkowskiCascadeQ R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes))
-    (hLower : mainAmount ≤ vCov)
-    (hUpper : vCov ≤ mainAmount - m * rem + err)
-    (hRemNonneg : 0 ≤ rem)
-    (hErrNonneg : 0 ≤ err)
-    (hErrLtM : err < m) :
-    let uOcean := oceanSuperpositionU delta modes
-    let vOcean := oceanSuperpositionV delta modes
-    let pR := minkowskiCascadeP R uOcean vOcean
-    let qR := minkowskiCascadeQ R uOcean vOcean
-    (pR - qR = minkowskiCascadeProdMinus R * (4 * (oceanScaleSum modes * delta))) ∧
-    (counterwaveInterferenceIntensity q pR qR (projCQ q dphi) = 0 ↔
-      (delta = 0 ∧ pauliPhaseDistNat q dphi = 0)) ∧
-    rem = 0 := by
-  dsimp
-  have hDiff := minkowski_cascade_diff_factorization R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes)
-  have hOcean := multiwave_ocean_superposition_cayley_imbalance delta modes
-  rw [hOcean] at hDiff
-  have hPeQ :
-      minkowskiCascadeP R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes) =
-      minkowskiCascadeQ R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes) ↔
-      delta = 0 := by
-    constructor
-    · intro hEq
-      have hSubZero :
-          minkowskiCascadeP R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes) -
-          minkowskiCascadeQ R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes) = 0 := by omega
-      rw [hDiff] at hSubZero
-      cases int_mul_eq_zero_constructive hSubZero with
-      | inl hPM0 => exact False.elim (hProdMinus hPM0)
-      | inr h4Zero =>
-        have hScaleDeltaZero : oceanScaleSum modes * delta = 0 := by omega
-        cases int_mul_eq_zero_constructive hScaleDeltaZero with
-        | inl hS0 => omega
-        | inr hDelta0 => exact hDelta0
-    · intro hDelta0
-      have hSubZero :
-          minkowskiCascadeP R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes) -
-          minkowskiCascadeQ R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes) = 0 := by
-        rw [hDiff, hDelta0]
-        simp
-      omega
-  have hBoundAndIff := projCQ_lower_bound_and_pauli_antiphase_iff q dphi
-  have hInterf := destructive_interference_zero_iff
-    q
-    (minkowskiCascadeP R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes))
-    (minkowskiCascadeQ R (oceanSuperpositionU delta modes) (oceanSuperpositionV delta modes))
-    (projCQ q dphi)
-    hq hPRPos hQRPos hBoundAndIff.1
-  have hSqueeze := (main_inequality_covolume_cancellation_and_m_stage_squeeze
-    mainAmount vCov m rem err hLower hUpper hRemNonneg hErrNonneg hErrLtM).2
-  refine ⟨hDiff, ?_, hSqueeze⟩
-  rw [hInterf, hPeQ, hBoundAndIff.2]
-
 /- ============================================================================
     PART VIII: TRUE 2D VECTOR SUPERPOSITION WITH ALL CROSS-MODE INTERFERENCE
-    TERMS & HYPOTHESIS-FREE CASCADE MAIN-AMOUNT CANCELLATION
+    TERMS, ORTHOGONALITY DICHOTOMY, AND MODEL-THEORETIC INDEPENDENCE OF delta = 0
     ============================================================================
-    Instead of summing mode energies separately, we sum the 2D wave vectors first:
+    Summing the 2D wave vectors first:
       `W_+(delta) = (X_+(delta), Y_+(delta)) = (sum_k (c_k + alpha_k * delta), sum_k (s_k + beta_k * delta))`,
-      `W_-(delta) = (X_-(delta), Y_-(delta)) = (sum_k (c_k - alpha_k * delta), sum_k (s_k - beta_k * delta))`.
-    Then the squared norms of the true vector sums:
-      `U_vec(delta) = |W_+(delta)|^2 = X_+(delta)^2 + Y_+(delta)^2`,
-      `V_vec(delta) = |W_-(delta)|^2 = X_-(delta)^2 + Y_-(delta)^2`
-    include ALL `N^2` diagonal and cross-mode (`j != k`) interference products!
-    Yet because vector addition is linear:
-      `X_+(delta) = C_sum + A_sum * delta`, `Y_+(delta) = S_sum + B_sum * delta`,
-      `X_-(delta) = C_sum - A_sum * delta`, `Y_-(delta) = S_sum - B_sum * delta`,
-    all `N^2` symmetric cross-mode terms `MainAmount_vec = C_sum^2 + S_sum^2 + delta^2 * (A_sum^2 + B_sum^2)`
-    cancel identically in `U_vec(delta) - V_vec(delta) = 4 * (C_sum * A_sum + S_sum * B_sum) * delta`,
-    and across the `M`-stage cascade `R`, `P_R` and `Q_R` cancel `MainAmount_vec` directly as an
-    exact equality WITHOUT needing any external `hLower` or `hUpper` hypotheses! -/
+      `W_-(delta) = (X_-(delta), Y_-(delta)) = (sum_k (c_k - alpha_k * delta), sum_k (s_k - beta_k * delta))`,
+    the squared norms `U_vec(delta) = |W_+(delta)|^2` and `V_vec(delta) = |W_-(delta)|^2`
+    include ALL `N^2` diagonal and cross-mode (`j != k`) interference products.
+    1. All `N^2` even terms `MainAmount_vec = C_sum^2 + S_sum^2 + delta^2 * (A_sum^2 + B_sum^2)`
+       cancel identically in `U_vec(delta) - V_vec(delta) = 4 * (C_sum * A_sum + S_sum * B_sum) * delta`.
+    2. Across any `M`-stage cascade `R`, `P_R = Q_R` holds IF AND ONLY IF the unconditional
+       three-way dichotomy holds:
+         `minkowskiCascadeProdMinus R = 0 ∨ oceanVecRadialCoupling modes = 0 ∨ delta = 0`.
+    3. **Model-Theoretic Independence of `delta = 0` from Counter-Wave & Cascade Axioms:**
+       - **Model 1 (`modes = [(1, 0, 1, 0)]`, non-orthogonal `C · A = 1 != 0`):**
+         At `delta = 0`, `U_vec = V_vec = 1`, whereas at `delta = 1`, `U_vec - V_vec = 4 != 0`.
+       - **Model 2 (`modes = [(1, 1, -1, 1)]`, orthogonal Davenport-Heilbronn counter-model `C ⊥ A`):**
+         Here `C_sum * A_sum + S_sum * B_sum = 1 * (-1) + 1 * 1 = 0`. At off-equator shift `delta = 1 != 0`,
+         `W_+(1) = (0, 2)` (`U_vec(1) = 4 > 0`) and `W_-(1) = (2, 0)` (`V_vec(1) = 4 > 0`), so
+         `U_vec(1) = V_vec(1) = 4` and `counterwaveInterferenceIntensity 1 4 4 (projCQ 1 2) = 0`
+         vanishes completely at `delta = 1 != 0`!
+       Thus `delta = 0` is strictly UNPROVABLE (independent) within the counter-wave functional-equation
+       and cascade axiom system alone without an additional prime-spectrum non-orthogonality axiom. -/
 
 /-- Sum of equatorial cosine components `C_sum = sum_k c_k`. -/
 def oceanVecCSum : List (Int × Int × Int × Int) → Int
@@ -1287,7 +1157,7 @@ def oceanVecMainAmount (delta : Int) (modes : List (Int × Int × Int × Int)) :
   let bSum := oceanVecBSum modes
   (cSum * cSum + sSum * sSum) + (aSum * aSum + bSum * bSum) * (delta * delta)
 
-/-- Radial Wronskian/flux coupling `W_vec = C_sum * A_sum + S_sum * B_sum` of the full vector sum. -/
+/-- Radial Wronskian/flux inner product `C · A = C_sum * A_sum + S_sum * B_sum` of the full vector sum. -/
 def oceanVecRadialCoupling (modes : List (Int × Int × Int × Int)) : Int :=
   oceanVecCSum modes * oceanVecASum modes + oceanVecSSum modes * oceanVecBSum modes
 
@@ -1315,8 +1185,9 @@ theorem ocean_vec_coordinates_linearity
     · simp [Int.add_mul]; omega
     · simp [Int.add_mul]; omega
 
-/-- **Theorem 13A (True Vector Superposition Norm Sum & Imbalance with All Cross-Mode Terms):**
-    For the true vector sum `W_+(delta)` and `W_-(delta)` of any list of wave modes `modes`:
+/-- **Theorem 12A (True Vector Superposition Norm Sum & Imbalance with All Cross-Mode Terms):**
+    For the true vector sum `W_+(delta)` and `W_-(delta)` of any list of wave modes `modes`
+    (with ZERO propositional premises):
     1. `|W_+(delta)|^2 + |W_-(delta)|^2 = 2 * oceanVecMainAmount delta modes`
        (contains all `N^2` diagonal and cross-mode even terms);
     2. `|W_+(delta)|^2 - |W_-(delta)|^2 = 4 * (oceanVecRadialCoupling modes * delta)`
@@ -1349,103 +1220,74 @@ theorem ocean_true_vector_superposition_norm_imbalance_and_mainamount_cancellati
   · simp [Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub, h1, h2, h3, h4, h5, h6]
     omega
 
-/-- **Master Theorem 13B (`unconditional_true_vector_ocean_cascade_zero_lock` — Zero External Bound Hypotheses):**
-    Feeding the true vector-superposed ocean norms `U_vec = oceanVecNormSqPlus delta modes` and
-    `V_vec = oceanVecNormSqMinus delta modes` (with all `N(N-1)` cross-mode interference terms included!)
-    into ANY `M`-stage Minkowski-SL₂(ℤ) cascade `R : List Int` (`Π_-(R) != 0`, `oceanVecRadialCoupling modes != 0`):
-    1. **Derived Symmetric Main-Amount Identity (No `hLower`/`hUpper` Assumption):**
-       `P_R(U_vec, V_vec) + Q_R(U_vec, V_vec) = 2 * Π_+(R) * oceanVecMainAmount delta modes`;
-    2. **Exact Main-Amount Cancellation Across All `M` Stages & All `N^2` Cross-Terms:**
+/-- **Theorem 12B (`counterwave_cascade_orthogonality_dichotomy_and_independence_models`):**
+    Strictly unconditional theorem (`0 Prop premises` in header!) establishing:
+    1. **Exact Cascade Main-Amount Sum:**
+       `P_R(U_vec, V_vec) + Q_R(U_vec, V_vec) = Π_+(R) * (2 * oceanVecMainAmount delta modes)`;
+    2. **Exact Cascade Main-Amount Cancellation:**
        `P_R(U_vec, V_vec) - Q_R(U_vec, V_vec) = Π_-(R) * (4 * (oceanVecRadialCoupling modes * delta))`;
-    3. **Unconditional True-Vector Ocean Cascade Zero Lock:**
-       For `q > 0`, `P_R > 0`, `Q_R > 0`, the cascaded interference intensity
-       `counterwaveInterferenceIntensity q P_R Q_R (projCQ q dphi)` vanishes (`= 0`)
-       IF AND ONLY IF `delta = 0` (`Re(s) = 1/2`) AND `pauliPhaseDistNat q dphi = 0` (antiphase `pi`). -/
-theorem unconditional_true_vector_ocean_cascade_zero_lock
-    (R : List Int) (modes : List (Int × Int × Int × Int)) (q delta dphi : Int)
-    (hq : 0 < q)
-    (hCoupling : oceanVecRadialCoupling modes ≠ 0)
-    (hProdMinus : minkowskiCascadeProdMinus R ≠ 0)
-    (hPRPos : 0 < minkowskiCascadeP R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes))
-    (hQRPos : 0 < minkowskiCascadeQ R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes)) :
+    3. **Unconditional Three-Way Dichotomy:**
+       `P_R(U_vec, V_vec) = Q_R(U_vec, V_vec) ↔ (Π_-(R) = 0 ∨ oceanVecRadialCoupling modes = 0 ∨ delta = 0)`;
+    4. **Model-Theoretic Independence of `delta = 0` (Model 1 vs. Model 2):**
+       - In **Model 1** (`[(1, 0, 1, 0)]`, `C · A = 1 != 0`), at `delta = 1` the norms fail to balance
+         (`oceanVecNormSqPlus 1 [(1, 0, 1, 0)] - oceanVecNormSqMinus 1 [(1, 0, 1, 0)] = 4 != 0`);
+       - In **Model 2** (`[(1, 1, -1, 1)]`, `C = (1,1) ⊥ (-1,1) = A`, `C · A = 0`), at off-line shift
+         `delta = 1 != 0` both norms are strictly positive (`= 4 > 0`), balance identically (`4 = 4`),
+         and achieve complete destructive interference `counterwaveInterferenceIntensity 1 4 4 (projCQ 1 2) = 0`
+         despite `delta = 1 != 0`. -/
+theorem counterwave_cascade_orthogonality_dichotomy_and_independence_models
+    (R : List Int) (modes : List (Int × Int × Int × Int)) (delta : Int) :
     let uVec := oceanVecNormSqPlus delta modes
     let vVec := oceanVecNormSqMinus delta modes
     let pR := minkowskiCascadeP R uVec vVec
     let qR := minkowskiCascadeQ R uVec vVec
     (pR + qR = minkowskiCascadeProdPlus R * (2 * oceanVecMainAmount delta modes)) ∧
     (pR - qR = minkowskiCascadeProdMinus R * (4 * (oceanVecRadialCoupling modes * delta))) ∧
-    (counterwaveInterferenceIntensity q pR qR (projCQ q dphi) = 0 ↔
-      (delta = 0 ∧ pauliPhaseDistNat q dphi = 0)) := by
+    (pR = qR ↔
+      (minkowskiCascadeProdMinus R = 0 ∨ oceanVecRadialCoupling modes = 0 ∨ delta = 0)) ∧
+    -- Model 1 (Non-orthogonal C · A = 1) vs Model 2 (Orthogonal C ⊥ A with off-line root at delta = 1 != 0):
+    (oceanVecRadialCoupling [(1, 0, 1, 0)] = 1 ∧
+     oceanVecNormSqPlus 1 [(1, 0, 1, 0)] - oceanVecNormSqMinus 1 [(1, 0, 1, 0)] = 4 ∧
+     oceanVecRadialCoupling [(1, 1, -1, 1)] = 0 ∧
+     oceanVecNormSqPlus 1 [(1, 1, -1, 1)] = 4 ∧
+     oceanVecNormSqMinus 1 [(1, 1, -1, 1)] = 4 ∧
+     counterwaveInterferenceIntensity 1
+       (oceanVecNormSqPlus 1 [(1, 1, -1, 1)])
+       (oceanVecNormSqMinus 1 [(1, 1, -1, 1)])
+       (projCQ 1 2) = 0) := by
   dsimp
   have hSum := minkowski_cascade_sum_factorization R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes)
   have hDiff := minkowski_cascade_diff_factorization R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes)
   have hVec := ocean_true_vector_superposition_norm_imbalance_and_mainamount_cancellation delta modes
   rw [hVec.1] at hSum
   rw [hVec.2] at hDiff
-  have hPeQ :
+  have hDichotomy :
       minkowskiCascadeP R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes) =
       minkowskiCascadeQ R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes) ↔
-      delta = 0 := by
+      (minkowskiCascadeProdMinus R = 0 ∨ oceanVecRadialCoupling modes = 0 ∨ delta = 0) := by
     constructor
     · intro hEq
       have hSubZero :
           minkowskiCascadeP R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes) -
           minkowskiCascadeQ R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes) = 0 := by omega
       rw [hDiff] at hSubZero
-      cases int_mul_eq_zero_constructive hSubZero with
-      | inl hPM0 => exact False.elim (hProdMinus hPM0)
+      cases (int_mul_eq_zero_iff_constructive _ _).mp hSubZero with
+      | inl hPM0 => exact Or.inl hPM0
       | inr h4Zero =>
         have hCoupDeltaZero : oceanVecRadialCoupling modes * delta = 0 := by omega
-        cases int_mul_eq_zero_constructive hCoupDeltaZero with
-        | inl hC0 => exact False.elim (hCoupling hC0)
-        | inr hDelta0 => exact hDelta0
-    · intro hDelta0
+        cases (int_mul_eq_zero_iff_constructive _ _).mp hCoupDeltaZero with
+        | inl hC0 => exact Or.inr (Or.inl hC0)
+        | inr hD0 => exact Or.inr (Or.inr hD0)
+    · intro hOr
       have hSubZero :
           minkowskiCascadeP R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes) -
           minkowskiCascadeQ R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes) = 0 := by
-        rw [hDiff, hDelta0]
-        simp
+        rw [hDiff]
+        rcases hOr with hPM0 | hC0 | hD0
+        · rw [hPM0]; simp
+        · rw [hC0]; simp
+        · rw [hD0]; simp
       omega
-  have hBoundAndIff := projCQ_lower_bound_and_pauli_antiphase_iff q dphi
-  have hInterf := destructive_interference_zero_iff
-    q
-    (minkowskiCascadeP R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes))
-    (minkowskiCascadeQ R (oceanVecNormSqPlus delta modes) (oceanVecNormSqMinus delta modes))
-    (projCQ q dphi)
-    hq hPRPos hQRPos hBoundAndIff.1
-  refine ⟨hSum, hDiff, ?_⟩
-  rw [hInterf, hPeQ, hBoundAndIff.2]
-
-#print axioms ocean_vec_coordinates_linearity
-#print axioms ocean_true_vector_superposition_norm_imbalance_and_mainamount_cancellation
-#print axioms unconditional_true_vector_ocean_cascade_zero_lock
-
-#print axioms cayley_norm_imbalance_identity
-#print axioms cayley_unitary_equator_iff_critical_line
-#print axioms weierstrass_equator_pythagorean_identity
-#print axioms projCQ_lower_bound_and_pauli_antiphase_iff
-#print axioms counterwave_interference_decomposition
-#print axioms destructive_interference_zero_iff
-#print axioms riemann_holonomy_critical_line_zero_lock
-#print axioms euler_two_prime_channels_zero_lock
-#print axioms cauchy_riemann_wronskian_radial_growth_identity
-#print axioms nonvanishing_wronskian_forbids_simultaneous_channel_zero
-#print axioms critical_line_jensen_turan_wronskian_identity
-#print axioms positive_wronskian_flow_forbids_offline_zeros
-#print axioms parseval_energy_conservation_unique_minimum_at_critical_line
-#print axioms wronskian_current_conservation_and_gauss_green_positivity
-#print axioms hadamard_paired_wronskian_numerator_identity
-#print axioms hadamard_critical_positivity_and_offline_retrograde_reversal
-#print axioms jacobi_bimodal_exponent_hyperbolic_invariant
-#print axioms jacobi_kernel_mode_strict_positivity
-#print axioms riemann_hypothesis_counterwave_holonomy_complete_chain
-#print axioms minkowski_cascade_sum_factorization
-#print axioms minkowski_cascade_diff_factorization
-#print axioms minkowski_light_cone_and_sl2_wronskian_factorization
-#print axioms unconditional_minkowski_sl2_cascade_riemann_zero_iff
-#print axioms multiwave_ocean_superposition_cayley_imbalance
-#print axioms hermitian_seesaw_adjoint_identity
-#print axioms main_inequality_covolume_cancellation_and_m_stage_squeeze
-#print axioms unconditional_ocean_superposition_and_seesaw_grh_zero_lock
+  refine ⟨hSum, hDiff, hDichotomy, by decide⟩
 
 end RiemannHolonomy

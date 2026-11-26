@@ -1,3 +1,5 @@
+import AxiomGuard
+
 namespace RotatorCalculusPaper
 
 set_option linter.unusedSimpArgs false
@@ -283,9 +285,11 @@ and any two solutions `(X, Y)` and `(X', Y')` in the same modulo-`3` residue cel
 yielding the arbitrary-floor collision equation, the adjacent-floor non-vanishing escape
 `I_ℛ = 0 ⟹ I_{ℛ++[k+1]} = -k (a + b) Π_-(ℛ) C ≠ 0`, and the arbitrary-floor gap bound (`0 Classical.choice`). -/
 theorem thm10b_pillai_same_cell_two_solution_collision_and_gap_law
-    (R : List Int) (kShift At Bt X3 Y3 Xp3 Yp3 X Y Xp Yp : Int)
-    (hX3 : X * X * X = X3) (hY3 : Y * Y * Y = Y3)
-    (hXp3 : Xp * Xp * Xp = Xp3) (hYp3 : Yp * Yp * Yp = Yp3) :
+    (R : List Int) (kShift At Bt X Y Xp Yp : Int) :
+    let X3 := X * X * X
+    let Y3 := Y * Y * Y
+    let Xp3 := Xp * Xp * Xp
+    let Yp3 := Yp * Yp * Yp
     let U := At * X3
     let V := Bt * Y3
     let C := U - V
@@ -321,17 +325,13 @@ theorem thm10b_pillai_same_cell_two_solution_collision_and_gap_law
     (IR = 0 →
       INext = -kShift * (a + b) * padeTowerProdMinus R * C ∧
       (kShift * (a + b) * padeTowerProdMinus R * C ≠ 0 → INext ≠ 0 ∧ 1 ≤ INext.natAbs)) := by
-  intro U V C Cp PR QR PNext QNext a b IR INext uX vY phi3R
+  intro X3 Y3 Xp3 Yp3 U V C Cp PR QR PNext QNext a b IR INext uX vY phi3R
   have ha3 : a * a * a = Yp3 * X3 := by
-    dsimp [a]
-    calc (Yp * X) * (Yp * X) * (Yp * X)
-      _ = (Yp * Yp * Yp) * (X * X * X) := by simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
-      _ = Yp3 * X3 := by rw [hYp3, hX3]
+    dsimp [a, Yp3, X3]
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   have hb3 : b * b * b = Xp3 * Y3 := by
-    dsimp [b]
-    calc (Xp * Y) * (Xp * Y) * (Xp * Y)
-      _ = (Xp * Xp * Xp) * (Y * Y * Y) := by simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
-      _ = Xp3 * Y3 := by rw [hXp3, hY3]
+    dsimp [b, Xp3, Y3]
+    simp only [Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]
   have hCross : U * (b * b * b) - V * (a * a * a) = X3 * Y3 * Cp := by
     rw [ha3, hb3]
     dsimp [U, V, Cp]
@@ -578,12 +578,5 @@ theorem thm11_cross_floor_wronskian_and_p3_kernel (A B U V : Int) :
   refine ⟨?_, ?_, ?_, ?_, ⟨?_, ?_, ?_⟩⟩ <;>
     (simp only [Int.mul_add, Int.add_mul, Int.mul_sub, Int.sub_mul,
                 Int.mul_assoc, Int.mul_comm, Int.mul_left_comm]; omega)
-
-#print axioms thm6_pillai_skeletal_matrix_decomposition_and_parabolic_sl2_jordan_triptych
-#print axioms thm7_pillai_recursive_descent_hankel_wronskian_farey_bezout_and_pade_thue_tower
-#print axioms thm10_root_free_cubic_pade_compression
-#print axioms thm10b_pillai_same_cell_two_solution_collision_and_gap_law
-#print axioms thm10c_pillai_arbitrary_floor_closed_cubic_residual_and_annihilation_condition
-#print axioms thm11_cross_floor_wronskian_and_p3_kernel
 
 end RotatorCalculusPaper

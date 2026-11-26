@@ -7,6 +7,8 @@
   Zero external dependencies (pure Lean 4 core), zero `sorry`, zero `Classical.choice`.
 -/
 
+import AxiomGuard
+
 namespace RotatorCalculusPaper
 
 set_option linter.unusedSimpArgs false
@@ -161,12 +163,11 @@ theorem discreteIntegral_const_mul (N : Nat) (c : Int) (g : Int → Int) :
   | zero => dsimp [discreteIntegral]; omega
   | succ n ih => dsimp [discreteIntegral]; rw [ih, Int.mul_add]
 
-theorem discreteIntegral_pointwise_const (N : Nat) (cInv : Int) (g : Int → Int)
-    (hC : ∀ p : Int, g p = cInv) :
-    discreteIntegral N g = (N : Int) * cInv := by
+theorem discreteIntegral_const (N : Nat) (cInv : Int) :
+    discreteIntegral N (fun _ => cInv) = (N : Int) * cInv := by
   induction N with
   | zero => dsimp [discreteIntegral]; omega
-  | succ n ih => dsimp [discreteIntegral]; rw [ih, hC (n : Int), Int.add_mul]; omega
+  | succ n ih => dsimp [discreteIntegral]; rw [ih, Int.add_mul]; omega
 
 /-- **Theorem 1 (Discrete Euler Exponential `e^{iφ}`, Euler's Identity `e^{iπ} + 1 = 0`, Constant Difference Wronskian `W_Q(φ) ≡ Q`, Constant Factor Extraction Out of Integrals, Brahmagupta–Weierstrass Lift, and Fundamental Theorem of Discrete Calculus)**: -/
 theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
@@ -225,8 +226,10 @@ theorem thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
   have hHalfS : antiderivS 3 (halfPeriod 3) = 16384 := rfl
   refine ⟨⟨⟨hProjC phi kTurns, hProjS phi kTurns, hWron phi kTurns,
             discreteIntegral_const_mul L cSq f,
-            discreteIntegral_pointwise_const L Q (fun _ => (qm + Q - m) - (qm - m)) (fun _ => by omega),
-            discreteIntegral_pointwise_const L cSq (fun _ => cSq) (fun _ => rfl)⟩,
+            by
+              have hEq : (qm + Q - m) - (qm - m) = Q := by omega
+              rw [discreteIntegral_const, hEq],
+            discreteIntegral_const L cSq⟩,
            by omega, by omega, by omega, by omega, ⟨by omega, by omega⟩, ?_, rfl, rfl, rfl⟩,
           ⟨by omega, by omega⟩,
           ⟨⟨by dsimp [discreteIntegral]; omega,
@@ -272,8 +275,12 @@ theorem thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
   have hFresS : fresnelSinIntegral 3 = 2048 := rfl
   have hPars : (nSquares 3 : Int) * parsevalCosSqIntegral 3 = 16777728 := rfl
   refine ⟨⟨⟨by omega, by omega⟩,
-           discreteIntegral_pointwise_const L Q (fun _ => (Q - m) + m) (fun _ => by omega),
-           discreteIntegral_pointwise_const L (2 * Q) (fun _ => (2 * Q - m) + m) (fun _ => by omega),
+           by
+             have hEq1 : (Q - m) + m = Q := by omega
+             rw [discreteIntegral_const, hEq1],
+           by
+             have hEq2 : (2 * Q - m) + m = 2 * Q := by omega
+             rw [discreteIntegral_const, hEq2],
            ?_, ?_⟩,
           ⟨?_, ?_, rfl, rfl, rfl⟩,
           ⟨rfl, rfl, rfl, discreteIntegral_const_mul (nRing 3) cSq (fun phi => projC 3 phi * projC 3 phi),
@@ -996,13 +1003,5 @@ theorem thm39_cyclotomic_q_i_sqrt2_zeta8_quotient_deriv_tower_and_parseval_ortho
           ⟨hBeltSum, hSimpsonMid, hSimpsonTot, by decide, by decide, by decide⟩,
           ⟨rfl, hN1, hDenomShift n x, hQuotStep⟩,
           ⟨by decide, hParsevalDecomp, by omega⟩⟩
-
-#print axioms thm1_constant_wronskian_weierstrass_lift_and_newton_leibniz
-#print axioms thm2_closed_form_fresnel_jacobi_dirichlet_parseval_bessel_integrals
-#print axioms thm3_continuum_integration_from_cuboctahedron_archimedes_layers
-#print axioms thm34_rotator_projective_field_invertibility_zero_divisor_freedom_and_q_i_sqrt2_fields
-#print axioms thm35_general_field_derivative_operator_quotient_wronskian_and_variational_euler_lagrange
-#print axioms thm38_c_infinity_higher_derivatives_taylor_newton_expansion_and_pole_free_quotients
-#print axioms thm39_cyclotomic_q_i_sqrt2_zeta8_quotient_deriv_tower_and_parseval_orthogonality
 
 end RotatorCalculusPaper

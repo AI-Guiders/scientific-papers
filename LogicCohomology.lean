@@ -255,8 +255,4 @@ theorem thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski
     simp only [Prod.mk.injEq, true_and]
     omega
 
-
-#print axioms thm4_boolean_post_completeness_3sat_reduction_and_channel_orthogonality
-#print axioms thm5_constructive_de_rham_cohomology_nilpotent_algebra_and_banach_tarski_free_measure
-
 end RotatorCalculusPaper

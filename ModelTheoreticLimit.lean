@@ -241,7 +241,4 @@ theorem thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_o
     simp only [Int.mul_add, Int.mul_one]
     omega
 
-
-#print axioms thm17_model_theoretic_termination_kernel_annihilation_and_godel_tarski_oracle_necessity
-
 end RotatorCalculusPaper
