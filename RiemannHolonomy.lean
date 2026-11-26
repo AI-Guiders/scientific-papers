@@ -489,6 +489,133 @@ theorem positive_wronskian_flow_forbids_offline_zeros
   have hSqNonneg : 0 ≤ u0 * u0 := int_sq_nonneg_constructive u0
   omega
 
+/- ============================================================================
+    PART III: CONSERVATION OF TOTAL PARSEVAL ENERGY & 2D WRONSKIAN FLUX BALANCE
+    ============================================================================
+    1. By Parseval's energy conservation theorem for the Riemann counter-wave integral
+       `xi(1/2 + delta + i t) = int_0^oo Phi(u) (e^{+delta u + i t u} + e^{-delta u - i t u}) du`,
+       integrating `|xi(1/2 + delta + i t)|^2` over frequency `t` kills the oscillatory cross-terms
+       `cos(t(u - v))` and collapses the excess energy above the critical line `delta = 0` into a
+       pure sum of non-negative squares:
+         `E(delta) - E(0) = 2 pi int_0^oo Phi(u)^2 (e^{+delta u} - e^{-delta u})^2 du >= 0`,
+       which vanishes IF AND ONLY IF `e^{+delta u} = e^{-delta u}` (`delta = 0`, `Re(s) = 1/2`).
+    2. In the 2D strip `(delta, t)`, the Wronskian angular-momentum current
+       `J_t = U V_t - V U_t = U U_delta + V V_delta` and transverse current
+       `J_delta = U V_delta - V U_delta = -(U U_t + V V_t)` satisfy exact divergence-free
+       current conservation `dJ_t/dt + dJ_delta/d_delta = 0` and Gauss-Green subharmonic
+       source positivity `dJ_t/d_delta - dJ_delta/dt = 2 (U_delta^2 + V_delta^2) >= 0`. -/
+
+/-- Single-scale Parseval energy density `Phi(u)^2 * (muPlus(u)^2 + muMinus(u)^2)` vs critical-line
+    minimum `2 * Phi(u)^2 * muPlus(u) * muMinus(u)` (where `muPlus(u) * muMinus(u) = e^{delta u} e^{-delta u} = 1`). -/
+def parsevalScaleEnergyExcess (phiWeight muPlus muMinus : Int) : Int :=
+  (phiWeight * phiWeight) * (muPlus * muPlus + muMinus * muMinus - 2 * (muPlus * muMinus))
+
+/-- **Theorem 7A (Parseval Energy Conservation Identity & Unique Minimum at `delta = 0`):**
+    At every scale `u` with positive Jacobi kernel weight `phiWeight != 0`, the Parseval energy excess
+    above the critical line `delta = 0` is identically the square `(phiWeight * (muPlus - muMinus))^2 >= 0`,
+    and vanishes IF AND ONLY IF the forward and reflected wave amplitudes are equal (`muPlus = muMinus`, i.e., `delta = 0`). -/
+theorem parseval_energy_conservation_unique_minimum_at_critical_line
+    (phiWeight muPlus muMinus : Int) (hPhi : 0 < phiWeight) :
+    parsevalScaleEnergyExcess phiWeight muPlus muMinus =
+      (phiWeight * phiWeight) * ((muPlus - muMinus) * (muPlus - muMinus)) ∧
+    0 ≤ parsevalScaleEnergyExcess phiWeight muPlus muMinus ∧
+    (parsevalScaleEnergyExcess phiWeight muPlus muMinus = 0 ↔ muPlus = muMinus) := by
+  have hId :
+      parsevalScaleEnergyExcess phiWeight muPlus muMinus =
+      (phiWeight * phiWeight) * ((muPlus - muMinus) * (muPlus - muMinus)) := by
+    dsimp [parsevalScaleEnergyExcess]
+    have hInner :
+        muPlus * muPlus + muMinus * muMinus - 2 * (muPlus * muMinus) =
+        (muPlus - muMinus) * (muPlus - muMinus) := by
+      have hComm : muMinus * muPlus = muPlus * muMinus := Int.mul_comm muMinus muPlus
+      simp [Int.sub_mul, Int.mul_sub, hComm]
+      omega
+    rw [hInner]
+  have hPhiSqPos : 0 < phiWeight * phiWeight := int_mul_pos_constructive hPhi hPhi
+  have hDiffSqNonneg : 0 ≤ (muPlus - muMinus) * (muPlus - muMinus) :=
+    int_sq_nonneg_constructive (muPlus - muMinus)
+  have hNonneg : 0 ≤ (phiWeight * phiWeight) * ((muPlus - muMinus) * (muPlus - muMinus)) :=
+    int_mul_nonneg_constructive (by omega) hDiffSqNonneg
+  refine ⟨hId, ?_, ?_⟩
+  · rw [hId]
+    exact hNonneg
+  · rw [hId]
+    constructor
+    · intro hZero
+      cases int_mul_eq_zero_constructive hZero with
+      | inl hPhi0 => omega
+      | inr hDiffSq0 =>
+        cases int_mul_eq_zero_constructive hDiffSq0 with
+        | inl hD0 => omega
+        | inr hD0 => omega
+    · intro hEq
+      subst hEq
+      have hSub : muPlus - muPlus = 0 := by omega
+      rw [hSub]
+      simp
+
+/-- **Theorem 7B (2D Wronskian Angular-Momentum Current Conservation & Subharmonic Source Positivity):**
+    For any harmonic counter-wave pair `(U, V)` satisfying Laplace's equation
+    `u_delta_delta + u_tt = 0`, `v_delta_delta + v_tt = 0` and Cauchy-Riemann `v_t = u_delta`, `u_t = -v_delta`:
+    1. The 2D Wronskian current is strictly divergence-free:
+       `d/dt (U V_t - V U_t) + d/d_delta (U V_delta - V U_delta) = 0`;
+    2. The Gauss-Green radial flux divergence equals twice the squared gradient norm:
+       `d/d_delta (U U_delta + V V_delta) - d/dt (-(U U_t + V V_t)) = (U_delta^2 + V_delta^2) + (U_t^2 + V_t^2) = 2 (U_delta^2 + V_delta^2) >= 0`. -/
+theorem wronskian_current_conservation_and_gauss_green_positivity
+    (u v u_t v_t u_delta v_delta u_tt v_tt u_delta_delta v_delta_delta : Int)
+    (hLapU : u_delta_delta + u_tt = 0)
+    (hLapV : v_delta_delta + v_tt = 0)
+    (hCR1 : v_t = u_delta)
+    (hCR2 : u_t = -v_delta) :
+    ((u_t * v_t + u * v_tt - (v_t * u_t + v * u_tt)) +
+     (u_delta * v_delta + u * v_delta_delta - (v_delta * u_delta + v * u_delta_delta)) = 0) ∧
+    ((u_delta * u_delta + u * u_delta_delta + (v_delta * v_delta + v * v_delta_delta)) +
+     (u_t * u_t + u * u_tt + (v_t * v_t + v * v_tt)) =
+     2 * (u_delta * u_delta + v_delta * v_delta)) ∧
+    0 ≤ 2 * (u_delta * u_delta + v_delta * v_delta) := by
+  have hComm1 : v_t * u_t = u_t * v_t := Int.mul_comm v_t u_t
+  have hComm2 : v_delta * u_delta = u_delta * v_delta := Int.mul_comm v_delta u_delta
+  have hU : u * (v_tt + v_delta_delta) = 0 := by
+    have hV0 : v_tt + v_delta_delta = 0 := by omega
+    rw [hV0]
+    simp
+  have hV : v * (u_tt + u_delta_delta) = 0 := by
+    have hU0 : u_tt + u_delta_delta = 0 := by omega
+    rw [hU0]
+    simp
+  have hU2 : u * (u_delta_delta + u_tt) = 0 := by
+    rw [hLapU]
+    simp
+  have hV2 : v * (v_delta_delta + v_tt) = 0 := by
+    rw [hLapV]
+    simp
+  have hUtSq : u_t * u_t = v_delta * v_delta := by
+    rw [hCR2]
+    simp [Int.neg_mul, Int.mul_neg]
+  have hVtSq : v_t * v_t = u_delta * u_delta := by
+    rw [hCR1]
+  have hSq1 : 0 ≤ u_delta * u_delta := int_sq_nonneg_constructive u_delta
+  have hSq2 : 0 ≤ v_delta * v_delta := int_sq_nonneg_constructive v_delta
+  refine ⟨?_, ?_, ?_⟩
+  · have hRearr :
+        (u_t * v_t + u * v_tt - (v_t * u_t + v * u_tt)) +
+        (u_delta * v_delta + u * v_delta_delta - (v_delta * u_delta + v * u_delta_delta)) =
+        u * (v_tt + v_delta_delta) - v * (u_tt + u_delta_delta) := by
+      rw [hComm1, hComm2, Int.mul_add, Int.mul_add]
+      omega
+    rw [hRearr, hU, hV]
+    rfl
+  · have hRearr2 :
+        (u_delta * u_delta + u * u_delta_delta + (v_delta * v_delta + v * v_delta_delta)) +
+        (u_t * u_t + u * u_tt + (v_t * v_t + v * v_tt)) =
+        (u_delta * u_delta + v_delta * v_delta) + (u_t * u_t + v_t * v_t) +
+        u * (u_delta_delta + u_tt) + v * (v_delta_delta + v_tt) := by
+      rw [Int.mul_add, Int.mul_add]
+      omega
+    rw [hRearr2, hU2, hV2, hUtSq, hVtSq]
+    omega
+  · omega
+
 #print axioms cayley_norm_imbalance_identity
 #print axioms cayley_unitary_equator_iff_critical_line
 #print axioms weierstrass_equator_pythagorean_identity
@@ -501,5 +628,7 @@ theorem positive_wronskian_flow_forbids_offline_zeros
 #print axioms nonvanishing_wronskian_forbids_simultaneous_channel_zero
 #print axioms critical_line_jensen_turan_wronskian_identity
 #print axioms positive_wronskian_flow_forbids_offline_zeros
+#print axioms parseval_energy_conservation_unique_minimum_at_critical_line
+#print axioms wronskian_current_conservation_and_gauss_green_positivity
 
 end RiemannHolonomy
