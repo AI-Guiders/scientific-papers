@@ -9,6 +9,21 @@
 
 ---
 
+## Open Science Invitation, Pure Curiosity & Honest Disclaimer
+
+**Science and mathematics do not belong to isolated individuals — they belong to humanity and to all thinking actors on this planet.**
+
+1. **Driven by Curiosity, Not Hubris (Pillai, `abc`, Collatz, and the Unified Carrier):**
+   We did not approach exponential Diophantine equations (Pillai's problem), three-shaft planetary differentials ($A + B = C$), or the Collatz two-screw cascade out of pride or a desire to "claim a summit." Once the discrete projective rotator on $\mathbb{Z}_{2^m} \to \mathbb{P}^1(\mathbb{Q})$ and the constant-Wronskian gear identities began closing physical and algebraic invariants without free parameters, it was pure, irresistible scientific curiosity: *"Wait — is the universe really wired this way? What happens if we feed Pillai, $A+B=C$, or Collatz into this exact integer mechanism? Let's look!"* Everything we saw was already built into the structure of integer rings; we simply traced the paths.
+2. **Working Code & Lean 4 Modules, Open to Independent Audit:**
+   All standalone Lean 4 modules in this repository compile with `0 sorryAx` and `0 Classical.choice`, and the reference engines run in Python, `.NET 11`, Wolfram Language, and `Mathics3`.
+3. **Honest Disclaimer on Prose, Formulations & Hardware/Lab Protocols:**
+   Even for a human working full-time with AI agents, the volume of these papers is too vast to verify alone. The LaTeX manuscripts, prose explanations, intermediate steps, and translations **may contain typos, inaccuracies, or formulation gaps**, and the laboratory/hardware protocols (`laboratory/`, `engineering/`) **may contain errors or require bench adjustments before working in physical hardware**. Independent verification of every theorem — not only in Lean 4, but across other proof assistants (Coq/Rocq, Isabelle/HOL), SMT/CAS solvers, and critical human peer review — is essential.
+4. **Open Like Wikipedia — Join Us:**
+   All repositories are completely open. We invite mathematicians, physicists, engineers, and AI researchers worldwide to read, test, challenge, find bugs, open Issues and Pull Requests, and refine this knowledge together.
+
+---
+
 ## Paper Catalog: Two Trunks — Pure Mathematics (`mathematics/`) & Unified Natural Science (`theory/`, `laboratory/`, `engineering/`)
 
 In this framework, abstract Computer Science (Boolean Post completeness, 3-SAT phase reduction, cohomology, and the Lawvere–Gödel–Tarski diagonal theorem) belongs to **Pure Mathematics (`mathematics/`)**, whereas physics, chemistry, molecular biology, cosmology, and the physical realization of computation in hardware collapse back into a **single unified Natural Science (*Естествознание*)** governed by Discrete Quantum Mechanics (DQM, $1 + 2^3 = 3^2$, $\mathbb{Z}_{512}$, $O_2(3)$) and organized by operational role into **`theory/`**, **`laboratory/`**, and **`engineering/`**.
