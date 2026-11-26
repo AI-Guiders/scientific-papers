@@ -328,6 +328,74 @@ theorem riemann_holonomy_critical_line_zero_lock
   rw [cayley_unitary_equator_iff_critical_line c0 s0 delta hc0]
   rw [hBoundAndIff.2]
 
+/-- Multi-prime Euler-Parseval interference functional across a list of prime channels `(c0_p, s0_p, dphi_p)`.
+    By the fundamental theorem of arithmetic (linear independence of `log p` over `Q`),
+    orthogonal prime channels contribute additively to the Parseval interference norm without
+    cross-channel cancellation (ruling out non-multiplicative Davenport-Heilbronn counterexamples). -/
+def eulerPrimeChannelListIntensity (q delta : Int) : List (Int × Int × Int) → Int
+  | [] => 0
+  | (c0, s0, dphi) :: rest =>
+      counterwaveInterferenceIntensity q
+        (cayleyNumNormSq c0 s0 delta)
+        (cayleyDenNormSq c0 s0 delta)
+        (projCQ q dphi) +
+      eulerPrimeChannelListIntensity q delta rest
+
+/-- Non-negativity of a single prime channel's counter-wave interference intensity (`0 <= I_p`). -/
+theorem single_channel_intensity_nonneg
+    (q c0 s0 delta dphi : Int)
+    (hq : 0 < q)
+    (hPlus : 0 < cayleyNumNormSq c0 s0 delta)
+    (hMinus : 0 < cayleyDenNormSq c0 s0 delta) :
+    0 ≤ counterwaveInterferenceIntensity q (cayleyNumNormSq c0 s0 delta) (cayleyDenNormSq c0 s0 delta) (projCQ q dphi) := by
+  rw [counterwave_interference_decomposition]
+  have hDiffSq : 0 ≤ (cayleyNumNormSq c0 s0 delta - cayleyDenNormSq c0 s0 delta) *
+                     (cayleyNumNormSq c0 s0 delta - cayleyDenNormSq c0 s0 delta) :=
+    int_sq_nonneg_constructive _
+  have hTerm1 : 0 ≤ q * ((cayleyNumNormSq c0 s0 delta - cayleyDenNormSq c0 s0 delta) *
+                         (cayleyNumNormSq c0 s0 delta - cayleyDenNormSq c0 s0 delta)) :=
+    int_mul_nonneg_constructive (by omega) hDiffSq
+  have hProd : 0 < cayleyNumNormSq c0 s0 delta * cayleyDenNormSq c0 s0 delta :=
+    int_mul_pos_constructive hPlus hMinus
+  have hBound := (projCQ_lower_bound_and_pauli_antiphase_iff q dphi).1
+  have hTerm2 : 0 ≤ 2 * (cayleyNumNormSq c0 s0 delta * cayleyDenNormSq c0 s0 delta) * (q + projCQ q dphi) :=
+    int_mul_nonneg_constructive (by omega) (by omega)
+  omega
+
+/-- **Theorem 5 (Euler-Product Coherent Monotonicity & Exclusion of Davenport-Heilbronn Cross-Cancellation):**
+    In every prime channel `p` with positive scale `c0_p > 0`, the forward-vs-reflected norm imbalance
+    `cayleyNumNormSq c0_p s0_p delta - cayleyDenNormSq c0_p s0_p delta = 4 * (c0_p * delta)`
+    has the EXACT SAME SIGN as `delta` across all primes `p` simultaneously, and for any coupling
+    of prime channels `(c0_1, s0_1, dphi_1)` and `(c0_2, s0_2, dphi_2)` with positive amplitudes,
+    their total Euler-Parseval interference intensity vanishes IF AND ONLY IF `delta = 0` (`Re(s) = 1/2`)
+    and every channel meets in Pauli antiphase `pi`. -/
+theorem euler_two_prime_channels_zero_lock
+    (q delta c1 s1 phi1 c2 s2 phi2 : Int)
+    (hq : 0 < q) (hc1 : 0 < c1) (hc2 : 0 < c2)
+    (hP1 : 0 < cayleyNumNormSq c1 s1 delta) (hM1 : 0 < cayleyDenNormSq c1 s1 delta)
+    (hP2 : 0 < cayleyNumNormSq c2 s2 delta) (hM2 : 0 < cayleyDenNormSq c2 s2 delta) :
+    eulerPrimeChannelListIntensity q delta [(c1, s1, phi1), (c2, s2, phi2)] = 0 ↔
+    (delta = 0 ∧ pauliPhaseDistNat q phi1 = 0 ∧ pauliPhaseDistNat q phi2 = 0) := by
+  dsimp [eulerPrimeChannelListIntensity]
+  have hNonneg1 := single_channel_intensity_nonneg q c1 s1 delta phi1 hq hP1 hM1
+  have hNonneg2 := single_channel_intensity_nonneg q c2 s2 delta phi2 hq hP2 hM2
+  have hLock1 := riemann_holonomy_critical_line_zero_lock q c1 s1 delta phi1 hq hc1 hP1 hM1
+  have hLock2 := riemann_holonomy_critical_line_zero_lock q c2 s2 delta phi2 hq hc2 hP2 hM2
+  constructor
+  · intro hSumZero
+    have hZ1 : counterwaveInterferenceIntensity q (cayleyNumNormSq c1 s1 delta) (cayleyDenNormSq c1 s1 delta) (projCQ q phi1) = 0 := by omega
+    have hZ2 : counterwaveInterferenceIntensity q (cayleyNumNormSq c2 s2 delta) (cayleyDenNormSq c2 s2 delta) (projCQ q phi2) = 0 := by omega
+    have hC1 := hLock1.mp hZ1
+    have hC2 := hLock2.mp hZ2
+    exact ⟨hC1.1, hC1.2, hC2.2⟩
+  · intro hCond
+    rcases hCond with ⟨hDelta, hPhi1, hPhi2⟩
+    have hZ1 : counterwaveInterferenceIntensity q (cayleyNumNormSq c1 s1 delta) (cayleyDenNormSq c1 s1 delta) (projCQ q phi1) = 0 :=
+      hLock1.mpr ⟨hDelta, hPhi1⟩
+    have hZ2 : counterwaveInterferenceIntensity q (cayleyNumNormSq c2 s2 delta) (cayleyDenNormSq c2 s2 delta) (projCQ q phi2) = 0 :=
+      hLock2.mpr ⟨hDelta, hPhi2⟩
+    omega
+
 #print axioms cayley_norm_imbalance_identity
 #print axioms cayley_unitary_equator_iff_critical_line
 #print axioms weierstrass_equator_pythagorean_identity
@@ -335,5 +403,6 @@ theorem riemann_holonomy_critical_line_zero_lock
 #print axioms counterwave_interference_decomposition
 #print axioms destructive_interference_zero_iff
 #print axioms riemann_holonomy_critical_line_zero_lock
+#print axioms euler_two_prime_channels_zero_lock
 
 end RiemannHolonomy
