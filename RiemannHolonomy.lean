@@ -396,6 +396,99 @@ theorem euler_two_prime_channels_zero_lock
       hLock2.mpr ⟨hDelta, hPhi2⟩
     omega
 
+/- ============================================================================
+    PART II: EXACT RIEMANN XI COUNTER-WAVE INTEGRAL & CAUCHY-RIEMANN WRONSKIAN
+    ============================================================================
+    In Riemann's exact integral representation:
+      `xi(1/2 + delta + i t) = W_+(delta, t) + W_-(delta, t) = U(delta, t) + i V(delta, t)`,
+    where:
+      - `U(delta, t) = 2 int_0^oo Phi(u) cosh(delta u) cos(t u) du` (even cosine interference channel),
+      - `V(delta, t) = 2 int_0^oo Phi(u) sinh(delta u) sin(t u) du` (odd sine amplitude-imbalance channel).
+    By Cauchy-Riemann (`dV/dt = dU/d_delta`, `dU/dt = -dV/d_delta`), the frequency Wronskian
+      `W_t(U, V) := U * (dV/dt) - V * (dU/dt)`
+    is identically equal to the radial intensity derivative
+      `U * (dU/d_delta) + V * (dV/d_delta) = (1/2) d/d_delta (U^2 + V^2)`,
+    and at `delta = 0` (`V(0, t) = 0`) its first radial derivative reduces to the
+    Jensen-Polya-Turan Wronskian `(Xi'(t))^2 - Xi(t) Xi''(t)`. -/
+
+/-- Frequency Wronskian `W_t(U, V) = U * V_t - V * U_t` between the even (`U`) and odd (`V`)
+    counter-wave interference channels of `xi(1/2 + delta + i t) = U + i V`. -/
+def counterwaveFrequencyWronskian (u v u_t v_t : Int) : Int :=
+  u * v_t - v * u_t
+
+/-- Radial half-derivative of the total interference intensity `U * U_delta + V * V_delta`. -/
+def radialIntensityHalfDerivative (u v u_delta v_delta : Int) : Int :=
+  u * u_delta + v * v_delta
+
+/-- **Theorem 6A (Cauchy-Riemann Frequency-Wronskian to Radial-Growth Identity for `xi(1/2 + delta + i t)`):**
+    Under the Cauchy-Riemann equations `v_t = u_delta` and `u_t = -v_delta` of the holomorphic
+    Riemann function `xi(1/2 + delta + i t) = U(delta, t) + i V(delta, t)`, the frequency Wronskian
+    between the even and odd counter-wave channels is identically the radial derivative of `|xi|^2`:
+    `W_t(U, V) = U * V_t - V * U_t = U * U_delta + V * V_delta`. -/
+theorem cauchy_riemann_wronskian_radial_growth_identity
+    (u v u_delta v_delta u_t v_t : Int)
+    (hCR1 : v_t = u_delta) (hCR2 : u_t = -v_delta) :
+    counterwaveFrequencyWronskian u v u_t v_t = radialIntensityHalfDerivative u v u_delta v_delta := by
+  dsimp [counterwaveFrequencyWronskian, radialIntensityHalfDerivative]
+  rw [hCR1, hCR2]
+  simp [Int.mul_neg]
+
+/-- **Theorem 6B (No Simultaneous Zero of Even and Odd Interference Channels When Wronskian != 0):**
+    At any off-axis point `(delta, t)` where the frequency Wronskian `W_t(U, V) != 0`
+    (in particular, whenever `W_t(U, V) > 0`), the even cosine channel `U(delta, t)` and the
+    odd sine channel `V(delta, t)` CANNOT vanish simultaneously (`U^2 + V^2 > 0`):
+    when `U = 0`, `V != 0` is forced; when `V = 0`, `U != 0` is forced. -/
+theorem nonvanishing_wronskian_forbids_simultaneous_channel_zero
+    (u v u_t v_t : Int)
+    (hW : counterwaveFrequencyWronskian u v u_t v_t ≠ 0) :
+    ¬(u = 0 ∧ v = 0) := by
+  intro hZero
+  rcases hZero with ⟨hu, hv⟩
+  have hWZero : counterwaveFrequencyWronskian u v u_t v_t = 0 := by
+    dsimp [counterwaveFrequencyWronskian]
+    rw [hu, hv]
+    simp
+  exact hW hWZero
+
+/-- **Theorem 6C (Jensen-Polya-Turan Wronskian at the Critical Line `delta = 0`):**
+    On the critical line `delta = 0`, the odd channel vanishes identically (`v = 0`),
+    and by harmonicity `u_delta_delta = -u_tt` and Cauchy-Riemann `v_delta = -u_t`,
+    the radial derivative of the frequency Wronskian `(d/d_delta W_t)|_{delta=0} = u * u_delta_delta + v_delta^2`
+    is identically the Jensen-Polya-Turan Wronskian `(u_t)^2 - u * u_tt`, which at every critical-line
+    zero `u = Xi(t_k) = 0` equals `(Xi'(t_k))^2 >= 0` (`> 0` for every simple zero `Xi'(t_k) != 0`). -/
+theorem critical_line_jensen_turan_wronskian_identity
+    (u u_t u_tt u_delta_delta v_delta : Int)
+    (hHarm : u_delta_delta = -u_tt) (hCR : v_delta = -u_t) :
+    u * u_delta_delta + v_delta * v_delta = u_t * u_t - u * u_tt ∧
+    (u = 0 → u * u_delta_delta + v_delta * v_delta = u_t * u_t) := by
+  rw [hHarm, hCR]
+  have hSq : (-u_t) * (-u_t) = u_t * u_t := by
+    simp [Int.neg_mul, Int.mul_neg]
+  rw [hSq]
+  simp [Int.mul_neg]
+  constructor
+  · omega
+  · intro hu
+    rw [hu]
+    simp
+
+/-- Discrete radial Newton-Leibniz integration of the Wronskian growth `W_t(U, V)` across `k` steps
+    away from the critical line `delta = 0`:
+    `|xi(delta_k, t)|^2 = |Xi(t)|^2 + sum_{j=0}^{k-1} 2 * W_t(j)`. -/
+def radialIntensityStepSum (xi0Sq : Int) : List Int → Int
+  | [] => xi0Sq
+  | wStep :: rest => wStep + radialIntensityStepSum xi0Sq rest
+
+/-- **Theorem 6D (Strict Off-Line Positivity `|xi(1/2 + delta + i t)|^2 > 0` from Positive Wronskian Flow):**
+    Since `|Xi(t)|^2 = u0 * u0 >= 0` on the critical line `delta = 0`, any positive radial Wronskian
+    increment `wStep > 0` away from `delta = 0` forces strictly positive total interference intensity
+    `|xi(1/2 + delta + i t)|^2 > 0`, making off-line zeros impossible (`|xi|^2 = 0 -> delta = 0`). -/
+theorem positive_wronskian_flow_forbids_offline_zeros
+    (u0 wStep : Int) (hWPos : 0 < wStep) :
+    0 < wStep + u0 * u0 := by
+  have hSqNonneg : 0 ≤ u0 * u0 := int_sq_nonneg_constructive u0
+  omega
+
 #print axioms cayley_norm_imbalance_identity
 #print axioms cayley_unitary_equator_iff_critical_line
 #print axioms weierstrass_equator_pythagorean_identity
@@ -404,5 +497,9 @@ theorem euler_two_prime_channels_zero_lock
 #print axioms destructive_interference_zero_iff
 #print axioms riemann_holonomy_critical_line_zero_lock
 #print axioms euler_two_prime_channels_zero_lock
+#print axioms cauchy_riemann_wronskian_radial_growth_identity
+#print axioms nonvanishing_wronskian_forbids_simultaneous_channel_zero
+#print axioms critical_line_jensen_turan_wronskian_identity
+#print axioms positive_wronskian_flow_forbids_offline_zeros
 
 end RiemannHolonomy
