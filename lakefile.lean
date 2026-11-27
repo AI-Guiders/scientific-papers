@@ -7,6 +7,7 @@ package «cuboctahedral-rotator-calculus» where
 @[default_target]
 lean_lib «RotatorCalculusPaper» where
   roots := #[
+    `AxiomGuard,
     `RotatorQuadrature,
     `LogicCohomology,
     `PillaiDiophantine,
