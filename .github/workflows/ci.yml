@@ -1,0 +1,23 @@
+name: Scientific Papers Lean 4 Kernel & AxiomGuard CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build all paper proof modules under AxiomGuard.lean
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and audit Lean 4 proofs (lean-action)
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: true
+          test: false
