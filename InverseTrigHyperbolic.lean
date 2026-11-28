@@ -96,33 +96,30 @@ def acothCayley (chVal shVal : Int) : Int × Int := (chVal + shVal, chVal - shVa
 theorem minkowski_hyperbola_poly_identity (c s : Int) :
     (c * c + s * s) * (c * c + s * s) - (2 * c * s) * (2 * c * s) =
       (c * c - s * s) * (c * c - s * s) := by
-  have hL : (c * c + s * s) * (c * c + s * s) =
-            (c * c) * (c * c) + 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
-    calc (c * c + s * s) * (c * c + s * s)
-      _ = (c * c) * (c * c) + (c * c) * (s * s) + ((s * s) * (c * c) + (s * s) * (s * s)) := by
-          simp [Int.add_mul, Int.mul_add]
-      _ = (c * c) * (c * c) + (c * c) * (s * s) + ((c * c) * (s * s) + (s * s) * (s * s)) := by
-          rw [Int.mul_comm (s * s) (c * c)]
-      _ = (c * c) * (c * c) + 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
-          generalize (c * c) * (s * s) = x
+  generalize hA : c * c = A
+  generalize hB : s * s = B
+  have hL : (A + B) * (A + B) = A * A + 2 * (A * B) + B * B := by
+    calc (A + B) * (A + B)
+      _ = A * A + B * A + (A * B + B * B) := by simp [Int.add_mul, Int.mul_add]
+      _ = A * A + A * B + (A * B + B * B) := by rw [Int.mul_comm B A]
+      _ = A * A + 2 * (A * B) + B * B := by
+          generalize A * B = ab
           omega
-  have hM : (2 * c * s) * (2 * c * s) = 4 * ((c * c) * (s * s)) := by
+  have hM : (2 * c * s) * (2 * c * s) = 4 * (A * B) := by
+    rw [← hA, ← hB]
     calc (2 * c * s) * (2 * c * s)
       _ = (2 * 2) * ((c * c) * (s * s)) := by
           simp [Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
       _ = 4 * ((c * c) * (s * s)) := rfl
-  have hR : (c * c - s * s) * (c * c - s * s) =
-            (c * c) * (c * c) - 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
-    calc (c * c - s * s) * (c * c - s * s)
-      _ = (c * c) * (c * c) - (c * c) * (s * s) - ((s * s) * (c * c) - (s * s) * (s * s)) := by
-          simp [Int.sub_mul, Int.mul_sub]
-      _ = (c * c) * (c * c) - (c * c) * (s * s) - ((c * c) * (s * s) - (s * s) * (s * s)) := by
-          rw [Int.mul_comm (s * s) (c * c)]
-      _ = (c * c) * (c * c) - 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
-          generalize (c * c) * (s * s) = x
+  have hR : (A - B) * (A - B) = A * A - 2 * (A * B) + B * B := by
+    calc (A - B) * (A - B)
+      _ = A * A - B * A - (A * B - B * B) := by simp [Int.sub_mul, Int.mul_sub]
+      _ = A * A - A * B - (A * B - B * B) := by rw [Int.mul_comm B A]
+      _ = A * A - 2 * (A * B) + B * B := by
+          generalize A * B = ab
           omega
   rw [hL, hM, hR]
-  generalize (c * c) * (s * s) = x
+  generalize A * B = ab
   omega
 
 /-- **Theorem (Exact Projective Inverse Trigonometry `atan`/`acot` and Root-Free / Logarithm-Free Hyperbolic Calculus on `ℤ_{4Q}`)**:
@@ -160,29 +157,34 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
     unfold hypCoshQ hypSinhQ hypDenomQ
     generalize projCQ Q phi = c
     generalize projSQ Q phi = s
-    calc (c * c + s * s) + 2 * c * s - (c * c - s * s)
+    have hAssoc : 2 * c * s = 2 * (c * s) := Int.mul_assoc 2 c s
+    rw [hAssoc]
+    calc (c * c + s * s) + 2 * (c * s) - (c * c - s * s)
       _ = 2 * (c * s) + 2 * (s * s) := by
           generalize c * s = cs
           generalize s * s = ss
           generalize c * c = cc
           omega
       _ = 2 * s * (c + s) := by
-          simp [Int.mul_add, Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
+          rw [Int.mul_add, Int.mul_assoc 2 s c, Int.mul_assoc 2 s s, Int.mul_comm s c]
   have hSumSq :
       hypCoshQ Q phi + hypSinhQ Q phi =
         (projCQ Q phi + projSQ Q phi) * (projCQ Q phi + projSQ Q phi) := by
     unfold hypCoshQ hypSinhQ
     generalize projCQ Q phi = c
     generalize projSQ Q phi = s
-    calc c * c + s * s + 2 * c * s
-      _ = c * c + (c * s + (c * s + s * s)) := by
-          generalize c * s = cs
-          generalize s * s = ss
-          generalize c * c = cc
-          omega
-      _ = c * c + (c * s + (s * c + s * s)) := by rw [Int.mul_comm s c]
-      _ = (c + s) * (c + s) := by
-          simp [Int.add_mul, Int.mul_add, Int.add_assoc]
+    have hAssoc : 2 * c * s = 2 * (c * s) := Int.mul_assoc 2 c s
+    rw [hAssoc]
+    have hSq : (c + s) * (c + s) = c * c + 2 * (c * s) + s * s := by
+      calc (c + s) * (c + s)
+        _ = c * c + s * c + (c * s + s * s) := by simp [Int.add_mul, Int.mul_add]
+        _ = c * c + c * s + (c * s + s * s) := by rw [Int.mul_comm s c]
+        _ = c * c + 2 * (c * s) + s * s := by
+            generalize c * s = cs
+            omega
+    rw [hSq]
+    generalize c * s = cs
+    omega
   have hLightCone :
       coshLightCone U V * coshLightCone U V - sinhLightCone U V * sinhLightCone U V = 4 * U * V := by
     unfold coshLightCone sinhLightCone
