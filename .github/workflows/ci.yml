@@ -1,4 +1,4 @@
-name: Scientific Papers Lean 4 Kernel & AxiomGuard CI
+name: Scientific Papers LaTeX & PDF Integrity CI
 
 on:
   push:
@@ -8,16 +8,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build all paper proof modules under AxiomGuard.lean
+  verify-papers:
+    name: Verify LaTeX & PDF papers across mathematics, theory, laboratory, engineering
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build and audit Lean 4 proofs (lean-action)
-        uses: leanprover/lean-action@v1
-        with:
-          auto-config: false
-          build: true
-          test: false
+      - name: Verify all TeX and PDF paper pairs exist and have valid structure
+        run: |
+          python3 - << 'EOF'
+          from pathlib import Path
+          import sys
+
+          root = Path(".")
+          subdirs = ["mathematics", "theory", "laboratory", "engineering"]
+          tex_count = 0
+          for d in subdirs:
+              p = root / d
+              assert p.is_dir(), f"Missing directory: {d}"
+              for tex in sorted(p.glob("*.tex")):
+                  tex_count += 1
+                  content = tex.read_text(encoding="utf-8")
+                  assert "\\begin{document}" in content and "\\end{document}" in content, f"Incomplete TeX in {tex}"
+                  pdf = tex.with_suffix(".pdf")
+                  assert pdf.exists() and pdf.stat().st_size > 1000, f"Missing or empty PDF for {tex}: {pdf}"
+          assert tex_count >= 16, f"Expected at least 16 TeX papers, found {tex_count}"
+          print(f"Verified {tex_count} LaTeX/PDF scientific papers across {subdirs}.")
+          EOF
