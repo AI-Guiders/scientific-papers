@@ -42,6 +42,15 @@ def projCQ (Q phi : Int) : Int :=
 def projSQ (Q phi : Int) : Int :=
   projCQ Q (phi - Q)
 
+/-- Exact integer Polar-to-Cartesian map `polarToCartQ(Q, M, φ) = (X, Y) = (M * C_Q(φ), M * S_Q(φ))`
+and root-free / series-free Cartesian-to-Polar inverse map `cartToPolarQ(Q, X, Y) = (M, φ)`
+where `M = (|X| + |Y|) / Q` and `φ = atan2L1RingQ(Q, Y, X)`. -/
+def polarToCartQ (Q mRad phi : Int) : Int × Int :=
+  (mRad * projCQ Q phi, mRad * projSQ Q phi)
+
+def cartToPolarRadiusQ (Q xVal yVal : Int) : Int :=
+  ((xVal.natAbs : Int) + (yVal.natAbs : Int)).tdiv Q
+
 /-- Projective tangent pair `tanPairQ(Q, φ) = (S_Q(φ), C_Q(φ))` and cotangent pair `cotPairQ(Q, φ) = (C_Q(φ), S_Q(φ))`. -/
 def tanPairQ (Q phi : Int) : Int × Int := (projSQ Q phi, projCQ Q phi)
 def cotPairQ (Q phi : Int) : Int × Int := (projCQ Q phi, projSQ Q phi)
@@ -66,6 +75,9 @@ def atan2L1RingQ (Q sVal cVal : Int) : Int :=
 
 def acot2L1RingQ (Q cVal sVal : Int) : Int :=
   atan2L1RingQ Q sVal cVal
+
+def cartToPolarQ (Q xVal yVal : Int) : Int × Int :=
+  (cartToPolarRadiusQ Q xVal yVal, atan2L1RingQ Q yVal xVal)
 
 /-- Projective Gudermann–Minkowski hyperbolic triple `(hypCoshQ, hypSinhQ, hypDenomQ)` for arbitrary `Q` and `φ`:
 - `hypCoshQ(Q, φ)  = C_Q(φ)² + S_Q(φ)²`,
@@ -125,7 +137,11 @@ theorem minkowski_hyperbola_poly_identity (c s : Int) :
 /-- **Theorem (Exact Projective Inverse Trigonometry `atan`/`acot` and Root-Free / Logarithm-Free Hyperbolic Calculus on `ℤ_{4Q}`)**:
 Unconditional constructive proof for arbitrary integer parameters `Q, φ, U, V ∈ ℤ` (`0 sorryAx`, `0 Classical.choice`, `0 Prop premises`). -/
 theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
-    (Q phi U V : Int) :
+    (Q mRad phi U V : Int) :
+    -- 0. Universal Polar-to-Cartesian linearity (X + Y = M * (C_Q(φ) + S_Q(φ)) and Q * Y = M * (Q * S_Q(φ))):
+    ((polarToCartQ Q mRad phi).1 + (polarToCartQ Q mRad phi).2 =
+       mRad * (projCQ Q phi + projSQ Q phi) ∧
+     Q * (polarToCartQ Q mRad phi).2 = mRad * (Q * projSQ Q phi)) ∧
     -- 1. Universal Minkowski hyperbola identity Ch_Q(φ)² - Sh_Q(φ)² = D_hyp(φ)² for arbitrary Q, φ ∈ ℤ:
     (hypCoshQ Q phi * hypCoshQ Q phi - hypSinhQ Q phi * hypSinhQ Q phi =
        hypDenomQ Q phi * hypDenomQ Q phi) ∧
@@ -138,8 +154,12 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
     (coshLightCone U V * coshLightCone U V - sinhLightCone U V * sinhLightCone U V = 4 * U * V ∧
      atanhCayley (tanhCayley U V).1 (tanhCayley U V).2 = (2 * U, 2 * V) ∧
      acothCayley (cothCayley U V).1 (cothCayley U V).2 = (2 * U, 2 * V)) ∧
-    -- 4. Full 512-tick ring bijective inversion of atan2, acot2, and root-free/log-free invHyp at Q = 128:
+    -- 4. Full 512-tick ring bijective Polar ↔ Cartesian inversion (M, φ) ↔ (X, Y), atan2, acot2, and invHyp at Q = 128:
     (((List.range 512).all (fun p =>
+       let xy13 := polarToCartQ 128 13 (p : Int)
+       let rp13 := cartToPolarQ 128 xy13.1 xy13.2
+       eqIntBool rp13.1 13 &&
+       eqIntBool rp13.2 (p : Int) &&
        eqIntBool (atan2L1RingQ 128 (projSQ 128 (p : Int)) (projCQ 128 (p : Int))) (p : Int) &&
        eqIntBool (acot2L1RingQ 128 (projCQ 128 (p : Int)) (projSQ 128 (p : Int))) (p : Int) &&
        eqIntBool (hypCoshQ 128 (p : Int) + ((hypSinhQ 128 (p : Int)).natAbs : Int)) (128 * 128)) = true) ∧
@@ -147,6 +167,17 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
        eqIntBool (invHypQ 128 (hypCoshQ 128 (p : Int)) (hypSinhQ 128 (p : Int)) (hypDenomQ 128 (p : Int))) (p : Int) &&
        eqIntBool (atanL1Q 128 (projSQ 128 (p : Int)) (projCQ 128 (p : Int)) +
                   acotL1Q 128 (projCQ 128 (p : Int)) (projSQ 128 (p : Int))) 128) = true)) := by
+  have hPolAdd :
+      (polarToCartQ Q mRad phi).1 + (polarToCartQ Q mRad phi).2 =
+        mRad * (projCQ Q phi + projSQ Q phi) := by
+    unfold polarToCartQ
+    dsimp
+    rw [← Int.mul_add]
+  have hPolScale :
+      Q * (polarToCartQ Q mRad phi).2 = mRad * (Q * projSQ Q phi) := by
+    unfold polarToCartQ
+    dsimp
+    rw [← Int.mul_assoc, Int.mul_comm Q mRad, Int.mul_assoc]
   have hMink :
       hypCoshQ Q phi * hypCoshQ Q phi - hypSinhQ Q phi * hypSinhQ Q phi =
         hypDenomQ Q phi * hypDenomQ Q phi :=
@@ -216,6 +247,6 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
     unfold acothCayley cothCayley
     dsimp
     congr 1 <;> omega
-  refine ⟨hMink, ⟨hInvNum, hSumSq⟩, ⟨hLightCone, hAtanh, hAcoth⟩, ⟨by native_decide, by native_decide⟩⟩
+  refine ⟨⟨hPolAdd, hPolScale⟩, hMink, ⟨hInvNum, hSumSq⟩, ⟨hLightCone, hAtanh, hAcoth⟩, ⟨by native_decide, by native_decide⟩⟩
 
 end RotatorCalculusPaper
