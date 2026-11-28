@@ -9,12 +9,15 @@ lean_lib «RotatorCalculusPaper» where
   roots := #[
     `AxiomGuard,
     `RotatorQuadrature,
+    `ProjectiveFieldCalculus,
     `InverseTrigHyperbolic,
     `LogicCohomology,
     `PillaiDiophantine,
     `AbcPlanetaryWronskian,
     `ModelTheoreticLimit,
     `CollatzPlanetarySplice,
+    `CollatzGearMonoid,
     `RiemannHolonomy,
+    `MinkowskiCounterwaveCascade,
     `RotatorCalculusPaper
   ]

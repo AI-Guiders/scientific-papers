@@ -1,9 +1,12 @@
 import RotatorQuadrature
+import ProjectiveFieldCalculus
+import InverseTrigHyperbolic
 import LogicCohomology
 import PillaiDiophantine
 import AbcPlanetaryWronskian
 import ModelTheoreticLimit
 import CollatzPlanetarySplice
+import CollatzGearMonoid
 
 /-!
 # RotatorCalculusPaper (Umbrella Module & Unified Diophantine Planetary-Differential Bridge)
