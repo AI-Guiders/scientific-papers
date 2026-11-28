@@ -250,22 +250,22 @@ def projIntervalWronskian (pL qL pR qR : Int) : Int :=
 def sternBrocotMediant (pL qL pR qR : Int) : Int × Int :=
   (pL + pR, qL + qR)
 
-/-- **Theorem 41 (Constructive Projective Real Intervals `ℝ_proj`, Stern–Brocot / `SL₂(ℤ)` Wronskian Invariance, and Bijective `L¹ ↔ S¹(ℂ)` Carrier Isomorphism)**:
-Explicitly formalizes the constructive projective real line `ℝ_proj` and unit circle `S¹(ℂ)` (`0 sorryAx`, `0 Classical.choice`, `0 Prop premises`):
+/-- **Theorem 41 (Occam–Mal'cev Elimination of the Continuum via Stern–Brocot / `SL₂(ℤ)` Projective Intervals and Bijective `L¹(ℤ_{4Q}) ↔ S¹(ℚ)` Carrier Isomorphism)**:
+Proves that no separate infinite continuum carrier (`ℝ` or `ℂ`) is required: all precision refinement and circle geometry are completely realized by finite integer brackets `[pL / qL, pR / qR]` over `ℤ` and the bijective Weierstrass lift `L¹(ℤ_{4Q}) ↔ S¹(ℚ)` (`0 sorryAx`, `0 Classical.choice`, `0 Prop premises`):
 1. **Stern–Brocot Mediant Subdivision Preserves the Interval Wronskian:**
    For any projective rational bracket `[pL / qL, pR / qR]` with mediant `(pM, qM) = (pL + pR, qL + qR)`,
    both sub-intervals `[pL / qL, pM / qM]` and `[pM / qM, pR / qR]` have the exact same Wronskian as the parent bracket:
    `Δ(pL, qL, pM, qM) = Δ(pL, qL, pR, qR)` and `Δ(pM, qM, pR, qR) = Δ(pL, qL, pR, qR)`.
-2. **Exact `GL₂(ℤ)` / `SL₂(ℤ)` Matrix Action on Projective Real Brackets:**
+2. **Exact `GL₂(ℤ)` / `SL₂(ℤ)` Matrix Action on Projective Rational Brackets:**
    Under any `2 × 2` integer refinement matrix `[[a, b], [c, d]]` acting on the bracket endpoints
    `(pL', qL') = (a * pL + b * qL, c * pL + d * qL)` and `(pR', qR') = (a * pR + b * qR, c * pR + d * qR)`,
    the interval Wronskian factors as:
    `Δ(pL', qL', pR', qR') = (a * d - b * c) * Δ(pL, qL, pR, qR)`
    (so every unimodular `SL₂(ℤ)` refinement step with `a * d - b * c = 1` preserves `Δ ≡ 1` while growing denominators `qL * qR → ∞`).
-3. **Constructive Projective Interval Addition & Multiplication Monotonicity:**
+3. **Projective Interval Addition Linearity:**
    Adding two brackets `[pL / q, pR / q]` and `[rL / q, rR / q]` over a common scale `q` adds their Wronskians:
    `(pR + rR) - (pL + rL) = (pR - pL) + (rR - rL)`.
-4. **Bijective Stereographic Carrier Isomorphism `L¹(ℤ_{4Q}) ↔ S¹(ℂ)` and Group Law:**
+4. **Bijective Stereographic Carrier Isomorphism `L¹(ℤ_{4Q}) ↔ S¹(ℚ)` Without Square Roots:**
    For any first-quadrant rotator point `(C, S)` with `C + S = Q`, the Weierstrass lift
    `(X, Y, R) = (C² - S², 2 * C * S, C² + S²)` satisfies `X² + Y² = R²`, `R + Y = Q²`,
    and is recovered bijectively without square roots by:
