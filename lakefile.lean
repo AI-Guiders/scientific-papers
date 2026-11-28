@@ -9,6 +9,7 @@ lean_lib «RotatorCalculusPaper» where
   roots := #[
     `AxiomGuard,
     `RotatorQuadrature,
+    `InverseTrigHyperbolic,
     `LogicCohomology,
     `PillaiDiophantine,
     `AbcPlanetaryWronskian,
