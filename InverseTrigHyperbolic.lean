@@ -1,5 +1,11 @@
 import RotatorQuadrature
 
+namespace RotatorCalculusPaper
+
+set_option linter.unusedSimpArgs false
+set_option maxRecDepth 200000
+set_option maxHeartbeats 1000000
+
 /-!
 # Exact Projective Inverse Trigonometry (`atan`, `acot`) and Root-Free / Logarithm-Free Hyperbolic Functions (`cosh`, `sinh`, `tanh`, `coth`, `asinh`, `atanh`) on `ℤ_{4Q}` (`0 sorryAx`, `0 Classical.choice`, `0 Prop premises`)
 
@@ -7,25 +13,34 @@ This pure mathematics module (`Constructive/InverseTrigHyperbolic.lean`) formali
 1. **Exact Inverse Tangent & Inverse Cotangent on the `L¹` Diamond (`|C_Q(φ)| + |S_Q(φ)| = Q`):**
    - In the first quadrant `0 ≤ φ ≤ Q`, `C_Q(φ) = Q - φ` and `S_Q(φ) = φ`, so `C_Q(φ) + S_Q(φ) = Q`.
    - Therefore, for any homogeneous scaling `λ ≥ 1` (`X = λ(Q - φ)`, `Y = λ φ`),
-     `atanL1(Y, X) = (Q * Y) / (X + Y) = φ` and `acotL1(X, Y) = (Q * X) / (X + Y) = Q - φ`
-     with **zero approximation error** and exact complementary sum `atanL1(Y, X) + acotL1(X, Y) = Q`!
-   - Across all 4 quadrants of the 512-tick ring (`Q = 128`), `atan2L1Ring512` and `acot2L1Ring512` invert `(C_128(φ), S_128(φ))`
+     `atanL1Q(Q, Y, X) = (Q * Y) / (|X| + |Y|) = φ` and `acotL1Q(Q, X, Y) = (Q * X) / (|X| + |Y|) = Q - φ`
+     with **zero approximation error** and exact complementary sum `atanL1Q(Q, Y, X) + acotL1Q(Q, X, Y) = Q`!
+   - Across all 4 quadrants of the 512-tick ring (`Q = 128`), `atan2L1RingQ 128` and `acot2L1RingQ 128` invert `(C_128(φ), S_128(φ))`
      bijectively at every single phase tick `φ ∈ {0, 1, ..., 511}`.
 2. **Projective Gudermann–Minkowski Hyperbolic Functions (`Ch_Q`, `Sh_Q`, `D_hyp`) Without Exponentials:**
    - Swapping the horizontal leg and hypotenuse of the Weierstrass circle lift yields the integer hyperbolic triple:
      `Ch_Q(φ) = C_Q(φ)² + S_Q(φ)²`, `Sh_Q(φ) = 2 * C_Q(φ) * S_Q(φ)`, `D_hyp(φ) = C_Q(φ)² - S_Q(φ)²`.
-   - At every phase `φ ∈ ℤ` and for every `Q ≥ 1`, this triple satisfies the **exact Minkowski hyperbola identity**:
+   - At every phase `φ ∈ ℤ` and for every `Q ∈ ℤ`, this triple satisfies the **exact Minkowski hyperbola identity**:
      `Ch_Q(φ)² - Sh_Q(φ)² ≡ D_hyp(φ)²` (so `(Ch_Q / D_hyp)² - (Sh_Q / D_hyp)² ≡ 1`).
    - On the `L¹` diamond `|C_Q(φ)| + |S_Q(φ)| = Q`, the light-cone sum is identically constant:
      `Ch_Q(φ) + |Sh_Q(φ)| = (|C_Q(φ)| + |S_Q(φ)|)² ≡ Q²`.
-3. **Root-Free and Logarithm-Free Exact Inverse Hyperbolic Functions (`invHypQ`, `atanhCayley`):**
-   - Because `C_Q(φ) + S_Q(φ) = Q` in the first quadrant, the quadratic difference `D_hyp(φ) = C_Q(φ)² - S_Q(φ)²`
-     factorizes into the **linear** form `Q * (Q - 2φ)`, and `Ch_Q(φ) + Sh_Q(φ) - D_hyp(φ) = 2 * S_Q(φ) * (C_Q(φ) + S_Q(φ)) = 2 * Q * φ`.
+3. **Root-Free and Logarithm-Free Exact Inverse Hyperbolic Functions (`invHypQ`, `atanhCayley`, `acothCayley`):**
+   - Because `C_Q(φ) + S_Q(φ) = Q` in the first quadrant, `Ch_Q(φ) + Sh_Q(φ) - D_hyp(φ) = 2 * S_Q(φ) * (C_Q(φ) + S_Q(φ)) = 2 * Q * φ`.
    - Dividing by `2 * Q` recovers the exact angle `φ` from `(Ch_Q(φ), Sh_Q(φ), D_hyp(φ))` without square roots or logarithms!
    - On light-cone coordinates `(U, V)`, the projective hyperbolic tangent `tanhCayley(U, V) = (U - V, U + V)` and
      hyperbolic cotangent `cothCayley(U, V) = (U + V, U - V)` are inverted algebraically by
      `atanhCayley(Sh, Ch) = (Ch + Sh, Ch - Sh) = (2U, 2V)` and `acothCayley(Ch, Sh) = (Ch + Sh, Ch - Sh) = (2U, 2V)`.
 -/
+
+/-- Arbitrary quarter-period `Q` phase wrapping and `L¹`-diamond rotator projections `(projCQ, projSQ)` on `ℤ_{4Q}`. -/
+def wrapRingQ (Q x : Int) : Int :=
+  2 * Q - (2 * Q - x) % (4 * Q)
+
+def projCQ (Q phi : Int) : Int :=
+  Q - (Int.natAbs (wrapRingQ Q phi) : Int)
+
+def projSQ (Q phi : Int) : Int :=
+  projCQ Q (phi - Q)
 
 /-- Projective tangent pair `tanPairQ(Q, φ) = (S_Q(φ), C_Q(φ))` and cotangent pair `cotPairQ(Q, φ) = (C_Q(φ), S_Q(φ))`. -/
 def tanPairQ (Q phi : Int) : Int × Int := (projSQ Q phi, projCQ Q phi)
@@ -77,26 +92,41 @@ def cothCayley (U V : Int) : Int × Int := (U + V, U - V)
 def atanhCayley (shVal chVal : Int) : Int × Int := (chVal + shVal, chVal - shVal)
 def acothCayley (chVal shVal : Int) : Int × Int := (chVal + shVal, chVal - shVal)
 
-/-- Boolean integer equality test for finite ring checks. -/
-def eqIntB (a b : Int) : Bool :=
-  if a = b then true else false
+/-- Universal polynomial identity `(c² + s²)² - (2cs)² = (c² - s²)²` for any integers `c, s ∈ ℤ`. -/
+theorem minkowski_hyperbola_poly_identity (c s : Int) :
+    (c * c + s * s) * (c * c + s * s) - (2 * c * s) * (2 * c * s) =
+      (c * c - s * s) * (c * c - s * s) := by
+  have hL : (c * c + s * s) * (c * c + s * s) =
+            (c * c) * (c * c) + 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
+    calc (c * c + s * s) * (c * c + s * s)
+      _ = (c * c) * (c * c) + (c * c) * (s * s) + ((s * s) * (c * c) + (s * s) * (s * s)) := by
+          simp [Int.add_mul, Int.mul_add]
+      _ = (c * c) * (c * c) + (c * c) * (s * s) + ((c * c) * (s * s) + (s * s) * (s * s)) := by
+          rw [Int.mul_comm (s * s) (c * c)]
+      _ = (c * c) * (c * c) + 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
+          generalize (c * c) * (s * s) = x
+          omega
+  have hM : (2 * c * s) * (2 * c * s) = 4 * ((c * c) * (s * s)) := by
+    calc (2 * c * s) * (2 * c * s)
+      _ = (2 * 2) * ((c * c) * (s * s)) := by
+          simp [Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
+      _ = 4 * ((c * c) * (s * s)) := rfl
+  have hR : (c * c - s * s) * (c * c - s * s) =
+            (c * c) * (c * c) - 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
+    calc (c * c - s * s) * (c * c - s * s)
+      _ = (c * c) * (c * c) - (c * c) * (s * s) - ((s * s) * (c * c) - (s * s) * (s * s)) := by
+          simp [Int.sub_mul, Int.mul_sub]
+      _ = (c * c) * (c * c) - (c * c) * (s * s) - ((c * c) * (s * s) - (s * s) * (s * s)) := by
+          rw [Int.mul_comm (s * s) (c * c)]
+      _ = (c * c) * (c * c) - 2 * ((c * c) * (s * s)) + (s * s) * (s * s) := by
+          generalize (c * c) * (s * s) = x
+          omega
+  rw [hL, hM, hR]
+  generalize (c * c) * (s * s) = x
+  omega
 
 /-- **Theorem (Exact Projective Inverse Trigonometry `atan`/`acot` and Root-Free / Logarithm-Free Hyperbolic Calculus on `ℤ_{4Q}`)**:
-Unconditional constructive proof for arbitrary integer parameters `Q, φ, U, V ∈ ℤ` (`0 sorryAx`, `0 Classical.choice`, `0 Prop premises`):
-1. **Universal Minkowski Hyperbola Identity for all `Q, φ ∈ ℤ`:**
-   `hypCoshQ(Q, φ)² - hypSinhQ(Q, φ)² ≡ hypDenomQ(Q, φ)²`.
-2. **Exact Algebraic Factorization of the Inverse Hyperbolic Numerator for all `Q, φ ∈ ℤ`:**
-   `hypCoshQ(Q, φ) + hypSinhQ(Q, φ) - hypDenomQ(Q, φ) ≡ 2 * S_Q(φ) * (C_Q(φ) + S_Q(φ))`
-   and `hypCoshQ(Q, φ) + hypSinhQ(Q, φ) ≡ (C_Q(φ) + S_Q(φ))²`.
-3. **Logarithm-Free Cayley Hyperbolic Tangent & Cotangent Inversion for all `U, V ∈ ℤ`:**
-   - `coshLightCone(U, V)² - sinhLightCone(U, V)² ≡ 4 * U * V`,
-   - `atanhCayley(tanhCayley(U, V)) ≡ (2 * U, 2 * V)`,
-   - `acothCayley(cothCayley(U, V)) ≡ (2 * U, 2 * V)`.
-4. **Full 512-Tick Ring Bijective Inversion (`Q = 128`):**
-   - For every `φ ∈ {0, ..., 511}`: `atan2L1RingQ 128 (S_128(φ)) (C_128(φ)) = φ`, `acot2L1RingQ 128 (C_128(φ)) (S_128(φ)) = φ`,
-     and `hypCoshQ 128 φ + |hypSinhQ 128 φ| = 128² = 16,384`.
-   - For every first-quadrant angle `φ ∈ {0, ..., 128}`: `invHypQ 128 (Ch(φ)) (Sh(φ)) (D_hyp(φ)) = φ` and
-     `atanL1Q 128 (S_128(φ)) (C_128(φ)) + acotL1Q 128 (C_128(φ)) (S_128(φ)) = 128`. -/
+Unconditional constructive proof for arbitrary integer parameters `Q, φ, U, V ∈ ℤ` (`0 sorryAx`, `0 Classical.choice`, `0 Prop premises`). -/
 theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
     (Q phi U V : Int) :
     -- 1. Universal Minkowski hyperbola identity Ch_Q(φ)² - Sh_Q(φ)² = D_hyp(φ)² for arbitrary Q, φ ∈ ℤ:
@@ -113,26 +143,17 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
      acothCayley (cothCayley U V).1 (cothCayley U V).2 = (2 * U, 2 * V)) ∧
     -- 4. Full 512-tick ring bijective inversion of atan2, acot2, and root-free/log-free invHyp at Q = 128:
     (((List.range 512).all (fun p =>
-       eqIntB (atan2L1RingQ 128 (projSQ 128 (p : Int)) (projCQ 128 (p : Int))) (p : Int) &&
-       eqIntB (acot2L1RingQ 128 (projCQ 128 (p : Int)) (projSQ 128 (p : Int))) (p : Int) &&
-       eqIntB (hypCoshQ 128 (p : Int) + ((hypSinhQ 128 (p : Int)).natAbs : Int)) (128 * 128)) = true) ∧
+       eqIntBool (atan2L1RingQ 128 (projSQ 128 (p : Int)) (projCQ 128 (p : Int))) (p : Int) &&
+       eqIntBool (acot2L1RingQ 128 (projCQ 128 (p : Int)) (projSQ 128 (p : Int))) (p : Int) &&
+       eqIntBool (hypCoshQ 128 (p : Int) + ((hypSinhQ 128 (p : Int)).natAbs : Int)) (128 * 128)) = true) ∧
      ((List.range 129).all (fun p =>
-       eqIntB (invHypQ 128 (hypCoshQ 128 (p : Int)) (hypSinhQ 128 (p : Int)) (hypDenomQ 128 (p : Int))) (p : Int) &&
-       eqIntB (atanL1Q 128 (projSQ 128 (p : Int)) (projCQ 128 (p : Int)) +
-               acotL1Q 128 (projCQ 128 (p : Int)) (projSQ 128 (p : Int))) 128) = true)) := by
+       eqIntBool (invHypQ 128 (hypCoshQ 128 (p : Int)) (hypSinhQ 128 (p : Int)) (hypDenomQ 128 (p : Int))) (p : Int) &&
+       eqIntBool (atanL1Q 128 (projSQ 128 (p : Int)) (projCQ 128 (p : Int)) +
+                  acotL1Q 128 (projCQ 128 (p : Int)) (projSQ 128 (p : Int))) 128) = true)) := by
   have hMink :
       hypCoshQ Q phi * hypCoshQ Q phi - hypSinhQ Q phi * hypSinhQ Q phi =
-        hypDenomQ Q phi * hypDenomQ Q phi := by
-    unfold hypCoshQ hypSinhQ hypDenomQ
-    generalize projCQ Q phi = c
-    generalize projSQ Q phi = s
-    calc (c * c + s * s) * (c * c + s * s) - (2 * c * s) * (2 * c * s)
-      _ = (c * c) * (c * c) + 2 * (c * c) * (s * s) + (s * s) * (s * s) - 4 * (c * c) * (s * s) := by
-          simp [Int.add_mul, Int.mul_add, Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
-      _ = (c * c) * (c * c) - 2 * (c * c) * (s * s) + (s * s) * (s * s) := by omega
-      _ = (c * c - s * s) * (c * c - s * s) := by
-          simp [Int.sub_mul, Int.mul_sub, Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
-          omega
+        hypDenomQ Q phi * hypDenomQ Q phi :=
+    minkowski_hyperbola_poly_identity (projCQ Q phi) (projSQ Q phi)
   have hInvNum :
       hypCoshQ Q phi + hypSinhQ Q phi - hypDenomQ Q phi =
         2 * projSQ Q phi * (projCQ Q phi + projSQ Q phi) := by
@@ -140,7 +161,11 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
     generalize projCQ Q phi = c
     generalize projSQ Q phi = s
     calc (c * c + s * s) + 2 * c * s - (c * c - s * s)
-      _ = 2 * c * s + 2 * (s * s) := by omega
+      _ = 2 * (c * s) + 2 * (s * s) := by
+          generalize c * s = cs
+          generalize s * s = ss
+          generalize c * c = cc
+          omega
       _ = 2 * s * (c + s) := by
           simp [Int.mul_add, Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
   have hSumSq :
@@ -149,16 +174,38 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
     unfold hypCoshQ hypSinhQ
     generalize projCQ Q phi = c
     generalize projSQ Q phi = s
-    simp [Int.add_mul, Int.mul_add, Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
-    omega
+    calc c * c + s * s + 2 * c * s
+      _ = c * c + (c * s + (c * s + s * s)) := by
+          generalize c * s = cs
+          generalize s * s = ss
+          generalize c * c = cc
+          omega
+      _ = c * c + (c * s + (s * c + s * s)) := by rw [Int.mul_comm s c]
+      _ = (c + s) * (c + s) := by
+          simp [Int.add_mul, Int.mul_add, Int.add_assoc]
   have hLightCone :
       coshLightCone U V * coshLightCone U V - sinhLightCone U V * sinhLightCone U V = 4 * U * V := by
     unfold coshLightCone sinhLightCone
-    calc (U + V) * (U + V) - (U - V) * (U - V)
-      _ = (U * U + 2 * U * V + V * V) - (U * U - 2 * U * V + V * V) := by
-          simp [Int.add_mul, Int.mul_add, Int.sub_mul, Int.mul_sub, Int.mul_assoc, Int.mul_left_comm, Int.mul_comm]
+    have h1 : (U + V) * (U + V) = U * U + 2 * (U * V) + V * V := by
+      calc (U + V) * (U + V)
+        _ = U * U + V * U + (U * V + V * V) := by simp [Int.add_mul, Int.mul_add]
+        _ = U * U + U * V + (U * V + V * V) := by rw [Int.mul_comm V U]
+        _ = U * U + 2 * (U * V) + V * V := by
+            generalize U * V = uv
+            omega
+    have h2 : (U - V) * (U - V) = U * U - 2 * (U * V) + V * V := by
+      calc (U - V) * (U - V)
+        _ = U * U - V * U - (U * V - V * V) := by simp [Int.sub_mul, Int.mul_sub]
+        _ = U * U - U * V - (U * V - V * V) := by rw [Int.mul_comm V U]
+        _ = U * U - 2 * (U * V) + V * V := by
+            generalize U * V = uv
+            omega
+    rw [h1, h2]
+    calc U * U + 2 * (U * V) + V * V - (U * U - 2 * (U * V) + V * V)
+      _ = 4 * (U * V) := by
+          generalize U * V = uv
           omega
-      _ = 4 * U * V := by omega
+      _ = 4 * U * V := by rw [← Int.mul_assoc]
   have hAtanh : atanhCayley (tanhCayley U V).1 (tanhCayley U V).2 = (2 * U, 2 * V) := by
     unfold atanhCayley tanhCayley
     dsimp
@@ -168,3 +215,5 @@ theorem exact_inverse_trig_and_rootfree_hyperbolic_calculus
     dsimp
     congr 1 <;> omega
   refine ⟨hMink, ⟨hInvNum, hSumSq⟩, ⟨hLightCone, hAtanh, hAcoth⟩, ⟨by native_decide, by native_decide⟩⟩
+
+end RotatorCalculusPaper
